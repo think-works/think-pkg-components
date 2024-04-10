@@ -1,0 +1,15 @@
+@import "@/styles/utils.less";
+
+.resizing {
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  &.detachFlow {
+    > * {
+      // 将子标签脱离文档流以避免撑开所在容器
+      position: absolute;
+      display: block;
+    }
+  }
+}

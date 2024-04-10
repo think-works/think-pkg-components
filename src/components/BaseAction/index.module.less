@@ -1,0 +1,18 @@
+@import "@/styles/utils.less";
+
+.baseAction {
+  &.inline {
+    &:global(.@{ant-prefix}-btn) {
+      display: inline-block;
+      padding: 0;
+      height: auto;
+      min-width: auto;
+    }
+  }
+  &.transparent {
+    &:global(.@{ant-prefix}-btn),
+    &:global(.@{ant-prefix}-btn):hover {
+      background-color: transparent;
+    }
+  }
+}

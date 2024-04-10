@@ -1,0 +1,106 @@
+{
+  "name": "@think/components",
+  "version": "0.1.0",
+  "description": "组件库",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./cli": {
+      "import": "./dist/cli.js",
+      "require": "./dist/cli.cjs",
+      "types": "./dist/cli.d.ts"
+    },
+    "./components.css": "./dist/components.css"
+  },
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "serve": "vite",
+    "build": "tsc && vite build && npm run build:types",
+    "build:types": "tsc --outDir dist --noEmit false --composite false --tsBuildInfoFile null --declaration --emitDeclarationOnly && tsc-alias --outDir dist && rm -rf dist/main.d.ts dist/Demo",
+    "prepare": "husky",
+    "version": "npm install && npm run build && git add .",
+    "postversion": "git push && git push --tags",
+    "release": "npm version ${npm_package_version%%-*} --allow-same-version && npm publish",
+    "release:major": "npm version major && npm publish",
+    "release:minor": "npm version minor && npm publish",
+    "release:patch": "npm version patch && npm publish",
+    "release:alpha": "npm version prerelease --preid alpha && npm publish --tag alpha",
+    "release:beta": "npm version prerelease --preid beta && npm publish --tag beta",
+    "release:rc": "npm version prerelease --preid rc && npm publish --tag rc"
+  },
+  "publishConfig": {
+    "registry": "http://117.50.180.240:8081/repository/npm-hosted/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/think-works/think-pkg-components.git"
+  },
+  "peerDependencies": {
+    "@ant-design/icons": "5.x",
+    "@dnd-kit/core": "6.x",
+    "@dnd-kit/modifiers": "7.x",
+    "@dnd-kit/sortable": "8.x",
+    "@dnd-kit/utilities": "3.x",
+    "antd": "5.x",
+    "axios": "1.x",
+    "classnames": "2.x",
+    "dayjs": "1.x",
+    "lodash-es": "4.x",
+    "react": "18.x",
+    "react-dom": "18.x",
+    "react-router": "6.x",
+    "react-router-dom": "6.x"
+  },
+  "devDependencies": {
+    "@ant-design/icons": "^5.3.6",
+    "@commitlint/cli": "^19.2.1",
+    "@commitlint/config-conventional": "^19.1.0",
+    "@dnd-kit/core": "^6.1.0",
+    "@dnd-kit/modifiers": "^7.0.0",
+    "@dnd-kit/sortable": "^8.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
+    "@eslint/js": "^8.57.0",
+    "@svgr/rollup": "^8.1.0",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@types/lodash-es": "^4.17.12",
+    "@types/react": "^18.2.73",
+    "@types/react-dom": "^18.2.23",
+    "@vitejs/plugin-react": "^4.2.1",
+    "antd": "^5.16.0",
+    "axios": "^1.6.8",
+    "classnames": "^2.5.1",
+    "dayjs": "^1.11.10",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "globals": "^15.0.0",
+    "husky": "^9.0.11",
+    "less": "^4.2.0",
+    "lint-staged": "^15.2.2",
+    "lodash-es": "^4.17.21",
+    "postcss-preset-env": "^9.5.3",
+    "prettier": "^3.2.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router": "^6.22.3",
+    "react-router-dom": "^6.22.3",
+    "tsc-alias": "^1.8.8",
+    "typescript": "^5.4.3",
+    "typescript-eslint": "^7.5.0",
+    "vite": "^5.2.7",
+    "vite-plugin-checker": "^0.6.4",
+    "vite-plugin-mock-dev-server": "^1.5.0"
+  }
+}

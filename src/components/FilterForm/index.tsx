@@ -1,0 +1,154 @@
+import { Button, Col, ColProps, Form, FormProps, Row, Space } from "antd";
+import { ButtonProps } from "antd/lib";
+import cls, { Argument } from "classnames";
+import React, { isValidElement, useMemo, useState } from "react";
+import { DownOutlined, UpOutlined } from "@ant-design/icons";
+import { useSearchFilterValue } from "../RouteTable";
+import stl from "./index.module.less";
+
+export type FilterItemConfig = {
+  key?: React.Key;
+  colProps?: ColProps;
+  children?: React.ReactNode;
+};
+
+export type FilterFormItem = React.ReactNode | FilterItemConfig;
+
+export type FilterFormProps = Omit<FormProps, "action"> & {
+  className?: Argument;
+  style?: React.CSSProperties;
+  defaultOpen?: boolean;
+  itemColSpan?: number;
+  itemLabelSpan?: number;
+  maxItemCount?: number;
+  action?: React.ReactNode;
+  items?: FilterFormItem[];
+  submitText?: React.ReactNode;
+  resetText?: React.ReactNode;
+  submitProps?: ButtonProps;
+  resetProps?: false | ButtonProps;
+  onFilterChange?: (params: Record<string, any>) => void;
+};
+
+const FilterForm = (props: FilterFormProps) => {
+  const {
+    className,
+    style,
+    defaultOpen,
+    itemColSpan,
+    itemLabelSpan,
+    maxItemCount = 3,
+    action,
+    items,
+    submitText,
+    resetText,
+    submitProps,
+    resetProps,
+    onFilterChange,
+    ...rest
+  } = props;
+  const showMore = (items?.length || 0) > maxItemCount;
+
+  const [form] = Form.useForm();
+  const [open, setOpen] = useState(defaultOpen);
+
+  const filterValue = useSearchFilterValue();
+  const initialValues = filterValue || {};
+
+  const triggerChange = (values: any) => {
+    onFilterChange &&
+      onFilterChange({
+        ...values,
+      });
+  };
+
+  const handleReset = () => {
+    triggerChange({});
+  };
+
+  const handleFinish = (values: any) => {
+    triggerChange(values);
+  };
+
+  const list = useMemo(() => {
+    let _items = items || [];
+    _items = open ? _items : _items?.slice(0, maxItemCount);
+    _items = _items?.map((item, idx) => {
+      let children;
+      let colProps = {
+        key: idx,
+        span: itemColSpan,
+      };
+
+      if (isValidElement(item)) {
+        children = item;
+      } else {
+        const { children: child, colProps: col } = (item ||
+          {}) as FilterItemConfig;
+        children = child;
+        colProps = Object.assign({}, colProps, col);
+      }
+
+      return <Col {...colProps}>{children}</Col>;
+    });
+
+    return _items as React.ReactNode[];
+  }, [itemColSpan, items, maxItemCount, open]);
+
+  return (
+    <Form
+      className={cls(stl.filterForm, className)}
+      style={style}
+      name="filter"
+      layout="inline"
+      form={form}
+      labelCol={{ span: itemLabelSpan }}
+      initialValues={initialValues}
+      onFinish={handleFinish}
+      {...rest}
+    >
+      <Row className={stl.row} gutter={[0, 8]}>
+        {list}
+        <Col flex="auto" className={stl.actionCol}>
+          <Form.Item>
+            <Space>
+              {resetProps === false ? null : (
+                <Button
+                  type="default"
+                  htmlType="reset"
+                  onClick={handleReset}
+                  {...resetProps}
+                >
+                  {resetText || "重置"}
+                </Button>
+              )}
+              <Button type="primary" htmlType="submit" {...submitProps}>
+                {submitText || "查询"}
+              </Button>
+              {action}
+              {showMore ? (
+                <a onClick={() => setOpen(!open)}>
+                  <Space size={4}>
+                    {open ? (
+                      <>
+                        <span>收起</span>
+                        <UpOutlined />
+                      </>
+                    ) : (
+                      <>
+                        <span>展开</span>
+                        <DownOutlined />
+                      </>
+                    )}
+                  </Space>
+                </a>
+              ) : null}
+            </Space>
+          </Form.Item>
+        </Col>
+      </Row>
+    </Form>
+  );
+};
+
+export default FilterForm;

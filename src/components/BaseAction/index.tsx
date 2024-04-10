@@ -1,0 +1,142 @@
+import {
+  App,
+  Button,
+  ButtonProps,
+  ModalFuncProps,
+  Popconfirm,
+  PopconfirmProps,
+  Tooltip,
+  TooltipProps,
+} from "antd";
+import cls, { Argument } from "classnames";
+import { isString } from "lodash-es";
+import { useState } from "react";
+import stl from "./index.module.less";
+
+export type BaseActionProps = Omit<ButtonProps, "onClick"> & {
+  className?: Argument;
+  tooltip?: string | TooltipProps;
+  confirm?: string | ModalFuncProps;
+  popconfirm?: string | PopconfirmProps;
+  children?: React.ReactNode;
+  disabled?: boolean;
+  inline?: boolean;
+  transparent?: boolean;
+  onClick?: (...rest: any[]) => any;
+};
+
+const isType = (val: any, type: string): boolean => {
+  return Object.prototype.toString.call(val) === `[object ${type}]`;
+};
+
+const isPromise = (val: any): val is Promise<any> => {
+  return isType(val, "Promise");
+};
+
+const BaseAction = (props: BaseActionProps) => {
+  const {
+    className,
+    tooltip,
+    confirm,
+    popconfirm,
+    children,
+    disabled,
+    inline,
+    transparent,
+    onClick,
+    ...rest
+  } = props || {};
+
+  const { modal } = App.useApp();
+  const [loading, setLoading] = useState(false);
+
+  const handleButtonClick = (...args: any[]) => {
+    // 确认弹框
+    if (confirm) {
+      const { title: _title, ...conRest } = confirm || ({} as any);
+      let title = _title;
+      if (isString(confirm)) {
+        title = confirm;
+      }
+
+      const handleOkClick = (...args: any[]) => {
+        return onClick && onClick(...args);
+      };
+
+      modal.confirm({
+        title,
+        onOk: handleOkClick,
+        ...conRest,
+      });
+
+      return;
+    }
+
+    // 确认气泡
+    if (popconfirm) {
+      return;
+    }
+
+    // 自动 loading
+    const promise = onClick && onClick(...args);
+    if (isPromise(promise)) {
+      setLoading(true);
+      promise.finally(() => {
+        setLoading(false);
+      });
+    }
+  };
+
+  const content = (
+    <Button
+      className={cls(
+        stl.baseAction,
+        { [stl.inline]: inline, [stl.transparent]: transparent },
+        className,
+      )}
+      disabled={disabled}
+      loading={loading}
+      onClick={handleButtonClick}
+      {...rest}
+    >
+      {children}
+    </Button>
+  );
+
+  // 疑似 BUG - 已禁用的按钮无法隐藏 Tooltip
+  if (!disabled && tooltip) {
+    const { title: _title, ...tipRest } = tooltip || ({} as any);
+    let title = _title;
+    if (isString(tooltip)) {
+      title = tooltip;
+    }
+
+    return (
+      <Tooltip title={title} {...tipRest}>
+        <span>{content}</span>
+      </Tooltip>
+    );
+  }
+
+  if (popconfirm) {
+    const { title: _title, ...popRest } = popconfirm || ({} as any);
+    let title = _title;
+    if (isString(popconfirm)) {
+      title = popconfirm;
+    }
+
+    const handleConfirmClick = (...args: any[]) => {
+      return onClick && onClick(...args);
+    };
+
+    return (
+      <Popconfirm title={title} onConfirm={handleConfirmClick} {...popRest}>
+        <span>{content}</span>
+      </Popconfirm>
+    );
+  }
+
+  return content;
+};
+
+export default BaseAction;

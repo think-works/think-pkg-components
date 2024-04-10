@@ -1,0 +1,28 @@
+@import "@/styles/utils.less";
+
+.layoutPanel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .title {
+    flex: none;
+    padding: 0 16px;
+
+    &.sticky {
+      position: sticky;
+      top: 0;
+      z-index: @bizLayoutZIndex;
+      background-color: @colorBgContainer;
+    }
+  }
+
+  .content {
+    flex: auto;
+    padding: 16px;
+
+    &.cling {
+      padding-top: 0;
+    }
+  }
+}

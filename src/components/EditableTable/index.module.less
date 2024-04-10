@@ -1,0 +1,55 @@
+@import "@/styles/utils.less";
+
+.table {
+  :global(.@{ant-prefix}-table) {
+    :global(.@{ant-prefix}-table-tbody) {
+      :global(.@{ant-prefix}-table-row) {
+        &:hover {
+          .cell,
+          .action {
+            // background-color: transparent;
+          }
+        }
+        .cell {
+          padding: 0;
+        }
+        .action {
+          padding-top: 0;
+          padding-bottom: 0;
+        }
+      }
+    }
+  }
+
+  .cell {
+    :global(.@{ant-prefix}-input) {
+      border-color: transparent;
+      &:hover {
+        border-color: @colorPrimary;
+      }
+    }
+  }
+}
+
+.col {
+  // background-color: rgb(253, 253, 253);
+  min-height: 32px;
+  padding: 0 10px;
+  // color: #666;
+  // 英文换行对齐
+  word-break: break-all;
+  // 中文换行对齐
+  word-wrap: break-word;
+  // 换行对齐
+  white-space: pre-wrap;
+  display: flex;
+  align-items: center;
+}
+
+.default {
+  // display: inline-block;
+  line-height: 32px;
+  min-height: 32px;
+  height: 32px;
+  padding: 0 10px;
+}

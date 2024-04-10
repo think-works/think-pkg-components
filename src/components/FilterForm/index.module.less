@@ -1,0 +1,26 @@
+@import "@/styles/utils.less";
+
+.filterForm {
+  .row {
+    width: 100%;
+  }
+
+  .actionCol {
+    text-align: right;
+  }
+
+  :global(.@{ant-prefix}-form-item) {
+    :global(.@{ant-prefix}-form-item-label) {
+      min-width: 70px;
+    }
+    :global(.@{ant-prefix}-form-item-control) {
+      min-width: 120px;
+    }
+  }
+  :global(.@{ant-prefix}-input),
+  :global(.@{ant-prefix}-input-affix-wrapper),
+  :global(.@{ant-prefix}-select-single),
+  :global(.@{ant-prefix}-select-auto-complete) {
+    max-width: 120px;
+  }
+}

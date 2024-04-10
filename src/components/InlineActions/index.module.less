@@ -1,0 +1,8 @@
+@import "@/styles/utils.less";
+
+.inlineActions {
+  display: inline-block;
+  :global(.@{ant-prefix}-btn) + :global(.@{ant-prefix}-btn) {
+    margin-left: 8px;
+  }
+}

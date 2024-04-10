@@ -1,0 +1,24 @@
+@import "@/styles/utils.less";
+
+.baseTable {
+  position: relative;
+  .table {
+    :global(.@{ant-prefix}-table-thead .@{ant-prefix}-table-cell) {
+      word-break: keep-all;
+      white-space: nowrap;
+    }
+    .ellipsis {
+      vertical-align: middle;
+      .ellipsis();
+    }
+    .multiLine {
+      vertical-align: middle;
+      .lineEllipsis(1);
+    }
+  }
+  .extend {
+    position: absolute;
+    left: 0;
+    bottom: 16px;
+  }
+}

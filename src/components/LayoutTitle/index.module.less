@@ -1,0 +1,29 @@
+@import "@/styles/utils.less";
+
+.layoutTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &.divider {
+    border-bottom: 1px solid @colorBorderSecondary;
+  }
+
+  .title {
+    &.large {
+      height: 40px;
+      line-height: 40px;
+    }
+    &.middle {
+      height: 32px;
+      line-height: 32px;
+    }
+    &.small {
+      height: 24px;
+      line-height: 24px;
+    }
+  }
+
+  .extend {
+  }
+}
