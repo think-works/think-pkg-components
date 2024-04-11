@@ -59,6 +59,24 @@
 );
 @colorSplit: var(~"--@{antPrefixVar}-color-split", rgba(5, 5, 5, 0.06));
 
+@colorBackgroundActive: rgba(0, 0, 0, 0.08);
+@colorBgHover: rgba(0, 0, 0, 0.06);
+@colorBg: rgb(253, 251, 252);
+
+@colorText: rgba(0, 0, 0, 0.85);
+@colorTextHover: rgba(0, 0, 0, 1);
+@colorTextSecondary: rgba(0, 0, 0, 0.06);
+
+@shadowCommon:
+  0px 1px 2px rgba(20, 20, 20, 0.1),
+  0px 3px 6px rgba(20, 20, 20, 0.06);
+@shadowCommonHigh:
+  0px 2px 4px rgba(20, 20, 20, 0.1),
+  0px 6px 12px rgba(20, 20, 20, 0.06);
+@shadowCommonHighest:
+  0px 3px 6px rgba(20, 20, 20, 0.1),
+  0px 8px 16px rgba(20, 20, 20, 0.08);
+
 // 清除浮动
 .clear() {
   zoom: 1;
