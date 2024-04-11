@@ -1,0 +1,199 @@
+@import "@/styles/utils.less";
+
+.x-tree-group {
+  height: 0;
+  min-height: 100%;
+  overflow-y: auto;
+  position: relative;
+  user-select: none;
+  transition: background 0.2s ease-out;
+  &.drag-over {
+    background: @colorBgHover;
+  }
+  .x-tree-group-wrapper {
+    // display: flex;
+    // flex: 1;
+    // flex-direction: column;
+  }
+  // 禁用 ant-checkbox 动画
+  .ant-checkbox-checked::after {
+    animation: none;
+  }
+  .ant-checkbox-inner {
+    transition: none;
+  }
+  .ant-checkbox-inner::after {
+    transition: none;
+  }
+  .ant-checkbox-checked .ant-checkbox-inner::after {
+    transition: none;
+  }
+
+  .x-tree-node {
+    min-height: 32px;
+    display: flex;
+  }
+  .x-tree-indent {
+    display: inline-block;
+    width: 16px;
+    display: flex;
+    &-unit {
+      width: 16px;
+      height: 100%;
+      position: relative;
+      left: 9px;
+      border-left: 1px solid @colorBorderSecondary;
+    }
+  }
+}
+
+.x-tree-group-status {
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+}
+
+.x-tree-node.drag-over {
+  .x-tree-item {
+    &::after {
+      content: "";
+      background: @colorBgHover;
+      // a2ff7a
+      transition: background 0.2s ease-out;
+      position: absolute;
+      height: 32px;
+      left: 0;
+      right: 0;
+    }
+  }
+}
+
+.x-tree-node.context {
+  .x-tree-item {
+    &::after {
+      content: "";
+      border: 1px solid @colorPrimary;
+      position: absolute;
+      height: 32px;
+      left: 0;
+      right: 0;
+    }
+  }
+}
+
+.x-tree-node.border {
+  margin-bottom: 10px;
+}
+
+.x-tree-node__dropdown {
+  .ant-dropdown-menu-title-content {
+    width: 115px;
+    margin-right: 8px;
+    display: inline-block;
+  }
+}
+
+.x-tree-item {
+  flex: 1;
+  overflow: hidden;
+  min-height: 32px; // 配合节点裁剪使用
+  // position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: @colorTextHeading;
+  // padding: 3px 0;
+  box-sizing: border-box;
+  &.border {
+    border: 1px solid @colorBorderSecondary;
+  }
+
+  &-icon {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+    color: @colorTextHeading;
+  }
+  &-checkbox {
+    margin-right: 5px;
+    position: relative;
+    z-index: 1;
+    width: 16px;
+  }
+  &-content {
+    overflow: hidden;
+    height: 32px;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    flex: 1;
+  }
+  &-btn {
+    display: inline-block;
+    font-family: "Courier New", Courier, monospace;
+    // width: 12px;
+    height: 12px;
+    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    i {
+      // color: #878CB1;
+      font-size: 12px;
+      transition: transform 0.3s;
+    }
+    i.down {
+      transform: rotate(90deg);
+    }
+    i.loading {
+      animation: rotate 1s linear infinite;
+    }
+  }
+  &::after {
+    content: "";
+    // transition: background .2s ease-out;
+    position: absolute;
+    height: 32px;
+    left: 0;
+    right: 0;
+    // opacity: .99;
+    // z-index: auto;
+  }
+  &:hover::after {
+    // 降低颜色透明度
+    background: @colorBgHover;
+  }
+  &.active::after {
+    background: @colorBackgroundActive;
+  }
+  &.search::after {
+    border: 1px solid rgba(255, 147, 46, 1);
+    background: rgba(255, 242, 229, 1);
+  }
+  &.conflict::after {
+    background: #3a1c1e;
+  }
+  &.disabled {
+    // pointer-events: none;
+    opacity: 0.2;
+    cursor: not-allowed;
+    &::after {
+      display: none;
+    }
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

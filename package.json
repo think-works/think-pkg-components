@@ -102,5 +102,8 @@
     "vite": "^5.2.7",
     "vite-plugin-checker": "^0.6.4",
     "vite-plugin-mock-dev-server": "^1.5.0"
+  },
+  "dependencies": {
+    "ahooks": "^3.7.11"
   }
 }

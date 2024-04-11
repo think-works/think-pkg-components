@@ -1,0 +1,77 @@
+@import "@/styles/utils.less";
+
+.item {
+  display: flex;
+  font-size: 12px;
+  align-items: center;
+  // justify-content: space-between;
+  // justify-content: flex-end;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  // padding-right: 5px;
+  &-left {
+    // justify-self: flex-start;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    .ellipsis();
+  }
+  &-tag {
+    display: flex;
+    align-items: center;
+  }
+  &-name {
+    flex: 1;
+    padding: 2px;
+    .ellipsis();
+    &-regressionTag {
+      color: #be0017;
+    }
+  }
+  &-edit {
+    border: 1px solid @colorBorderSecondary;
+    padding: 2px;
+    margin-left: -2px;
+    width: 100%;
+    outline: 0;
+    font-size: 12px;
+    // &:focus {
+    //   border: 1px solid red;
+    // }
+  }
+  &-icon {
+    margin-right: 2px;
+    font-size: 16px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    &-priority {
+      text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+      font-size: 11px;
+      position: absolute;
+      right: -5px;
+      bottom: -8px;
+      // background-color: #fff;
+    }
+  }
+  &-right {
+    // flex: 1;
+    i {
+      padding: 0 3px;
+      color: rgba(0, 0, 0, 0.75);
+      &:hover {
+        color: @colorPrimary;
+      }
+    }
+    &-nodeCount {
+      color: @colorPrimary;
+      font-weight: bold;
+    }
+  }
+  &-menu {
+    svg {
+      margin-right: 5px;
+    }
+  }
+}
