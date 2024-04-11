@@ -1,0 +1,79 @@
+.dragContainer {
+  display: flex;
+  height: 100%;
+  width: 100%;
+
+  &.row {
+    flex-direction: column;
+    &.reverse {
+      flex-direction: column-reverse;
+    }
+  }
+  &.col {
+    flex-direction: row;
+    &.reverse {
+      flex-direction: row-reverse;
+    }
+  }
+
+  .normalPanel {
+    flex: auto;
+  }
+  .dragPanel {
+    flex: none;
+    position: relative;
+  }
+}
+
+.dragHandler {
+  position: absolute;
+  border-radius: 2px;
+  box-sizing: content-box;
+  background-clip: content-box;
+  user-select: none;
+  &.row {
+    cursor: row-resize;
+    top: unset;
+    bottom: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 2px;
+    border-top: 2px solid #00000033;
+    border-bottom: 2px solid #00000033;
+    &.reverse {
+      top: -3px;
+      bottom: unset;
+    }
+  }
+  &.col {
+    cursor: col-resize;
+    top: 50%;
+    left: unset;
+    right: -3px;
+    transform: translateY(-50%);
+    height: 30px;
+    width: 2px;
+    border-left: 2px solid #00000033;
+    border-right: 2px solid #00000033;
+    &.reverse {
+      left: -3px;
+      right: unset;
+    }
+  }
+}
+
+.draggingIcon {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 100px;
+  opacity: 0.1;
+  user-select: none;
+
+  .icon {
+    display: block;
+    font-size: 100px;
+  }
+}

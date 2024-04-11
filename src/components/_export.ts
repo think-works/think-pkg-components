@@ -16,6 +16,10 @@ export {
   default as ColumnActions,
 } from "./ColumnActions";
 export {
+  type DragContainerProps,
+  default as DragContainer,
+} from "./DragContainer";
+export {
   type DropdownActionsProps,
   default as DropdownActions,
 } from "./DropdownActions";
