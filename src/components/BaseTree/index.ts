@@ -5,6 +5,6 @@ export type {
   TreeIndexItem,
   TreeItemContext,
   BaseTreeNode,
+  TreeContextMenu as BaseTreeContextMenu,
 } from "./base/types";
 export type { TreeProps, TreeRef } from "./base";
-export type { TreeContextMenu as BaseTreeContextMenu } from "./base/types";

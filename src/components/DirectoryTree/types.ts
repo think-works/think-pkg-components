@@ -1,5 +1,5 @@
 import { ItemType } from "antd/es/menu/hooks/useItems";
-import { BaseTreeNode } from "@/components/Tree";
+import { BaseTreeNode } from "@/components/BaseTree";
 
 export interface DirectoryNode<T extends BaseTreeNode, NODE_TYPE>
   extends BaseTreeNode {

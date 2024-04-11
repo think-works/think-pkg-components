@@ -8,7 +8,7 @@ import React, {
   useState,
 } from "react";
 import { MoreOutlined } from "@ant-design/icons";
-import { BaseTreeNode, TreeIndexItem } from "@/components/Tree";
+import { BaseTreeNode, TreeIndexItem } from "@/components/BaseTree";
 import { uuid4 } from "@/utils/crypto";
 import { TreeFolderIcon } from "./icon/FolderIcon";
 import { TreeFolderOpenIcon } from "./icon/FolderOpenIcon";

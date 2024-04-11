@@ -52,5 +52,5 @@ export { type UserAvatarProps, default as UserAvatar } from "./UserAvatar";
 export { default as DirectoryTree } from "./DirectoryTree";
 export * as DirectoryTreeType from "./DirectoryTree/types";
 
-export * from "./Tree";
+export * from "./BaseTree";
 export * from "./MacScrollbar";
