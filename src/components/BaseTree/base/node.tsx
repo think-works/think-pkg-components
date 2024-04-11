@@ -3,23 +3,23 @@ import classNames from "classnames";
 import { useMemo, useState } from "react";
 import { CaretDownOutlined, CaretRightOutlined } from "@ant-design/icons";
 import {
+  BaseTreeIndexItem,
+  BaseTreeItemContext,
+  BaseTreeKey,
+  BaseTreeMenuActions,
   BaseTreeNode,
-  Key,
-  TreeIndexItem,
-  TreeItemContext,
-  TreeMenuActions,
 } from "./types";
 
-interface NodeProps<T extends BaseTreeNode> {
-  data: TreeIndexItem<T>;
+export interface BaseTreeNodeProps<T extends BaseTreeNode> {
+  data: BaseTreeIndexItem<T>;
   onCheck: (checked: boolean) => void;
   onClick: () => void;
   onExpand: (expanded: boolean) => void;
   checkable?: boolean;
-  activeKey?: Key;
+  activeKey?: BaseTreeKey;
   renderContent?: (
-    data: TreeIndexItem<T>,
-    context: TreeItemContext,
+    data: BaseTreeIndexItem<T>,
+    context: BaseTreeItemContext,
   ) => React.ReactNode;
   dropAttrs: React.HTMLAttributes<HTMLDivElement>;
   /** 拖拽背景高亮 */
@@ -27,11 +27,11 @@ interface NodeProps<T extends BaseTreeNode> {
   /** 点击节点无效 */
   disabledNodeClick?: boolean;
   /** 右键操作 */
-  menu?: TreeMenuActions;
+  menu?: BaseTreeMenuActions;
   showIndentBorder?: boolean;
 }
 
-const TreeNode = <T extends BaseTreeNode>(props: NodeProps<T>) => {
+const TreeNode = <T extends BaseTreeNode>(props: BaseTreeNodeProps<T>) => {
   const { data, onCheck, menu } = props;
   const [hover, setHover] = useState(false);
   const [contextMenuOpen, setContextMenuOpen] = useState(false);

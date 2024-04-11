@@ -1,26 +1,4 @@
-import { BaseTreeNode, Key } from "./types";
-
-export const isSymbol = (key: unknown): key is symbol =>
-  typeof key === "symbol";
-//@ts-ignore
-export const getKey = (func, node, index, parent?: string | number): Key => {
-  let key = "";
-  if (func) {
-    key = func(node, index, parent);
-  }
-  if (!key) {
-    if (node.key) {
-      key = node.key;
-    } else if (node.id) {
-      key = node.id;
-    } else if (parent) {
-      key = `${parent}-${index}`;
-    } else {
-      key = index;
-    }
-  }
-  return key;
-};
+import { BaseTreeKey, BaseTreeNode } from "./types";
 
 /**
  * 根据 searchText 查找匹配的子节点并获取其所有父节点ID
@@ -33,8 +11,8 @@ export const getKey = (func, node, index, parent?: string | number): Key => {
 export const findParentIdsBySearchText = <T extends BaseTreeNode>(
   steps: T[],
   searchText?: string,
-  parentIds: Key[] = [],
-  results: Key[] = [],
+  parentIds: BaseTreeKey[] = [],
+  results: BaseTreeKey[] = [],
 ) => {
   if (!searchText) {
     return [];

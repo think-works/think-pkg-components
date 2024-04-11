@@ -13,18 +13,44 @@ import { MacScrollbar } from "@/components/MacScrollbar";
 import "./index.less";
 import TreeNode from "./node";
 import {
+  BaseTreeIndexItem,
+  BaseTreeItemContext,
+  BaseTreeKey,
+  BaseTreeMenuActions,
   BaseTreeNode,
-  Key,
-  TreeIndexItem,
-  TreeItemContext,
-  TreeMenuActions,
 } from "./types";
-import { findParentIdsBySearchText, getKey, isSymbol } from "./utils";
+import { findParentIdsBySearchText } from "./utils";
 
+const isSymbol = (key: unknown): key is symbol => typeof key === "symbol";
+const getKey = (
+  //@ts-ignore
+  func,
+  //@ts-ignore
+  node,
+  index: string | number,
+  parent?: string | number,
+): BaseTreeKey => {
+  let key = "";
+  if (func) {
+    key = func(node, index, parent);
+  }
+  if (!key) {
+    if (node.key) {
+      key = node.key;
+    } else if (node.id) {
+      key = node.id;
+    } else if (parent) {
+      key = `${parent}-${index}`;
+    } else {
+      key = index as string;
+    }
+  }
+  return key;
+};
 export const kRootNode = Symbol("kRootNode");
 
 export const disabledSome = <BaseNode extends BaseTreeNode>(
-  nodes: TreeIndexItem<BaseNode>[],
+  nodes: BaseTreeIndexItem<BaseNode>[],
   length = false,
 ): boolean => {
   if (nodes.length === 0) {
@@ -41,7 +67,7 @@ export const disabledSome = <BaseNode extends BaseTreeNode>(
 };
 
 export const disabledEvery = <BaseNode extends BaseTreeNode>(
-  nodes: TreeIndexItem<BaseNode>[],
+  nodes: BaseTreeIndexItem<BaseNode>[],
   length = true,
 ): boolean => {
   if (nodes.length === 0) {
@@ -60,7 +86,7 @@ export const disabledEvery = <BaseNode extends BaseTreeNode>(
   return every;
 };
 
-export interface TreeRef<BaseNode extends BaseTreeNode> {
+export interface BaseTreeRef<BaseNode extends BaseTreeNode> {
   focusReload?: () => void;
   scrollTo?: (index: number) => void;
   scrollToKey?: () => void;
@@ -70,33 +96,33 @@ export interface TreeRef<BaseNode extends BaseTreeNode> {
   checkAll?: () => void;
 }
 
-export interface TreeProps<BaseNode extends BaseTreeNode> {
+export interface BaseTreeProps<BaseNode extends BaseTreeNode> {
   data: BaseNode[];
   filter?: (node: BaseNode) => boolean;
   /** 怎么生成 key? */
-  rowKey?: (row: BaseNode) => Key;
+  rowKey?: (row: BaseNode) => BaseTreeKey;
   /** 展开层级 or 全部 */
   expandAll?: boolean | number;
   /** 显示复选框 */
   checkable?: boolean;
   // disabledKeys
   /** 是否可以选中 */
-  canActiveKey?: (key: Key, node: BaseNode) => boolean;
+  canActiveKey?: (key: BaseTreeKey, node: BaseNode) => boolean;
   /** 选中的 key 默认带自动展开上级逻辑 */
-  activeKey?: Key;
-  onActive?: (key: Key, node: BaseNode) => void;
+  activeKey?: BaseTreeKey;
+  onActive?: (key: BaseTreeKey, node: BaseNode) => void;
   /** 非flex布局给高度 虚拟滚动需要高度的 */
   maxHeight?: number;
   className?: string;
   /** 渲染节点 */
   renderContent?: (
-    data: TreeIndexItem<BaseNode>,
-    context: TreeItemContext,
+    data: BaseTreeIndexItem<BaseNode>,
+    context: BaseTreeItemContext,
   ) => React.ReactNode;
   /** 选中的Keys */
-  checkedKeys?: Key[];
+  checkedKeys?: BaseTreeKey[];
   onCheckedKeys?: (
-    keys: Key[],
+    keys: BaseTreeKey[],
     nodes: BaseNode[],
     node: BaseNode | null,
   ) => void;
@@ -106,18 +132,22 @@ export interface TreeProps<BaseNode extends BaseTreeNode> {
    */
   searchText?: string;
   /** 展开的Keys 受控 */
-  expandedKeys?: Key[];
-  onExpandedKeys?: (keys: Key[], nodes: BaseNode[], node: BaseNode) => void;
+  expandedKeys?: BaseTreeKey[];
+  onExpandedKeys?: (
+    keys: BaseTreeKey[],
+    nodes: BaseNode[],
+    node: BaseNode,
+  ) => void;
   canDrag?: (
-    source: TreeIndexItem<BaseNode>,
-    target?: TreeIndexItem<BaseNode>,
-  ) => Key | symbol | null;
+    source: BaseTreeIndexItem<BaseNode>,
+    target?: BaseTreeIndexItem<BaseNode>,
+  ) => BaseTreeKey | symbol | null;
   onDrag?: (source: BaseNode, target?: BaseNode) => void;
   // onDrop={this.onDrop}
   /** 点击节点无效 */
   disabledNodeClick?: boolean;
   /** 右键操作 */
-  menu?: TreeMenuActions;
+  menu?: BaseTreeMenuActions;
   showIndentBorder?: boolean;
 }
 
@@ -125,24 +155,30 @@ export interface TreeProps<BaseNode extends BaseTreeNode> {
  * 项目内通用树组件
  * 设计目的主要服务于效率工具 确保性能
  * @author William Chan <root@williamchan.me>
- * @param {TreeProps} props
+ * @param {BaseTreeProps} props
  */
 const Tree = <BaseNode extends BaseTreeNode>(
-  props: TreeProps<BaseNode>,
-  ref: ForwardedRef<TreeRef<BaseNode>>,
+  props: BaseTreeProps<BaseNode>,
+  ref: ForwardedRef<BaseTreeRef<BaseNode>>,
 ) => {
   const { expandAll, expandedKeys, checkedKeys, searchText } = props;
   const [data, setData] = useState<BaseNode[]>(props.data);
   const [controlExpandedKeys, setControlExpandedKeys] = useState(
-    new Map<Key, boolean | null>(),
+    new Map<BaseTreeKey, boolean | null>(),
   );
   const [controlCheckedKeys, setControlCheckedKeys] = useState(
-    new Map<Key, boolean | null>(),
+    new Map<BaseTreeKey, boolean | null>(),
   );
   // const [controlDisabledKeys, setControlDisabledKeys] = useState<Record<string, boolean>>({});
-  const [currentDragKey, setCurrentDragKey] = useState<Key | null>(null);
-  const [dragTargetKey, setDragTargetKey] = useState<Key | symbol | null>(null);
-  const [activeKey, setActiveKey] = useState<Key | undefined>(props.activeKey);
+  const [currentDragKey, setCurrentDragKey] = useState<BaseTreeKey | null>(
+    null,
+  );
+  const [dragTargetKey, setDragTargetKey] = useState<
+    BaseTreeKey | symbol | null
+  >(null);
+  const [activeKey, setActiveKey] = useState<BaseTreeKey | undefined>(
+    props.activeKey,
+  );
   const [count, setCount] = useState(0);
   const [reload, setReload] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -159,13 +195,13 @@ const Tree = <BaseNode extends BaseTreeNode>(
 
   const [nodeList, treeIndex] = useMemo(() => {
     // 内部维护索引
-    const tIndex = new Map<Key, TreeIndexItem<BaseNode>>();
-    const expandList = new Map<Key, boolean | null>();
-    const checkedList = new Map<Key, boolean | null>();
-    const disabledList = new Map<Key, boolean | null>();
-    const searchedList = new Map<Key, boolean | null>();
+    const tIndex = new Map<BaseTreeKey, BaseTreeIndexItem<BaseNode>>();
+    const expandList = new Map<BaseTreeKey, boolean | null>();
+    const checkedList = new Map<BaseTreeKey, boolean | null>();
+    const disabledList = new Map<BaseTreeKey, boolean | null>();
+    const searchedList = new Map<BaseTreeKey, boolean | null>();
 
-    const kNodes: TreeIndexItem<BaseNode>[] = [];
+    const kNodes: BaseTreeIndexItem<BaseNode>[] = [];
     const searchedParentIds = findParentIdsBySearchText<BaseNode>(
       data,
       searchText,
@@ -204,7 +240,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
      * @returns
      */
     const checkSome = (
-      nodes: TreeIndexItem<BaseNode>[],
+      nodes: BaseTreeIndexItem<BaseNode>[],
       length = false,
     ): boolean => {
       if (nodes.length === 0) {
@@ -226,7 +262,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
      * @returns
      */
     const checkEvery = (
-      nodes: TreeIndexItem<BaseNode>[],
+      nodes: BaseTreeIndexItem<BaseNode>[],
       length = false,
     ): boolean => {
       if (nodes.length === 0) {
@@ -239,7 +275,9 @@ const Tree = <BaseNode extends BaseTreeNode>(
       return every;
     };
 
-    const checkIndeterminate = (items: TreeIndexItem<BaseNode>[]): boolean => {
+    const checkIndeterminate = (
+      items: BaseTreeIndexItem<BaseNode>[],
+    ): boolean => {
       const some = checkSome(items);
       const every = checkEvery(items);
       return some === true && every === false;
@@ -247,10 +285,10 @@ const Tree = <BaseNode extends BaseTreeNode>(
 
     const loop = (
       nodes: BaseNode[],
-      parent?: TreeIndexItem<BaseNode>,
+      parent?: BaseTreeIndexItem<BaseNode>,
       deep = 0,
-    ): TreeIndexItem<BaseNode>[] => {
-      const treeIndexItem: TreeIndexItem<BaseNode>[] = [];
+    ): BaseTreeIndexItem<BaseNode>[] => {
+      const treeIndexItem: BaseTreeIndexItem<BaseNode>[] = [];
       nodes.forEach((node: BaseNode, index) => {
         if (props.filter && props.filter(node) === true) {
           return;
@@ -351,7 +389,9 @@ const Tree = <BaseNode extends BaseTreeNode>(
               });
             }
             if (val === false && indexItem?.parent) {
-              const loopParent = (item: TreeIndexItem<BaseTreeNode>): void => {
+              const loopParent = (
+                item: BaseTreeIndexItem<BaseTreeNode>,
+              ): void => {
                 if (!item.disabled) {
                   checkedList.set(item.key, false);
                 }
@@ -398,7 +438,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
           configurable: false,
           get: (): boolean => {
             const disabledAllA = (
-              items: TreeIndexItem<BaseNode>[],
+              items: BaseTreeIndexItem<BaseNode>[],
             ): boolean => {
               const some = disabledSome<BaseNode>(items);
               const every = disabledEvery<BaseNode>(items);
@@ -451,7 +491,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
     if (activeKey) {
       const active = tIndex.get(activeKey);
       if (active && active.parent) {
-        const expandedLoop = (item: TreeIndexItem<BaseNode>): void => {
+        const expandedLoop = (item: BaseTreeIndexItem<BaseNode>): void => {
           if (item && item.expanded !== true) {
             item.expanded = true;
             if (item.parent) {
@@ -513,9 +553,12 @@ const Tree = <BaseNode extends BaseTreeNode>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkedKeys]);
 
-  const onExpand = (node: TreeIndexItem<BaseNode>, expanded: boolean): void => {
+  const onExpand = (
+    node: BaseTreeIndexItem<BaseNode>,
+    expanded: boolean,
+  ): void => {
     node.expanded = expanded;
-    const expandList: Key[] = [];
+    const expandList: BaseTreeKey[] = [];
     const nodes: BaseNode[] = [];
     treeIndex.forEach((item) => {
       if (item.expanded === true) {
@@ -528,10 +571,13 @@ const Tree = <BaseNode extends BaseTreeNode>(
       props.onExpandedKeys(expandList, nodes, node.node);
   };
 
-  const onCheck = (node: TreeIndexItem<BaseNode>, checked: boolean): void => {
+  const onCheck = (
+    node: BaseTreeIndexItem<BaseNode>,
+    checked: boolean,
+  ): void => {
     // eslint-disable-next-line no-param-reassign
     node.checked = checked;
-    const checkList: Key[] = [];
+    const checkList: BaseTreeKey[] = [];
     const nodes: BaseNode[] = [];
     nodeList.forEach((item) => {
       if (item.checked === true) {
@@ -543,7 +589,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
     if (props.onCheckedKeys) props.onCheckedKeys(checkList, nodes, node.node);
   };
 
-  const onClick = (node: TreeIndexItem<BaseNode>): void => {
+  const onClick = (node: BaseTreeIndexItem<BaseNode>): void => {
     if (props.canActiveKey && !props.canActiveKey(node.key, node.node)) {
       return;
     }
@@ -578,7 +624,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
   };
 
   const checkAll = (): void => {
-    const checkList: Key[] = [];
+    const checkList: BaseTreeKey[] = [];
     const nodes: BaseNode[] = [];
     nodeList.forEach((item) => {
       if (!item.disabled) {
@@ -614,7 +660,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
       if (target) {
         // 自己 包含自己下的所有节点
         const highlightList = { [target.key]: true };
-        // const loop = (node: TreeIndexItem) => {
+        // const loop = (node: BaseTreeIndexItem) => {
         //   node.children.forEach((item) => {
         //     highlightList[item.key] = true;
         //     if (node.children) loop(item);
@@ -629,14 +675,14 @@ const Tree = <BaseNode extends BaseTreeNode>(
     return {};
   }, [dragTargetKey, treeIndex]);
 
-  const onDragStart = (e: any, key: Key) => {
+  const onDragStart = (e: any, key: BaseTreeKey) => {
     if (props.canDrag) {
       e.stopPropagation();
       setCurrentDragKey(key);
     }
   };
 
-  const onDragLeave = (e: any, key: Key | symbol) => {
+  const onDragLeave = (e: any, key: BaseTreeKey | symbol) => {
     if (props.canDrag) {
       if (isSymbol(key) || !dragHighlightList[key]) {
         setDragTargetKey(null);
@@ -645,7 +691,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
     }
   };
 
-  const onDragOver = (e: any, key: Key | symbol) => {
+  const onDragOver = (e: any, key: BaseTreeKey | symbol) => {
     if (props.canDrag && currentDragKey) {
       const source = treeIndex.get(currentDragKey);
       if (isSymbol(key) && source) {
@@ -659,7 +705,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
           e.stopPropagation();
         }
       } else if (source) {
-        const target = treeIndex.get(key as Key);
+        const target = treeIndex.get(key as BaseTreeKey);
         // dragTargetKey
         const uniqueId = props.canDrag(source, target);
         if (uniqueId !== null && uniqueId !== currentDragKey) {
@@ -678,12 +724,12 @@ const Tree = <BaseNode extends BaseTreeNode>(
     }
   };
 
-  const onDrop = (e: any, key: Key | symbol): void => {
+  const onDrop = (e: any, key: BaseTreeKey | symbol): void => {
     if (props.canDrag && props.onDrag && currentDragKey) {
       setDragTargetKey(null);
       e.stopPropagation();
       const source = treeIndex.get(currentDragKey);
-      const target = treeIndex.get(key as Key);
+      const target = treeIndex.get(key as BaseTreeKey);
       if (source) {
         const uniqueId = props.canDrag(source, target);
         if (isSymbol(uniqueId)) {
@@ -764,7 +810,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
 };
 
 export default forwardRef(Tree) as <BaseNode extends BaseTreeNode>(
-  props: TreeProps<BaseNode> & {
-    ref: React.RefObject<TreeRef<BaseNode>> | null;
+  props: BaseTreeProps<BaseNode> & {
+    ref: React.RefObject<BaseTreeRef<BaseNode>> | null;
   },
 ) => React.ReactElement;

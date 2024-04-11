@@ -1,5 +1,5 @@
 import { ItemType } from "antd/es/menu/hooks/useItems";
-import { BaseTreeNode } from "@/components/BaseTree";
+import { BaseTreeNode } from "../BaseTree";
 
 export interface DirectoryNode<T extends BaseTreeNode, NODE_TYPE>
   extends BaseTreeNode {
@@ -17,7 +17,7 @@ export interface DirectoryNode<T extends BaseTreeNode, NODE_TYPE>
   temp?: boolean;
 }
 
-export interface TreeActions<T> {
+export interface DirectoryTreeActions<T> {
   rename?: (node: T) => Promise<void>;
   copy?: (node: T) => Promise<void>;
   delete?: (node: T) => Promise<void>;
@@ -27,13 +27,16 @@ export interface TreeActions<T> {
 
 type ACTION_TYPE = "rename" | "copy" | "delete" | "create" | "import";
 
-export type BaseTreeAction<T extends BaseTreeNode, NODE_TYPE> = ItemType & {
+export type DirectoryBaseTreeAction<
+  T extends BaseTreeNode,
+  NODE_TYPE,
+> = ItemType & {
   /**
    * key 保持列表唯一
    */
   key: string;
   /**
-   * 内置操作类型，不填直接触发 onClick。填了就自动触发 TreeActions 中操作
+   * 内置操作类型，不填直接触发 onClick。填了就自动触发 DirectoryTreeActions 中操作
    */
   actionType?: ACTION_TYPE;
   /**
@@ -47,10 +50,10 @@ export type BaseTreeAction<T extends BaseTreeNode, NODE_TYPE> = ItemType & {
   onClick?: (node: DirectoryNode<T, NODE_TYPE>) => void;
 };
 
-export type CreateAction<T extends BaseTreeNode, NODE_TYPE> = BaseTreeAction<
-  T,
-  NODE_TYPE
-> & {
+export type DirectoryCreateAction<
+  T extends BaseTreeNode,
+  NODE_TYPE,
+> = DirectoryBaseTreeAction<T, NODE_TYPE> & {
   actionType: "create";
   /**
    * 新建的节点类型
@@ -62,10 +65,10 @@ export type CreateAction<T extends BaseTreeNode, NODE_TYPE> = BaseTreeAction<
   createDefaultName: string;
 };
 
-export type NonCreateAction<T extends BaseTreeNode, NODE_TYPE> = BaseTreeAction<
-  T,
-  NODE_TYPE
-> & {
+export type DirectoryNonCreateAction<
+  T extends BaseTreeNode,
+  NODE_TYPE,
+> = DirectoryBaseTreeAction<T, NODE_TYPE> & {
   actionType?: Exclude<ACTION_TYPE, "create">;
 };
 /**
@@ -73,6 +76,6 @@ export type NonCreateAction<T extends BaseTreeNode, NODE_TYPE> = BaseTreeAction<
  * 通过 actions 通知出去
  * 对应 "rename" | "copy" | "delete" | "create" | "import";
  */
-export type DropdownItem<T extends BaseTreeNode, NODE_TYPE> =
-  | CreateAction<T, NODE_TYPE>
-  | NonCreateAction<T, NODE_TYPE>;
+export type DirectoryDropdownItem<T extends BaseTreeNode, NODE_TYPE> =
+  | DirectoryCreateAction<T, NODE_TYPE>
+  | DirectoryNonCreateAction<T, NODE_TYPE>;

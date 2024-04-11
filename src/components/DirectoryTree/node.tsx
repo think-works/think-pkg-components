@@ -8,16 +8,21 @@ import React, {
   useState,
 } from "react";
 import { MoreOutlined } from "@ant-design/icons";
-import { BaseTreeNode, TreeIndexItem } from "@/components/BaseTree";
+import { BaseTreeIndexItem, BaseTreeNode } from "@/components/BaseTree";
 import { uuid4 } from "@/utils/crypto";
 import { TreeFolderIcon } from "./icon/FolderIcon";
 import { TreeFolderOpenIcon } from "./icon/FolderOpenIcon";
 import style from "./item.module.less";
-import { DirectoryNode, DropdownItem, TreeActions } from "./types";
+import {
+  DirectoryDropdownItem,
+  DirectoryNode,
+  DirectoryTreeActions,
+} from "./types";
 
+export { TreeFolderIcon, TreeFolderOpenIcon };
 interface Props<T extends BaseTreeNode, NODE_TYPE> {
   /** 节点数据 */
-  data: TreeIndexItem<DirectoryNode<T, NODE_TYPE>>;
+  data: BaseTreeIndexItem<DirectoryNode<T, NODE_TYPE>>;
   /**
    * 当前节点是否被 hover
    */
@@ -28,7 +33,7 @@ interface Props<T extends BaseTreeNode, NODE_TYPE> {
    */
   onUpdate: () => void;
   createTypes?: NODE_TYPE[];
-  actions?: TreeActions<DirectoryNode<T, NODE_TYPE>>;
+  actions?: DirectoryTreeActions<DirectoryNode<T, NODE_TYPE>>;
 
   showNodeCount?: boolean;
   /**
@@ -47,7 +52,7 @@ interface Props<T extends BaseTreeNode, NODE_TYPE> {
    */
   renderDropdownItems?: (
     node: DirectoryNode<T, NODE_TYPE>,
-  ) => DropdownItem<T, NODE_TYPE>[];
+  ) => DirectoryDropdownItem<T, NODE_TYPE>[];
   /**
    * 判断文件夹
    * @param node

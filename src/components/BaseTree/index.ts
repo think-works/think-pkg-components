@@ -1,10 +1,5 @@
-export { default as BaseTree, kRootNode } from "./base";
+export { default as BaseTree, kRootNode as BaseTreeKRootNode } from "./base";
 
-export { default as TreeIcon } from "./icon";
-export type {
-  TreeIndexItem,
-  TreeItemContext,
-  BaseTreeNode,
-  TreeContextMenu as BaseTreeContextMenu,
-} from "./base/types";
-export type { TreeProps, TreeRef } from "./base";
+export { default as BaseTreeIcon } from "./icon";
+export * from "./base/types";
+export type * from "./base";

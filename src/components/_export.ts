@@ -49,8 +49,9 @@ export {
 } from "./SortableTable";
 export { type UploaderProps, default as Uploader } from "./Uploader";
 export { type UserAvatarProps, default as UserAvatar } from "./UserAvatar";
-export { default as DirectoryTree } from "./DirectoryTree";
-export * as DirectoryTreeType from "./DirectoryTree/types";
 
+export { TreeFolderIcon, TreeFolderOpenIcon } from "./DirectoryTree/node";
+export { default as DirectoryTree } from "./DirectoryTree";
+export * from "./DirectoryTree/types";
 export * from "./BaseTree";
 export * from "./MacScrollbar";

@@ -1,20 +1,20 @@
 import { ReactNode } from "react";
 
-export type Key = string | number;
+export type BaseTreeKey = string | number;
 
 export interface BaseTreeNode {
-  id: Key;
+  id: BaseTreeKey;
   name: number | string | boolean | ReactNode;
-  parentId?: Key;
+  parentId?: BaseTreeKey;
   children?: BaseTreeNode[];
   isLeaf?: boolean | ((val: BaseTreeNode) => boolean);
 }
 
-export interface TreeIndexItem<T extends BaseTreeNode> {
-  readonly key: Key;
+export interface BaseTreeIndexItem<T extends BaseTreeNode> {
+  readonly key: BaseTreeKey;
   readonly node: T;
-  readonly parent?: TreeIndexItem<T>;
-  readonly children: TreeIndexItem<T>[];
+  readonly parent?: BaseTreeIndexItem<T>;
+  readonly children: BaseTreeIndexItem<T>[];
   readonly deep: number;
   readonly indeterminate: boolean;
   readonly isShow: boolean;
@@ -27,18 +27,18 @@ export interface TreeIndexItem<T extends BaseTreeNode> {
   searched: boolean;
 }
 
-export interface TreeItemContext {
+export interface BaseTreeItemContext {
   hover: boolean;
 }
 
-export interface TreeContextMenu<T extends BaseTreeNode> {
+export interface BaseTreeContextMenu<T extends BaseTreeNode> {
   label?: React.ReactNode;
   divider?: boolean;
   disabled?: boolean;
   onClick?: (node: T) => void | Promise<void>;
-  subMenu?: TreeContextMenu<T>[];
+  subMenu?: BaseTreeContextMenu<T>[];
 }
 
-export type TreeMenuActions<T extends BaseTreeNode = BaseTreeNode> =
-  | TreeContextMenu<T>[]
-  | ((node: T) => TreeContextMenu<T>[]);
+export type BaseTreeMenuActions<T extends BaseTreeNode = BaseTreeNode> =
+  | BaseTreeContextMenu<T>[]
+  | ((node: T) => BaseTreeContextMenu<T>[]);
