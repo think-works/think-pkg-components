@@ -1,6 +1,6 @@
 {
   "name": "@think/components",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "组件库",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -78,6 +78,7 @@
     "@types/react": "^18.2.73",
     "@types/react-dom": "^18.2.23",
     "@vitejs/plugin-react": "^4.2.1",
+    "ahooks": "^3.7.11",
     "antd": "^5.16.0",
     "axios": "^1.6.8",
     "classnames": "^2.5.1",
