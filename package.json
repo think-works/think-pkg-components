@@ -1,6 +1,6 @@
 {
   "name": "@think/components",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "组件库",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -27,6 +27,7 @@
   ],
   "scripts": {
     "serve": "vite",
+    "build:watch": "tsc && vite build -w && npm run build:types",
     "build": "tsc && vite build && npm run build:types",
     "build:types": "tsc --outDir dist --noEmit false --composite false --tsBuildInfoFile null --declaration --emitDeclarationOnly && tsc-alias --outDir dist && rm -rf dist/main.d.ts dist/Demo",
     "prepare": "husky",

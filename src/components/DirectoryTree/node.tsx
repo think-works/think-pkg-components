@@ -14,15 +14,15 @@ import { TreeFolderIcon } from "./icon/FolderIcon";
 import { TreeFolderOpenIcon } from "./icon/FolderOpenIcon";
 import style from "./item.module.less";
 import {
-  DirectoryDropdownItem,
-  DirectoryNode,
   DirectoryTreeActions,
+  DirectoryTreeDropdownItem,
+  DirectoryTreeNode,
 } from "./types";
 
 export { TreeFolderIcon, TreeFolderOpenIcon };
 interface Props<T extends BaseTreeNode, NODE_TYPE> {
   /** 节点数据 */
-  data: BaseTreeIndexItem<DirectoryNode<T, NODE_TYPE>>;
+  data: BaseTreeIndexItem<DirectoryTreeNode<T, NODE_TYPE>>;
   /**
    * 当前节点是否被 hover
    */
@@ -33,7 +33,7 @@ interface Props<T extends BaseTreeNode, NODE_TYPE> {
    */
   onUpdate: () => void;
   createTypes?: NODE_TYPE[];
-  actions?: DirectoryTreeActions<DirectoryNode<T, NODE_TYPE>>;
+  actions?: DirectoryTreeActions<DirectoryTreeNode<T, NODE_TYPE>>;
 
   showNodeCount?: boolean;
   /**
@@ -42,17 +42,17 @@ interface Props<T extends BaseTreeNode, NODE_TYPE> {
    * @param node
    * @returns
    */
-  renderNodeIcon?: (node: DirectoryNode<T, NODE_TYPE>) => React.ReactNode;
-  renderTag?: (node: DirectoryNode<T, NODE_TYPE>) => React.ReactNode;
-  renderRight?: (node: DirectoryNode<T, NODE_TYPE>) => React.ReactNode;
+  renderNodeIcon?: (node: DirectoryTreeNode<T, NODE_TYPE>) => React.ReactNode;
+  renderTag?: (node: DirectoryTreeNode<T, NODE_TYPE>) => React.ReactNode;
+  renderRight?: (node: DirectoryTreeNode<T, NODE_TYPE>) => React.ReactNode;
   /**
    * 给每个节点处理自己的 DropdownItems
    * @param node
    * @returns
    */
   renderDropdownItems?: (
-    node: DirectoryNode<T, NODE_TYPE>,
-  ) => DirectoryDropdownItem<T, NODE_TYPE>[];
+    node: DirectoryTreeNode<T, NODE_TYPE>,
+  ) => DirectoryTreeDropdownItem<T, NODE_TYPE>[];
   /**
    * 判断文件夹
    * @param node
@@ -96,7 +96,7 @@ function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
       if (!data.node.children) {
         data.node.children = [];
       }
-      const node: DirectoryNode<T, NODE_TYPE> = {
+      const node: DirectoryTreeNode<T, NODE_TYPE> = {
         name,
         type,
         id: uuid4(),
@@ -206,7 +206,7 @@ function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
       return props.renderRight(data.node);
     }
     if (props.showNodeCount) {
-      const loop = (node: DirectoryNode<T, NODE_TYPE>[]): number => {
+      const loop = (node: DirectoryTreeNode<T, NODE_TYPE>[]): number => {
         let count = 0;
         node.forEach((item) => {
           if (!isDirectory(item.type)) {
