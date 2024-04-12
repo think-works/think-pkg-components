@@ -7,7 +7,10 @@ export type LoadingProps = SpinProps & {
   delay?: number;
 };
 
-const Loading = (props: LoadingProps) => {
+/**
+ * 充满容器且不嵌套的加载中
+ */
+export const Loading = (props: LoadingProps) => {
   const { className, delay = 200, spinning, ...rest } = props;
 
   const [loading, setLoading] = useState(spinning);

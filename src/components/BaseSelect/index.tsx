@@ -3,7 +3,7 @@ import cls, { Argument } from "classnames";
 import { isArray, isObject } from "lodash-es";
 import stl from "./index.module.less";
 
-export type BaseOption = {
+type BaseOption = {
   [key: string]: any;
   label?: any;
   value?: any;
@@ -18,7 +18,10 @@ export type BaseSelectProps = Omit<SelectProps, "options"> & {
   disabledOptions?: any[];
 };
 
-const BaseSelect = (props: BaseSelectProps) => {
+/**
+ * 基础下拉框
+ */
+export const BaseSelect = (props: BaseSelectProps) => {
   const {
     className,
     options,

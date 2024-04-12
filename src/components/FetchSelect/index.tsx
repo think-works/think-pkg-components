@@ -1,9 +1,9 @@
 import { get } from "lodash-es";
 import { useCallback, useEffect, useState } from "react";
-import { useDebounce, useIsMounted } from "@/utils/hooks";
+import { useDebounce, useIsMounted } from "@/hooks";
 import BaseSelect, { BaseSelectProps } from "../BaseSelect";
 
-export type OptionItem<R = any> = {
+type OptionItem<R = any> = {
   key?: string;
   value?: string;
   label?: string;
@@ -27,7 +27,10 @@ export type FetchSelectProps = BaseSelectProps & {
   transformOptions?: (options: OptionItem[]) => any[];
 };
 
-const FetchSelect = (props: FetchSelectProps) => {
+/**
+ * 可查询下拉框
+ */
+export const FetchSelect = (props: FetchSelectProps) => {
   const {
     showSearch = false,
     filterOption = true,

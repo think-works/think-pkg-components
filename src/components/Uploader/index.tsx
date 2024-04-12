@@ -17,7 +17,10 @@ export type UploaderProps = UploadProps & {
   axiosConfig?: Record<string, any>;
 };
 
-class Uploader extends React.Component<UploaderProps, any> {
+/**
+ * 异步上传
+ */
+export class Uploader extends React.Component<UploaderProps, any> {
   static Dragger: any;
 
   protected getUploadProps = () => {
@@ -127,6 +130,9 @@ class Uploader extends React.Component<UploaderProps, any> {
   }
 }
 
+/**
+ * 拖拽异步上传
+ */
 class Dragger extends Uploader {
   render() {
     const { className, children } = this.props;

@@ -3,38 +3,13 @@ import React, { useCallback } from "react";
 import { NavigateFunction, useLocation, useNavigate } from "react-router-dom";
 import type { Location } from "@remix-run/router";
 import { normalizeObject, parseQuery, stringifyQuery } from "@/utils/tools";
-import { DFT_SIZE } from "../BaseTable";
+import { BaseTableDefaultPageSize } from "../BaseTable";
 import FetchTable, {
-  FetchData,
-  FetchParams,
+  FetchTablePaging,
+  FetchTableParams,
   FetchTableProps,
-  PagingParams,
 } from "../FetchTable";
-
-const withRouter =
-  (Component: any) =>
-  (props: Omit<RouteTableProps, "location" | "navigate">) => {
-    const location = useLocation();
-    const navigate = useNavigate();
-    return <Component location={location} navigate={navigate} {...props} />;
-  };
-
-export type RouteParams<FilterType = Record<string, any>> = {
-  filter?: FilterType;
-} & FetchParams;
-
-export type RouteTableProps<
-  RecordType = any,
-  FilterType = Record<string, any>,
-> = Omit<
-  FetchTableProps<RecordType>,
-  "pageNo" | "pageSize" | "fetchData" | "onPagingChange"
-> & {
-  location: Location;
-  navigate: NavigateFunction;
-  filter?: FilterType;
-  fetchData?: (params: RouteParams) => void | Promise<FetchData | void>;
-};
+import { FilterTableGetData } from "../FilterTable";
 
 const QUERY_PAGE_KEY = "pageNo";
 const QUERY_SIZE_KEY = "pageSize";
@@ -66,7 +41,7 @@ const tryStringify = (value?: string) => {
   return value;
 };
 
-export const clearPageSearch = (search: string) => {
+const clearPageSearch = (search: string) => {
   const query = parseQuery(search);
   const newQuery = omit(query, [
     QUERY_PAGE_KEY,
@@ -77,7 +52,7 @@ export const clearPageSearch = (search: string) => {
   return stringifyQuery(newQuery);
 };
 
-export const parsePageSearch = (search: string) => {
+const parsePageSearch = (search: string) => {
   const query = parseQuery(search);
 
   const pageNo = tryParse(query[QUERY_PAGE_KEY]);
@@ -91,7 +66,7 @@ export const parsePageSearch = (search: string) => {
   };
 };
 
-export const updatePageSearch = (search: string, diff: Record<string, any>) => {
+const updatePageSearch = (search: string, diff: Record<string, any>) => {
   const query = parseQuery(search);
 
   const _diff: Record<string, any> = {};
@@ -113,7 +88,7 @@ export const updatePageSearch = (search: string, diff: Record<string, any>) => {
 /**
  * 清理路由查询参数中的分页查询参数
  */
-export const useClearPageSearch = () => {
+const useClearPageSearch = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -128,7 +103,7 @@ export const useClearPageSearch = () => {
 /**
  * 从路由查询参数中获取分页查询参数
  */
-export const useParsePageSearch = () => {
+const useParsePageSearch = () => {
   const location = useLocation();
   const query = parsePageSearch(location.search);
   return query;
@@ -137,11 +112,28 @@ export const useParsePageSearch = () => {
 /**
  * 从路由查询参数中获取筛选条件
  */
-export const useSearchFilterValue = () => {
+const useSearchFilterValue = () => {
   const { filter } = useParsePageSearch();
   return filter;
 };
 
+export type RouteTableProps<
+  RecordType = any,
+  FilterType = Record<string, any>,
+  DataItem = any,
+> = Omit<
+  FetchTableProps<RecordType>,
+  "pageNo" | "pageSize" | "fetchData" | "onPagingChange"
+> & {
+  location: Location;
+  navigate: NavigateFunction;
+  filter?: FilterType;
+  fetchData?: FilterTableGetData<FilterType, DataItem>;
+};
+
+/**
+ * 路由表格
+ */
 class RouteTable extends React.Component<RouteTableProps, any> {
   static getDerivedStateFromProps(props: RouteTableProps, state: any) {
     const { location } = props;
@@ -181,7 +173,7 @@ class RouteTable extends React.Component<RouteTableProps, any> {
 
     this.state = {
       pageNo: pageNo || 1,
-      pageSize: pageSize || DFT_SIZE,
+      pageSize: pageSize || BaseTableDefaultPageSize,
       filter: filter,
       filterKey: 0,
     };
@@ -225,7 +217,7 @@ class RouteTable extends React.Component<RouteTableProps, any> {
     );
   };
 
-  private fetchData = (params: FetchParams) => {
+  private fetchData = (params: FetchTableParams) => {
     const { location, fetchData } = this.props;
     const { filter } = parsePageSearch(location.search);
 
@@ -238,7 +230,7 @@ class RouteTable extends React.Component<RouteTableProps, any> {
     );
   };
 
-  private handlePagingChange = (paging: PagingParams) => {
+  private handlePagingChange = (paging: FetchTablePaging) => {
     const { pageNo, pageSize } = paging;
 
     this.setQuery({ pageNo, pageSize });
@@ -269,6 +261,39 @@ class RouteTable extends React.Component<RouteTableProps, any> {
   }
 }
 
-const RouteTableWrapper = withRouter(RouteTable);
+type withRouterResult = (
+  props: Omit<RouteTableProps, "location" | "navigate">,
+) => JSX.Element;
+
+type withRouterFunc = (
+  Component: React.ComponentType<RouteTableProps>,
+) => withRouterResult;
+
+type WrapperComponent = withRouterResult & {
+  clearPageSearch: typeof clearPageSearch;
+  parsePageSearch: typeof parsePageSearch;
+  updatePageSearch: typeof updatePageSearch;
+  useClearPageSearch: typeof useClearPageSearch;
+  useParsePageSearch: typeof useParsePageSearch;
+  useSearchFilterValue: typeof useSearchFilterValue;
+};
+
+const withRouter: withRouterFunc = (Component) => (props) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  return <Component location={location} navigate={navigate} {...props} />;
+};
+
+/**
+ * 路由表格包装
+ */
+export const RouteTableWrapper = withRouter(RouteTable) as WrapperComponent;
+
+RouteTableWrapper.clearPageSearch = clearPageSearch;
+RouteTableWrapper.parsePageSearch = parsePageSearch;
+RouteTableWrapper.updatePageSearch = updatePageSearch;
+RouteTableWrapper.useClearPageSearch = useClearPageSearch;
+RouteTableWrapper.useParsePageSearch = useParsePageSearch;
+RouteTableWrapper.useSearchFilterValue = useSearchFilterValue;
 
 export default RouteTableWrapper;

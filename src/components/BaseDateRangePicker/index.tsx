@@ -6,14 +6,16 @@ export type BaseDateRangePickerProps = Omit<
   (typeof DatePicker)["RangePicker"],
   "value" | "onChange" | "$$typeof"
 > & {
-  [key: string]: any;
   startOf?: (OpUnitType | null)[];
   endOf?: (OpUnitType | null)[];
   value?: number[];
   onChange?: (time: number[], timeString: string[]) => any;
 };
 
-const BaseDateRangePicker = (props: BaseDateRangePickerProps) => {
+/**
+ * 基础时间区间选择
+ */
+export const BaseDateRangePicker = (props: BaseDateRangePickerProps) => {
   const { startOf, endOf, value, onChange, ...rest } = props || props;
 
   const _value = useMemo(() => {

@@ -1,2 +1,2 @@
-export * from "./colors";
-export * from "./theme";
+export * as color from "./colors";
+export * as theme from "./theme";

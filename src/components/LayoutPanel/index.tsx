@@ -21,7 +21,7 @@ export type LayoutPanelProps = LayoutTitleProps & {
 /**
  * 布局面板
  */
-const LayoutPanel = (props: LayoutPanelProps) => {
+export const LayoutPanel = (props: LayoutPanelProps) => {
   const {
     className,
     style,

@@ -1,15 +1,19 @@
 import { Divider } from "antd";
 import cls, { Argument } from "classnames";
+import { HTMLAttributes } from "react";
 import BaseAction, { BaseActionProps } from "../BaseAction";
 import stl from "./index.module.less";
 
-export type InlineActionsProps = {
+export type InlineActionsProps = HTMLAttributes<HTMLSpanElement> & {
   className?: Argument;
   actions?: (BaseActionProps | null | undefined)[];
   divider?: boolean;
 };
 
-const InlineActions = (props: InlineActionsProps) => {
+/**
+ * 内敛操作
+ */
+export const InlineActions = (props: InlineActionsProps) => {
   const { className, actions, divider, ...rest } = props || {};
 
   if (divider) {

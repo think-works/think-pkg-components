@@ -1,7 +1,7 @@
 import { Input, InputProps, Select } from "antd";
 import { useState } from "react";
 
-export type SearchInputValue = {
+type SearchInputValue = {
   type?: string;
   text?: string;
 };
@@ -12,7 +12,10 @@ export type SearchInputProps = Omit<InputProps, "value" | "onChange"> & {
   onChange?: (value: SearchInputValue) => void;
 };
 
-const SearchInput = (props: SearchInputProps) => {
+/**
+ * 搜索输入
+ */
+export const SearchInput = (props: SearchInputProps) => {
   const { options, value, onChange, ...rest } = props || {};
 
   const _options = (options || []).map((option) => ({
@@ -47,7 +50,6 @@ const SearchInput = (props: SearchInputProps) => {
     <Input
       value={cache.text}
       onChange={handleInputChange}
-      {...rest}
       addonBefore={
         <Select
           value={cache.type}
@@ -55,6 +57,7 @@ const SearchInput = (props: SearchInputProps) => {
           onChange={handleSelectChange}
         />
       }
+      {...rest}
     />
   );
 };

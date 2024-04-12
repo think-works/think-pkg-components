@@ -17,11 +17,26 @@ import DecoupleTextArea from "./DecoupleTextArea";
 import EditableHeader from "./EditableHeader";
 import stl from "./index.module.less";
 
-export type DataRow = Record<string, any>;
+type DataRow = Record<string, any>;
 
-export type Column = ColumnType<any>;
+type Column = ColumnType<any>;
 
-export type ColumnExtend = Column & {
+type RenderParams = Parameters<Required<Column>["render"]>;
+
+type ActionResult = {
+  /** 禁止操作 */
+  disabled?: boolean;
+  /** 操作扩展 */
+  extend?: ReactNode;
+};
+
+type ActionRender = (
+  text: RenderParams[0],
+  record: RenderParams[1],
+  index: RenderParams[2],
+) => ActionResult;
+
+export type EditableTableColumn = Column & {
   disabled?: boolean | ((record: DataRow) => boolean | string);
   /** value 别名 */
   valuePropName?: string;
@@ -30,21 +45,6 @@ export type ColumnExtend = Column & {
   /** onChange 事件值转换器 */
   changeEventConverter?: (event: any) => any;
 };
-
-export type RenderParams = Parameters<Required<Column>["render"]>;
-
-export type ActionResult = {
-  /** 禁止操作 */
-  disabled?: boolean;
-  /** 操作扩展 */
-  extend?: ReactNode;
-};
-
-export type ActionRender = (
-  text: RenderParams[0],
-  record: RenderParams[1],
-  index: RenderParams[2],
-) => ActionResult;
 
 export type EditableTableProps = Omit<
   TableProps<any>,
@@ -59,7 +59,7 @@ export type EditableTableProps = Omit<
   /** 数据源 */
   dataSource?: DataRow[];
   /** 列配置 */
-  columns?: ColumnExtend[];
+  columns?: EditableTableColumn[];
   /** 操作列配置 */
   actionColumn?: false | Column;
   /** 操作列渲染 */
@@ -80,7 +80,7 @@ export type EditableTableProps = Omit<
  * 适用场景：
  * 使用 <Input /> 时，因重复渲染造成单元格实例不稳定，表现为光标位置总是跳到最后一个字符之后。
  */
-const EditableTable = (props: EditableTableProps) => {
+export const EditableTable = (props: EditableTableProps) => {
   const {
     className,
     readOnly,
@@ -94,7 +94,7 @@ const EditableTable = (props: EditableTableProps) => {
     onDataChange,
     onChange,
     onRowDelete,
-    ...restProps
+    ...rest
   } = props;
 
   const [itemList, setItemList] = useState<DataRow[]>([]);
@@ -350,7 +350,7 @@ const EditableTable = (props: EditableTableProps) => {
       dataSource={itemList}
       columns={colList}
       locale={{ emptyText: "无内容" }}
-      {...restProps}
+      {...rest}
     />
   );
 };

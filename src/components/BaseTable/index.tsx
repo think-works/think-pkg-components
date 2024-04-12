@@ -11,6 +11,8 @@ const isBlankString = (text?: string) =>
     detectEmpty: true,
   });
 
+export const BaseTableDefaultPageSize = 20;
+
 type TableColumn<RecordType = any> = NonNullable<
   TableProps<RecordType>["columns"]
 >[number];
@@ -40,9 +42,10 @@ export type BaseTableProps<RecordType = any> = Omit<
   tableProps?: Record<string, any>;
 };
 
-export const DFT_SIZE = 20;
-
-const BaseTable = (props: BaseTableProps) => {
+/**
+ * 基础表格
+ */
+export const BaseTable = (props: BaseTableProps) => {
   const { className, columns, pagination, extend, tableProps, ...rest } =
     props || {};
 

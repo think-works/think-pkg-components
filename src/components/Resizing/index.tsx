@@ -2,16 +2,16 @@ import cls from "classnames";
 import {
   ForwardedRef,
   forwardRef,
+  HTMLAttributes,
   useCallback,
   useEffect,
   useImperativeHandle,
   useRef,
 } from "react";
-import { useThrottle } from "@/utils/hooks";
+import { useThrottle } from "@/hooks";
 import stl from "./index.module.less";
 
-export type ResizingProps = {
-  [key: string]: any;
+export type ResizingProps = HTMLAttributes<HTMLDivElement> & {
   /** 防抖毫秒时间间隔 */
   throttle?: number;
   /** 将子标签脱离文档流以避免撑开所在容器 */
@@ -20,7 +20,13 @@ export type ResizingProps = {
   onResize?: (width: number, height: number) => any;
 };
 
-const Resizing = (props: ResizingProps, ref: ForwardedRef<HTMLDivElement>) => {
+/**
+ * 可尺寸变更容器
+ */
+export const Resizing = (
+  props: ResizingProps,
+  ref: ForwardedRef<HTMLDivElement>,
+) => {
   const {
     className,
     throttle = 100,

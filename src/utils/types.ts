@@ -1,4 +1,34 @@
 /**
+ * api 接口响应
+ */
+export type ApiResponse<Data = any, Ext = any> = {
+  success?: boolean;
+  message?: string;
+  data?: Data;
+  ext?: Ext;
+};
+
+/**
+ * 分页请求参数
+ */
+export type PagingRequest = {
+  pageNo?: number;
+  pageSize?: number;
+  offset?: number;
+};
+
+/**
+ * 分页响应参数
+ */
+export type PagingResponse<T = any> = {
+  total?: number;
+  pageNo?: number;
+  pageSize?: number;
+  offset?: number;
+  list?: T[];
+};
+
+/**
  * 可变类型移除 readonly
  */
 export type Mutable<T> = {

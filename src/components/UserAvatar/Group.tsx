@@ -1,13 +1,23 @@
 import { Avatar, GetProps, Tooltip } from "antd";
 import { truthy } from "@/utils/types";
 import BaseAvatar from "../BaseAvatar";
-import { getUserName, UserModel } from "./index";
 import stl from "./index.module.less";
+
+export type UserModel = {
+  loginName?: string;
+  nickName?: string;
+};
+
+export const getUserName = ({ nickName, loginName }: UserModel) =>
+  nickName ? `${nickName}(${loginName})` : loginName;
 
 export type UserAvatarGroupProps = GetProps<typeof Avatar.Group> & {
   userModels?: (UserModel | undefined)[];
 };
 
+/**
+ * 用户头像组
+ */
 const UserAvatarGroup = (props: UserAvatarGroupProps) => {
   const { userModels, ...rest } = props;
   const list = userModels?.filter(truthy);

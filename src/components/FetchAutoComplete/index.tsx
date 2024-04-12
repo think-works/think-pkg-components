@@ -2,7 +2,7 @@ import { AutoComplete, AutoCompleteProps } from "antd";
 import cls, { Argument } from "classnames";
 import { get } from "lodash-es";
 import { useCallback, useEffect, useState } from "react";
-import { useDebounce, useIsMounted } from "@/utils/hooks";
+import { useDebounce, useIsMounted } from "@/hooks";
 import stl from "./index.module.less";
 
 export type FetchAutoCompleteProps = AutoCompleteProps & {
@@ -22,7 +22,10 @@ export type FetchAutoCompleteProps = AutoCompleteProps & {
   transformOptions?: (options: any[]) => any[];
 };
 
-const FetchAutoComplete = (props: FetchAutoCompleteProps) => {
+/**
+ * 可查询自动补全
+ */
+export const FetchAutoComplete = (props: FetchAutoCompleteProps) => {
   const {
     className,
     filterOption = true,

@@ -6,13 +6,13 @@ import {
   useRef,
   useState,
 } from "react";
-import { useThrottle } from "@/utils/hooks";
+import { useThrottle } from "@/hooks";
 import DraggingIcon from "./DraggingIcon";
 import DragHandler, { DragHandlerProps, Size } from "./DragHandler";
 import stl from "./index.module.less";
 import useDraggable, { DraggableParams } from "./useDraggable";
 
-export type Placement = "top" | "bottom" | "left" | "right";
+type Placement = "top" | "bottom" | "left" | "right";
 
 export type DragContainerProps = HTMLAttributes<HTMLDivElement> & {
   /** 容器样式 */
@@ -38,7 +38,7 @@ export type DragContainerProps = HTMLAttributes<HTMLDivElement> & {
 /**
  * 拖拽容器
  */
-const DragContainer = (props: DragContainerProps) => {
+export const DragContainer = (props: DragContainerProps) => {
   const {
     className,
     panelClassName,

@@ -24,7 +24,10 @@ export type DropdownActionsProps = (
   children?: React.ReactNode;
 };
 
-const DropdownActions = (props: DropdownActionsProps) => {
+/**
+ * 下拉操作
+ */
+export const DropdownActions = (props: DropdownActionsProps) => {
   const { className, buttonTrigger, actions, children, ...rest } = props || {};
 
   const items: MenuProps["items"] = (actions || [])

@@ -10,7 +10,10 @@ export type LayoutQueryProps = {
   result?: React.ReactNode;
 };
 
-const LayoutQuery = (props: LayoutQueryProps) => {
+/**
+ * 查询布局
+ */
+export const LayoutQuery = (props: LayoutQueryProps) => {
   const { className, style, filter, title, action, result } = props || {};
 
   return (

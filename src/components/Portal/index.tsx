@@ -3,14 +3,16 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 export type PortalProps = {
-  [key: string]: any;
   className?: string;
   selector?: string;
   clear?: boolean;
   children?: React.ReactNode;
 };
 
-const Portal = (props: PortalProps) => {
+/**
+ * 创建 Portal
+ */
+export const Portal = (props: PortalProps) => {
   const { className, selector, clear, children } = props;
 
   const [container, setContainer] = useState<Element>();

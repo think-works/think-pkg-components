@@ -3,16 +3,16 @@ import { ButtonProps } from "antd/lib";
 import cls, { Argument } from "classnames";
 import React, { isValidElement, useMemo, useState } from "react";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
-import { useSearchFilterValue } from "../RouteTable";
+import RouteTable from "../RouteTable";
 import stl from "./index.module.less";
 
-export type FilterItemConfig = {
+type FilterFormItemConfig = {
   key?: React.Key;
   colProps?: ColProps;
   children?: React.ReactNode;
 };
 
-export type FilterFormItem = React.ReactNode | FilterItemConfig;
+type FilterFormItem = React.ReactNode | FilterFormItemConfig;
 
 export type FilterFormProps = Omit<FormProps, "action"> & {
   className?: Argument;
@@ -30,7 +30,10 @@ export type FilterFormProps = Omit<FormProps, "action"> & {
   onFilterChange?: (params: Record<string, any>) => void;
 };
 
-const FilterForm = (props: FilterFormProps) => {
+/**
+ * 可筛选表单
+ */
+export const FilterForm = (props: FilterFormProps) => {
   const {
     className,
     style,
@@ -52,7 +55,7 @@ const FilterForm = (props: FilterFormProps) => {
   const [form] = Form.useForm();
   const [open, setOpen] = useState(defaultOpen);
 
-  const filterValue = useSearchFilterValue();
+  const filterValue = RouteTable.useSearchFilterValue();
   const initialValues = filterValue || {};
 
   const triggerChange = (values: any) => {
@@ -84,7 +87,7 @@ const FilterForm = (props: FilterFormProps) => {
         children = item;
       } else {
         const { children: child, colProps: col } = (item ||
-          {}) as FilterItemConfig;
+          {}) as FilterFormItemConfig;
         children = child;
         colProps = Object.assign({}, colProps, col);
       }

@@ -15,6 +15,10 @@ const srcPath = fileURLToPath(new URL("src", import.meta.url));
 const external = Object.keys(peerDependencies || {}).concat([
   "react/jsx-runtime",
 ]);
+const libEntry = [
+  path.join(srcPath, "index.ts"),
+  path.join(srcPath, "node.ts"),
+];
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
@@ -68,7 +72,7 @@ export default defineConfig(({ mode }) => {
       sourcemap: buildSourcemap,
       lib: {
         formats: ["es", "cjs"],
-        entry: [path.join(srcPath, "index.ts"), path.join(srcPath, "cli.ts")],
+        entry: libEntry,
       },
       rollupOptions: {
         external,

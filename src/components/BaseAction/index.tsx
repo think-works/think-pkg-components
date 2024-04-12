@@ -13,6 +13,17 @@ import { isString } from "lodash-es";
 import { useState } from "react";
 import stl from "./index.module.less";
 
+const isType = (val: any, type: string): boolean => {
+  return Object.prototype.toString.call(val) === `[object ${type}]`;
+};
+
+const isPromise = (val: any): val is Promise<any> => {
+  return isType(val, "Promise");
+};
+
+/**
+ * 基础操作按钮
+ */
 export type BaseActionProps = Omit<ButtonProps, "onClick"> & {
   className?: Argument;
   tooltip?: string | TooltipProps;
@@ -25,15 +36,7 @@ export type BaseActionProps = Omit<ButtonProps, "onClick"> & {
   onClick?: (...rest: any[]) => any;
 };
 
-const isType = (val: any, type: string): boolean => {
-  return Object.prototype.toString.call(val) === `[object ${type}]`;
-};
-
-const isPromise = (val: any): val is Promise<any> => {
-  return isType(val, "Promise");
-};
-
-const BaseAction = (props: BaseActionProps) => {
+export const BaseAction = (props: BaseActionProps) => {
   const {
     className,
     tooltip,

@@ -1,20 +1,29 @@
 import { isEqual, omit } from "lodash-es";
 import React from "react";
-import { DFT_SIZE } from "../BaseTable";
+import { BaseTableDefaultPageSize } from "../BaseTable";
 import FetchTable, {
-  FetchData,
-  FetchParams,
+  FetchTableData,
+  FetchTablePaging,
+  FetchTableParams,
   FetchTableProps,
-  PagingParams,
 } from "../FetchTable";
 
-export type FilterParams<FilterType = Record<string, any>> = {
-  filter?: FilterType;
-} & FetchParams;
+export type FilterTableParams<FilterType = Record<string, any>> =
+  FetchTableParams & {
+    filter?: FilterType;
+  };
+
+export type FilterTableGetData<
+  FilterType = Record<string, any>,
+  DataItem = any,
+> = (
+  params: FilterTableParams<FilterType>,
+) => void | Promise<void | FetchTableData<DataItem>>;
 
 export type FilterTableProps<
   RecordType = any,
   FilterType = Record<string, any>,
+  DataItem = any,
 > = Omit<
   FetchTableProps<RecordType>,
   "pageNo" | "pageSize" | "fetchData" | "onPagingChange"
@@ -22,10 +31,13 @@ export type FilterTableProps<
   defaultPage?: number;
   defaultSize?: number;
   filter?: FilterType;
-  fetchData?: (params: FilterParams) => void | Promise<FetchData | void>;
+  fetchData?: FilterTableGetData<FilterType, DataItem>;
 };
 
-class FilterTable extends React.Component<FilterTableProps, any> {
+/**
+ * 可筛选表格
+ */
+export class FilterTable extends React.Component<FilterTableProps, any> {
   static getDerivedStateFromProps(props: FilterTableProps, state: any) {
     let diff = null;
 
@@ -47,13 +59,13 @@ class FilterTable extends React.Component<FilterTableProps, any> {
 
     this.state = {
       pageNo: defaultPage || 1,
-      pageSize: defaultSize || DFT_SIZE,
+      pageSize: defaultSize || BaseTableDefaultPageSize,
       filter: filter,
       filterKey: 0,
     };
   }
 
-  private fetchData = (params: FetchParams) => {
+  private fetchData = (params: FilterTableParams) => {
     const { fetchData } = this.props;
     const { filter } = this.state;
 
@@ -66,7 +78,7 @@ class FilterTable extends React.Component<FilterTableProps, any> {
     );
   };
 
-  private handlePagingChange = (paging: PagingParams) => {
+  private handlePagingChange = (paging: FetchTablePaging) => {
     const { pageNo, pageSize } = paging;
     this.setState({ pageNo, pageSize });
   };

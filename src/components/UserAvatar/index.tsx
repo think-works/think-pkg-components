@@ -1,21 +1,16 @@
 import { Space, Tooltip } from "antd";
 import BaseAvatar, { BaseAvatarProps } from "../BaseAvatar";
-import UserAvatarGroup from "./Group";
-
-export type UserModel = {
-  loginName?: string;
-  nickName?: string;
-};
-
-export const getUserName = ({ nickName, loginName }: UserModel) =>
-  nickName ? `${nickName}(${loginName})` : loginName;
+import UserAvatarGroup, { getUserName, UserModel } from "./Group";
 
 export type UserAvatarProps = Omit<BaseAvatarProps, "userInfo"> & {
   userModel?: UserModel;
   hideName?: boolean;
 };
 
-const UserAvatar = (props: UserAvatarProps) => {
+/**
+ * 用户头像
+ */
+export const UserAvatar = (props: UserAvatarProps) => {
   const { userModel, hideName, ...rest } = props;
 
   if (!userModel) {

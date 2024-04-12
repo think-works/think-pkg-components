@@ -92,7 +92,10 @@ export type SortableTableProps<
   sortableContextProps?: GetProps<typeof SortableContext>;
 };
 
-const SortableTable = (props: SortableTableProps) => {
+/**
+ * 可排序表格
+ */
+export const SortableTable = (props: SortableTableProps) => {
   const {
     TableComponent = Table,
     onDataSourceChange,

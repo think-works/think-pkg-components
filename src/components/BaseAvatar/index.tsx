@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { UserOutlined } from "@ant-design/icons";
 import { hashColor } from "@/common/colors";
 
-export type UserInfo = {
+type UserInfo = {
   name?: string | React.ReactNode;
   avatar?: string | React.ReactNode;
 };
@@ -13,7 +13,10 @@ export type BaseAvatarProps = AvatarProps & {
   nameSlice?: (name: string) => string;
 };
 
-const BaseAvatar = (props: BaseAvatarProps) => {
+/**
+ * 基础头像
+ */
+export const BaseAvatar = (props: BaseAvatarProps) => {
   const { style, userInfo, nameSlice, ...rest } = props;
   const { name, avatar } = userInfo || {};
 

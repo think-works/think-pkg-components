@@ -12,7 +12,10 @@ export type ColumnActionsProps = {
   dropdownActions?: DropdownActionsProps["actions"];
 };
 
-const ColumnActions = (props: ColumnActionsProps) => {
+/**
+ * 表格操作列
+ */
+export const ColumnActions = (props: ColumnActionsProps) => {
   const {
     children,
     disabledDropdown,

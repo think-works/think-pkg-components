@@ -2,28 +2,37 @@ import { omit } from "lodash-es";
 import { isBoolean } from "lodash-es";
 import React from "react";
 import logger from "@/utils/logger";
-import BaseTable, { BaseTableProps, DFT_SIZE } from "../BaseTable";
+import BaseTable, {
+  BaseTableDefaultPageSize,
+  BaseTableProps,
+} from "../BaseTable";
 
-export type FetchParams = {
+const API_PAGE_KEY = "pageNo";
+const API_SIZE_KEY = "pageSize";
+const API_TOTAL_KEY = "total";
+const API_LIST_KEY = "list";
+
+type RawOnChange = NonNullable<BaseTableProps["onChange"]>;
+
+export type FetchTablePaging = {
   pageNo: number;
   pageSize: number;
 };
 
-export type PagingParams = {
-  pageNo: number;
-  pageSize: number;
-};
+export type FetchTableParams = FetchTablePaging;
 
-export type FetchData = {
+export type FetchTableData<Item = any> = {
   pageNo?: number;
   pageSize?: number;
   total?: number;
-  list?: any[];
+  list?: Item[];
 };
 
-export type RawOnChange = NonNullable<BaseTableProps["onChange"]>;
+export type FetchTableGetData<DataItem = any> = (
+  params: FetchTableParams,
+) => void | Promise<void | FetchTableData<DataItem>>;
 
-export type FetchTableProps<RecordType = any> = Omit<
+export type FetchTableProps<RecordType = any, DataItem = any> = Omit<
   BaseTableProps<RecordType>,
   "onChange"
 > & {
@@ -31,17 +40,15 @@ export type FetchTableProps<RecordType = any> = Omit<
   pageSize?: number;
   refreshKey?: number;
   loadingDelay?: number;
-  fetchData?: (params: FetchParams) => void | Promise<FetchData | void>;
-  onPagingChange?: (params: PagingParams) => void;
+  fetchData?: FetchTableGetData<DataItem>;
+  onPagingChange?: (params: FetchTablePaging) => void;
   onChange?: (...rest: Parameters<RawOnChange>) => void | boolean;
 };
 
-const API_PAGE_KEY = "pageNo";
-const API_SIZE_KEY = "pageSize";
-const API_TOTAL_KEY = "total";
-const API_LIST_KEY = "list";
-
-class FetchTable extends React.Component<FetchTableProps, any> {
+/**
+ * 可查询表格
+ */
+export class FetchTable extends React.Component<FetchTableProps, any> {
   mounted = false;
   queryTimer: any;
   loadingTimer: any;
@@ -55,7 +62,7 @@ class FetchTable extends React.Component<FetchTableProps, any> {
       loading: false,
       total: 0,
       current: 1,
-      pageSize: defaultPageSize || DFT_SIZE,
+      pageSize: defaultPageSize || BaseTableDefaultPageSize,
       dataSource: [],
     };
   }
@@ -118,7 +125,7 @@ class FetchTable extends React.Component<FetchTableProps, any> {
 
     const params = {
       [API_PAGE_KEY]: pageNo || 1,
-      [API_SIZE_KEY]: pageSize || DFT_SIZE,
+      [API_SIZE_KEY]: pageSize || BaseTableDefaultPageSize,
     };
 
     // 加载很快时，不显示
@@ -140,7 +147,7 @@ class FetchTable extends React.Component<FetchTableProps, any> {
         this.setState({
           total: total || 0,
           current: pageNo || 1,
-          pageSize: pageSize || DFT_SIZE,
+          pageSize: pageSize || BaseTableDefaultPageSize,
           dataSource: list || [],
         });
       }

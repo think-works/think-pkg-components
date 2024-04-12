@@ -12,7 +12,10 @@ export type BaseDatePickerProps = Omit<
   onChange?: (time: number, timeString: string) => any;
 };
 
-const BaseDatePicker = (props: BaseDatePickerProps) => {
+/**
+ * 基础时间选择
+ */
+export const BaseDatePicker = (props: BaseDatePickerProps) => {
   const { startOf, endOf, value, onChange, picker, ...rest } = props || {};
 
   const _value = useMemo(() => {

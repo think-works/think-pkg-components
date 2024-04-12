@@ -1,16 +1,19 @@
 import cls, { Argument } from "classnames";
-import React from "react";
+import React, { HTMLAttributes } from "react";
 import stl from "./index.module.less";
 
-export type BaseTextProps = {
+export type BaseTextProps = HTMLAttributes<HTMLSpanElement> & {
   className?: Argument;
   style?: React.CSSProperties;
   children?: React.ReactNode;
   type?: "main" | "sub" | "small" | "strong" | "help" | "disabled";
 };
 
-const BaseText = (props: BaseTextProps) => {
-  const { className, style, children, type } = props;
+/**
+ * 基础文本
+ */
+export const BaseText = (props: BaseTextProps) => {
+  const { className, style, children, type, ...rest } = props;
 
   return (
     <span
@@ -27,6 +30,7 @@ const BaseText = (props: BaseTextProps) => {
         className,
       )}
       style={style}
+      {...rest}
     >
       {children}
     </span>
