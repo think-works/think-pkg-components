@@ -27,8 +27,6 @@ export * from "./SortableTable";
 export * from "./Uploader";
 export * from "./UserAvatar";
 
-export { TreeFolderIcon, TreeFolderOpenIcon } from "./DirectoryTree/node";
-export { default as DirectoryTree } from "./DirectoryTree";
-export * from "./DirectoryTree/types";
+export * from "./DirectoryTree/export";
 export * from "./BaseTree";
 export * from "./MacScrollbar";

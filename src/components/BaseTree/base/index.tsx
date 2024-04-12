@@ -212,8 +212,8 @@ const Tree = <BaseNode extends BaseTreeNode>(
       });
       setControlCheckedKeys(expandList);
     } else {
-      if (props.expandedKeys) {
-        props.expandedKeys.forEach((key) => {
+      if (expandedKeys) {
+        expandedKeys.forEach((key) => {
           expandList.set(key, true);
         });
       } else {
@@ -222,7 +222,6 @@ const Tree = <BaseNode extends BaseTreeNode>(
         });
       }
     }
-
     if (checkedKeys) {
       checkedKeys.forEach((key) => {
         checkedList.set(key, true);
@@ -599,7 +598,8 @@ const Tree = <BaseNode extends BaseTreeNode>(
 
   const nodes = useMemo(
     () => nodeList.filter((item) => item.isShow === true),
-    [nodeList],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [treeIndex, count],
   );
 
   const [list, scrollTo] = useVirtualList(nodes, {

@@ -14,19 +14,19 @@ import {
 } from "@/components/BaseTree";
 import { BaseTreeNode } from "@/components/BaseTree/base/types";
 import styles from "./index.module.less";
-import XDirectoryNode from "./node";
+import XDirectoryTreeNode from "./node";
 import {
-  DirectoryDropdownItem,
-  DirectoryNode,
   DirectoryTreeActions,
+  DirectoryTreeDropdownItem,
+  DirectoryTreeNode,
 } from "./types";
 
 export interface DirectoryTreeProps<BASE_NODE extends BaseTreeNode, NODE_TYPE>
-  extends BaseTreeProps<DirectoryNode<BASE_NODE, NODE_TYPE>> {
+  extends BaseTreeProps<DirectoryTreeNode<BASE_NODE, NODE_TYPE>> {
   classNames?: string;
   style?: React.CSSProperties;
   /** actions call */
-  actions?: DirectoryTreeActions<DirectoryNode<BASE_NODE, NODE_TYPE>>;
+  actions?: DirectoryTreeActions<DirectoryTreeNode<BASE_NODE, NODE_TYPE>>;
   /** 允许添加的节点类型 枚举 NODE_TYPE */
   createTypes?: NODE_TYPE[];
   /** 显示个数 */
@@ -38,19 +38,23 @@ export interface DirectoryTreeProps<BASE_NODE extends BaseTreeNode, NODE_TYPE>
    * @returns
    */
   renderNodeIcon?: (
-    node: DirectoryNode<BASE_NODE, NODE_TYPE>,
+    node: DirectoryTreeNode<BASE_NODE, NODE_TYPE>,
   ) => React.ReactNode;
-  renderTag?: (node: DirectoryNode<BASE_NODE, NODE_TYPE>) => React.ReactNode;
-  renderRight?: (node: DirectoryNode<BASE_NODE, NODE_TYPE>) => React.ReactNode;
-  filter?: (node: DirectoryNode<BASE_NODE, NODE_TYPE>) => boolean;
+  renderTag?: (
+    node: DirectoryTreeNode<BASE_NODE, NODE_TYPE>,
+  ) => React.ReactNode;
+  renderRight?: (
+    node: DirectoryTreeNode<BASE_NODE, NODE_TYPE>,
+  ) => React.ReactNode;
+  filter?: (node: DirectoryTreeNode<BASE_NODE, NODE_TYPE>) => boolean;
   /**
    * 给每个节点处理自己的 DropdownItems
    * @param node
    * @returns
    */
   renderDropdownItems?: (
-    node: DirectoryNode<BASE_NODE, NODE_TYPE>,
-  ) => DirectoryDropdownItem<BASE_NODE, NODE_TYPE>[];
+    node: DirectoryTreeNode<BASE_NODE, NODE_TYPE>,
+  ) => DirectoryTreeDropdownItem<BASE_NODE, NODE_TYPE>[];
   showIndentBorder?: boolean;
   /**
    * 判断文件夹
@@ -68,7 +72,7 @@ export interface DirectoryTreeProps<BASE_NODE extends BaseTreeNode, NODE_TYPE>
  */
 const DirectoryTree = <BASE_NODE extends BaseTreeNode, NODE_TYPE>(
   props: DirectoryTreeProps<BASE_NODE, NODE_TYPE>,
-  _ref: ForwardedRef<BaseTreeRef<DirectoryNode<BASE_NODE, NODE_TYPE>>>,
+  _ref: ForwardedRef<BaseTreeRef<DirectoryTreeNode<BASE_NODE, NODE_TYPE>>>,
 ) => {
   const {
     classNames,
@@ -84,7 +88,8 @@ const DirectoryTree = <BASE_NODE extends BaseTreeNode, NODE_TYPE>(
     showIndentBorder = true,
     ...rest
   } = props;
-  const ref = useRef<BaseTreeRef<DirectoryNode<BASE_NODE, NODE_TYPE>>>(null);
+  const ref =
+    useRef<BaseTreeRef<DirectoryTreeNode<BASE_NODE, NODE_TYPE>>>(null);
   const onUpdate = () => {
     ref.current?.focusReload?.();
   };
@@ -105,17 +110,17 @@ const DirectoryTree = <BASE_NODE extends BaseTreeNode, NODE_TYPE>(
 
   return (
     <div className={styles.tree} style={style}>
-      <BaseTree<DirectoryNode<BASE_NODE, NODE_TYPE>>
+      <BaseTree<DirectoryTreeNode<BASE_NODE, NODE_TYPE>>
         {...rest}
         className={cls(styles["tree-group"], classNames)}
         ref={ref}
         showIndentBorder={showIndentBorder}
         renderContent={(
-          item: BaseTreeIndexItem<DirectoryNode<BASE_NODE, NODE_TYPE>>,
+          item: BaseTreeIndexItem<DirectoryTreeNode<BASE_NODE, NODE_TYPE>>,
           context: BaseTreeItemContext,
         ) => {
           return (
-            <XDirectoryNode<BASE_NODE, NODE_TYPE>
+            <XDirectoryTreeNode<BASE_NODE, NODE_TYPE>
               data={item}
               showNodeCount={showNodeCount}
               createTypes={createTypes}
@@ -140,6 +145,6 @@ export default forwardRef(DirectoryTree) as <
   NODE_TYPE,
 >(
   props: DirectoryTreeProps<BASE_NODE, NODE_TYPE> & {
-    ref: ForwardedRef<BaseTreeRef<DirectoryNode<BASE_NODE, NODE_TYPE>>>;
+    ref: ForwardedRef<BaseTreeRef<DirectoryTreeNode<BASE_NODE, NODE_TYPE>>>;
   },
 ) => React.ReactElement;

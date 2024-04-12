@@ -1,6 +1,6 @@
 {
   "name": "@think/components",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "组件库",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -29,6 +29,7 @@
     "serve": "vite",
     "build": "tsc && vite build && npm run build:types",
     "build:types": "tsc --outDir dist --noEmit false --composite false --tsBuildInfoFile null --declaration --emitDeclarationOnly && tsc-alias --outDir dist && rm -rf dist/main.d.ts dist/Demo",
+    "build:watch": "vite build -w",
     "prepare": "husky",
     "version": "npm install && npm run build && git add .",
     "postversion": "git push && git push --tags",
