@@ -187,12 +187,11 @@ function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
         return {
           ...others,
           label: labelNode,
-          onClick: (e) => {
+          onClick: ({ domEvent }) => {
             if (!tooltip && !popConfirm) {
               handelItem();
             } else if (popConfirm) {
-              //@ts-expect-error 阻止冒泡，避免 Popconfirm 出来时 Dropdown 关闭
-              e.stopPropagation();
+              domEvent.stopPropagation();
             }
           },
         };
