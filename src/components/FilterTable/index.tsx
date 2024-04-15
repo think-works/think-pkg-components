@@ -13,6 +13,8 @@ export type FilterTableParams<FilterType = Record<string, any>> =
     filter?: FilterType;
   };
 
+export type FilterTableData<Item = any> = FetchTableData<Item>;
+
 export type FilterTableGetData<
   FilterType = Record<string, any>,
   DataItem = any,

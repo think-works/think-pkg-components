@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useDebounce, useIsMounted } from "@/hooks";
 import BaseSelect, { BaseSelectProps } from "../BaseSelect";
 
-type OptionItem<R = any> = {
+export type FetchSelectOptionItem<R = any> = {
   key?: string;
   value?: string;
   label?: string;
@@ -24,7 +24,7 @@ export type FetchSelectProps = BaseSelectProps & {
   fetchApi?: (...rest: any) => any;
   fetchParams?: Record<string, any>;
   transformData?: (data: any) => any;
-  transformOptions?: (options: OptionItem[]) => any[];
+  transformOptions?: (options: FetchSelectOptionItem[]) => any[];
 };
 
 /**
