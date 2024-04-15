@@ -5,11 +5,12 @@ import type { Location } from "@remix-run/router";
 import { normalizeObject, parseQuery, stringifyQuery } from "@/utils/tools";
 import { BaseTableDefaultPageSize } from "../BaseTable";
 import FetchTable, {
+  FetchTableData,
   FetchTablePaging,
   FetchTableParams,
   FetchTableProps,
 } from "../FetchTable";
-import { FilterTableGetData } from "../FilterTable";
+import { FilterTableGetData, FilterTableParams } from "../FilterTable";
 
 const QUERY_PAGE_KEY = "pageNo";
 const QUERY_SIZE_KEY = "pageSize";
@@ -117,6 +118,18 @@ const useSearchFilterValue = () => {
   return filter;
 };
 
+export type RouteTableParams<FilterType = Record<string, any>> =
+  FilterTableParams<FilterType>;
+
+export type RouteTableData<Item = any> = FetchTableData<Item>;
+
+export type RouteTableGetData<
+  FilterType = Record<string, any>,
+  DataItem = any,
+> = (
+  params: RouteTableParams<FilterType>,
+) => void | Promise<void | RouteTableData<DataItem>>;
+
 export type RouteTableProps<
   RecordType = any,
   FilterType = Record<string, any>,
@@ -128,7 +141,7 @@ export type RouteTableProps<
   location: Location;
   navigate: NavigateFunction;
   filter?: FilterType;
-  fetchData?: FilterTableGetData<FilterType, DataItem>;
+  fetchData?: RouteTableGetData<FilterType, DataItem>;
 };
 
 /**
