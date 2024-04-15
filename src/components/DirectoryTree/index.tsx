@@ -145,6 +145,6 @@ export default forwardRef(DirectoryTree) as <
   NODE_TYPE,
 >(
   props: DirectoryTreeProps<BASE_NODE, NODE_TYPE> & {
-    ref: ForwardedRef<BaseTreeRef<DirectoryTreeNode<BASE_NODE, NODE_TYPE>>>;
+    ref?: ForwardedRef<BaseTreeRef<DirectoryTreeNode<BASE_NODE, NODE_TYPE>>>;
   },
 ) => React.ReactElement;
