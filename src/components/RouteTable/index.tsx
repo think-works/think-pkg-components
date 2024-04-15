@@ -134,7 +134,7 @@ export type RouteTableProps<
 /**
  * 路由表格
  */
-class RouteTable extends React.Component<RouteTableProps, any> {
+class RouteTableComponent extends React.Component<RouteTableProps, any> {
   static getDerivedStateFromProps(props: RouteTableProps, state: any) {
     const { location } = props;
     const { pageNo, pageSize, filter } = parsePageSearch(location.search);
@@ -287,13 +287,13 @@ const withRouter: withRouterFunc = (Component) => (props) => {
 /**
  * 路由表格包装
  */
-export const RouteTableWrapper = withRouter(RouteTable) as WrapperComponent;
+export const RouteTable = withRouter(RouteTableComponent) as WrapperComponent;
 
-RouteTableWrapper.clearPageSearch = clearPageSearch;
-RouteTableWrapper.parsePageSearch = parsePageSearch;
-RouteTableWrapper.updatePageSearch = updatePageSearch;
-RouteTableWrapper.useClearPageSearch = useClearPageSearch;
-RouteTableWrapper.useParsePageSearch = useParsePageSearch;
-RouteTableWrapper.useSearchFilterValue = useSearchFilterValue;
+RouteTable.clearPageSearch = clearPageSearch;
+RouteTable.parsePageSearch = parsePageSearch;
+RouteTable.updatePageSearch = updatePageSearch;
+RouteTable.useClearPageSearch = useClearPageSearch;
+RouteTable.useParsePageSearch = useParsePageSearch;
+RouteTable.useSearchFilterValue = useSearchFilterValue;
 
-export default RouteTableWrapper;
+export default RouteTable;
