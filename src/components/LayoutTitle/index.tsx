@@ -2,7 +2,7 @@ import cls, { Argument } from "classnames";
 import BaseText, { BaseTextProps } from "../BaseText";
 import stl from "./index.module.less";
 
-export type LayoutTitleProps = BaseTextProps & {
+export type LayoutTitleProps = Omit<BaseTextProps, "title"> & {
   className?: Argument;
   style?: React.CSSProperties;
   size?: "large" | "middle" | "small";
