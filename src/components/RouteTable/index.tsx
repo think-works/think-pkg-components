@@ -10,7 +10,7 @@ import FetchTable, {
   FetchTableParams,
   FetchTableProps,
 } from "../FetchTable";
-import { FilterTableGetData, FilterTableParams } from "../FilterTable";
+import { FilterTableParams } from "../FilterTable";
 
 const QUERY_PAGE_KEY = "pageNo";
 const QUERY_SIZE_KEY = "pageSize";
