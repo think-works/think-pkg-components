@@ -1,6 +1,5 @@
 import { GetProps, Table, TableProps } from "antd";
 import type { GetRowKey } from "antd/es/table/interface";
-import type { ReactComponentLike } from "prop-types";
 import React from "react";
 import { MenuOutlined } from "@ant-design/icons";
 import { DndContext, DndContextProps, DragEndEvent } from "@dnd-kit/core";
@@ -86,7 +85,7 @@ export type SortableTableProps<
   RecordType = any,
   ComponentProps = TableProps<RecordType>,
 > = ComponentProps & {
-  TableComponent?: ReactComponentLike;
+  TableComponent?: React.ComponentType;
   onDataSourceChange?: (dataSource: RecordType[]) => void;
   dndContextProps?: DndContextProps;
   sortableContextProps?: GetProps<typeof SortableContext>;
