@@ -46,6 +46,15 @@ export interface DirectoryTreeProps<BASE_NODE extends BaseTreeNode, NODE_TYPE>
   renderRight?: (
     node: DirectoryTreeNode<BASE_NODE, NODE_TYPE>,
   ) => React.ReactNode;
+  /**
+   * name 包装器
+   * @param children
+   * @returns
+   */
+  nameWrapper?: (
+    children: React.ReactNode,
+    node: DirectoryTreeNode<BASE_NODE, NODE_TYPE>,
+  ) => React.ReactNode;
   filter?: (node: DirectoryTreeNode<BASE_NODE, NODE_TYPE>) => boolean;
   /**
    * 给每个节点处理自己的 DropdownItems
@@ -86,6 +95,7 @@ const DirectoryTree = <BASE_NODE extends BaseTreeNode, NODE_TYPE>(
     isDirectory,
     style,
     showIndentBorder = true,
+    nameWrapper,
     ...rest
   } = props;
   const ref =
@@ -124,13 +134,14 @@ const DirectoryTree = <BASE_NODE extends BaseTreeNode, NODE_TYPE>(
               data={item}
               showNodeCount={showNodeCount}
               createTypes={createTypes}
-              onUpdate={onUpdate}
               actions={actions}
-              renderDropdownItems={renderDropdownItems}
+              onUpdate={onUpdate}
               renderTag={renderTag}
+              nameWrapper={nameWrapper}
               renderRight={renderRight}
               isDirectory={isDirectory}
               renderNodeIcon={renderNodeIcon}
+              renderDropdownItems={renderDropdownItems}
               {...context}
             />
           );
