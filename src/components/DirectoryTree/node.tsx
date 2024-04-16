@@ -1,6 +1,7 @@
 import { Dropdown, Input, InputRef, Popconfirm, Tooltip } from "antd";
 import { MenuItemType } from "antd/es/menu/hooks/useItems";
 import React, {
+  ReactNode,
   useCallback,
   useEffect,
   useMemo,
@@ -37,6 +38,15 @@ interface Props<T extends BaseTreeNode, NODE_TYPE> {
 
   showNodeCount?: boolean;
   /**
+   * name 包装器
+   * @param children
+   * @returns
+   */
+  nameWrapper?: (
+    children: React.ReactNode,
+    node: DirectoryTreeNode<T, NODE_TYPE>,
+  ) => React.ReactNode;
+  /**
    * 文件夹 icon 内置
    * 这里自定义的是 非文件夹 图标
    * @param node
@@ -64,7 +74,13 @@ interface Props<T extends BaseTreeNode, NODE_TYPE> {
 function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
   props: Props<T, NODE_TYPE>,
 ) {
-  const { data, actions = {}, isDirectory, renderDropdownItems } = props;
+  const {
+    data,
+    actions = {},
+    nameWrapper,
+    isDirectory,
+    renderDropdownItems,
+  } = props;
   const [value, setValue] = useState(data.node.name);
   const [edit, setEdit] = useState(data.node.temp);
   const [loading, setLoading] = useState(false);
@@ -254,62 +270,69 @@ function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
       e.stopPropagation();
     }
   };
+  const renderLeft = () => {
+    return (
+      <>
+        <div className={style["item-icon"]}>
+          {isDirectory(data.node.type) ? (
+            data.expanded ? (
+              <TreeFolderOpenIcon />
+            ) : (
+              <TreeFolderIcon />
+            )
+          ) : (
+            props.renderNodeIcon && props.renderNodeIcon(data.node)
+          )}
+        </div>
+        <div className={style["item-tag"]}>
+          {props.renderTag && props.renderTag(data.node)}
+        </div>
+
+        <div
+          className={style["item-name"]}
+          onDragStart={onDragstart}
+          draggable={edit}
+        >
+          {edit ? (
+            <Input
+              size="small"
+              disabled={loading}
+              ref={ref}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  onEdit(value);
+                }
+              }}
+              onBlur={() => {
+                onEdit(value);
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+              }}
+              className={style["item-edit"]}
+              type="text"
+              value={value}
+              onChange={(e) => {
+                setValue(e.target.value);
+              }}
+            />
+          ) : (
+            <span
+              className={style["item-name-text"]}
+              style={{ color: data.node.color }}
+            >
+              {data.node.name}
+            </span>
+          )}
+        </div>
+      </>
+    );
+  };
+
   return (
     <div className={style.item}>
-      <div className={style["item-icon"]}>
-        {isDirectory(data.node.type) ? (
-          data.expanded ? (
-            <TreeFolderOpenIcon />
-          ) : (
-            <TreeFolderIcon />
-          )
-        ) : (
-          props.renderNodeIcon && props.renderNodeIcon(data.node)
-        )}
-      </div>
-      <div className={style["item-tag"]}>
-        {props.renderTag && props.renderTag(data.node)}
-      </div>
-
-      <div
-        className={style["item-name"]}
-        onDragStart={onDragstart}
-        draggable={edit}
-      >
-        {edit ? (
-          <Input
-            size="small"
-            disabled={loading}
-            ref={ref}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                onEdit(value);
-              }
-            }}
-            onBlur={() => {
-              onEdit(value);
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-            }}
-            className={style["item-edit"]}
-            type="text"
-            value={value}
-            onChange={(e) => {
-              setValue(e.target.value);
-            }}
-          />
-        ) : (
-          <span
-            className={style["item-name-text"]}
-            style={{ color: data.node.color }}
-          >
-            {data.node.name}
-          </span>
-        )}
-      </div>
-
+      {nameWrapper ? nameWrapper(renderLeft(), data.node) : renderLeft()}
       {renderRight()}
     </div>
   );
