@@ -28,7 +28,7 @@ export type BaseActionProps = Omit<ButtonProps, "onClick"> & {
   className?: Argument;
   tooltip?: string | TooltipProps;
   confirm?: string | ModalFuncProps;
-  popconfirm?: string | PopconfirmProps;
+  popconfirm?: string | (PopconfirmProps & { stopPropagation?: boolean });
   children?: React.ReactNode;
   disabled?: boolean;
   inline?: boolean;
@@ -62,8 +62,8 @@ export const BaseAction = (props: BaseActionProps) => {
         title = confirm;
       }
 
-      const handleOkClick = (...args: any[]) => {
-        return onClick && onClick(...args);
+      const handleOkClick = async (...args: any[]) => {
+        return await onClick?.(...args);
       };
 
       modal.confirm({
@@ -81,7 +81,7 @@ export const BaseAction = (props: BaseActionProps) => {
     }
 
     // 自动 loading
-    const promise = onClick && onClick(...args);
+    const promise = onClick?.(...args);
     if (isPromise(promise)) {
       setLoading(true);
       promise.finally(() => {
@@ -106,8 +106,7 @@ export const BaseAction = (props: BaseActionProps) => {
     </Button>
   );
 
-  // 疑似 BUG - 已禁用的按钮无法隐藏 Tooltip
-  if (!disabled && tooltip) {
+  if (tooltip) {
     const { title: _title, ...tipRest } = tooltip || ({} as any);
     let title = _title;
     if (isString(tooltip)) {
@@ -122,19 +121,37 @@ export const BaseAction = (props: BaseActionProps) => {
   }
 
   if (popconfirm) {
-    const { title: _title, ...popRest } = popconfirm || ({} as any);
+    const {
+      title: _title,
+      stopPropagation,
+      ...popRest
+    } = popconfirm || ({} as any);
     let title = _title;
     if (isString(popconfirm)) {
       title = popconfirm;
     }
 
-    const handleConfirmClick = (...args: any[]) => {
-      return onClick && onClick(...args);
+    const handleConfirmClick = async (
+      e?: React.MouseEvent<HTMLElement>,
+      ...args: any[]
+    ) => {
+      if (stopPropagation) {
+        e?.stopPropagation();
+      }
+      return await onClick?.(e, ...args);
     };
 
     return (
       <Popconfirm title={title} onConfirm={handleConfirmClick} {...popRest}>
-        <span>{content}</span>
+        <span
+          onClick={(e) => {
+            if (stopPropagation) {
+              e.stopPropagation();
+            }
+          }}
+        >
+          {content}
+        </span>
       </Popconfirm>
     );
   }

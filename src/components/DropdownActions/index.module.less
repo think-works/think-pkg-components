@@ -1,6 +1,13 @@
 @import "@/styles/utils.less";
 
 .dropdownActions {
+  &:global(.@{ant-prefix}-dropdown) {
+    :global(.@{ant-prefix}-dropdown-menu) {
+      :global(.@{ant-prefix}-dropdown-menu-item) {
+        padding: 0;
+      }
+    }
+  }
 }
 
 .actionIcon {
