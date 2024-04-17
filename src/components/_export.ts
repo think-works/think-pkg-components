@@ -8,6 +8,7 @@ export * from "./BaseText";
 export * from "./ColumnActions";
 export * from "./DragContainer";
 export * from "./DropdownActions";
+export * from "./DynamicImport";
 export * from "./EditableTable";
 export * from "./FetchAutoComplete";
 export * from "./FetchSelect";
