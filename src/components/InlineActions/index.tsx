@@ -1,4 +1,4 @@
-import { Divider } from "antd";
+import { Divider, Space } from "antd";
 import cls, { Argument } from "classnames";
 import { HTMLAttributes } from "react";
 import BaseAction, { BaseActionProps } from "../BaseAction";
@@ -19,13 +19,15 @@ export const InlineActions = (props: InlineActionsProps) => {
   if (divider) {
     return (
       <span className={cls(stl.inlineActions, className)} {...rest}>
-        {(actions || [])
-          .filter(Boolean)
-          .map((item, idx) => [
+        <Space>
+          {(actions || []).filter(Boolean).map((item, idx) => [
             idx === 0 ? null : (
               <Divider
                 key={`divider-${idx}-${item?.children}`}
                 type="vertical"
+                style={{
+                  margin: 0,
+                }}
               />
             ),
             <BaseAction
@@ -35,20 +37,23 @@ export const InlineActions = (props: InlineActionsProps) => {
               {...item}
             />,
           ])}
+        </Space>
       </span>
     );
   }
 
   return (
     <span className={cls(stl.inlineActions, className)} {...rest}>
-      {(actions || []).filter(Boolean).map((item, idx) => (
-        <BaseAction
-          key={`action-${idx}-${item?.children}`}
-          inline
-          type="link"
-          {...item}
-        />
-      ))}
+      <Space>
+        {(actions || []).filter(Boolean).map((item, idx) => (
+          <BaseAction
+            key={`action-${idx}-${item?.children}`}
+            inline
+            type="link"
+            {...item}
+          />
+        ))}
+      </Space>
     </span>
   );
 };
