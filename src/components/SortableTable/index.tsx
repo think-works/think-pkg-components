@@ -115,7 +115,7 @@ export const SortableTable = (props: SortableTableProps) => {
     return ([{ key: sortableColumnKey, width: 32 }] as any[]).concat(columns);
   }, [hideSortable, columns]);
   if (!onDataSourceChange) {
-    return <TableComponent {...rest} />;
+    return <TableComponent {...props} />;
   }
 
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
