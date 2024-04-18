@@ -1,6 +1,6 @@
 @import "@/styles/utils.less";
 
-.layoutPanel {
+.layoutDetail {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -8,13 +8,8 @@
   .head {
     flex: none;
     padding: 0 12px;
-
-    &.sticky {
-      position: sticky;
-      top: 0;
-      z-index: @bizLayoutZIndex;
-      background-color: @colorBgContainer;
-    }
+    padding-bottom: 12px;
+    background-color: @colorBgContainer;
   }
 
   .body {
@@ -24,5 +19,23 @@
     &.cling {
       padding-top: 0;
     }
+  }
+
+  .crumb {
+  }
+
+  .title {
+  }
+
+  .extend {
+    display: flex;
+  }
+
+  .description {
+    flex: auto;
+  }
+
+  .statistic {
+    flex: none;
   }
 }

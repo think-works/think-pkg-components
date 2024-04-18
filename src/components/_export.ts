@@ -16,6 +16,8 @@ export * from "./FetchTable";
 export * from "./FilterForm";
 export * from "./FilterTable";
 export * from "./InlineActions";
+export * from "./LayoutCard";
+export * from "./LayoutDetail";
 export * from "./LayoutPanel";
 export * from "./LayoutQuery";
 export * from "./LayoutTitle";

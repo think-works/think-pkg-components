@@ -1,0 +1,40 @@
+@import "@/styles/utils.less";
+
+.layoutCard {
+  border-radius: 8px;
+  background-color: @colorBgContainer;
+
+  &.bordered {
+    border: 1px solid @colorBorderSecondary;
+  }
+
+  .head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    min-height: 38px;
+    font-size: 14px;
+    font-weight: bold;
+
+    &.divider {
+      border-bottom: 1px solid @colorBorderSecondary;
+    }
+
+    .title {
+      flex: auto;
+    }
+
+    .extra {
+      flex: none;
+    }
+  }
+
+  .body {
+    padding: 12px;
+
+    &.cling {
+      padding-top: 0;
+    }
+  }
+}

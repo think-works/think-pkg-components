@@ -1,15 +1,14 @@
 import cls, { Argument } from "classnames";
-import { LayoutTitle } from "../LayoutTitle";
 import stl from "./index.module.less";
 
-export type LayoutPanelProps = {
+export type LayoutCardProps = {
   className?: Argument;
   style?: React.CSSProperties;
-  stickyTitle?: boolean;
+  bordered?: boolean;
   clingContent?: boolean;
   divider?: boolean;
   title?: React.ReactNode;
-  extend?: React.ReactNode;
+  extra?: React.ReactNode;
   children?: React.ReactNode;
   classNames?: {
     head?: Argument;
@@ -22,39 +21,39 @@ export type LayoutPanelProps = {
 };
 
 /**
- * 布局面板
+ * 布局卡片
  */
-export const LayoutPanel = (props: LayoutPanelProps) => {
+export const LayoutCard = (props: LayoutCardProps) => {
   const {
     className,
     style,
-    stickyTitle,
+    bordered,
     clingContent,
     divider,
     title,
-    extend,
+    extra,
     children,
     classNames,
     styles,
   } = props || {};
 
   return (
-    <div className={cls(stl.layoutPanel, className)} style={style}>
-      {title || extend ? (
-        <LayoutTitle
-          className={cls(
-            stl.head,
-            {
-              [stl.sticky]: stickyTitle,
-            },
-            classNames?.head,
-          )}
+    <div
+      className={cls(stl.layoutCard, className, {
+        [stl.bordered]: bordered,
+      })}
+      style={style}
+    >
+      {title || extra ? (
+        <div
+          className={cls(stl.head, classNames?.head, {
+            [stl.divider]: divider,
+          })}
           style={styles?.head}
-          size="large"
-          divider={divider}
-          title={title}
-          extend={extend}
-        />
+        >
+          <div className={stl.title}>{title}</div>
+          <div className={stl.extra}>{extra}</div>
+        </div>
       ) : null}
       <div
         className={cls(
@@ -72,4 +71,4 @@ export const LayoutPanel = (props: LayoutPanelProps) => {
   );
 };
 
-export default LayoutPanel;
+export default LayoutCard;

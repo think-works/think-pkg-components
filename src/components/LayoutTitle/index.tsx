@@ -1,14 +1,22 @@
 import cls, { Argument } from "classnames";
-import BaseText, { BaseTextProps } from "../BaseText";
+import { BaseText, BaseTextProps } from "../BaseText";
 import stl from "./index.module.less";
 
-export type LayoutTitleProps = Omit<BaseTextProps, "title"> & {
+export type LayoutTitleProps = {
   className?: Argument;
   style?: React.CSSProperties;
   size?: "large" | "middle" | "small";
+  divider?: boolean;
   title?: React.ReactNode;
   extend?: React.ReactNode;
-  divider?: boolean;
+  classNames?: {
+    title?: Argument;
+    extend?: Argument;
+  };
+  styles?: {
+    title?: React.CSSProperties;
+    extend?: React.CSSProperties;
+  };
 };
 
 /**
@@ -19,10 +27,11 @@ export const LayoutTitle = (props: LayoutTitleProps) => {
     className,
     style,
     size = "middle",
+    divider,
     title,
     extend,
-    divider,
-    ...rest
+    classNames,
+    styles,
   } = props || {};
 
   let textType: BaseTextProps["type"];
@@ -46,17 +55,21 @@ export const LayoutTitle = (props: LayoutTitleProps) => {
       style={style}
     >
       <div
-        className={cls(stl.title, {
+        className={cls(stl.title, classNames?.title, {
           [stl.large]: size === "large",
           [stl.middle]: size === "middle",
           [stl.small]: size === "small",
         })}
+        style={styles?.title}
       >
-        <BaseText type={textType} {...rest}>
-          {title}
-        </BaseText>
+        <BaseText type={textType}>{title}</BaseText>
       </div>
-      <div className={stl.extend}>{extend}</div>
+      <div
+        className={cls(stl.extend, classNames?.extend)}
+        style={styles?.extend}
+      >
+        {extend}
+      </div>
     </div>
   );
 };

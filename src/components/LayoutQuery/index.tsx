@@ -1,4 +1,6 @@
 import cls, { Argument } from "classnames";
+import LayoutCard from "../LayoutCard";
+import { LayoutTitle } from "../LayoutTitle";
 import stl from "./index.module.less";
 
 export type LayoutQueryProps = {
@@ -7,25 +9,67 @@ export type LayoutQueryProps = {
   filter?: React.ReactNode;
   title?: React.ReactNode;
   action?: React.ReactNode;
-  result?: React.ReactNode;
+  children?: React.ReactNode;
+  classNames?: {
+    head?: Argument;
+    body?: Argument;
+    tools?: Argument;
+    result?: Argument;
+  };
+  styles?: {
+    head?: React.CSSProperties;
+    body?: React.CSSProperties;
+    tools?: React.CSSProperties;
+    result?: React.CSSProperties;
+  };
 };
 
 /**
- * 查询布局
+ * 布局查询
  */
 export const LayoutQuery = (props: LayoutQueryProps) => {
-  const { className, style, filter, title, action, result } = props || {};
+  const {
+    className,
+    style,
+    filter,
+    title,
+    action,
+    children,
+    classNames,
+    styles,
+  } = props || {};
 
   return (
     <div className={cls(stl.layoutQuery, className)} style={style}>
-      {filter ? <div className={stl.filter}>{filter}</div> : null}
-      {title || action ? (
-        <div className={stl.tools}>
-          <div className={stl.title}>{title}</div>
-          <div className={stl.action}>{action}</div>
-        </div>
+      {filter ? (
+        <LayoutCard
+          className={cls(stl.head, classNames?.head)}
+          style={styles?.head}
+        >
+          {filter}
+        </LayoutCard>
       ) : null}
-      {result ? <div className={stl.result}>{result}</div> : null}
+      <LayoutCard
+        className={cls(stl.body, classNames?.body)}
+        style={styles?.body}
+        classNames={{ body: stl.resultBody }}
+      >
+        {title || action ? (
+          <LayoutTitle
+            className={cls(stl.tools, classNames?.tools)}
+            style={styles?.tools}
+            size="middle"
+            title={title}
+            extend={action}
+          />
+        ) : null}
+        <div
+          className={cls(stl.result, classNames?.result)}
+          style={styles?.result}
+        >
+          {children}
+        </div>
+      </LayoutCard>
     </div>
   );
 };
