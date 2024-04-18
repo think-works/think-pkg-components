@@ -1,7 +1,7 @@
 import { Button, Space, Table, TableProps } from "antd";
 import type { ColumnType } from "antd/lib/table/interface";
 import cls from "classnames";
-import { get, isFunction, set } from "lodash-es";
+import { cloneDeep, get, isFunction, set } from "lodash-es";
 import {
   cloneElement,
   isValidElement,
@@ -12,6 +12,8 @@ import {
   useState,
 } from "react";
 import { DeleteOutlined } from "@ant-design/icons";
+import { uuid4 } from "@/utils/crypto";
+import SortableTable from "../SortableTable";
 import DecoupleInput from "./DecoupleInput";
 import DecoupleTextArea from "./DecoupleTextArea";
 import EditableHeader from "./EditableHeader";
@@ -45,11 +47,27 @@ export type EditableTableColumn = Column & {
   /** onChange 事件值转换器 */
   changeEventConverter?: (event: any) => any;
 };
+/**
+ * 给每一行的数据补充 rowKey ，内部使用
+ * @param list
+ * @param rowKey
+ * @returns
+ */
+const addRowsKey = (list: DataRow[], rowKey = "") => {
+  return list.map((item) => {
+    const key = item[rowKey];
+    if (!key) {
+      item[rowKey] = uuid4();
+    }
+    return item;
+  });
+};
 
 export type EditableTableProps = Omit<
   TableProps<any>,
-  "dataSource" | "columns"
+  "dataSource" | "columns" | "onChange"
 > & {
+  rowKey?: string;
   /** readOnly */
   readOnly?: boolean;
   /** 禁止新建 */
@@ -65,6 +83,8 @@ export type EditableTableProps = Omit<
   /** 操作列渲染 */
   actionRender?: ActionRender;
   lastActionRender?: React.ReactNode;
+  /** 可以拖拽，非 readOnly，编辑状态有效 */
+  canDrag?: boolean;
   /** 数据变更 */
   onDataChange?: (data: DataRow[]) => any;
   /** 表单专用 */
@@ -94,32 +114,29 @@ export const EditableTable = (props: EditableTableProps) => {
     onDataChange,
     onChange,
     onRowDelete,
+    canDrag = false,
+    rowKey,
     ...rest
   } = props;
-
   const [itemList, setItemList] = useState<DataRow[]>([]);
   const itemCount = itemList.length;
+  const [innerRowKey, setInnerRowKey] = useState(rowKey || "innerRowKey");
 
-  // 指定 key
-  // Warning: [antd: Table] `index` parameter of `rowKey` function is deprecated. There is no guarantee that it will work as expected.
-  const rowKey = useCallback(
-    (row: DataRow, idx?: number) => idx ?? itemList.findIndex((x) => x === row),
-    [itemList],
-  );
-
-  // 校验行
+  // 排除内部使用的 rowKey，校验这行是否有有效值
   const verifyRow = useCallback(
     (row: DataRow) =>
       row &&
-      Object.keys(row).some((key) => {
-        const val = row[key];
-        const dftVal = (defaultRowValue ?? {})[key];
+      Object.keys(row)
+        .filter((key) => key != innerRowKey)
+        .some((key) => {
+          const val = row[key];
+          const dftVal = (defaultRowValue ?? {})[key];
 
-        return (
-          val !== undefined && val !== null && val !== "" && val !== dftVal
-        );
-      }),
-    [defaultRowValue],
+          return (
+            val !== undefined && val !== null && val !== "" && val !== dftVal
+          );
+        }),
+    [defaultRowValue, innerRowKey],
   );
 
   // 新建行
@@ -175,9 +192,16 @@ export const EditableTable = (props: EditableTableProps) => {
       rows = clearLastRow(rows);
     }
 
-    setItemList(rows);
-  }, [readOnly, disabledAdd, dataSource, addRow, clearLastRow]);
+    setItemList(addRowsKey(rows, innerRowKey));
+  }, [readOnly, disabledAdd, dataSource, innerRowKey, addRow, clearLastRow]);
 
+  useEffect(() => {
+    if (rowKey) {
+      setInnerRowKey(rowKey);
+    } else {
+      setInnerRowKey("innerRowKey");
+    }
+  }, [rowKey]);
   // 处理值变更
   const handleChange = useCallback(
     (list: DataRow[] | undefined = undefined) => {
@@ -208,6 +232,15 @@ export const EditableTable = (props: EditableTableProps) => {
       handleChange(list);
     },
     [itemList, removeRow, handleChange, onRowDelete],
+  );
+
+  const handleSort = useCallback(
+    (v: any[]) => {
+      const list = cloneDeep(v);
+      setItemList(list);
+      handleChange(list);
+    },
+    [setItemList, handleChange],
   );
 
   // 组装列配置
@@ -341,14 +374,20 @@ export const EditableTable = (props: EditableTableProps) => {
   ]);
 
   return (
-    <Table
-      className={cls(stl.table, className)}
+    <SortableTable
+      hideSortable={readOnly || !canDrag}
+      TableComponent={Table}
       bordered
-      size="small"
       pagination={false}
-      rowKey={rowKey}
-      dataSource={itemList}
       columns={colList}
+      className={cls(stl.table, className)}
+      size="small"
+      dndContextProps={{
+        cancelDrop: () => false,
+      }}
+      rowKey={innerRowKey}
+      dataSource={itemList}
+      onDataSourceChange={handleSort}
       locale={{ emptyText: "无内容" }}
       {...rest}
     />

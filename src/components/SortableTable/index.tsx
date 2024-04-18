@@ -1,6 +1,6 @@
 import { GetProps, Table, TableProps } from "antd";
 import type { GetRowKey } from "antd/es/table/interface";
-import React from "react";
+import React, { useMemo } from "react";
 import { MenuOutlined } from "@ant-design/icons";
 import { DndContext, DndContextProps, DragEndEvent } from "@dnd-kit/core";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
@@ -60,11 +60,10 @@ const SortableRow = (props: SortableRowProps) => {
     transition,
     transform: CSS.Transform.toString(transform && { ...transform, scaleY: 1 }),
   };
-
   return (
     <tr {...rest} ref={setNodeRef} style={style} {...attributes}>
       {React.Children.map(children, (child) => {
-        if ((child as React.ReactElement).key === sortableColumnKey) {
+        if ((child as React.ReactElement).key === sortableColumnKey && rowId) {
           return React.cloneElement(child as React.ReactElement, {
             children: (
               <MenuOutlined
@@ -85,6 +84,8 @@ export type SortableTableProps<
   RecordType = any,
   ComponentProps = TableProps<RecordType>,
 > = ComponentProps & {
+  /** 隐藏排序按钮 */
+  hideSortable?: boolean;
   TableComponent?: React.ComponentType;
   onDataSourceChange?: (dataSource: RecordType[]) => void;
   dndContextProps?: DndContextProps;
@@ -103,17 +104,19 @@ export const SortableTable = (props: SortableTableProps) => {
     rowKey = "key",
     columns = [],
     dataSource = [],
+    hideSortable = false,
     ...rest
   } = props;
-
+  const rowKeyFunc = getRowKeyFunc(rowKey);
+  const sortableColumns = useMemo(() => {
+    if (hideSortable) {
+      return columns;
+    }
+    return ([{ key: sortableColumnKey, width: 32 }] as any[]).concat(columns);
+  }, [hideSortable, columns]);
   if (!onDataSourceChange) {
     return <TableComponent {...props} />;
   }
-
-  const rowKeyFunc = getRowKeyFunc(rowKey);
-  const sortableColumns = (
-    [{ key: sortableColumnKey, width: 32 }] as any[]
-  ).concat(columns);
 
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
     if (active.id !== over?.id) {
@@ -127,7 +130,6 @@ export const SortableTable = (props: SortableTableProps) => {
       onDataSourceChange(list);
     }
   };
-
   return (
     <DndContext
       modifiers={[restrictToVerticalAxis]}
