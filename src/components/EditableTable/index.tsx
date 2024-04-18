@@ -48,20 +48,17 @@ export type EditableTableColumn = Column & {
   changeEventConverter?: (event: any) => any;
 };
 /**
- * 给每一行的数据增加 rowKey 字段
+ * 给每一行的数据补充 rowKey ，内部使用
  * @param list
  * @param rowKey
  * @returns
  */
 const addRowsKey = (list: DataRow[], rowKey = "") => {
-  return list.map((item, index) => {
+  return list.map((item) => {
     const key = item[rowKey];
-    if (index < list.length - 1) {
-      if (!key) {
-        item[rowKey] = uuid4();
-      }
+    if (!key) {
+      item[rowKey] = uuid4();
     }
-
     return item;
   });
 };
@@ -124,19 +121,22 @@ export const EditableTable = (props: EditableTableProps) => {
   const [itemList, setItemList] = useState<DataRow[]>([]);
   const itemCount = itemList.length;
   const [innerRowKey, setInnerRowKey] = useState(rowKey || "innerRowKey");
-  // 校验行
+
+  // 排除内部使用的 rowKey，校验这行是否有有效值
   const verifyRow = useCallback(
     (row: DataRow) =>
       row &&
-      Object.keys(row).some((key) => {
-        const val = row[key];
-        const dftVal = (defaultRowValue ?? {})[key];
+      Object.keys(row)
+        .filter((key) => key != innerRowKey)
+        .some((key) => {
+          const val = row[key];
+          const dftVal = (defaultRowValue ?? {})[key];
 
-        return (
-          val !== undefined && val !== null && val !== "" && val !== dftVal
-        );
-      }),
-    [defaultRowValue],
+          return (
+            val !== undefined && val !== null && val !== "" && val !== dftVal
+          );
+        }),
+    [defaultRowValue, innerRowKey],
   );
 
   // 新建行
@@ -191,6 +191,7 @@ export const EditableTable = (props: EditableTableProps) => {
       // 如果最后一行无效，则剔除最后一行
       rows = clearLastRow(rows);
     }
+
     setItemList(addRowsKey(rows, innerRowKey));
   }, [readOnly, disabledAdd, dataSource, innerRowKey, addRow, clearLastRow]);
 
@@ -227,10 +228,10 @@ export const EditableTable = (props: EditableTableProps) => {
 
       // 函数式组件没有提供类似 setState(updater, callback) 的支持
       const list = removeRow(itemList, row);
-      setItemList(addRowsKey(list, innerRowKey));
+      setItemList(list);
       handleChange(list);
     },
-    [itemList, removeRow, handleChange, onRowDelete, innerRowKey],
+    [itemList, removeRow, handleChange, onRowDelete],
   );
 
   const handleSort = useCallback(
