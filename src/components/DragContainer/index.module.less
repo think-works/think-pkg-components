@@ -35,7 +35,10 @@
   background-clip: content-box;
   user-select: none;
   &:hover {
-    border-color: @colorPrimary;
+    &.row,
+    &.col {
+      border-color: @colorPrimary;
+    }
   }
   &.row {
     cursor: row-resize;
