@@ -1,7 +1,7 @@
 import { Button, Space, Table, TableProps } from "antd";
 import type { ColumnType } from "antd/lib/table/interface";
 import cls from "classnames";
-import { get, isFunction, set } from "lodash-es";
+import { cloneDeep, get, isFunction, set } from "lodash-es";
 import {
   cloneElement,
   isValidElement,
@@ -12,6 +12,8 @@ import {
   useState,
 } from "react";
 import { DeleteOutlined } from "@ant-design/icons";
+import { uuid4 } from "@/utils/crypto";
+import SortableTable from "../SortableTable";
 import DecoupleInput from "./DecoupleInput";
 import DecoupleTextArea from "./DecoupleTextArea";
 import EditableHeader from "./EditableHeader";
@@ -45,11 +47,30 @@ export type EditableTableColumn = Column & {
   /** onChange 事件值转换器 */
   changeEventConverter?: (event: any) => any;
 };
+/**
+ * 给每一行的数据增加 rowKey 字段
+ * @param list
+ * @param rowKey
+ * @returns
+ */
+const addRowsKey = (list: DataRow[], rowKey = "") => {
+  return list.map((item, index) => {
+    const key = item[rowKey];
+    if (index < list.length - 1) {
+      if (!key) {
+        item[rowKey] = uuid4();
+      }
+    }
+
+    return item;
+  });
+};
 
 export type EditableTableProps = Omit<
   TableProps<any>,
-  "dataSource" | "columns"
+  "dataSource" | "columns" | "onChange"
 > & {
+  rowKey?: string;
   /** readOnly */
   readOnly?: boolean;
   /** 禁止新建 */
@@ -65,6 +86,8 @@ export type EditableTableProps = Omit<
   /** 操作列渲染 */
   actionRender?: ActionRender;
   lastActionRender?: React.ReactNode;
+  /** 可以拖拽，非 readOnly，编辑状态有效 */
+  canDrag?: boolean;
   /** 数据变更 */
   onDataChange?: (data: DataRow[]) => any;
   /** 表单专用 */
@@ -94,19 +117,13 @@ export const EditableTable = (props: EditableTableProps) => {
     onDataChange,
     onChange,
     onRowDelete,
+    canDrag = false,
+    rowKey,
     ...rest
   } = props;
-
   const [itemList, setItemList] = useState<DataRow[]>([]);
   const itemCount = itemList.length;
-
-  // 指定 key
-  // Warning: [antd: Table] `index` parameter of `rowKey` function is deprecated. There is no guarantee that it will work as expected.
-  const rowKey = useCallback(
-    (row: DataRow, idx?: number) => idx ?? itemList.findIndex((x) => x === row),
-    [itemList],
-  );
-
+  const [innerRowKey, setInnerRowKey] = useState(rowKey || "innerRowKey");
   // 校验行
   const verifyRow = useCallback(
     (row: DataRow) =>
@@ -174,10 +191,16 @@ export const EditableTable = (props: EditableTableProps) => {
       // 如果最后一行无效，则剔除最后一行
       rows = clearLastRow(rows);
     }
+    setItemList(addRowsKey(rows, innerRowKey));
+  }, [readOnly, disabledAdd, dataSource, innerRowKey, addRow, clearLastRow]);
 
-    setItemList(rows);
-  }, [readOnly, disabledAdd, dataSource, addRow, clearLastRow]);
-
+  useEffect(() => {
+    if (rowKey) {
+      setInnerRowKey(rowKey);
+    } else {
+      setInnerRowKey("innerRowKey");
+    }
+  }, [rowKey]);
   // 处理值变更
   const handleChange = useCallback(
     (list: DataRow[] | undefined = undefined) => {
@@ -204,10 +227,19 @@ export const EditableTable = (props: EditableTableProps) => {
 
       // 函数式组件没有提供类似 setState(updater, callback) 的支持
       const list = removeRow(itemList, row);
+      setItemList(addRowsKey(list, innerRowKey));
+      handleChange(list);
+    },
+    [itemList, removeRow, handleChange, onRowDelete, innerRowKey],
+  );
+
+  const handleSort = useCallback(
+    (v: any[]) => {
+      const list = cloneDeep(v);
       setItemList(list);
       handleChange(list);
     },
-    [itemList, removeRow, handleChange, onRowDelete],
+    [setItemList, handleChange],
   );
 
   // 组装列配置
@@ -341,14 +373,20 @@ export const EditableTable = (props: EditableTableProps) => {
   ]);
 
   return (
-    <Table
-      className={cls(stl.table, className)}
+    <SortableTable
+      hideSortable={readOnly || !canDrag}
+      TableComponent={Table}
       bordered
-      size="small"
       pagination={false}
-      rowKey={rowKey}
-      dataSource={itemList}
       columns={colList}
+      className={cls(stl.table, className)}
+      size="small"
+      dndContextProps={{
+        cancelDrop: () => false,
+      }}
+      rowKey={innerRowKey}
+      dataSource={itemList}
+      onDataSourceChange={handleSort}
       locale={{ emptyText: "无内容" }}
       {...rest}
     />
