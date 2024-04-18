@@ -79,7 +79,7 @@ const TreeNode = <BaseNode extends BaseTreeNode>(
 
   const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
     e.stopPropagation();
-    if (!canActiveKey || !canActiveKey(data.key, data.node) || canExpand()) {
+    if ((!canActiveKey || !canActiveKey(data.key, data.node)) && canExpand()) {
       switchExpand(!data.expanded);
     }
     // if (this.loading || this.node.disabled || this.node.status === NODE_STATUS.EDIT) {
