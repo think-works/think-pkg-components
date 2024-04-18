@@ -794,6 +794,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
               dropAttrs={dropAttrs}
               onClick={() => onClick(item.data)}
               onCheck={(val) => onCheck(item.data, val)}
+              canActiveKey={props.canActiveKey}
               onExpand={(val) => onExpand(item.data, val)}
               data={item.data}
               key={item.data.key}

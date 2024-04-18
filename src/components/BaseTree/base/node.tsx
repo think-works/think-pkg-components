@@ -10,15 +10,16 @@ import {
   BaseTreeNode,
 } from "./types";
 
-export interface BaseTreeNodeProps<T extends BaseTreeNode> {
-  data: BaseTreeIndexItem<T>;
+export interface BaseTreeNodeProps<BaseNode extends BaseTreeNode> {
+  data: BaseTreeIndexItem<BaseNode>;
   onCheck: (checked: boolean) => void;
   onClick: () => void;
   onExpand: (expanded: boolean) => void;
+  canActiveKey?: ((key: BaseTreeKey, node: BaseNode) => boolean) | undefined;
   checkable?: boolean;
   activeKey?: BaseTreeKey;
   renderContent?: (
-    data: BaseTreeIndexItem<T>,
+    data: BaseTreeIndexItem<BaseNode>,
     context: BaseTreeItemContext,
   ) => React.ReactNode;
   dropAttrs: React.HTMLAttributes<HTMLDivElement>;
@@ -31,8 +32,10 @@ export interface BaseTreeNodeProps<T extends BaseTreeNode> {
   showIndentBorder?: boolean;
 }
 
-const TreeNode = <T extends BaseTreeNode>(props: BaseTreeNodeProps<T>) => {
-  const { data, onCheck, menu } = props;
+const TreeNode = <BaseNode extends BaseTreeNode>(
+  props: BaseTreeNodeProps<BaseNode>,
+) => {
+  const { data, onCheck, menu, canActiveKey } = props;
   const [hover, setHover] = useState(false);
   const [contextMenuOpen, setContextMenuOpen] = useState(false);
 
@@ -76,6 +79,9 @@ const TreeNode = <T extends BaseTreeNode>(props: BaseTreeNodeProps<T>) => {
 
   const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
     e.stopPropagation();
+    if (!canActiveKey && canExpand()) {
+      switchExpand(!data.expanded);
+    }
     // if (this.loading || this.node.disabled || this.node.status === NODE_STATUS.EDIT) {
     //   return;
     // }
