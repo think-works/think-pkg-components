@@ -3,6 +3,7 @@ import {
   HTMLAttributes,
   ReactNode,
   useCallback,
+  useEffect,
   useRef,
   useState,
 } from "react";
@@ -17,18 +18,20 @@ type Placement = "top" | "bottom" | "left" | "right";
 export type DragContainerProps = HTMLAttributes<HTMLDivElement> & {
   /** 容器样式 */
   className?: Argument;
-  /** 面板样式 */
-  panelClassName?: Argument;
-  /** 手柄样式 */
-  handlerClassName?: Argument;
+  /** 子组件样式 */
+  classNames?: {
+    dragHandler?: Argument;
+    dragPanel?: Argument;
+    contentPanel?: Argument;
+  };
   /** 持久化存储 Key */
   storage?: string;
   /** 停放位置 */
   placement: Placement;
   /** 容器子节点 */
   children?: ReactNode;
-  /** 面板子节点 */
-  panelChildren?: ReactNode;
+  /** 拖拽面板子节点 */
+  dragPanelChildren?: ReactNode;
   /** 拖拽防抖 */
   dragThrottle?: number;
   draggableParams?: Partial<DraggableParams>;
@@ -41,20 +44,31 @@ export type DragContainerProps = HTMLAttributes<HTMLDivElement> & {
 export const DragContainer = (props: DragContainerProps) => {
   const {
     className,
-    panelClassName,
-    handlerClassName,
+    classNames,
     storage,
     placement,
     children,
-    panelChildren,
+    dragPanelChildren,
     dragThrottle,
     draggableParams,
     dragHandlerProps,
     ...rest
   } = props;
+
   const isResizeRow = placement === "top" || placement === "bottom";
   const isResizeCol = placement === "left" || placement === "right";
   const isReverse = placement === "bottom" || placement === "right";
+
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => {
+    /**
+     * 因为 hooks 会在 render 阶段执行，而 ref 会在 commit 阶段赋值。
+     * 因此初次执行 useDraggable 时 refContainer.current 为无效值。
+     * 如果当前组件或祖先组件没有后续状态更新， useDraggable 就无法再次执行。
+     * https://react.dev/learn/manipulating-the-dom-with-refs#when-react-attaches-the-refs
+     */
+    setLoaded(true);
+  }, []);
 
   const refContainer = useRef<HTMLDivElement>(null);
   const [curWidth, setCurWidth] = useState<number>(0);
@@ -89,7 +103,7 @@ export const DragContainer = (props: DragContainerProps) => {
     dragHandler = (
       <DragHandler
         key={dftHeight} // 算出默认值后强制销毁重建
-        className={cls(stl.dragHandler, handlerClassName)}
+        className={cls(stl.dragHandler, classNames?.dragHandler)}
         resize="row"
         reverse={isReverse}
         storage={storage}
@@ -104,7 +118,7 @@ export const DragContainer = (props: DragContainerProps) => {
     dragHandler = (
       <DragHandler
         key={dftWidth} // 算出默认值后强制销毁重建
-        className={cls(stl.dragHandler, handlerClassName)}
+        className={cls(stl.dragHandler, classNames?.dragHandler)}
         resize="col"
         reverse={isReverse}
         storage={storage}
@@ -132,13 +146,15 @@ export const DragContainer = (props: DragContainerProps) => {
       {...rest}
     >
       <div
-        className={cls(stl.dragPanel, panelClassName)}
+        className={cls(stl.dragPanel, classNames?.dragPanel)}
         style={{ width: panelWidth, height: panelHeight }}
       >
-        {panelChildren}
-        {dragHandler}
+        {dragPanelChildren}
+        {loaded ? dragHandler : null}
       </div>
-      <div className={stl.normalPanel}>{children}</div>
+      <div className={cls(stl.contentPanel, classNames?.contentPanel)}>
+        {children}
+      </div>
     </div>
   );
 };

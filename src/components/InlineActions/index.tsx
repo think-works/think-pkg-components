@@ -19,7 +19,7 @@ export const InlineActions = (props: InlineActionsProps) => {
   if (divider) {
     return (
       <span className={cls(stl.inlineActions, className)} {...rest}>
-        <Space>
+        <Space size={4}>
           {(actions || []).filter(Boolean).map((item, idx) => [
             idx === 0 ? null : (
               <Divider
@@ -44,7 +44,7 @@ export const InlineActions = (props: InlineActionsProps) => {
 
   return (
     <span className={cls(stl.inlineActions, className)} {...rest}>
-      <Space>
+      <Space size={8}>
         {(actions || []).filter(Boolean).map((item, idx) => (
           <BaseAction
             key={`action-${idx}-${item?.children}`}
