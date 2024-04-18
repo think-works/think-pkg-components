@@ -1,3 +1,5 @@
+@import "@/styles/utils.less";
+
 .dragContainer {
   display: flex;
   height: 100%;
@@ -32,6 +34,9 @@
   box-sizing: content-box;
   background-clip: content-box;
   user-select: none;
+  &:hover {
+    border-color: @colorPrimary;
+  }
   &.row {
     cursor: row-resize;
     top: unset;
