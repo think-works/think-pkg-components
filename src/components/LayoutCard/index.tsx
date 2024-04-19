@@ -1,4 +1,5 @@
 import cls, { Argument } from "classnames";
+import BaseText from "../BaseText";
 import stl from "./index.module.less";
 
 export type LayoutCardProps = {
@@ -51,7 +52,9 @@ export const LayoutCard = (props: LayoutCardProps) => {
           })}
           style={styles?.head}
         >
-          <div className={stl.title}>{title}</div>
+          <div className={stl.title}>
+            <BaseText type="sub">{title}</BaseText>
+          </div>
           <div className={stl.extra}>{extra}</div>
         </div>
       ) : null}
