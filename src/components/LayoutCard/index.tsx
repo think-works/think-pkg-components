@@ -6,8 +6,8 @@ export type LayoutCardProps = {
   className?: Argument;
   style?: React.CSSProperties;
   bordered?: boolean;
-  clingContent?: boolean;
   divider?: boolean;
+  clingContent?: boolean;
   title?: React.ReactNode;
   extra?: React.ReactNode;
   children?: React.ReactNode;
@@ -28,9 +28,9 @@ export const LayoutCard = (props: LayoutCardProps) => {
   const {
     className,
     style,
-    bordered,
+    bordered = true,
+    divider = true,
     clingContent,
-    divider,
     title,
     extra,
     children,
