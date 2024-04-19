@@ -1,5 +1,4 @@
 import cls, { Argument } from "classnames";
-import LayoutCard from "../LayoutCard";
 import { LayoutTitle } from "../LayoutTitle";
 import stl from "./index.module.less";
 
