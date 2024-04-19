@@ -42,7 +42,7 @@ export const DropdownActions = (props: DropdownActionsProps) => {
       }
       return {
         key: key || idx,
-        label: <BaseAction transparent type="text" {...actionRest} />,
+        label: <BaseAction transparent block type="text" {...actionRest} />,
       };
     });
 
