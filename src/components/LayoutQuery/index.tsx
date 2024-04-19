@@ -42,18 +42,11 @@ export const LayoutQuery = (props: LayoutQueryProps) => {
   return (
     <div className={cls(stl.layoutQuery, className)} style={style}>
       {filter ? (
-        <LayoutCard
-          className={cls(stl.head, classNames?.head)}
-          style={styles?.head}
-        >
+        <div className={cls(stl.head, classNames?.head)} style={styles?.head}>
           {filter}
-        </LayoutCard>
+        </div>
       ) : null}
-      <LayoutCard
-        className={cls(stl.body, classNames?.body)}
-        style={styles?.body}
-        classNames={{ body: stl.resultBody }}
-      >
+      <div className={cls(stl.body, classNames?.body)} style={styles?.body}>
         {title || action ? (
           <LayoutTitle
             className={cls(stl.tools, classNames?.tools)}
@@ -69,7 +62,7 @@ export const LayoutQuery = (props: LayoutQueryProps) => {
         >
           {children}
         </div>
-      </LayoutCard>
+      </div>
     </div>
   );
 };
