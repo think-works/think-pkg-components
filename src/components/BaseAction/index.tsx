@@ -33,6 +33,7 @@ export type BaseActionProps = Omit<ButtonProps, "onClick"> & {
   disabled?: boolean;
   inline?: boolean;
   transparent?: boolean;
+  align?: "left" | "right";
   onClick?: (...rest: any[]) => any;
 };
 
@@ -46,6 +47,7 @@ export const BaseAction = (props: BaseActionProps) => {
     disabled,
     inline,
     transparent,
+    align,
     onClick,
     ...rest
   } = props || {};
@@ -92,11 +94,12 @@ export const BaseAction = (props: BaseActionProps) => {
 
   const content = (
     <Button
-      className={cls(
-        stl.baseAction,
-        { [stl.inline]: inline, [stl.transparent]: transparent },
-        className,
-      )}
+      className={cls(stl.baseAction, className, {
+        [stl.inline]: inline,
+        [stl.transparent]: transparent,
+        [stl.alignLeft]: align === "left",
+        [stl.alignRight]: align === "right",
+      })}
       disabled={disabled}
       loading={loading}
       onClick={handleButtonClick}

@@ -21,6 +21,7 @@ export type DropdownActionsProps = (
 ) & {
   className?: Argument;
   actions?: (DropdownActionItem | null | undefined)[];
+  actionAlign?: BaseActionProps["align"];
   children?: React.ReactNode;
 };
 
@@ -28,7 +29,8 @@ export type DropdownActionsProps = (
  * 下拉操作
  */
 export const DropdownActions = (props: DropdownActionsProps) => {
-  const { className, buttonTrigger, actions, children, ...rest } = props || {};
+  const { className, buttonTrigger, actions, actionAlign, children, ...rest } =
+    props || {};
 
   const items: MenuProps["items"] = (actions || [])
     .filter(Boolean)
@@ -42,7 +44,9 @@ export const DropdownActions = (props: DropdownActionsProps) => {
       }
       return {
         key: key || idx,
-        label: <BaseAction transparent block type="text" {...actionRest} />,
+        label: (
+          <BaseAction block type="text" align={actionAlign} {...actionRest} />
+        ),
       };
     });
 

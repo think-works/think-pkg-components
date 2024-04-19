@@ -10,6 +10,7 @@ export type ColumnActionsProps = {
   dropdownText?: ReactNode;
   dropdownTrigger?: ReactNode;
   dropdownActions?: DropdownActionsProps["actions"];
+  dropdownActionAlign?: DropdownActionsProps["actionAlign"];
 };
 
 /**
@@ -22,15 +23,24 @@ export const ColumnActions = (props: ColumnActionsProps) => {
     dropdownText,
     dropdownTrigger,
     dropdownActions,
+    dropdownActionAlign,
   } = props || {};
 
-  const _dropdownActions = dropdownActions?.filter(truthy);
+  let _dropdownActions = dropdownActions?.filter(truthy);
+  _dropdownActions = _dropdownActions?.map((action) => ({
+    type: "link",
+    ...action,
+  }));
 
   return (
     <Space>
       {children}
       {_dropdownActions?.length ? (
-        <DropdownActions disabled={disabledDropdown} actions={dropdownActions}>
+        <DropdownActions
+          disabled={disabledDropdown}
+          actions={dropdownActions}
+          actionAlign={dropdownActionAlign}
+        >
           {dropdownTrigger || (
             <a>
               <Space size={4}>

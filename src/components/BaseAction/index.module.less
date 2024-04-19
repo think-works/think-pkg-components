@@ -6,13 +6,22 @@
       display: inline-block;
       padding: 0;
       height: auto;
-      min-width: auto;
     }
   }
   &.transparent {
     &:global(.@{ant-prefix}-btn),
     &:global(.@{ant-prefix}-btn):hover {
       background-color: transparent;
+    }
+  }
+  &.alignLeft {
+    &:global(.@{ant-prefix}-btn) {
+      text-align: left;
+    }
+  }
+  &.alignRight {
+    &:global(.@{ant-prefix}-btn) {
+      text-align: right;
     }
   }
 }
