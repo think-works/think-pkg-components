@@ -67,6 +67,9 @@ export type EditableTableProps = Omit<
   TableProps<any>,
   "dataSource" | "columns" | "onChange"
 > & {
+  /**
+   * 指定拖拽的 rowKey
+   */
   rowKey?: string;
   /** readOnly */
   readOnly?: boolean;
@@ -121,7 +124,12 @@ export const EditableTable = (props: EditableTableProps) => {
   const [itemList, setItemList] = useState<DataRow[]>([]);
   const itemCount = itemList.length;
   const [innerRowKey, setInnerRowKey] = useState(rowKey || "innerRowKey");
-
+  // 指定 key
+  // Warning: [antd: Table] `index` parameter of `rowKey` function is deprecated. There is no guarantee that it will work as expected.
+  const normalRowKey = useCallback(
+    (row: DataRow, idx?: number) => idx ?? itemList.findIndex((x) => x === row),
+    [itemList],
+  );
   // 排除内部使用的 rowKey，校验这行是否有有效值
   const verifyRow = useCallback(
     (row: DataRow) =>
@@ -191,9 +199,23 @@ export const EditableTable = (props: EditableTableProps) => {
       // 如果最后一行无效，则剔除最后一行
       rows = clearLastRow(rows);
     }
+    /**
+     * 如果可拖拽，数据增加 rowKey
+     */
+    if (canDrag) {
+      rows = addRowsKey(rows, innerRowKey);
+    }
 
-    setItemList(addRowsKey(rows, innerRowKey));
-  }, [readOnly, disabledAdd, dataSource, innerRowKey, addRow, clearLastRow]);
+    setItemList(rows);
+  }, [
+    canDrag,
+    readOnly,
+    disabledAdd,
+    dataSource,
+    innerRowKey,
+    addRow,
+    clearLastRow,
+  ]);
 
   useEffect(() => {
     if (rowKey) {
@@ -385,7 +407,7 @@ export const EditableTable = (props: EditableTableProps) => {
       dndContextProps={{
         cancelDrop: () => false,
       }}
-      rowKey={innerRowKey}
+      rowKey={canDrag ? innerRowKey : normalRowKey}
       dataSource={itemList}
       onDataSourceChange={handleSort}
       locale={{ emptyText: "无内容" }}
