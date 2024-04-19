@@ -1,4 +1,4 @@
-import { Button, Space, Table, TableProps } from "antd";
+import { Button, Space, Table, TableProps, Tooltip } from "antd";
 import type { ColumnType } from "antd/lib/table/interface";
 import cls from "classnames";
 import { cloneDeep, get, isFunction, set } from "lodash-es";
@@ -28,6 +28,8 @@ type RenderParams = Parameters<Required<Column>["render"]>;
 type ActionResult = {
   /** 禁止操作 */
   disabled?: boolean;
+  /** 提示 */
+  tooltip?: string;
   /** 操作扩展 */
   extend?: ReactNode;
 };
@@ -354,23 +356,25 @@ export const EditableTable = (props: EditableTableProps) => {
 
         // 渲染操作列
         const actionResult = actionRender?.(text, record, rowIdx) ?? {};
-        const { disabled, extend } = actionResult;
+        const { disabled, tooltip, extend } = actionResult;
 
         // 追加新建行，没有操作列
         return isLastRow ? (
           lastActionRender
         ) : (
           <Space>
-            <Button
-              type="text"
-              tabIndex={-1}
-              disabled={disabled}
-              size={size}
-              title="删除本行"
-              onClick={() => handleDelete(record, rowIdx)}
-            >
-              <DeleteOutlined />
-            </Button>
+            <Tooltip title={tooltip}>
+              <Button
+                type="text"
+                tabIndex={-1}
+                disabled={disabled}
+                size={size}
+                onClick={() => handleDelete(record, rowIdx)}
+              >
+                <DeleteOutlined />
+              </Button>
+            </Tooltip>
+
             {extend}
           </Space>
         );
