@@ -1,7 +1,6 @@
 import { Space } from "antd";
 import { ReactNode } from "react";
 import { DownOutlined } from "@ant-design/icons";
-import { truthy } from "@/utils/types";
 import DropdownActions, { DropdownActionsProps } from "../DropdownActions";
 
 export type ColumnActionsProps = {
@@ -26,9 +25,8 @@ export const ColumnActions = (props: ColumnActionsProps) => {
     dropdownActionAlign,
   } = props || {};
 
-  let _dropdownActions = dropdownActions?.filter(truthy);
-  _dropdownActions = _dropdownActions?.map((action) => ({
-    type: "link",
+  const _dropdownActions = dropdownActions?.map((action) => ({
+    type: "link" as const,
     ...action,
   }));
 
@@ -38,7 +36,7 @@ export const ColumnActions = (props: ColumnActionsProps) => {
       {_dropdownActions?.length ? (
         <DropdownActions
           disabled={disabledDropdown}
-          actions={dropdownActions}
+          actions={_dropdownActions}
           actionAlign={dropdownActionAlign}
         >
           {dropdownTrigger || (
