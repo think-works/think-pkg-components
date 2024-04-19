@@ -119,6 +119,7 @@ export const EditableTable = (props: EditableTableProps) => {
     onRowDelete,
     canDrag = false,
     rowKey,
+    size = "small",
     ...rest
   } = props;
   const [itemList, setItemList] = useState<DataRow[]>([]);
@@ -364,6 +365,8 @@ export const EditableTable = (props: EditableTableProps) => {
               type="text"
               tabIndex={-1}
               disabled={disabled}
+              size={size}
+              title="删除本行"
               onClick={() => handleDelete(record, rowIdx)}
             >
               <DeleteOutlined />
@@ -385,6 +388,7 @@ export const EditableTable = (props: EditableTableProps) => {
     }
     return list;
   }, [
+    size,
     columns,
     readOnly,
     actionColumn,
@@ -403,7 +407,7 @@ export const EditableTable = (props: EditableTableProps) => {
       pagination={false}
       columns={colList}
       className={cls(stl.table, className)}
-      size="small"
+      size={size}
       dndContextProps={{
         cancelDrop: () => false,
       }}
