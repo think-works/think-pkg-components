@@ -1,6 +1,10 @@
 {
   "name": "@think/components",
+<<<<<<< HEAD
   "version": "0.2.25",
+=======
+  "version": "0.2.26",
+>>>>>>> e69d7835604c56cc36d98d870cf941a7c4111db3
   "description": "组件库",
   "type": "module",
   "main": "./dist/index.cjs",
