@@ -6,10 +6,6 @@
   flex-direction: column;
   height: 100%;
 
-  &.vertical {
-    flex-direction: row;
-  }
-
   &.overflow {
     :global(.@{ant-prefix}-tabs-tabpane) {
       height: 0;
@@ -17,9 +13,27 @@
     }
   }
 
+  &.top {
+    :global(.@{ant-prefix}-tabs-nav) {
+      margin-top: 8px;
+    }
+  }
+  &.bottom {
+    :global(.@{ant-prefix}-tabs-nav) {
+      margin-top: 8px;
+    }
+  }
+  &.left,
+  &.right {
+    flex-direction: row;
+
+    :global(.@{ant-prefix}-tabs-tabpane) {
+      padding: @bizLayoutGap;
+    }
+  }
+
   :global(.@{ant-prefix}-tabs-nav) {
     flex: none;
-    margin-bottom: 8px;
   }
 
   :global(.@{ant-prefix}-tabs-content-holder) {

@@ -16,14 +16,18 @@ export type FlexTabsProps = TabsProps & {
  * 使用 flex 布局样式的 Tabs
  */
 export const FlexTabs = (props: FlexTabsProps) => {
-  const { className, tabPosition, overflowContent, ...rest } = props;
+  const { className, tabPosition = "top", overflowContent, ...rest } = props;
 
   return (
     <Tabs
-      className={cls(stl.flexTabs, className, {
-        [stl.vertical]: tabPosition === "left" || tabPosition === "right",
-        [stl.overflow]: overflowContent,
-      })}
+      className={cls(
+        stl.flexTabs,
+        className,
+        {
+          [stl.overflow]: overflowContent,
+        },
+        tabPosition ? stl[tabPosition] : null,
+      )}
       tabPosition={tabPosition}
       {...rest}
     />
