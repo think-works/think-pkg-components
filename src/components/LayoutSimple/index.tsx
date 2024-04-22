@@ -26,7 +26,12 @@ export const LayoutSimple = (props: LayoutSimpleProps) => {
     props || {};
 
   return (
-    <div className={cls(stl.layoutSimple, className)} style={style}>
+    <div
+      className={cls(stl.layoutSimple, className, {
+        [stl.showTitle]: title || extend,
+      })}
+      style={style}
+    >
       {title || extend ? (
         <LayoutTitle
           className={cls(stl.head, classNames?.head)}
