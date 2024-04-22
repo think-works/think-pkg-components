@@ -1,0 +1,40 @@
+@import "@/styles/utils.less";
+
+.flexTabs {
+  flex: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &.vertical {
+    flex-direction: row;
+  }
+
+  &.overflow {
+    :global(.@{ant-prefix}-tabs-tabpane) {
+      height: 0;
+      overflow: auto;
+    }
+  }
+
+  :global(.@{ant-prefix}-tabs-nav) {
+    flex: none;
+    margin-bottom: 8px;
+  }
+
+  :global(.@{ant-prefix}-tabs-content-holder) {
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+
+    :global(.@{ant-prefix}-tabs-content) {
+      flex: auto;
+      display: flex;
+      flex-direction: column;
+
+      :global(.@{ant-prefix}-tabs-tabpane) {
+        flex: auto;
+      }
+    }
+  }
+}

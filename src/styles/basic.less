@@ -94,42 +94,4 @@
   }
 }
 
-// flex 布局标签
-.flexTabs() {
-  display: flex;
-  flex-direction: column;
-  flex: auto;
-  height: 100%;
-
-  :global(.@{ant-prefix}-tabs-nav) {
-    flex: none;
-  }
-
-  :global(.@{ant-prefix}-tabs-content-holder) {
-    display: flex;
-    flex-direction: column;
-    flex: auto;
-
-    :global(.@{ant-prefix}-tabs-content) {
-      display: flex;
-      flex-direction: column;
-      flex: auto;
-
-      :global(.@{ant-prefix}-tabs-tabpane) {
-        display: flex;
-        flex-direction: column;
-        flex: auto;
-
-        &:global(.@{ant-prefix}-tabs-tabpane-hidden) {
-          display: none;
-        }
-
-        & > div {
-          flex: auto;
-        }
-      }
-    }
-  }
-}
-
 // #endregion
