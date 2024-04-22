@@ -17,6 +17,7 @@
       "require": "./dist/node.cjs",
       "types": "./dist/node.d.ts"
     },
+    "./basic-utils.less": "./dist/basic-utils.less",
     "./components.css": "./dist/components.css"
   },
   "sideEffects": [
@@ -27,8 +28,9 @@
   ],
   "scripts": {
     "serve": "vite",
-    "build": "tsc && vite build && npm run build:types",
-    "build:types": "tsc --outDir dist --noEmit false --composite false --tsBuildInfoFile null --declaration --emitDeclarationOnly && tsc-alias --outDir dist && rm -rf dist/main.d.ts dist/Demo",
+    "build": "tsc && vite build && npm run build:types && npm run build:assets",
+    "build:types": "tsc --outDir dist --noEmit false --composite false --tsBuildInfoFile null --declaration --emitDeclarationOnly && tsc-alias --outDir dist",
+    "build:assets": "cp src/styles/basic.less dist/basic-utils.less && rm -rf dist/main.d.ts dist/Demo",
     "build:watch": "vite build -w",
     "prepare": "husky",
     "version": "npm install && npm run build && git add .",
@@ -90,7 +92,7 @@
     "less": "^4.2.0",
     "lint-staged": "^15.2.2",
     "lodash-es": "^4.17.21",
-    "postcss-preset-env": "^9.5.6",
+    "postcss-preset-env": "^9.5.8",
     "prettier": "^3.2.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -100,7 +102,7 @@
     "tsc-alias": "^1.8.8",
     "typescript": "^5.4.5",
     "typescript-eslint": "^7.7.0",
-    "vite": "^5.2.9",
+    "vite": "^5.2.10",
     "vite-plugin-checker": "^0.6.4",
     "vite-plugin-mock-dev-server": "^1.5.0"
   }
