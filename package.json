@@ -17,11 +17,11 @@
       "require": "./dist/node.cjs",
       "types": "./dist/node.d.ts"
     },
-    "./basic-utils.less": "./dist/basic-utils.less",
-    "./components.css": "./dist/components.css"
+    "./dist/*": "./dist/*"
   },
   "sideEffects": [
-    "**/*.css"
+    "**/*.css",
+    "**/*.less"
   ],
   "files": [
     "dist"
