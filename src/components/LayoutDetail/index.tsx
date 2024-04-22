@@ -5,6 +5,7 @@ import stl from "./index.module.less";
 export type LayoutDetailProps = {
   className?: Argument;
   style?: React.CSSProperties;
+  divider?: boolean;
   clingContent?: boolean;
   crumb?: React.ReactNode;
   title?: React.ReactNode;
@@ -43,6 +44,7 @@ export const LayoutDetail = (props: LayoutDetailProps) => {
   const {
     className,
     style,
+    divider = true,
     clingContent,
     crumb,
     title,
@@ -56,7 +58,12 @@ export const LayoutDetail = (props: LayoutDetailProps) => {
 
   return (
     <div className={cls(stl.layoutDetail, className)} style={style}>
-      <div className={cls(stl.head, classNames?.head)} style={styles?.head}>
+      <div
+        className={cls(stl.head, classNames?.head, {
+          [stl.divider]: divider,
+        })}
+        style={styles?.head}
+      >
         {crumb ? (
           <div
             className={cls(stl.crumb, classNames?.crumb)}

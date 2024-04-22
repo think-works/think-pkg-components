@@ -5,8 +5,8 @@ import stl from "./index.module.less";
 export type LayoutCardProps = {
   className?: Argument;
   style?: React.CSSProperties;
-  bordered?: boolean;
   divider?: boolean;
+  bordered?: boolean;
   clingContent?: boolean;
   title?: React.ReactNode;
   extra?: React.ReactNode;
@@ -28,8 +28,8 @@ export const LayoutCard = (props: LayoutCardProps) => {
   const {
     className,
     style,
-    bordered = true,
     divider = true,
+    bordered = true,
     clingContent,
     title,
     extra,

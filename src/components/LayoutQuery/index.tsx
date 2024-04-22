@@ -5,6 +5,7 @@ import stl from "./index.module.less";
 export type LayoutQueryProps = {
   className?: Argument;
   style?: React.CSSProperties;
+  bordered?: boolean;
   filter?: React.ReactNode;
   title?: React.ReactNode;
   action?: React.ReactNode;
@@ -30,6 +31,7 @@ export const LayoutQuery = (props: LayoutQueryProps) => {
   const {
     className,
     style,
+    bordered,
     filter,
     title,
     action,
@@ -41,11 +43,21 @@ export const LayoutQuery = (props: LayoutQueryProps) => {
   return (
     <div className={cls(stl.layoutQuery, className)} style={style}>
       {filter ? (
-        <div className={cls(stl.head, classNames?.head)} style={styles?.head}>
+        <div
+          className={cls(stl.head, classNames?.head, {
+            [stl.bordered]: bordered,
+          })}
+          style={styles?.head}
+        >
           {filter}
         </div>
       ) : null}
-      <div className={cls(stl.body, classNames?.body)} style={styles?.body}>
+      <div
+        className={cls(stl.body, classNames?.body, {
+          [stl.bordered]: bordered,
+        })}
+        style={styles?.body}
+      >
         {title || action ? (
           <LayoutTitle
             className={cls(stl.tools, classNames?.tools)}
