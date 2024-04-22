@@ -1,0 +1,28 @@
+@import "@/styles/utils.less";
+
+.layoutSimple {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 8px;
+  background-color: @colorBgContainer;
+
+  .head {
+    flex: none;
+    padding: 0 @bizLayoutGap;
+  }
+
+  .body {
+    flex: auto;
+    padding: @bizLayoutGap;
+
+    &.cling {
+      padding-top: 0;
+    }
+
+    &.overflow {
+      height: 0;
+      overflow: auto;
+    }
+  }
+}

@@ -20,7 +20,7 @@ export type LayoutTitleProps = {
 };
 
 /**
- * 布局标题
+ * 标题布局
  */
 export const LayoutTitle = (props: LayoutTitleProps) => {
   const {

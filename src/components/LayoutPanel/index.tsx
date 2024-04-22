@@ -30,7 +30,7 @@ export type LayoutPanelProps = {
 };
 
 /**
- * 布局面板
+ * 面板布局
  */
 export const LayoutPanel = (props: LayoutPanelProps) => {
   const {

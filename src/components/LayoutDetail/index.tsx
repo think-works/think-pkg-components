@@ -46,7 +46,7 @@ export type LayoutDetailProps = {
 };
 
 /**
- * 布局详情
+ * 详情布局
  */
 export const LayoutDetail = (props: LayoutDetailProps) => {
   const {

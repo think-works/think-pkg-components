@@ -32,7 +32,7 @@ export type LayoutQueryProps = {
 };
 
 /**
- * 布局查询
+ * 查询布局
  */
 export const LayoutQuery = (props: LayoutQueryProps) => {
   const {

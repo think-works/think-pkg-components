@@ -21,6 +21,7 @@ export * from "./LayoutCard";
 export * from "./LayoutDetail";
 export * from "./LayoutPanel";
 export * from "./LayoutQuery";
+export * from "./LayoutSimple";
 export * from "./LayoutTitle";
 export * from "./Loading";
 export * from "./Portal";

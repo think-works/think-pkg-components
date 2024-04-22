@@ -1,14 +1,12 @@
 import cls, { Argument } from "classnames";
-import BaseText from "../BaseText";
+import { LayoutTitle } from "../LayoutTitle";
 import stl from "./index.module.less";
 
-export type LayoutCardProps = {
+export type LayoutSimpleProps = {
   className?: Argument;
   style?: React.CSSProperties;
   /** 头部分割线 */
   divider?: boolean;
-  /** 组件边框 */
-  bordered?: boolean;
   /** 内容区域紧贴头部 */
   clingContent?: boolean;
   /**
@@ -18,7 +16,7 @@ export type LayoutCardProps = {
    */
   overflowContent?: boolean;
   title?: React.ReactNode;
-  extra?: React.ReactNode;
+  extend?: React.ReactNode;
   children?: React.ReactNode;
   classNames?: {
     head?: Argument;
@@ -31,42 +29,33 @@ export type LayoutCardProps = {
 };
 
 /**
- * 卡片布局
+ * 简单布局
  */
-export const LayoutCard = (props: LayoutCardProps) => {
+export const LayoutSimple = (props: LayoutSimpleProps) => {
   const {
     className,
     style,
-    divider = true,
-    bordered = true,
+    divider,
     clingContent,
     overflowContent,
     title,
-    extra,
+    extend,
     children,
     classNames,
     styles,
   } = props || {};
 
   return (
-    <div
-      className={cls(stl.layoutCard, className, {
-        [stl.bordered]: bordered,
-      })}
-      style={style}
-    >
-      {title || extra ? (
-        <div
-          className={cls(stl.head, classNames?.head, {
-            [stl.divider]: divider,
-          })}
+    <div className={cls(stl.layoutSimple, className)} style={style}>
+      {title || extend ? (
+        <LayoutTitle
+          className={cls(stl.head, classNames?.head)}
           style={styles?.head}
-        >
-          <div className={stl.title}>
-            <BaseText type="sub">{title}</BaseText>
-          </div>
-          <div className={stl.extra}>{extra}</div>
-        </div>
+          size="middle"
+          divider={divider}
+          title={title}
+          extend={extend}
+        />
       ) : null}
       <div
         className={cls(
@@ -85,4 +74,4 @@ export const LayoutCard = (props: LayoutCardProps) => {
   );
 };
 
-export default LayoutCard;
+export default LayoutSimple;
