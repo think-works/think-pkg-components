@@ -152,7 +152,12 @@ export const DragContainer = (props: DragContainerProps) => {
         {dragPanelChildren}
         {loaded ? dragHandler : null}
       </div>
-      <div className={cls(stl.contentPanel, classNames?.contentPanel)}>
+      <div
+        className={cls(stl.contentPanel, classNames?.contentPanel, {
+          [stl.row]: isResizeRow,
+          [stl.col]: isResizeCol,
+        })}
+      >
         {children}
       </div>
     </div>
