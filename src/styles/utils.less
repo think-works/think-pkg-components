@@ -1,5 +1,66 @@
 @import "./basic.less";
 
+// #region 变量映射
+
+@colorTextHeading: var(
+  ~"--@{antPrefixVar}-color-text-heading",
+  rgba(0, 0, 0, 0.88)
+);
+@colorTextLabel: var(
+  ~"--@{antPrefixVar}-color-text-label",
+  rgba(0, 0, 0, 0.65)
+);
+@colorTextDescription: var(
+  ~"--@{antPrefixVar}-color-text-description",
+  rgba(0, 0, 0, 0.45)
+);
+@colorTextDisabled: var(
+  ~"--@{antPrefixVar}-color-text-disabled",
+  rgba(0, 0, 0, 0.25)
+);
+
+@colorBgContainer: var(~"--@{antPrefixVar}-color-bg-container", #ffffff);
+@colorBgContainerDisabled: var(
+  ~"--@{antPrefixVar}-color-bg-container-disabled",
+  rgba(0, 0, 0, 0.04)
+);
+@colorBgElevated: var(~"--@{antPrefixVar}-color-bg-elevated", #ffffff);
+@colorBgMask: var(~"--@{antPrefixVar}-color-bg-mask", rgba(0, 0, 0, 0.45));
+
+@colorBgTextHover: var(
+  ~"--@{antPrefixVar}-color-bg-text-hover",
+  rgba(0, 0, 0, 0.06)
+);
+@colorBgTextActive: var(
+  ~"--@{antPrefixVar}-color-bg-text-active",
+  rgba(0, 0, 0, 0.15)
+);
+
+@controlItemBgHover: var(
+  ~"--@{antPrefixVar}-control-item-bg-hover",
+  rgba(0, 0, 0, 0.04)
+);
+@controlItemBgActive: var(~"--@{antPrefixVar}-control-item-bg-active", #e6f4ff);
+@controlItemBgActiveHover: var(
+  ~"--@{antPrefixVar}-control-item-bg-active-hover",
+  #bae0ff
+);
+@controlItemBgActiveDisabled: var(
+  ~"--@{antPrefixVar}-control-item-bg-active-disabled",
+  rgba(0, 0, 0, 0.15)
+);
+
+@colorBorder: var(~"--@{antPrefixVar}-color-border", #d9d9d9);
+@colorBorderSecondary: var(
+  ~"--@{antPrefixVar}-color-border-secondary",
+  #f0f0f0
+);
+@colorSplit: var(~"--@{antPrefixVar}-color-split", rgba(5, 5, 5, 0.06));
+
+// #endregion
+
+// #region 业务变量
+
 @colorBackgroundActive: rgba(0, 0, 0, 0.08);
 @colorBgHover: rgba(0, 0, 0, 0.06);
 @colorBg: rgb(253, 251, 252);
@@ -17,3 +78,5 @@
 @shadowCommonHighest:
   0px 3px 6px rgba(20, 20, 20, 0.1),
   0px 8px 16px rgba(20, 20, 20, 0.08);
+
+// #endregion
