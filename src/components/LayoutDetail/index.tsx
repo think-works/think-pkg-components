@@ -5,8 +5,16 @@ import stl from "./index.module.less";
 export type LayoutDetailProps = {
   className?: Argument;
   style?: React.CSSProperties;
+  /** 头部分割线 */
   divider?: boolean;
+  /** 内容区域紧贴头部 */
   clingContent?: boolean;
+  /**
+   * 内容区域高度自适应。
+   * 若内容高度低于所在 flex 容器剩余空间则自动撑满，若超过则出现滚动条。
+   * 要求内容区域所在 flex 容器必须指定高度，或者其父容器也是 flex 容器。
+   */
+  overflowContent?: boolean;
   crumb?: React.ReactNode;
   title?: React.ReactNode;
   action?: React.ReactNode;
@@ -46,6 +54,7 @@ export const LayoutDetail = (props: LayoutDetailProps) => {
     style,
     divider = true,
     clingContent,
+    overflowContent,
     crumb,
     title,
     action,
@@ -108,6 +117,7 @@ export const LayoutDetail = (props: LayoutDetailProps) => {
           stl.body,
           {
             [stl.cling]: clingContent,
+            [stl.overflow]: overflowContent,
           },
           classNames?.body,
         )}
