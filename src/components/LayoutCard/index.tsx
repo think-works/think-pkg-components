@@ -69,14 +69,10 @@ export const LayoutCard = (props: LayoutCardProps) => {
         </div>
       ) : null}
       <div
-        className={cls(
-          stl.body,
-          {
-            [stl.cling]: clingContent,
-            [stl.overflow]: overflowContent,
-          },
-          classNames?.body,
-        )}
+        className={cls(stl.body, classNames?.body, {
+          [stl.cling]: clingContent,
+          [stl.overflow]: overflowContent,
+        })}
         style={styles?.body}
       >
         {children}

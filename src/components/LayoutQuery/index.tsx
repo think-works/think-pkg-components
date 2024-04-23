@@ -63,6 +63,7 @@ export const LayoutQuery = (props: LayoutQueryProps) => {
       <div
         className={cls(stl.body, classNames?.body, {
           [stl.bordered]: bordered,
+          [stl.showTools]: title || action,
         })}
         style={styles?.body}
       >

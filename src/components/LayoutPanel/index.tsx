@@ -51,13 +51,9 @@ export const LayoutPanel = (props: LayoutPanelProps) => {
     <div className={cls(stl.layoutPanel, className)} style={style}>
       {title || extend ? (
         <LayoutTitle
-          className={cls(
-            stl.head,
-            {
-              [stl.sticky]: stickyTitle,
-            },
-            classNames?.head,
-          )}
+          className={cls(stl.head, classNames?.head, {
+            [stl.sticky]: stickyTitle,
+          })}
           style={styles?.head}
           size="large"
           divider={divider}
@@ -66,14 +62,10 @@ export const LayoutPanel = (props: LayoutPanelProps) => {
         />
       ) : null}
       <div
-        className={cls(
-          stl.body,
-          {
-            [stl.cling]: clingContent,
-            [stl.overflow]: overflowContent,
-          },
-          classNames?.body,
-        )}
+        className={cls(stl.body, classNames?.body, {
+          [stl.cling]: clingContent,
+          [stl.overflow]: overflowContent,
+        })}
         style={styles?.body}
       >
         {children}

@@ -25,11 +25,18 @@
     flex: auto;
     display: flex;
     flex-direction: column;
+
+    &.showTools {
+      padding-top: 0;
+
+      .tools {
+        margin: 8px 0;
+      }
+    }
   }
 
   .tools {
     flex: none;
-    margin-bottom: 8px;
   }
 
   .result {
