@@ -41,12 +41,30 @@
   box-sizing: content-box;
   background-clip: content-box;
   user-select: none;
-  &:hover {
+
+  &:hover,
+  &.hidden:hover {
     &.row,
     &.col {
+      transition: all 0.3s;
       border-color: @colorPrimary;
     }
   }
+
+  &.hidden {
+    &.row {
+      width: 100%;
+      border-top-color: transparent;
+      border-bottom-color: transparent;
+    }
+
+    &.col {
+      height: 100%;
+      border-left-color: transparent;
+      border-right-color: transparent;
+    }
+  }
+
   &.row {
     cursor: row-resize;
     top: unset;
@@ -57,11 +75,13 @@
     height: 2px;
     border-top: 2px solid #00000033;
     border-bottom: 2px solid #00000033;
+
     &.reverse {
       top: -3px;
       bottom: unset;
     }
   }
+
   &.col {
     cursor: col-resize;
     top: 50%;
@@ -72,6 +92,7 @@
     width: 2px;
     border-left: 2px solid #00000033;
     border-right: 2px solid #00000033;
+
     &.reverse {
       left: -3px;
       right: unset;

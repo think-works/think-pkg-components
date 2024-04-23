@@ -8,9 +8,9 @@ const DragContainerDemo = () => {
       dragPanelMinSize={{
         width: 200,
       }}
-      // dragPanelMaxSize={{
-      //   width: 400,
-      // }}
+      dragPanelMaxSize={{
+        width: 400,
+      }}
       dragPanelChildren="dragPanel"
     >
       contentPanel
@@ -34,7 +34,6 @@ const DragContainerDemo = () => {
   return (
     <FlexTabs
       size="small"
-      tabPosition="left"
       items={[
         {
           key: "simple",

@@ -29,6 +29,8 @@ export type DragContainerProps = HTMLAttributes<HTMLDivElement> & {
   storage?: string;
   /** 拖拽防抖 */
   dragThrottle?: number;
+  /** 隐藏式拖拽手柄 */
+  hiddenDragHandler?: boolean;
 
   /** 停放位置 */
   placement: Placement;
@@ -62,6 +64,7 @@ export const DragContainer = (props: DragContainerProps) => {
 
     storage,
     dragThrottle,
+    hiddenDragHandler,
 
     placement,
     children,
@@ -143,7 +146,9 @@ export const DragContainer = (props: DragContainerProps) => {
     dragHandler = (
       <DragHandler
         key={_dftHeight} // 算出默认值后强制销毁重建
-        className={cls(stl.dragHandler, classNames?.dragHandler)}
+        className={cls(stl.dragHandler, classNames?.dragHandler, {
+          [stl.hidden]: hiddenDragHandler,
+        })}
         resize="row"
         reverse={isReverse}
         storage={storage}
@@ -158,7 +163,9 @@ export const DragContainer = (props: DragContainerProps) => {
     dragHandler = (
       <DragHandler
         key={_dftWidth} // 算出默认值后强制销毁重建
-        className={cls(stl.dragHandler, classNames?.dragHandler)}
+        className={cls(stl.dragHandler, classNames?.dragHandler, {
+          [stl.hidden]: hiddenDragHandler,
+        })}
         resize="col"
         reverse={isReverse}
         storage={storage}

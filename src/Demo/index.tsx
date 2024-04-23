@@ -6,6 +6,7 @@ import "./index.less";
 const Demo = () => {
   return (
     <FlexTabs
+      tabPosition="left"
       items={[
         {
           key: "DragContainerDemo",
