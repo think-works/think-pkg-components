@@ -24,36 +24,67 @@ export type DragContainerProps = HTMLAttributes<HTMLDivElement> & {
     dragPanel?: Argument;
     contentPanel?: Argument;
   };
+
   /** 持久化存储 Key */
   storage?: string;
+  /** 拖拽防抖 */
+  dragThrottle?: number;
+
   /** 停放位置 */
   placement: Placement;
   /** 容器子节点 */
   children?: ReactNode;
   /** 拖拽面板子节点 */
   dragPanelChildren?: ReactNode;
-  /** 拖拽防抖 */
-  dragThrottle?: number;
+
+  /** 拖拽面板最小尺寸 */
+  dragPanelMinSize?: Size;
+  /** 拖拽面板最大尺寸 */
+  dragPanelMaxSize?: Size;
+  /** 拖拽面板默认尺寸 */
+  dragPanelDftSize?: Size;
+
+  /** `useDraggable()` 参数 */
   draggableParams?: Partial<DraggableParams>;
+  /** `<DragHandler />` 属性 */
   dragHandlerProps?: Partial<DragHandlerProps>;
 };
 
 /**
  * 拖拽容器
+ * 简单模式——直接使用给定值作为拖拽面板的边界值。
+ * 高级模式——根据可拖拽容器尺寸计算拖拽面板的边界值。
  */
 export const DragContainer = (props: DragContainerProps) => {
   const {
     className,
     classNames,
+
     storage,
+    dragThrottle,
+
     placement,
     children,
     dragPanelChildren,
-    dragThrottle,
+
+    dragPanelDftSize,
+    dragPanelMinSize,
+    dragPanelMaxSize,
+
     draggableParams,
     dragHandlerProps,
     ...rest
   } = props;
+
+  // 简单模式——直接使用给定值作为拖拽面板的边界值。
+  const { width: minPanelWidth, height: minPanelHeight } =
+    dragPanelMinSize || {};
+  const { width: maxPanelWidth, height: maxPanelHeight } =
+    dragPanelMaxSize || {};
+  const {
+    width: dftPanelWidth = minPanelWidth,
+    height: dftPanelHeight = minPanelHeight,
+  } = dragPanelDftSize || {};
 
   const isResizeRow = placement === "top" || placement === "bottom";
   const isResizeCol = placement === "left" || placement === "right";
@@ -74,6 +105,7 @@ export const DragContainer = (props: DragContainerProps) => {
   const [curWidth, setCurWidth] = useState<number>(0);
   const [curHeight, setCurHeight] = useState<number>(0);
 
+  // 高级模式——根据可拖拽容器尺寸计算可拖拽面板的边界值。
   const { minWidth, minHeight, maxWidth, maxHeight, dftWidth, dftHeight } =
     useDraggable({
       selector: refContainer.current!,
@@ -82,18 +114,26 @@ export const DragContainer = (props: DragContainerProps) => {
       ...draggableParams,
     });
 
-  const panelWidth = curWidth || dftWidth || draggableParams?.safeAreaLeft;
-  const panelHeight = curHeight || dftHeight || draggableParams?.safeAreaBottom;
+  const _minWidth = minPanelWidth || minWidth;
+  const _minHeight = minPanelHeight || minHeight;
+  const _maxWidth = maxPanelWidth || maxWidth;
+  const _maxHeight = maxPanelHeight || maxHeight;
+  const _dftWidth = dftPanelWidth || dftWidth;
+  const _dftHeight = dftPanelHeight || dftHeight;
+
+  const panelWidth = curWidth || _dftWidth || draggableParams?.safeAreaLeft;
+  const panelHeight =
+    curHeight || _dftHeight || draggableParams?.safeAreaBottom;
 
   const handleDragChange = useThrottle(
     useCallback(
       (size: Size) => {
-        const width = size.width || minWidth;
-        const height = size.height || minHeight;
+        const width = size.width || _minWidth;
+        const height = size.height || _minHeight;
         setCurWidth(width);
         setCurHeight(height);
       },
-      [minHeight, minWidth],
+      [_minHeight, _minWidth],
     ),
     dragThrottle ?? 100,
   );
@@ -102,14 +142,14 @@ export const DragContainer = (props: DragContainerProps) => {
   if (isResizeRow) {
     dragHandler = (
       <DragHandler
-        key={dftHeight} // 算出默认值后强制销毁重建
+        key={_dftHeight} // 算出默认值后强制销毁重建
         className={cls(stl.dragHandler, classNames?.dragHandler)}
         resize="row"
         reverse={isReverse}
         storage={storage}
-        dftSize={{ height: dftHeight }}
-        minSize={{ height: minHeight }}
-        maxSize={{ height: maxHeight }}
+        dftSize={{ height: _dftHeight }}
+        minSize={{ height: _minHeight }}
+        maxSize={{ height: _maxHeight }}
         onChange={handleDragChange}
         {...dragHandlerProps}
       />
@@ -117,14 +157,14 @@ export const DragContainer = (props: DragContainerProps) => {
   } else if (isResizeCol) {
     dragHandler = (
       <DragHandler
-        key={dftWidth} // 算出默认值后强制销毁重建
+        key={_dftWidth} // 算出默认值后强制销毁重建
         className={cls(stl.dragHandler, classNames?.dragHandler)}
         resize="col"
         reverse={isReverse}
         storage={storage}
-        dftSize={{ width: dftWidth }}
-        minSize={{ width: minWidth }}
-        maxSize={{ width: maxWidth }}
+        dftSize={{ width: _dftWidth }}
+        minSize={{ width: _minWidth }}
+        maxSize={{ width: _maxWidth }}
         onChange={handleDragChange}
         {...dragHandlerProps}
       />

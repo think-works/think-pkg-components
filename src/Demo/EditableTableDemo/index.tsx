@@ -2,7 +2,7 @@ import type { ColumnType } from "antd/lib/table/interface";
 import { useMemo, useState } from "react";
 import { EditableTable } from "@/components/_export";
 
-const Editable = () => {
+const EditableTableDemo = () => {
   const [data, setDataSource] = useState<any[]>([
     {
       description: "查询条件：记录名称、状态、执行人、执行时间",
@@ -83,4 +83,4 @@ const Editable = () => {
     />
   );
 };
-export default Editable;
+export default EditableTableDemo;
