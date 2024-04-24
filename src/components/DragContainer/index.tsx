@@ -138,7 +138,7 @@ export const DragContainer = (props: DragContainerProps) => {
       },
       [_minHeight, _minWidth],
     ),
-    dragThrottle ?? 100,
+    dragThrottle ?? 20,
   );
 
   let dragHandler;

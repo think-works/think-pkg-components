@@ -1,5 +1,4 @@
-import DragContainer from "@/components/DragContainer";
-import FlexTabs from "@/components/FlexTabs";
+import { DragContainer, FlexTabs } from "@/index";
 
 const DragContainerDemo = () => {
   const simpleDemo = (
@@ -33,7 +32,6 @@ const DragContainerDemo = () => {
 
   return (
     <FlexTabs
-      size="small"
       items={[
         {
           key: "simple",

@@ -1,6 +1,6 @@
-import type { ColumnType } from "antd/lib/table/interface";
+import type { TableColumnType } from "antd";
 import { useMemo, useState } from "react";
-import { EditableTable } from "@/components/_export";
+import { EditableTable } from "@/index";
 
 const EditableTableDemo = () => {
   const [data, setDataSource] = useState<any[]>([
@@ -31,8 +31,8 @@ const EditableTableDemo = () => {
     },
   ]);
 
-  const columns: ColumnType<any>[] = useMemo(() => {
-    const list: ColumnType<any>[] = [
+  const columns: TableColumnType<any>[] = useMemo(() => {
+    const list: TableColumnType<any>[] = [
       {
         title: "序号",
         align: "center",
