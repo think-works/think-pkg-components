@@ -5,6 +5,8 @@ import stl from "./index.module.less";
 export type LayoutSimpleProps = {
   className?: Argument;
   style?: React.CSSProperties;
+  /** 组件边框 */
+  bordered?: boolean;
   /**
    * 内容区域高度自适应。
    * 若内容高度低于所在 flex 容器剩余空间则自动撑满，若超过则出现滚动条。
@@ -30,8 +32,9 @@ export type LayoutSimpleProps = {
 export const LayoutSimple = (props: LayoutSimpleProps) => {
   const {
     className,
-    overflowContent,
     style,
+    bordered = true,
+    overflowContent,
     title,
     extend,
     children,
@@ -42,6 +45,7 @@ export const LayoutSimple = (props: LayoutSimpleProps) => {
   return (
     <div
       className={cls(stl.layoutSimple, className, {
+        [stl.bordered]: bordered,
         [stl.showTitle]: title || extend,
       })}
       style={style}
