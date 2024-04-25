@@ -64,19 +64,19 @@
 }
 
 // 自定义滚动条
-.scrollbar(@x: auto, @y: auto) {
+.scrollbar(@x: auto, @y: auto, @thumb: rgba(0, 0, 0, 0.25), @track: transparent) {
   overflow-x: @x;
   overflow-y: @y;
-  /**
-   * https://caniuse.com/?search=overlay
-   * https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_scrollbars_styling
-   * https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-gutter
-   * https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-width
-   * https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-color
-   */
+  scrollbar-color: @thumb @track;
   scrollbar-gutter: auto;
   scrollbar-width: thin;
-  scrollbar-color: #00000030 transparent;
+}
+
+// 自定义滚动条可见性
+.scrollbarVisibility(@x: auto, @y: auto, @thumb: rgba(0, 0, 0, 0.25), @track: transparent) {
+  overflow-x: @x;
+  overflow-y: @y;
+
   &:hover {
     &::-webkit-scrollbar {
     }
@@ -85,14 +85,14 @@
     }
   }
   &::-webkit-scrollbar {
-    background-color: transparent;
+    background-color: @track;
   }
   &::-webkit-scrollbar-thumb {
     visibility: hidden;
     border-radius: 10px;
-    border: 3px solid transparent;
+    border: 2px solid @track;
+    background-color: @thumb;
     background-clip: content-box;
-    background-color: #00000030;
   }
 }
 
