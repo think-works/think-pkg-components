@@ -1,27 +1,25 @@
 import { Tooltip } from "antd";
-import classNames from "classnames";
-import React from "react";
+import cls, { Argument } from "classnames";
+import React, { HTMLAttributes } from "react";
 import { QuestionCircleOutlined } from "@ant-design/icons";
-import styles from "./style.module.less";
+import stl from "./index.module.less";
 
-export interface HelpTipsProps {
-  /**
-   * 提示内容
-   */
-  tips?: string | React.ReactNode;
-  className?: string;
+export type HelpTipsProps = HTMLAttributes<HTMLSpanElement> & {
+  className?: Argument;
   style?: React.CSSProperties;
-}
+  /** 提示内容 */
+  tips?: React.ReactNode;
+};
+
 /**
  * 问号提示
- * @param props
- * @returns
  */
-const HelpTips = (props: HelpTipsProps) => {
-  const { tips, style, className } = props;
+export const HelpTips = (props: HelpTipsProps) => {
+  const { className, tips, ...rest } = props;
+
   return (
     <Tooltip title={tips}>
-      <span className={classNames(styles.helpIcon, className)} style={style}>
+      <span className={cls(stl.helpTips, className)} {...rest}>
         <QuestionCircleOutlined />
       </span>
     </Tooltip>
