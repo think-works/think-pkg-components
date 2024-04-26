@@ -1,10 +1,11 @@
 import { Tooltip } from "antd";
 import cls, { Argument } from "classnames";
-import React, { HTMLAttributes } from "react";
+import React from "react";
 import { QuestionCircleOutlined } from "@ant-design/icons";
+import type { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
 import stl from "./index.module.less";
 
-export type HelpTipsProps = HTMLAttributes<HTMLSpanElement> & {
+export type HelpTipsProps = AntdIconProps & {
   className?: Argument;
   style?: React.CSSProperties;
   /** 提示内容 */
@@ -19,9 +20,10 @@ export const HelpTips = (props: HelpTipsProps) => {
 
   return (
     <Tooltip title={tips}>
-      <span className={cls(stl.helpTips, className)} {...rest}>
-        <QuestionCircleOutlined />
-      </span>
+      <QuestionCircleOutlined
+        className={cls(stl.helpTips, className)}
+        {...rest}
+      />
     </Tooltip>
   );
 };
