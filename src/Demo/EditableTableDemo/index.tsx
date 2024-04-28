@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { EditableTable } from "@/index";
 
 const EditableTableDemo = () => {
+  const [readOnly] = useState<boolean>(false);
   const [data, setDataSource] = useState<any[]>([
     {
       description: "查询条件：记录名称、状态、执行人、执行时间",
@@ -46,20 +47,28 @@ const EditableTableDemo = () => {
         title: "步骤描述",
         dataIndex: "description",
         render: (value: string) => {
-          return <EditableTable.DecoupleTextArea autoSize value={value} />;
+          return readOnly ? (
+            value
+          ) : (
+            <EditableTable.DecoupleTextArea autoSize value={value} />
+          );
         },
       },
       {
         title: "预期结果",
         dataIndex: "expectedResult",
         render: (value: string) => {
-          return <EditableTable.DecoupleTextArea autoSize value={value} />;
+          return readOnly ? (
+            value
+          ) : (
+            <EditableTable.DecoupleTextArea autoSize value={value} />
+          );
         },
       },
     ];
 
     return list;
-  }, []);
+  }, [readOnly]);
   const dataSource = useMemo(() => {
     if (data?.length) {
       return data.map((item, index) => {
@@ -73,7 +82,7 @@ const EditableTableDemo = () => {
   }, [data]);
   return (
     <EditableTable
-      //   readOnly={readOnly}
+      // readOnly={readOnly}
       canDrag
       columns={columns}
       dataSource={dataSource}
