@@ -403,21 +403,36 @@ export const EditableTable = (props: EditableTableProps) => {
     handleDelete,
   ]);
 
+  if (canDrag && !readOnly) {
+    return (
+      <SortableTable
+        TableComponent={Table}
+        bordered
+        pagination={false}
+        columns={colList}
+        className={cls(stl.table, className)}
+        size={size}
+        dndContextProps={{
+          cancelDrop: () => false,
+        }}
+        rowKey={innerRowKey}
+        dataSource={itemList}
+        onDataSourceChange={handleSort}
+        locale={{ emptyText: "无内容" }}
+        {...rest}
+      />
+    );
+  }
+
   return (
-    <SortableTable
-      hideSortable={readOnly || !canDrag}
-      TableComponent={Table}
+    <Table
       bordered
       pagination={false}
       columns={colList}
       className={cls(stl.table, className)}
       size={size}
-      dndContextProps={{
-        cancelDrop: () => false,
-      }}
-      rowKey={canDrag ? innerRowKey : normalRowKey}
+      rowKey={normalRowKey}
       dataSource={itemList}
-      onDataSourceChange={handleSort}
       locale={{ emptyText: "无内容" }}
       {...rest}
     />

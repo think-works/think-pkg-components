@@ -61,7 +61,7 @@ const SortableRow = (props: SortableRowProps) => {
     transform: CSS.Transform.toString(transform && { ...transform, scaleY: 1 }),
   };
   return (
-    <tr {...rest} ref={setNodeRef} style={style} {...attributes}>
+    <tr {...rest} ref={setNodeRef} style={style} {...attributes} tabIndex={-1}>
       {React.Children.map(children, (child) => {
         if ((child as React.ReactElement).key === sortableColumnKey && rowId) {
           return React.cloneElement(child as React.ReactElement, {
