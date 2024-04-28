@@ -30,6 +30,22 @@ const DragContainerDemo = () => {
     </DragContainer>
   );
 
+  const hiddenDemo = (
+    <DragContainer
+      hiddenDragHandler
+      placement="left"
+      dragPanelMinSize={{
+        width: 200,
+      }}
+      dragPanelMaxSize={{
+        width: 400,
+      }}
+      dragPanelChildren="dragPanel"
+    >
+      contentPanel
+    </DragContainer>
+  );
+
   return (
     <FlexTabs
       items={[
@@ -42,6 +58,11 @@ const DragContainerDemo = () => {
           key: "advanced",
           label: "高级模式",
           children: advancedDemo,
+        },
+        {
+          key: "hidden",
+          label: "隐藏手柄",
+          children: hiddenDemo,
         },
       ]}
     />
