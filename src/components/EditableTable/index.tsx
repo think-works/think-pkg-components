@@ -407,6 +407,7 @@ export const EditableTable = (props: EditableTableProps) => {
     return (
       <SortableTable
         TableComponent={Table}
+        rowHoverable={false}
         bordered
         pagination={false}
         columns={colList}
@@ -426,6 +427,7 @@ export const EditableTable = (props: EditableTableProps) => {
 
   return (
     <Table
+      rowHoverable={false}
       bordered
       pagination={false}
       columns={colList}
