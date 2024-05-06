@@ -1,6 +1,7 @@
 import { Space } from "antd";
 import { ReactNode } from "react";
 import { DownOutlined } from "@ant-design/icons";
+import { truthy } from "@/utils/types";
 import DropdownActions, { DropdownActionsProps } from "../DropdownActions";
 
 export type ColumnActionsProps = {
@@ -25,30 +26,32 @@ export const ColumnActions = (props: ColumnActionsProps) => {
     dropdownActionAlign,
   } = props || {};
 
-  const _dropdownActions = dropdownActions?.map((action) => ({
+  const _dropdownActions = dropdownActions?.filter(truthy)?.map((action) => ({
     type: "link" as const,
     ...action,
   }));
 
+  if (!_dropdownActions?.length) {
+    return children;
+  }
+
   return (
     <Space>
       {children}
-      {_dropdownActions?.length ? (
-        <DropdownActions
-          disabled={disabledDropdown}
-          actions={_dropdownActions}
-          actionAlign={dropdownActionAlign}
-        >
-          {dropdownTrigger || (
-            <a>
-              <Space size={4}>
-                <span>{dropdownText || "操作"}</span>
-                <DownOutlined />
-              </Space>
-            </a>
-          )}
-        </DropdownActions>
-      ) : null}
+      <DropdownActions
+        disabled={disabledDropdown}
+        actions={_dropdownActions}
+        actionAlign={dropdownActionAlign}
+      >
+        {dropdownTrigger || (
+          <a>
+            <Space size={4}>
+              <span>{dropdownText || "操作"}</span>
+              <DownOutlined />
+            </Space>
+          </a>
+        )}
+      </DropdownActions>
     </Space>
   );
 };

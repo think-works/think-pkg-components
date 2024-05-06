@@ -1,5 +1,6 @@
 import { Dropdown, DropDownProps, GetProps, MenuProps } from "antd";
 import cls, { Argument } from "classnames";
+import { truthy } from "@/utils/types";
 import BaseAction, { BaseActionProps } from "../BaseAction";
 // import { ReactComponent as IconEllipsis } from "./assets/ellipsis.svg";
 import { ReactComponent as IconMore } from "./assets/more.svg";
@@ -32,23 +33,27 @@ export const DropdownActions = (props: DropdownActionsProps) => {
   const { className, buttonTrigger, actions, actionAlign, children, ...rest } =
     props || {};
 
-  const items: MenuProps["items"] = (actions || [])
-    .filter(Boolean)
-    .map((action, idx) => {
-      const { key, divider, ...actionRest } = action || {};
-      if (divider) {
-        return {
-          key: key || idx,
-          type: "divider",
-        };
-      }
+  const _actions = actions?.filter(truthy);
+
+  if (!_actions?.length) {
+    return children;
+  }
+
+  const items: MenuProps["items"] = _actions?.map((action, idx) => {
+    const { key, divider, ...actionRest } = action || {};
+    if (divider) {
       return {
         key: key || idx,
-        label: (
-          <BaseAction block type="text" align={actionAlign} {...actionRest} />
-        ),
+        type: "divider",
       };
-    });
+    }
+    return {
+      key: key || idx,
+      label: (
+        <BaseAction block type="text" align={actionAlign} {...actionRest} />
+      ),
+    };
+  });
 
   if (buttonTrigger) {
     return (

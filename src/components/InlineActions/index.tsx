@@ -1,6 +1,7 @@
 import { Divider, Space } from "antd";
 import cls, { Argument } from "classnames";
 import { HTMLAttributes } from "react";
+import { truthy } from "@/utils/types";
 import BaseAction, { BaseActionProps } from "../BaseAction";
 import stl from "./index.module.less";
 
@@ -16,11 +17,17 @@ export type InlineActionsProps = HTMLAttributes<HTMLSpanElement> & {
 export const InlineActions = (props: InlineActionsProps) => {
   const { className, actions, divider, ...rest } = props || {};
 
+  const _actions = actions?.filter(truthy);
+
+  if (!_actions?.length) {
+    return null;
+  }
+
   if (divider) {
     return (
       <span className={cls(stl.inlineActions, className)} {...rest}>
         <Space size={4}>
-          {(actions || []).filter(Boolean).map((item, idx) => [
+          {_actions?.map((item, idx) => [
             idx === 0 ? null : (
               <Divider
                 key={`divider-${idx}-${item?.children}`}
@@ -45,7 +52,7 @@ export const InlineActions = (props: InlineActionsProps) => {
   return (
     <span className={cls(stl.inlineActions, className)} {...rest}>
       <Space size={8}>
-        {(actions || []).filter(Boolean).map((item, idx) => (
+        {_actions?.map((item, idx) => (
           <BaseAction
             key={`action-${idx}-${item?.children}`}
             inline
