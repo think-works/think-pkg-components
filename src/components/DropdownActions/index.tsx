@@ -36,7 +36,7 @@ export const DropdownActions = (props: DropdownActionsProps) => {
   const _actions = actions?.filter(truthy);
 
   if (!_actions?.length) {
-    return children;
+    return null;
   }
 
   const items: MenuProps["items"] = _actions?.map((action, idx) => {
