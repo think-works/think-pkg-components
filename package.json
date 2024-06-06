@@ -30,7 +30,7 @@
     "serve": "vite",
     "build": "tsc && vite build && npm run build:types && npm run build:assets",
     "build:types": "tsc --outDir dist --noEmit false --composite false --tsBuildInfoFile null --declaration --emitDeclarationOnly && tsc-alias --outDir dist",
-    "build:assets": "cp src/styles/basic.less dist/basic-utils.less && rm -rf dist/main.d.ts dist/Demo",
+    "build:assets": "rm -rf dist/main.d.ts dist/Demo && cp src/styles/basic.less dist/basic-utils.less",
     "build:watch": "vite build -w",
     "prepare": "husky",
     "version": "npm install && npm run build && git add .",
