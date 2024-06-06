@@ -1,5 +1,4 @@
 import { Dropdown, Input, InputRef, Popconfirm, Tooltip } from "antd";
-import { MenuItemType } from "antd/es/menu/hooks/useItems";
 import React, {
   ReactNode,
   useCallback,
@@ -157,12 +156,12 @@ function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
     },
     [data.node, props.actions],
   );
-  const dropdownMenuItems: MenuItemType[] = useMemo(() => {
+  const dropdownMenuItems: any[] = useMemo(() => {
     if (renderDropdownItems) {
       return renderDropdownItems(data.node).map((menuItem) => {
         const {
           actionType,
-          //@ts-expect-error  type: 'divider' 时不需要 label 在预期内
+          //@ts-expect-error type: 'divider' 时不需要 label 在预期内
           label,
           //@ts-expect-error actionType === "create" 才有此值
           createNodeType,
@@ -203,7 +202,7 @@ function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
         return {
           ...others,
           label: labelNode,
-          onClick: ({ domEvent }) => {
+          onClick: ({ domEvent }: any) => {
             if (!tooltip && !popConfirm) {
               handelItem();
             } else if (popConfirm) {
