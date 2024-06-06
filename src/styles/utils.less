@@ -1,5 +1,12 @@
 @import "./basic.less";
 
+// #region 样式配置
+
+// 业务布局边距
+@bizLayoutGap: 12px;
+
+// #endregion
+
 // #region 变量映射
 
 @colorTextHeading: var(
@@ -56,6 +63,8 @@
   #f0f0f0
 );
 @colorSplit: var(~"--@{antPrefixVar}-color-split", rgba(5, 5, 5, 0.06));
+
+@tableRowHoverBg: var(~"--@{antPrefixVar}-table-row-hover-bg", #fafafa);
 
 // #endregion
 
