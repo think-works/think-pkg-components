@@ -1,4 +1,4 @@
-import { ItemType } from "antd/es/menu/interface";
+import { ItemType } from "antd/es/menu/hooks/useItems";
 import { BaseTreeNode } from "../BaseTree";
 
 export interface DirectoryTreeNode<T extends BaseTreeNode, NODE_TYPE>

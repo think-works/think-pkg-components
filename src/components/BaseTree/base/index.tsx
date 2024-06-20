@@ -521,7 +521,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
     }
     setCount(count + 1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [expandAll, treeIndex]);
+  }, [expandAll]);
 
   /** 处理 expandedKeys 受控 */
   useEffect(() => {
