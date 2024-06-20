@@ -1,5 +1,5 @@
-import { Dropdown, Input, InputRef, Popconfirm, Tooltip } from "antd";
-import { ItemType, MenuItemType } from "antd/es/menu/hooks/useItems";
+import { Dropdown, Input, InputRef } from "antd";
+import { ItemType } from "antd/es/menu/interface";
 import React, {
   ReactNode,
   useCallback,
@@ -164,9 +164,7 @@ function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
         (menuItem: DirectoryTreeDropdownItem<T, NODE_TYPE>) => {
           const {
             actionType,
-            //@ts-expect-error actionType === "create" 才有此值
             createNodeType,
-            //@ts-expect-error actionType === "create" 才有此值
             createDefaultName,
             onClick,
             ...others
@@ -185,7 +183,6 @@ function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
             }
             onClick?.(data.node);
           };
-          //@ts-expect-error actionType === "create" 才有此值
           if (menuItem.type === "divider") {
             return {
               type: "divider",
