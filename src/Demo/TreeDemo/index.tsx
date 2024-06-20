@@ -645,6 +645,7 @@ const TreeDemo = () => {
         }}
       >
         <DirectoryTree
+          showNodeCount
           expandAll={expandAll}
           data={treeData as any}
           actions={getActions()}

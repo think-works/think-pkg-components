@@ -57,11 +57,14 @@
   }
   &-right {
     // flex: 1;
-    i {
-      padding: 0 3px;
-      color: rgba(0, 0, 0, 0.75);
-      &:hover {
-        color: @colorPrimary;
+    display: flex;
+    &-menu {
+      i {
+        padding: 0 3px;
+        color: rgba(0, 0, 0, 0.75);
+        &:hover {
+          color: @colorPrimary;
+        }
       }
     }
     &-nodeCount {

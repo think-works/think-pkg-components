@@ -219,7 +219,8 @@ function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
     if (props.renderRight) {
       return props.renderRight(data.node);
     }
-    if (props.showNodeCount) {
+
+    const renderNodeCount = () => {
       const loop = (node: DirectoryTreeNode<T, NODE_TYPE>[]): number => {
         let count = 0;
         node.forEach((item) => {
@@ -242,23 +243,27 @@ function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
           {nodeCount > 0 ? nodeCount : ""}
         </span>
       );
-    }
+    };
+
     return (
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className={style["item-right"]}
-        style={{ display: isActive ? "block" : "none" }}
-      >
-        {!!dropdownMenuItems.length && (
-          <Dropdown
-            menu={{
-              items: dropdownMenuItems,
-            }}
-            onOpenChange={(e) => setHoldOption(e)}
-          >
-            <MoreOutlined />
-          </Dropdown>
-        )}
+      <div className={style["item-right"]}>
+        {props.showNodeCount && renderNodeCount()}
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className={style["item-right-menu"]}
+          style={{ display: isActive ? "block" : "none" }}
+        >
+          {!!dropdownMenuItems.length && (
+            <Dropdown
+              menu={{
+                items: dropdownMenuItems,
+              }}
+              onOpenChange={(e) => setHoldOption(e)}
+            >
+              <MoreOutlined />
+            </Dropdown>
+          )}
+        </div>
       </div>
     );
   };
