@@ -1,4 +1,4 @@
-import { Dropdown, Input, InputRef, Popconfirm, Tooltip } from "antd";
+import { Input, InputRef } from "antd";
 import React, {
   ReactNode,
   useCallback,
@@ -10,6 +10,7 @@ import React, {
 import { MoreOutlined } from "@ant-design/icons";
 import { BaseTreeIndexItem, BaseTreeNode } from "@/components/BaseTree";
 import { uuid4 } from "@/utils/crypto";
+import DropdownActions, { DropdownActionItem } from "../DropdownActions";
 import { TreeFolderIcon } from "./icon/FolderIcon";
 import { TreeFolderOpenIcon } from "./icon/FolderOpenIcon";
 import style from "./item.module.less";
@@ -156,61 +157,46 @@ function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
     },
     [data.node, props.actions],
   );
-  const dropdownMenuItems: any[] = useMemo(() => {
+  const dropdownMenuItems: DropdownActionItem[] = useMemo(() => {
     if (renderDropdownItems) {
-      return renderDropdownItems(data.node).map((menuItem) => {
-        const {
-          actionType,
-          //@ts-expect-error type: 'divider' 时不需要 label 在预期内
-          label,
-          //@ts-expect-error actionType === "create" 才有此值
-          createNodeType,
-          //@ts-expect-error actionType === "create" 才有此值
-          createDefaultName,
-          tooltip,
-          popConfirm,
-          onClick,
-          ...others
-        } = menuItem;
-        let labelNode = label || "";
-        const handelItem = () => {
-          if (actionType === "create") {
-            createNode(createNodeType, createDefaultName);
-          } else if (actionType === "rename") {
-            onEdit(true);
-          } else if (actionType === "copy") {
-            actions.copy?.(data.node);
-          } else if (actionType === "import") {
-            actions.import?.(data.node);
-          } else if (actionType === "delete") {
-            actions.delete?.(data.node);
-          }
-          onClick?.(data.node);
-        };
-
-        if (tooltip) {
-          labelNode = <Tooltip title="tooltip">{labelNode}</Tooltip>;
-        }
-
-        if (popConfirm) {
-          labelNode = (
-            <Popconfirm title={popConfirm} onConfirm={handelItem}>
-              {labelNode}
-            </Popconfirm>
-          );
-        }
-        return {
-          ...others,
-          label: labelNode,
-          onClick: ({ domEvent }: any) => {
-            if (!tooltip && !popConfirm) {
-              handelItem();
-            } else if (popConfirm) {
-              domEvent.stopPropagation();
+      return renderDropdownItems(data.node).map(
+        (menuItem: DirectoryTreeDropdownItem<T, NODE_TYPE>) => {
+          const {
+            actionType,
+            //@ts-expect-error actionType === "create" 存在
+            createNodeType,
+            //@ts-expect-error actionType === "create" 存在
+            createDefaultName,
+            onClick,
+            ...others
+          } = menuItem;
+          const handelItem = () => {
+            if (actionType === "create") {
+              createNode(createNodeType, createDefaultName);
+            } else if (actionType === "rename") {
+              onEdit(true);
+            } else if (actionType === "copy") {
+              actions.copy?.(data.node);
+            } else if (actionType === "import") {
+              actions.import?.(data.node);
+            } else if (actionType === "delete") {
+              actions.delete?.(data.node);
             }
-          },
-        };
-      });
+            onClick?.(data.node);
+          };
+          if (menuItem.divider) {
+            return {
+              type: "link",
+              ...others,
+            };
+          }
+          return {
+            type: "text",
+            onClick: handelItem,
+            ...others,
+          };
+        },
+      );
     }
     return [];
   }, [renderDropdownItems, data.node, createNode, onEdit, actions]);
@@ -254,14 +240,13 @@ function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
           style={{ display: isActive ? "block" : "none" }}
         >
           {!!dropdownMenuItems.length && (
-            <Dropdown
-              menu={{
-                items: dropdownMenuItems,
-              }}
+            <DropdownActions
+              actionAlign={"left"}
+              actions={dropdownMenuItems}
               onOpenChange={(e) => setHoldOption(e)}
             >
               <MoreOutlined />
-            </Dropdown>
+            </DropdownActions>
           )}
         </div>
       </div>

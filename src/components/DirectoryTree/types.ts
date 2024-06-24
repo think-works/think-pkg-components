@@ -1,12 +1,24 @@
 import { ItemType } from "antd/es/menu/interface";
 import { BaseTreeNode } from "../BaseTree";
+import { DropdownActionItem } from "../DropdownActions";
 
 export interface DirectoryTreeNode<T extends BaseTreeNode, NODE_TYPE>
   extends BaseTreeNode {
+  /**
+   * 节点id
+   */
   id: string;
+  /**
+   * 节点名字
+   */
   name: string;
+  /**
+   * 节点类型
+   */
   type: NODE_TYPE;
-  priority?: number;
+  /**
+   * 节点父级id
+   */
   parentId?: string;
   children?: DirectoryTreeNode<T, NODE_TYPE>[];
   /** 节点颜色 */
@@ -60,7 +72,7 @@ export type DirectoryTreeBaseTreeAction<
 export type DirectoryTreeCreateAction<
   T extends BaseTreeNode,
   NODE_TYPE,
-> = DirectoryTreeBaseTreeAction<T, NODE_TYPE> & {
+> = DropdownActionItem & {
   actionType: "create";
   /**
    * 新建的节点类型
@@ -70,6 +82,7 @@ export type DirectoryTreeCreateAction<
    * 新建节点的默认填充名称
    */
   createDefaultName: string;
+  onClick?: (node: DirectoryTreeNode<T, NODE_TYPE>) => void;
 };
 /**
  * 内置 "rename" | "copy" | "delete"  | "import";
@@ -77,8 +90,9 @@ export type DirectoryTreeCreateAction<
 export type DirectoryTreeNonCreateAction<
   T extends BaseTreeNode,
   NODE_TYPE,
-> = DirectoryTreeBaseTreeAction<T, NODE_TYPE> & {
+> = DropdownActionItem & {
   actionType?: Exclude<ACTION_TYPE, "create">;
+  onClick?: (node: DirectoryTreeNode<T, NODE_TYPE>) => void;
 };
 /**
  * 填了 actionType，会触发内置行为

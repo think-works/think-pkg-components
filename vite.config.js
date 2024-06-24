@@ -32,7 +32,7 @@ export default defineConfig(({ mode }) => {
   process.env.VITE_APP_VERSION = version;
   process.env.VITE_BUILD_DATE = date;
   process.env.VITE_BUILD_COMMIT = commit;
-  
+
   const env = loadEnv(mode, process.cwd(), "");
 
   const proxyTarget = env.PROXY_TARGET;
