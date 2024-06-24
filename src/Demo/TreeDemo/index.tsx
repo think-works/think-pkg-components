@@ -632,6 +632,7 @@ const TreeDemo = () => {
       key: "create_scene",
       icon: <FileAddOutlined />,
       actionType: "create",
+      align: "left",
       createDefaultName: "场景",
       createNodeType: "DIR",
     });

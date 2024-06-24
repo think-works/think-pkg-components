@@ -241,6 +241,7 @@ function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
         >
           {!!dropdownMenuItems.length && (
             <DropdownActions
+              actionAlign={"left"}
               actions={dropdownMenuItems}
               onOpenChange={(e) => setHoldOption(e)}
             >
