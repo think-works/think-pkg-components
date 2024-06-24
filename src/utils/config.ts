@@ -1,6 +1,6 @@
 const NODE_ENV = process.env.NODE_ENV;
-const APP_NAME = __APP_NAME__ || "APP";
-const APP_VERSION = __APP_VERSION__ || "0.0.0";
+const APP_NAME = String(import.meta.env.VITE_APP_NAME || "APP");
+const APP_VERSION = String(import.meta.env.VITE_APP_VERSION || "0.0.0");
 
 /**
  * 生产模式

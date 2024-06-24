@@ -22,6 +22,17 @@ const libEntry = [
 ];
 
 export default defineConfig(({ mode }) => {
+  const date = new Date().toISOString();
+  const commit = cProcess
+    .execSync("git rev-parse HEAD || echo UNKNOWN")
+    .toString()
+    .trim();
+
+  process.env.VITE_APP_NAME = name;
+  process.env.VITE_APP_VERSION = version;
+  process.env.VITE_BUILD_DATE = date;
+  process.env.VITE_BUILD_COMMIT = commit;
+
   const env = loadEnv(mode, process.cwd(), "");
 
   const proxyTarget = env.PROXY_TARGET;
@@ -40,12 +51,6 @@ export default defineConfig(({ mode }) => {
     bizLayoutHeader: env.VITE_BIZ_LAYOUT_HEADER,
   };
 
-  const time = new Date().toISOString();
-  const commit = cProcess
-    .execSync("git rev-parse HEAD || echo UNKNOWN")
-    .toString()
-    .trim();
-
   const proxyCfg = proxy({
     apiBase,
     target: proxyTarget,
@@ -57,12 +62,6 @@ export default defineConfig(({ mode }) => {
       alias: {
         "@/": path.join(srcPath, "/"),
       },
-    },
-    define: {
-      __APP_NAME__: JSON.stringify(name),
-      __APP_VERSION__: JSON.stringify(version),
-      __BUILD_TIME__: JSON.stringify(time),
-      __BUILD_COMMIT__: JSON.stringify(commit),
     },
     server: {
       host: "0.0.0.0",
@@ -79,7 +78,7 @@ export default defineConfig(({ mode }) => {
         external,
         output: {
           sourcemapExcludeSources: true,
-          banner: `/*!\n * APP_NAME: ${name}\n * APP_VERSION: ${version}\n * BUILD_TIME: ${time}\n * BUILD_COMMIT: ${commit}\n */\n`,
+          banner: `/*!\n * APP_NAME: ${name}\n * APP_VERSION: ${version}\n * BUILD_DATE: ${date}\n * BUILD_COMMIT: ${commit}\n */\n`,
           /**
            * 在 js 中添加 css 导入语句，将样式交由本库的使用方处理。
            * https://github.com/vitejs/vite/issues/1579

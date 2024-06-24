@@ -5,6 +5,7 @@ import {
   PropsWithRef,
   ReactNode,
   useEffect,
+  useReducer,
   useRef,
   useState,
 } from "react";
@@ -28,17 +29,21 @@ export type DynamicImportProps<ComponentProps = Record<string, any>> =
 export const DynamicImport = forwardRef((props: DynamicImportProps, ref) => {
   const { dynamicImport, placeholder, ...rest } = props;
 
-  // 维护 loading 状态，主要是为了在模块加载后触发组件更新
+  // 维护 forceKey 和 loading 状态，主要是为了在模块加载后触发组件更新
+  const [forceKey, forceUpdate] = useReducer((x: number) => x + 1, 0);
   const [loading, setLoading] = useState(false);
   const refComponent = useRef<ComponentType<PropsWithRef<any>>>();
 
   useEffect(() => {
+    forceUpdate();
     setLoading(true);
+
     dynamicImport
       .then((module) => {
         refComponent.current = module.default;
       })
       .finally(() => {
+        forceUpdate();
         setLoading(false);
       });
   }, [dynamicImport]);
@@ -46,7 +51,7 @@ export const DynamicImport = forwardRef((props: DynamicImportProps, ref) => {
   const Component = refComponent.current;
 
   if (!Component) {
-    return placeholder || <Spin spinning={loading} />;
+    return placeholder || <Spin key={forceKey} spinning={loading} />;
   }
 
   return <Component ref={ref} {...rest} />;

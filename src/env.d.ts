@@ -1,11 +1,5 @@
 /// <reference types="vite/client" />
 
-// 编译时常量
-declare const __APP_NAME__: string;
-declare const __APP_VERSION__: string;
-declare const __BUILD_TIME__: string;
-declare const __BUILD_COMMIT__: string;
-
 // 运行时变量
 declare interface Window {}
 
