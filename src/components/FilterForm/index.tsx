@@ -84,6 +84,7 @@ export const FilterForm = (props: FilterFormProps) => {
       };
 
       if (isValidElement(item)) {
+        colProps.key = item?.key || item?.props?.name || colProps.key;
         children = item;
       } else {
         const { children: child, colProps: col } = (item ||
@@ -92,7 +93,11 @@ export const FilterForm = (props: FilterFormProps) => {
         colProps = Object.assign({}, colProps, col);
       }
 
-      return <Col {...colProps}>{children}</Col>;
+      return (
+        <Col {...colProps} key={colProps.key}>
+          {children}
+        </Col>
+      );
     });
 
     return _items as React.ReactNode[];
