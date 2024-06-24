@@ -6,8 +6,14 @@ import { ReactComponent as IconMore } from "./assets/more.svg";
 import stl from "./index.module.less";
 
 type DropdownButtonProps = GetProps<typeof Dropdown.Button>;
-type DropdownActionItem = BaseActionProps & {
+export type DropdownActionItem = BaseActionProps & {
+  /**
+   * 唯一标识
+   */
   key?: React.Key;
+  /**
+   * 分割线
+   */
   divider?: boolean;
 };
 

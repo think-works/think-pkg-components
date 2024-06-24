@@ -1,5 +1,4 @@
-import { Dropdown, Input, InputRef } from "antd";
-import { ItemType } from "antd/es/menu/interface";
+import { Input, InputRef } from "antd";
 import React, {
   ReactNode,
   useCallback,
@@ -11,7 +10,7 @@ import React, {
 import { MoreOutlined } from "@ant-design/icons";
 import { BaseTreeIndexItem, BaseTreeNode } from "@/components/BaseTree";
 import { uuid4 } from "@/utils/crypto";
-import BaseAction from "../BaseAction";
+import DropdownActions, { DropdownActionItem } from "../DropdownActions";
 import { TreeFolderIcon } from "./icon/FolderIcon";
 import { TreeFolderOpenIcon } from "./icon/FolderOpenIcon";
 import style from "./item.module.less";
@@ -158,13 +157,15 @@ function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
     },
     [data.node, props.actions],
   );
-  const dropdownMenuItems: ItemType[] = useMemo(() => {
+  const dropdownMenuItems: DropdownActionItem[] = useMemo(() => {
     if (renderDropdownItems) {
       return renderDropdownItems(data.node).map(
         (menuItem: DirectoryTreeDropdownItem<T, NODE_TYPE>) => {
           const {
             actionType,
+            //@ts-expect-error actionType === "create" 存在
             createNodeType,
+            //@ts-expect-error actionType === "create" 存在
             createDefaultName,
             onClick,
             ...others
@@ -183,16 +184,15 @@ function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
             }
             onClick?.(data.node);
           };
-          if (menuItem.type === "divider") {
+          if (menuItem.divider) {
             return {
-              type: "divider",
+              type: "link",
               ...others,
             };
           }
           return {
-            label: (
-              <BaseAction block onClick={handelItem} {...others} type="text" />
-            ),
+            type: "text",
+            onClick: handelItem,
             ...others,
           };
         },
@@ -240,14 +240,12 @@ function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
           style={{ display: isActive ? "block" : "none" }}
         >
           {!!dropdownMenuItems.length && (
-            <Dropdown
-              menu={{
-                items: dropdownMenuItems,
-              }}
+            <DropdownActions
+              actions={dropdownMenuItems}
               onOpenChange={(e) => setHoldOption(e)}
             >
               <MoreOutlined />
-            </Dropdown>
+            </DropdownActions>
           )}
         </div>
       </div>

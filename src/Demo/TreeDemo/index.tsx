@@ -1,5 +1,10 @@
 import { Button } from "antd";
 import { useState } from "react";
+import { DeleteFilled, FileAddOutlined } from "@ant-design/icons";
+import {
+  DirectoryTreeDropdownItem,
+  DirectoryTreeNode,
+} from "@/components/_export";
 import DirectoryTree from "@/components/DirectoryTree";
 
 const TreeDemo = () => {
@@ -601,13 +606,34 @@ const TreeDemo = () => {
     },
   ]);
   const [expandAll, setExpandAll] = useState<boolean | number>(2);
-  const renderDropdownItems = () => {
-    const dropdownList = [];
+  const renderDropdownItems = (node: DirectoryTreeNode<any, "DIR">) => {
+    const dropdownList: DirectoryTreeDropdownItem<any, "DIR">[] = [
+      {
+        children: "编辑",
+        icon: <DeleteFilled />,
+        key: "edit_scene",
+        actionType: "rename",
+      },
+      {
+        key: "divider",
+        divider: true,
+      },
+      {
+        children: "删除场景",
+        icon: <DeleteFilled />,
+        key: "delete_scene",
+        actionType: "delete",
+        danger: true,
+        popconfirm: "确认删除吗",
+      },
+    ];
     dropdownList.unshift({
-      label: "新建场景",
+      children: "新建场景",
       key: "create_scene",
+      icon: <FileAddOutlined />,
       actionType: "create",
       createDefaultName: "场景",
+      createNodeType: "DIR",
     });
 
     return dropdownList;
@@ -651,7 +677,7 @@ const TreeDemo = () => {
           actions={getActions()}
           canActiveKey={() => true}
           isDirectory={(type) => type === "DIR"}
-          renderDropdownItems={renderDropdownItems as any}
+          renderDropdownItems={renderDropdownItems}
         />
       </div>
     </div>

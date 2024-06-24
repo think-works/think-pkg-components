@@ -26,13 +26,34 @@ const isPromise = (val: any): val is Promise<any> => {
  */
 export type BaseActionProps = Omit<ButtonProps, "onClick"> & {
   className?: Argument;
+  /**
+   * 文本提示
+   */
   tooltip?: string | TooltipProps;
+  /**
+   * 确认弹窗modal提示
+   */
   confirm?: string | ModalFuncProps;
+  /**
+   * 气泡二次确认
+   */
   popconfirm?: string | (PopconfirmProps & { stopPropagation?: boolean });
   children?: React.ReactNode;
+  /**
+   * 按钮禁用
+   */
   disabled?: boolean;
+  /**
+   * inline-block
+   */
   inline?: boolean;
+  /**
+   * 背景透明
+   */
   transparent?: boolean;
+  /**
+   * 文本内容居左 ｜ 居右
+   */
   align?: "left" | "right";
   onClick?: (...rest: any[]) => any;
 };
