@@ -4,7 +4,7 @@ const DragContainerDemo = () => {
   return (
     <ul>
       {routes.map(({ path }) => (
-        <li>
+        <li key={path}>
           <a href={path}>{path}</a>
         </li>
       ))}

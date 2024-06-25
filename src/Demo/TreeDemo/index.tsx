@@ -3,7 +3,7 @@ import { useState } from "react";
 import { DeleteFilled, FileAddOutlined } from "@ant-design/icons";
 import {
   DirectoryTreeDropdownItem,
-  DirectoryTreeNode,
+  /*DirectoryTreeNode,*/
 } from "@/components/_export";
 import DirectoryTree from "@/components/DirectoryTree";
 
@@ -606,7 +606,7 @@ const TreeDemo = () => {
     },
   ]);
   const [expandAll, setExpandAll] = useState<boolean | number>(2);
-  const renderDropdownItems = (node: DirectoryTreeNode<any, "DIR">) => {
+  const renderDropdownItems = (/*node: DirectoryTreeNode<any, "DIR">*/) => {
     const dropdownList: DirectoryTreeDropdownItem<any, "DIR">[] = [
       {
         children: "编辑",
