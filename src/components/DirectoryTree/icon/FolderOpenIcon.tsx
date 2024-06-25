@@ -1,4 +1,4 @@
-export const TreeFolderOpenIcon: React.FC<{ style: React.CSSProperties }> = ({
+export const TreeFolderOpenIcon: React.FC<{ style?: React.CSSProperties }> = ({
   style,
 }) => {
   return (
