@@ -19,7 +19,7 @@ import {
   BaseTreeMenuActions,
   BaseTreeNode,
 } from "./types";
-import { findParentIdsBySearchText } from "./utils";
+import { findParentIdsBySearchText, matchesSearch } from "./utils";
 
 const isSymbol = (key: unknown): key is symbol => typeof key === "symbol";
 const getKey = (
@@ -131,6 +131,18 @@ export interface BaseTreeProps<BaseNode extends BaseTreeNode> {
    * 用户输入的搜索文本
    */
   searchText?: string;
+  /**
+   * 搜索文本匹配 字段 过滤
+   *
+   * 如 不传，默认值 [["name"]] ，过滤 obj.name
+   *
+   * 如 [["name"], ["data", "parentId"]]
+   * 先找 obj.name，如果匹配不上，再 obj.data.parentId 进行过滤
+   *
+   * 如 [["data", "name"], ["data", "parentId"]]
+   * 先找 obj.data.name，如果匹配不上，再 obj.data.parentId 进行过滤
+   */
+  searchFilterProps?: string[][];
   /** 展开的Keys 受控 */
   expandedKeys?: BaseTreeKey[];
   onExpandedKeys?: (
@@ -161,7 +173,13 @@ const Tree = <BaseNode extends BaseTreeNode>(
   props: BaseTreeProps<BaseNode>,
   ref: ForwardedRef<BaseTreeRef<BaseNode>>,
 ) => {
-  const { expandAll, expandedKeys, checkedKeys, searchText } = props;
+  const {
+    expandAll,
+    expandedKeys,
+    checkedKeys,
+    searchText,
+    searchFilterProps = [["name"]],
+  } = props;
   const [data, setData] = useState<BaseNode[]>(props.data);
   const [controlExpandedKeys, setControlExpandedKeys] = useState(
     new Map<BaseTreeKey, boolean | null>(),
@@ -202,11 +220,13 @@ const Tree = <BaseNode extends BaseTreeNode>(
     const searchedList = new Map<BaseTreeKey, boolean | null>();
 
     const kNodes: BaseTreeIndexItem<BaseNode>[] = [];
-    const searchedParentIds = findParentIdsBySearchText<BaseNode>(
-      data,
-      searchText,
-    );
+
     if (searchText) {
+      const searchedParentIds = findParentIdsBySearchText<BaseNode>(
+        data,
+        searchText,
+        searchFilterProps,
+      );
       searchedParentIds?.forEach((key) => {
         expandList.set(key, true);
       });
@@ -314,8 +334,12 @@ const Tree = <BaseNode extends BaseTreeNode>(
 
         if (searchText && typeof node.name === "string") {
           try {
-            const searchIndex = node.name.indexOf(searchText);
-            if (searchIndex > -1) {
+            const isSearched = matchesSearch(
+              node,
+              searchText,
+              searchFilterProps,
+            );
+            if (isSearched) {
               if (parent?.key) {
                 expandList.set(parent.key, true);
               }

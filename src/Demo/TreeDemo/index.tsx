@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import { Button, Space } from "antd";
 import { useState } from "react";
 import { DeleteFilled, FileAddOutlined } from "@ant-design/icons";
 import {
@@ -6,6 +6,7 @@ import {
   DirectoryTreeNode,
 } from "@/components/_export";
 import DirectoryTree from "@/components/DirectoryTree";
+import DirectoryTreeSearch from "@/components/DirectoryTree/search";
 
 const TreeDemo = () => {
   const [treeData, setTreeData] = useState([
@@ -605,6 +606,7 @@ const TreeDemo = () => {
       ],
     },
   ]);
+  const [search, setSearch] = useState("");
   const [expandAll, setExpandAll] = useState<boolean | number>(2);
   const renderDropdownItems = (node: DirectoryTreeNode<any, "DIR">) => {
     const dropdownList: DirectoryTreeDropdownItem<any, "DIR">[] = [
@@ -639,6 +641,7 @@ const TreeDemo = () => {
 
     return dropdownList;
   };
+
   const getActions = () => {
     const actions = {
       create: async (item: any) => {
@@ -651,17 +654,26 @@ const TreeDemo = () => {
   };
   return (
     <div>
-      <Button
-        onClick={() => {
-          if (expandAll === 2) {
-            setExpandAll(true);
-          } else {
-            setExpandAll(!expandAll);
-          }
-        }}
-      >
-        {expandAll === true ? "收起" : "展开"}
-      </Button>
+      <Space>
+        <Button
+          onClick={() => {
+            if (expandAll === 2) {
+              setExpandAll(true);
+            } else {
+              setExpandAll(!expandAll);
+            }
+          }}
+        >
+          {expandAll === true ? "收起" : "展开"}
+        </Button>
+      </Space>
+      <DirectoryTreeSearch
+        value={search}
+        total={3}
+        current={1}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+
       <div
         style={{
           overflow: "hidden",

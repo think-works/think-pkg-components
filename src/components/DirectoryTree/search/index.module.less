@@ -1,0 +1,32 @@
+@import "@/styles/utils.less";
+
+.search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid @colorBorderSecondary;
+  .filter {
+    cursor: pointer;
+  }
+  .searchInput {
+    border: 0;
+    outline: 0;
+    height: 32px;
+  }
+  .searchBox {
+    position: absolute;
+    top: 36px;
+    right: 0;
+    height: 32px;
+    display: flex;
+    justify-content: flex-end;
+    z-index: 2;
+    .searchBtn {
+      background-color: #fff;
+      .searchBtnText {
+        color: @colorTextDescription;
+        padding-right: 8px;
+      }
+    }
+  }
+}
