@@ -59,36 +59,65 @@
   -webkit-line-clamp: @line;
 }
 
-// 自定义滚动条
-.scrollbar(@x: auto, @y: auto, @thumb: rgba(0, 0, 0, 0.25), @track: transparent) {
-  overflow-x: @x;
-  overflow-y: @y;
-  scrollbar-color: @thumb @track;
-  scrollbar-gutter: auto;
+// #endregion
+
+// #region 自定义滚动条
+
+// 滚动条滑块颜色
+@scrollbarThumb: rgba(0, 0, 0, 0.25);
+// 滚动条轨道颜色
+@scrollbarTrack: transparent;
+
+// 现代的滚动条
+.scrollbarModern(@thumb: @scrollbarThumb, @track: @scrollbarTrack) {
   scrollbar-width: thin;
+  scrollbar-color: @thumb @track;
 }
 
-// 自定义滚动条可见性
-.scrollbarVisibility(@x: auto, @y: auto, @thumb: rgba(0, 0, 0, 0.25), @track: transparent) {
-  overflow-x: @x;
-  overflow-y: @y;
-
-  &:hover {
-    &::-webkit-scrollbar {
-    }
-    &::-webkit-scrollbar-thumb {
-      visibility: visible;
-    }
-  }
+// 遗留的滚动条
+.scrollbarLegacy(@thumb: @scrollbarThumb, @track: @scrollbarTrack) {
   &::-webkit-scrollbar {
     background-color: @track;
   }
   &::-webkit-scrollbar-thumb {
-    visibility: hidden;
+    border: 4px solid transparent;
     border-radius: 10px;
-    border: 2px solid @track;
     background-color: @thumb;
     background-clip: content-box;
+  }
+}
+
+// 匹配 * 的滚动条
+.scrollbarStarSelector(@thumb: @scrollbarThumb, @track: @scrollbarTrack) {
+  @supports (scrollbar-width: thin) {
+    * {
+      .scrollbarModern(@thumb, @track);
+    }
+  }
+  @supports not (scrollbar-width: thin) {
+    * {
+      .scrollbarLegacy(@thumb, @track);
+    }
+  }
+}
+
+// 匹配 *:hover 的滚动条
+.scrollbarStarSelectorHover (@thumb: @scrollbarThumb, @track: @scrollbarTrack) {
+  @supports (scrollbar-width: thin) {
+    * {
+      .scrollbarModern(transparent, transparent);
+      &:hover {
+        .scrollbarModern(@thumb, @track);
+      }
+    }
+  }
+  @supports not (scrollbar-width: thin) {
+    * {
+      .scrollbarLegacy(transparent, transparent);
+      &:hover {
+        .scrollbarLegacy(@thumb, @track);
+      }
+    }
   }
 }
 
