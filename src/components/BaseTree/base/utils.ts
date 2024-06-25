@@ -29,7 +29,7 @@ export const BaseTreeMatchesSearch = (
     const value = getNestedValue(obj, props);
 
     // 如果找到了值且值为字符串，进行匹配
-    if (typeof value === "string" && value.toLowerCase().includes(searchText)) {
+    if (typeof value === "string" && value.includes(searchText)) {
       return true;
     }
   }
