@@ -41,7 +41,7 @@ export const DirectoryTreeSearch = (props: DirectoryTreeSearchProps) => {
       <Input
         prefix={<SearchOutlined />}
         suffix={
-          showFilter ? (
+          value && showFilter && total > 0 ? (
             <FilterFilled
               style={{ color: themeToken.colorPrimary }}
               className={stl.filter}
