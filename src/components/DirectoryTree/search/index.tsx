@@ -1,14 +1,17 @@
-import { Button, Input, Space } from "antd";
+import { Button, Input, Space, Tooltip } from "antd";
 import { InputProps } from "antd/lib";
 import classNames, { Argument } from "classnames";
 import { useState } from "react";
 import {
   FilterFilled,
   FilterOutlined,
+  LeftOutlined,
+  RightOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
 import { themeToken } from "@/common/theme";
 import stl from "./index.module.less";
+import { findLastIndex, findNextIndex } from "./utils";
 
 /**
  * 基础操作按钮
@@ -68,25 +71,34 @@ export const DirectoryTreeSearch = (props: DirectoryTreeSearchProps) => {
         className={classNames(stl.searchBox)}
         style={{ display: value && showFilter && total > 0 ? "block" : "none" }}
       >
-        <Space className={classNames(stl.searchBtn)}>
-          <Button
-            type={"default"}
-            disabled={current <= 0}
-            size="small"
-            onClick={onLast}
-          >
-            上一个
-          </Button>
-          <Button disabled={current + 1 == total} size="small" onClick={onNext}>
-            下一个
-          </Button>
-          <span className={stl.searchBtnText}>
+        <Space>
+          <Tooltip title={current <= 0 ? "" : "上一个"}>
+            <Button
+              type={"default"}
+              disabled={current <= 0}
+              size="small"
+              onClick={onLast}
+              icon={<LeftOutlined />}
+            />
+          </Tooltip>
+
+          <Tooltip title={current + 1 == total ? "" : "下一个"}>
+            <Button
+              disabled={current + 1 == total}
+              size="small"
+              onClick={onNext}
+              icon={<RightOutlined />}
+            />
+          </Tooltip>
+          <div className={stl.searchBtnText}>
             {current + 1} / {total}
-          </span>
+          </div>
         </Space>
       </div>
     </div>
   );
 };
+DirectoryTreeSearch.findNextIndex = findNextIndex;
+DirectoryTreeSearch.findLastIndex = findLastIndex;
 
 export default DirectoryTreeSearch;
