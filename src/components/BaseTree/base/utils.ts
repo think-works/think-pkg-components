@@ -7,7 +7,7 @@ import { BaseTreeKey, BaseTreeNode } from "./types";
  * @param searchFilterProps
  * @returns boolean
  */
-export const matchesSearch = (
+export const BaseTreeMatchesSearch = (
   obj: Record<string, any>,
   searchText?: string,
   searchFilterProps: string[][] = [["name"]],
@@ -59,7 +59,7 @@ export const findParentIdsBySearchText = <T extends BaseTreeNode>(
     const { id, children } = steps[i];
 
     // 检查节点是否包含搜索文本
-    if (matchesSearch(steps[i], searchText, searchFilterProps)) {
+    if (BaseTreeMatchesSearch(steps[i], searchText, searchFilterProps)) {
       results.push(...parentIds);
     }
 

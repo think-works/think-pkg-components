@@ -19,7 +19,7 @@ import {
   BaseTreeMenuActions,
   BaseTreeNode,
 } from "./types";
-import { findParentIdsBySearchText, matchesSearch } from "./utils";
+import { BaseTreeMatchesSearch, findParentIdsBySearchText } from "./utils";
 
 const isSymbol = (key: unknown): key is symbol => typeof key === "symbol";
 const getKey = (
@@ -334,7 +334,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
 
         if (searchText && typeof node.name === "string") {
           try {
-            const isSearched = matchesSearch(
+            const isSearched = BaseTreeMatchesSearch(
               node,
               searchText,
               searchFilterProps,
