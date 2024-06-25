@@ -1,0 +1,38 @@
+@import "@/styles/utils.less";
+
+.search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid @colorBorderSecondary;
+  .filter {
+    cursor: pointer;
+  }
+  .searchInput {
+    font-size: 12px;
+    border: 0;
+    outline: 0;
+    height: 32px;
+  }
+  .searchBox {
+    position: absolute;
+    top: 36px;
+    right: 0;
+    height: 32px;
+    display: flex;
+    justify-content: flex-end;
+    z-index: 2;
+    .searchBtnText {
+      display: flex;
+      padding: 0 4px;
+      justify-content: center;
+      align-items: center;
+      background-color: #fff;
+      color: @colorTextDescription;
+      margin-right: 8px;
+      font-size: 14px;
+      border-radius: 4px;
+      font-weight: normal;
+    }
+  }
+}
