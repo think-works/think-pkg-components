@@ -59,39 +59,6 @@
   -webkit-line-clamp: @line;
 }
 
-// 自定义滚动条
-.scrollbar(@x: auto, @y: auto, @thumb: rgba(0, 0, 0, 0.25), @track: transparent) {
-  overflow-x: @x;
-  overflow-y: @y;
-  scrollbar-color: @thumb @track;
-  scrollbar-gutter: auto;
-  scrollbar-width: thin;
-}
-
-// 自定义滚动条可见性
-.scrollbarVisibility(@x: auto, @y: auto, @thumb: rgba(0, 0, 0, 0.25), @track: transparent) {
-  overflow-x: @x;
-  overflow-y: @y;
-
-  &:hover {
-    &::-webkit-scrollbar {
-    }
-    &::-webkit-scrollbar-thumb {
-      visibility: visible;
-    }
-  }
-  &::-webkit-scrollbar {
-    background-color: @track;
-  }
-  &::-webkit-scrollbar-thumb {
-    visibility: hidden;
-    border-radius: 10px;
-    border: 2px solid @track;
-    background-color: @thumb;
-    background-clip: content-box;
-  }
-}
-
 // #endregion
 
 // #region 自定义滚动条
