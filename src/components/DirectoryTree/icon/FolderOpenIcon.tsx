@@ -1,7 +1,9 @@
-export const TreeFolderOpenIcon: React.FC = () => {
+export const TreeFolderOpenIcon: React.FC<{ style: React.CSSProperties }> = ({
+  style,
+}) => {
   return (
     <svg
-      style={{ verticalAlign: "sub" }}
+      style={{ verticalAlign: "sub", ...style }}
       viewBox="0 0 1024 1024"
       width="24"
       height="24"
