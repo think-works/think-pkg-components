@@ -3,6 +3,7 @@ import classNames from "classnames";
 import React, {
   ForwardedRef,
   forwardRef,
+  useCallback,
   useEffect,
   useImperativeHandle,
   useMemo,
@@ -199,6 +200,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
   );
   const [count, setCount] = useState(0);
   const [reload, setReload] = useState(0);
+  const countRef = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<() => void>(() => {});
@@ -528,6 +530,10 @@ const Tree = <BaseNode extends BaseTreeNode>(
     return [kNodes, tIndex];
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, reload, searchText]);
+  const nodes = useMemo(() => {
+    return nodeList.filter((item) => item.isShow === true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [treeIndex, count]);
 
   /** 处理 expandAll 受控 */
   useEffect(() => {
@@ -575,24 +581,26 @@ const Tree = <BaseNode extends BaseTreeNode>(
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkedKeys]);
-
-  const onExpand = (
-    node: BaseTreeIndexItem<BaseNode>,
-    expanded: boolean,
-  ): void => {
-    node.expanded = expanded;
-    const expandList: BaseTreeKey[] = [];
-    const nodes: BaseNode[] = [];
-    treeIndex.forEach((item) => {
-      if (item.expanded === true) {
-        expandList.push(item.key);
-        nodes.push(item.node);
-      }
-    });
-    setCount(count + 1);
-    if (props.onExpandedKeys)
-      props.onExpandedKeys(expandList, nodes, node.node);
-  };
+  useEffect(() => {
+    countRef.current = count;
+  }, [count]);
+  const onExpand = useCallback(
+    (node: BaseTreeIndexItem<BaseNode>, expanded: boolean): void => {
+      node.expanded = expanded;
+      const expandList: BaseTreeKey[] = [];
+      const nodes: BaseNode[] = [];
+      treeIndex.forEach((item) => {
+        if (item.expanded === true) {
+          expandList.push(item.key);
+          nodes.push(item.node);
+        }
+      });
+      setCount(countRef.current + 1);
+      if (props.onExpandedKeys)
+        props.onExpandedKeys(expandList, nodes, node.node);
+    },
+    [props, treeIndex],
+  );
 
   const onCheck = (
     node: BaseTreeIndexItem<BaseNode>,
@@ -619,12 +627,6 @@ const Tree = <BaseNode extends BaseTreeNode>(
     if (!props.onActive) setActiveKey(node.key);
     if (props.onActive) props.onActive(node.key, node.node);
   };
-
-  const nodes = useMemo(
-    () => nodeList.filter((item) => item.isShow === true),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [treeIndex, count],
-  );
 
   const [list, scrollTo] = useVirtualList(nodes, {
     containerTarget: containerRef,
@@ -664,18 +666,44 @@ const Tree = <BaseNode extends BaseTreeNode>(
     if (props.onCheckedKeys) props.onCheckedKeys(checkList, nodes, null);
     setCount(count + 1);
   };
+  /**
+   * 滑动并且展开节点
+   */
+  const scrollAndExtendNode = useCallback(
+    (index: number) => {
+      const nodeItem = nodeList[index];
+      if (!nodeItem) {
+        return;
+      }
 
-  useImperativeHandle(ref, () => ({
-    focusReload: () => setReload(reload + 1),
-    containerRef,
-    scrollTo,
-    scrollToKey: () => {
-      scrollRef?.current?.();
+      if (nodeItem && nodeItem.parent && nodeItem.parent.expanded !== true) {
+        const parent = nodeItem.parent;
+        nodeItem.expanded = true;
+        let parentsNodeItem = null;
+        // node 的父节点全展开
+        const expandedParentsLoop = (
+          item: BaseTreeIndexItem<BaseNode>,
+        ): void => {
+          if (item && item.expanded !== true) {
+            item.expanded = true;
+            parentsNodeItem = item;
+            if (item.parent) {
+              expandedParentsLoop(item.parent);
+            }
+          }
+        };
+        expandedParentsLoop(parent);
+        if (parentsNodeItem) {
+          //展开最外层节点
+          onExpand(parentsNodeItem, true);
+        }
+      }
+
+      scrollTo(index);
     },
-    setCurrentDragKey: (key: string) => setCurrentDragKey(key),
-    getNodeList: getNodeList,
-    checkAll,
-  }));
+    [nodeList, onExpand, scrollTo],
+  );
+
   /** ---------------- 拖拽相关 处理根节点的 ---------------- */
 
   const dragHighlightList = useMemo(() => {
@@ -773,7 +801,17 @@ const Tree = <BaseNode extends BaseTreeNode>(
     // e.stopPropagation();
     setDragTargetKey(null);
   };
-
+  useImperativeHandle(ref, () => ({
+    focusReload: () => setReload(reload + 1),
+    containerRef,
+    scrollTo: scrollAndExtendNode,
+    scrollToKey: () => {
+      scrollRef?.current?.();
+    },
+    setCurrentDragKey: (key: string) => setCurrentDragKey(key),
+    getNodeList: getNodeList,
+    checkAll,
+  }));
   /** ---------------- 拖拽相关 ---------------- */
 
   return (
