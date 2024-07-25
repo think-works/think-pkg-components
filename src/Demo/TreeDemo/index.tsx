@@ -10,6 +10,7 @@ import {
 import DirectoryTree from "@/components/DirectoryTree";
 import DirectoryTreeSearch from "@/components/DirectoryTree/search";
 import { treeData as defaultData } from "./data";
+import styles from "./index.module.less";
 
 const TreeDemo = () => {
   const [treeData, setTreeData] = useState(defaultData);
@@ -53,6 +54,10 @@ const TreeDemo = () => {
     });
 
     return dropdownList;
+  };
+
+  const nameTextClassName = () => {
+    return styles.underline;
   };
 
   const getActions = () => {
@@ -172,6 +177,7 @@ const TreeDemo = () => {
           canActiveKey={() => true}
           isDirectory={(type) => type === 1}
           renderDropdownItems={renderDropdownItems}
+          nameTextClassName={nameTextClassName}
         />
       </div>
     </div>
