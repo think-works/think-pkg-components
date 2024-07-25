@@ -1,4 +1,5 @@
 import { Input, InputRef } from "antd";
+import classNames from "classnames";
 import React, {
   ReactNode,
   useCallback,
@@ -69,6 +70,12 @@ interface Props<T extends BaseTreeNode, NODE_TYPE> {
    * @returns
    */
   isDirectory: (node: NODE_TYPE) => boolean;
+  /**
+   * 自定义文本样式
+   * @param node
+   * @returns
+   */
+  nameTextClassName?: (node: DirectoryTreeNode<T, NODE_TYPE>) => string;
 }
 
 function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
@@ -78,6 +85,7 @@ function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
     data,
     actions = {},
     nameWrapper,
+    nameTextClassName,
     isDirectory,
     renderDropdownItems,
   } = props;
@@ -308,7 +316,10 @@ function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
             />
           ) : (
             <span
-              className={style["item-name-text"]}
+              className={classNames(
+                style["item-name-text"],
+                nameTextClassName?.(data.node),
+              )}
               style={{ color: data.node.color }}
             >
               {data.node.name}
