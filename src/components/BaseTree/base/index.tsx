@@ -535,24 +535,6 @@ const Tree = <BaseNode extends BaseTreeNode>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [treeIndex, count]);
 
-  /** 处理 expandAll 受控 */
-  useEffect(() => {
-    if (expandAll !== undefined) {
-      controlExpandedKeys.forEach((_, key) => {
-        if (typeof expandAll === "number") {
-          const deep = treeIndex.get(key)?.deep;
-          if (deep && deep <= expandAll) {
-            controlExpandedKeys.set(key, true);
-          }
-        } else {
-          controlExpandedKeys.set(key, expandAll);
-        }
-      });
-    }
-    setCount(count + 1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [expandAll]);
-
   /** 处理 expandedKeys 受控 */
   useEffect(() => {
     if (expandedKeys) {
@@ -666,6 +648,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
     if (props.onCheckedKeys) props.onCheckedKeys(checkList, nodes, null);
     setCount(count + 1);
   };
+
   /**
    * 滑动并且展开节点
    */
@@ -812,8 +795,26 @@ const Tree = <BaseNode extends BaseTreeNode>(
     getNodeList: getNodeList,
     checkAll,
   }));
-  /** ---------------- 拖拽相关 ---------------- */
-
+  /** 处理 expandAll 受控 */
+  useEffect(() => {
+    if (expandAll !== undefined) {
+      controlExpandedKeys.forEach((_, key) => {
+        if (typeof expandAll === "number") {
+          const deep = treeIndex.get(key)?.deep;
+          if (deep && deep <= expandAll) {
+            controlExpandedKeys.set(key, true);
+          }
+        } else {
+          controlExpandedKeys.set(key, expandAll);
+        }
+      });
+      if (expandAll === false) {
+        scrollTo(0);
+      }
+    }
+    setCount(count + 1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [expandAll]);
   return (
     <MacScrollbar
       ref={containerRef}

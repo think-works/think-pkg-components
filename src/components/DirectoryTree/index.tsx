@@ -71,6 +71,12 @@ export interface DirectoryTreeProps<BASE_NODE extends BaseTreeNode, NODE_TYPE>
    * @returns
    */
   isDirectory: (node: NODE_TYPE) => boolean;
+  /**
+   * 自定义文本样式
+   * @param node
+   * @returns
+   */
+  nameTextClassName?: (node: DirectoryTreeNode<BASE_NODE, NODE_TYPE>) => string;
 }
 
 /**
@@ -92,6 +98,7 @@ const DirectoryTree = <BASE_NODE extends BaseTreeNode, NODE_TYPE>(
     renderNodeIcon,
     renderRight,
     renderDropdownItems,
+    nameTextClassName,
     isDirectory,
     style,
     showIndentBorder = true,
@@ -142,6 +149,7 @@ const DirectoryTree = <BASE_NODE extends BaseTreeNode, NODE_TYPE>(
               isDirectory={isDirectory}
               renderNodeIcon={renderNodeIcon}
               renderDropdownItems={renderDropdownItems}
+              nameTextClassName={nameTextClassName}
               {...context}
             />
           );

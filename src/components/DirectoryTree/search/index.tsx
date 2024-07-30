@@ -44,7 +44,7 @@ export const DirectoryTreeSearch = (props: DirectoryTreeSearchProps) => {
       <Input
         prefix={<SearchOutlined />}
         suffix={
-          value && showFilter && total > 0 ? (
+          value && showFilter ? (
             <FilterFilled
               style={{ color: themeToken.colorPrimary }}
               className={stl.filter}
@@ -69,9 +69,9 @@ export const DirectoryTreeSearch = (props: DirectoryTreeSearchProps) => {
 
       <div
         className={classNames(stl.searchBox)}
-        style={{ display: value && showFilter && total > 0 ? "block" : "none" }}
+        style={{ display: value && showFilter ? "block" : "none" }}
       >
-        <Space>
+        <Space style={{ paddingRight: 8 }}>
           <Tooltip title={current <= 0 ? "" : "上一个"}>
             <Button
               type={"default"}
@@ -82,17 +82,19 @@ export const DirectoryTreeSearch = (props: DirectoryTreeSearchProps) => {
             />
           </Tooltip>
 
-          <Tooltip title={current + 1 == total ? "" : "下一个"}>
+          <Tooltip title={total === 0 || current + 1 == total ? "" : "下一个"}>
             <Button
-              disabled={current + 1 == total}
+              disabled={total === 0 || current + 1 == total}
               size="small"
               onClick={onNext}
               icon={<RightOutlined />}
             />
           </Tooltip>
-          <div className={stl.searchBtnText}>
-            {current + 1} / {total}
-          </div>
+          {total > 0 && (
+            <div className={stl.searchBtnText}>
+              {current + 1} / {total}
+            </div>
+          )}
         </Space>
       </div>
     </div>
