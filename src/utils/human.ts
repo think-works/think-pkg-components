@@ -55,8 +55,11 @@ export const separator = (num: number, len = 0, pad = true) => {
 
 /**
  * 人类友好的时间间隔
+ * @timestamp 时间戳
+ * @units 单位
+ * @split 分隔符
  */
-export const timespan = (timestamp: number, units = {}) => {
+export const timespan = (timestamp: number, units = {}, split = " ") => {
   const s = 1000;
   const m = s * 60;
   const H = m * 60;
@@ -114,7 +117,7 @@ export const timespan = (timestamp: number, units = {}) => {
     }
   }
 
-  return list.join(" ");
+  return list.join(split);
 };
 
 /**
