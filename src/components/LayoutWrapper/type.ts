@@ -106,12 +106,15 @@ export interface LayoutWrapperProps {
      * 自定义菜单上方内容
      * @param siderWidth 侧边栏实际宽度 展开时为 siderWidth 收缩时为 collapsedWidth
      */
-    renderMenuTop: (siderWidth: number, collapsed?: boolean) => React.ReactNode;
+    renderMenuTop?: (
+      siderWidth: number,
+      collapsed?: boolean,
+    ) => React.ReactNode;
     /**
      * 自定义菜单下方内容
      * @param siderWidth 侧边栏实际宽度 展开时为 siderWidth 收缩时为 collapsedWidth
      */
-    renderMenuBottom: (
+    renderMenuBottom?: (
       siderWidth: number,
       collapsed?: boolean,
     ) => React.ReactNode;
