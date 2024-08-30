@@ -12,12 +12,17 @@ export type SiderProps = {
   className?: Argument;
   /**
    * 自定义菜单上方内容
+   * @param siderWidth 侧边栏实际宽度 展开时为 siderWidth 收缩时为 collapsedWidth
    */
-  siderMenuTop?: React.ReactNode;
+  renderMenuTop?: (siderWidth: number, collapsed?: boolean) => React.ReactNode;
   /**
    * 自定义菜单下方内容
+   * @param siderWidth 侧边栏实际宽度 展开时为 siderWidth 收缩时为 collapsedWidth
    */
-  siderMenuBottom?: React.ReactNode;
+  renderMenuBottom?: (
+    siderWidth: number,
+    collapsed?: boolean,
+  ) => React.ReactNode;
   collapsed?: boolean;
   onCollapse?: (collapsed: boolean) => void;
   siderWidth: number;
@@ -27,8 +32,8 @@ export type SiderProps = {
 const Sider = (props: SiderProps) => {
   const {
     className,
-    siderMenuTop,
-    siderMenuBottom,
+    renderMenuTop,
+    renderMenuBottom,
     siderWidth,
     collapsedWidth,
     collapsed,
@@ -45,9 +50,9 @@ const Sider = (props: SiderProps) => {
       collapsed={collapsed}
       onCollapse={onCollapse}
     >
-      {siderMenuTop}
+      {renderMenuTop?.(collapsed ? collapsedWidth : siderWidth, collapsed)}
       <LeftMenu />
-      {siderMenuBottom}
+      {renderMenuBottom?.(collapsed ? collapsedWidth : siderWidth, collapsed)}
       <div className={cls(stl.extend, siderExtendClass)} />
     </Layout.Sider>
   );

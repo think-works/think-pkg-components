@@ -18,8 +18,8 @@ const LayoutWrapper = (props: LayoutWrapperProps) => {
   const {
     siderWidth = 160,
     collapsedWidth = theme.styleConfig.bizLayoutHeader,
-    siderMenuTop,
-    siderMenuBottom,
+    renderMenuTop,
+    renderMenuBottom,
   } = siderProps || {};
   const showSider = useSiderVisibility();
   const [collapsed, setCollapsed] = useState(defaultCollapsed);
@@ -39,8 +39,8 @@ const LayoutWrapper = (props: LayoutWrapperProps) => {
       siderWidth={siderWidth}
       collapsedWidth={collapsedWidth}
       onCollapse={handleCollapse}
-      siderMenuTop={siderMenuTop}
-      siderMenuBottom={siderMenuBottom}
+      renderMenuTop={renderMenuTop}
+      renderMenuBottom={renderMenuBottom}
     />
   );
   // 如果传入了自定义侧边栏，则使用自定义侧边栏
