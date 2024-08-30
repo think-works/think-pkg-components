@@ -1,0 +1,45 @@
+@import "@/styles/utils.less";
+
+.sider {
+  display: flex;
+  flex-direction: column;
+  height: 100%; // 基于窗口高度计算(等同于 100vh)，超出屏幕部分不可见
+  border-right: 1px solid @colorBorderSecondary;
+  box-shadow: 2px 2px 6px 0 @colorSplit;
+
+  :global(.@{ant-prefix}-layout-sider-trigger) {
+    flex: none;
+    border-top: 1px solid @colorBorderSecondary;
+    border-right: 1px solid @colorBorderSecondary;
+  }
+  :global(.@{ant-prefix}-layout-sider-children) {
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .leftMenu {
+    flex: auto;
+    overflow: auto;
+    overflow: overlay;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  .extend {
+    flex: none;
+    margin-bottom: 50px;
+  }
+}
+
+.leftMenu {
+  &:global(.@{ant-prefix}-menu.@{ant-prefix}-menu-root) {
+    border-right: none;
+    border-inline-end: none;
+  }
+
+  :global(.@{ant-prefix}-menu-submenu) {
+    :global(.@{ant-prefix}-menu-submenu-title) a {
+      color: inherit;
+    }
+  }
+}
