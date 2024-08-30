@@ -12,7 +12,7 @@ import { LayoutWrapperProps } from "./type";
 const storageVal = queryLocal(appLayoutConfigKey);
 const defaultCollapsed = storageVal?.collapsed || false;
 
-const LayoutWrapper = (props: LayoutWrapperProps) => {
+export const LayoutWrapper = (props: LayoutWrapperProps) => {
   const { children, header, sider, childrenProps, footer, siderProps } = props;
   const { minFullWidth = 1200, crumbMode } = childrenProps || {};
   const {
