@@ -3,6 +3,7 @@ import DragContainerDemo from "./DragContainerDemo";
 import EditableTableDemo from "./EditableTableDemo";
 import FlexTabsDemo from "./FlexTabsDemo";
 import Home from "./Home";
+import PageLayout from "./PageLayout";
 import TreeDemo from "./TreeDemo";
 
 export const routes: RouteObject[] = [
@@ -25,6 +26,10 @@ export const routes: RouteObject[] = [
   {
     path: "/tree",
     element: <TreeDemo />,
+  },
+  {
+    path: "/page-layout",
+    element: <PageLayout />,
   },
 ];
 

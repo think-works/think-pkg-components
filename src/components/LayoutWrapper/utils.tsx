@@ -1,7 +1,7 @@
 import { MenuProps } from "antd";
 import { ReactNode } from "react";
 import { To } from "react-router-dom";
-import { events, Portal, PortalProps } from "@think/components";
+import { events } from "@think/components";
 
 // #region 注册自定义菜单
 
@@ -170,54 +170,7 @@ export const invokeTransformCrumb = (
 
 // #endregion
 
-// #region 扩展布局容器
-
 /**
- * 页头扩展类名
+ * 静态配置左侧菜单
  */
-export const headerExtendClass = `Layout-Header-Extend-${Date.now()}`;
-
-/**
- * 页脚扩展类名
- */
-export const footerExtendClass = `Layout-Footer-Extend-${Date.now()}`;
-
-/**
- * 侧边栏扩展类名
- */
-export const siderExtendClass = `Layout-Sider-Extend-${Date.now()}`;
-
-/**
- * 面包屑扩展类名
- */
-export const breadcrumbExtendClass = `Layout-Breadcrumb-Extend-${Date.now()}`;
-
-/**
- * 页头扩展
- */
-export const HeaderExtend = (props: PortalProps) => (
-  <Portal selector={`.${headerExtendClass}`} {...props} />
-);
-
-/**
- * 页脚扩展
- */
-export const FooterExtend = (props: PortalProps) => (
-  <Portal selector={`.${footerExtendClass}`} {...props} />
-);
-
-/**
- * 侧边栏容器
- */
-export const SiderExtend = (props: PortalProps) => (
-  <Portal selector={`.${siderExtendClass}`} {...props} />
-);
-
-/**
- * 面包屑扩展
- */
-export const BreadcrumbExtend = (props: PortalProps) => (
-  <Portal selector={`.${breadcrumbExtendClass}`} {...props} />
-);
-
-// #endregion
+export const defaultLeftMenus: MenuItem[] = [];

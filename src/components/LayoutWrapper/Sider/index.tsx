@@ -1,10 +1,13 @@
 import { Layout } from "antd";
 import cls, { Argument } from "classnames";
 import React from "react";
-import { siderExtendClass } from "../utils";
 import stl from "./index.module.less";
 import LeftMenu from "./LeftMenu";
 
+/**
+ * 侧边栏扩展类名
+ */
+const siderExtendClass = `Layout-Sider-Extend-${Date.now()}`;
 export type SiderProps = {
   className?: Argument;
   /**

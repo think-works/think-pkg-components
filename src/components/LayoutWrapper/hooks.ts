@@ -2,7 +2,7 @@ import { isArray, isString } from "lodash-es";
 import { useEffect, useMemo } from "react";
 import { useMatches } from "react-router-dom";
 import { events, useForceUpdate } from "@think/components";
-import { ExtendRouteMeta } from "./type";
+import { LayoutWrapperExtendRouteMeta } from "./type";
 import {
   CrumbReturn,
   CustomMenuPosition,
@@ -24,7 +24,7 @@ export const useMatchMenuKeys = () => {
     // 用匹配路由的 name/menu 作为菜单展开和选中 key
     const list = matches
       .map(({ handle }) => {
-        const { name, menu } = (handle || {}) as ExtendRouteMeta;
+        const { name, menu } = (handle || {}) as LayoutWrapperExtendRouteMeta;
         const arr: string[] = [];
 
         if (menu === false) {
@@ -102,7 +102,8 @@ export const useMatchCrumbs = () => {
     // 用匹配路由的 crumb/title 和 pathname 作为面包屑
     const list = matches
       .map(({ pathname, handle }) => {
-        const { name, title, crumb } = (handle || {}) as ExtendRouteMeta;
+        const { name, title, crumb } = (handle ||
+          {}) as LayoutWrapperExtendRouteMeta;
 
         if (crumb === false) {
           return;
@@ -136,7 +137,9 @@ const useLastVisibility = (key: string) => {
 
   const last = useMemo(() => {
     const list = matches
-      .map(({ handle }) => ((handle || {}) as ExtendRouteMeta)[key])
+      .map(
+        ({ handle }) => ((handle || {}) as LayoutWrapperExtendRouteMeta)[key],
+      )
       .filter((x) => typeof x === "boolean");
 
     // 以最后一个有效配置为准

@@ -3,12 +3,12 @@ import { FooterProps } from "./Footer";
 /**
  * 权限组合模式
  */
-export type AuthCombineMode = "OR" | "AND";
+type AuthCombineMode = "OR" | "AND";
 /**
  * 路由权限
  */
-export type RouteAuth = string | number | (string | number)[];
-export interface ExtendRouteMeta extends Record<string, any> {
+type RouteAuth = string | number | (string | number)[];
+export interface LayoutWrapperExtendRouteMeta extends Record<string, any> {
   /**
    * 页面标题
    */

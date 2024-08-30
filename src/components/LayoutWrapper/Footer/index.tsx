@@ -1,8 +1,11 @@
 import { Layout } from "antd";
 import cls, { Argument } from "classnames";
-import { footerExtendClass } from "../utils";
 import stl from "./index.module.less";
 
+/**
+ * 页脚扩展类名
+ */
+const footerExtendClass = `Layout-Footer-Extend-${Date.now()}`;
 export type FooterProps = {
   className?: Argument;
 };

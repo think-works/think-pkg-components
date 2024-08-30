@@ -4,8 +4,12 @@ import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { types } from "@think/components";
 import { useMatchCrumbs } from "../hooks";
-import { breadcrumbExtendClass } from "../utils";
 import stl from "./index.module.less";
+
+/**
+ * 面包屑扩展类名
+ */
+const breadcrumbExtendClass = `Layout-Breadcrumb-Extend-${Date.now()}`;
 
 export type CrumbProps = {
   className?: Argument;

@@ -3,8 +3,7 @@ import cls, { Argument } from "classnames";
 import { useEffect, useState } from "react";
 import { types, useForceUpdate } from "@think/components";
 import { useCustomMenus, useMatchMenuKeys } from "../hooks";
-import { defaultLeftMenus } from "../menus";
-import { MenuItem } from "../utils";
+import { defaultLeftMenus, MenuItem } from "../utils";
 import stl from "./index.module.less";
 
 export type LeftMenuProps = {
