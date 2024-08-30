@@ -1,7 +1,8 @@
 import { Menu } from "antd";
 import cls, { Argument } from "classnames";
 import { useEffect, useState } from "react";
-import { types, useForceUpdate } from "@think/components";
+import { useForceUpdate } from "@/hooks";
+import * as types from "@/utils/types";
 import { useCustomMenus, useMatchMenuKeys } from "../hooks";
 import { defaultLeftMenus, MenuItem } from "../utils";
 import stl from "./index.module.less";

@@ -2,7 +2,7 @@ import { Breadcrumb } from "antd";
 import cls, { Argument } from "classnames";
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { types } from "@think/components";
+import * as types from "@/utils/types";
 import { useMatchCrumbs } from "../hooks";
 import stl from "./index.module.less";
 

@@ -1,7 +1,7 @@
 import { MenuProps } from "antd";
 import { ReactNode } from "react";
 import { To } from "react-router-dom";
-import { events } from "@think/components";
+import * as events from "@/utils/events";
 
 // #region 注册自定义菜单
 

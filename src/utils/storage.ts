@@ -1,6 +1,6 @@
-import { tools } from "@think/components";
 import { keyPrefix } from "@/utils/config";
 import logger from "@/utils/logger";
+import * as tools from "@/utils/tools";
 
 export const appLayoutConfigKey = "appLayout";
 /**

@@ -1,7 +1,8 @@
 import { isArray, isString } from "lodash-es";
 import { useEffect, useMemo } from "react";
 import { useMatches } from "react-router-dom";
-import { events, useForceUpdate } from "@think/components";
+import { useForceUpdate } from "@/hooks";
+import * as events from "@/utils/events";
 import { LayoutWrapperExtendRouteMeta } from "./type";
 import {
   CrumbReturn,
