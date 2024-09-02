@@ -3,6 +3,7 @@ import { useCallback, useState } from "react";
 import { theme } from "@/common/_export";
 import { queryLocal, updateLocal } from "@/utils/storage";
 import Content from "./Content";
+import Crumb from "./Content/Crumb";
 import Footer from "./Footer";
 import { useSiderVisibility } from "./hooks";
 import stl from "./index.module.less";
@@ -77,6 +78,8 @@ export const LayoutWrapper = (props: LayoutWrapperProps) => {
     </Layout>
   );
 };
+
+LayoutWrapper.Crumb = Crumb;
 export * as layoutWrapperUtils from "./utils";
 export * as layoutWrapperHooks from "./hooks";
 export * from "./type";
