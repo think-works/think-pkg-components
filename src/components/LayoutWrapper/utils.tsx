@@ -36,7 +36,6 @@ export const registerCustomMenus = (
   } else if (position === "left") {
     activeSet = customLeftMenuSet;
   }
-  console.log("registerCustomMenus", items, customLeftMenuSet?.values());
 
   // 检测模式
   let clonedSet: Set<MenuItem> | undefined = undefined;
@@ -59,7 +58,6 @@ export const registerCustomMenus = (
   events.emit(refreshCustomMenuEventKey);
 
   return () => {
-    console.log("registerCustomMenus 卸载");
     if (mode === "append") {
       // 将本次项目从集合中删除
       items.forEach((item) => {

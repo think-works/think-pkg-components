@@ -4,7 +4,6 @@ import { theme } from "@/common/_export";
 import { appLayoutConfigKey, queryLocal, updateLocal } from "@/utils/storage";
 import Content from "./Content";
 import Footer from "./Footer";
-import GlobalInit from "./GlobalInit";
 import { useSiderVisibility } from "./hooks";
 import stl from "./index.module.less";
 import Sider from "./Sider";
@@ -51,7 +50,6 @@ export const LayoutWrapper = (props: LayoutWrapperProps) => {
 
   return (
     <Layout className={stl.layout}>
-      <GlobalInit />
       {header}
       <Layout
         className={stl.main}
