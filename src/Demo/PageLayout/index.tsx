@@ -13,7 +13,7 @@ const DragContainerDemo = () => {
       },
     ]);
   }, [registerCustomMenus]);
-  return <LayoutWrapper header={<div>header</div>}>hahahah</LayoutWrapper>;
+  return <LayoutWrapper header={<div>header</div>}>hahahah1233</LayoutWrapper>;
 };
 
 export default DragContainerDemo;
