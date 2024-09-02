@@ -5,10 +5,10 @@ import { useForceUpdate } from "@/hooks";
 import * as events from "@/utils/events";
 import { LayoutWrapperExtendRouteMeta } from "./type";
 import {
-  CrumbReturn,
-  CustomMenuPosition,
   getCustomMenus,
   invokeTransformCrumb,
+  LayoutWrapperCrumbReturn,
+  LayoutWrapperCustomMenuPosition,
   refreshCustomMenuEventKey,
   refreshRouteCrumbEventKey,
 } from "./utils";
@@ -60,7 +60,7 @@ export const useMatchMenuKeys = () => {
 /**
  * 获取自定义菜单
  */
-export const useCustomMenus = (position?: CustomMenuPosition) => {
+export const useCustomMenus = (position?: LayoutWrapperCustomMenuPosition) => {
   const [forceKey, forceUpdate] = useForceUpdate();
   useEffect(() => {
     events.on(refreshCustomMenuEventKey, forceUpdate);
@@ -118,7 +118,7 @@ export const useMatchCrumbs = () => {
       })
       .filter((x) => x);
 
-    return list as CrumbReturn[];
+    return list as LayoutWrapperCrumbReturn[];
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [forceKey, matches]);
 

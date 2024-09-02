@@ -5,32 +5,32 @@ import * as events from "@/utils/events";
 
 // #region 注册自定义菜单
 
-export type CustomMenuPosition = "top" | "left";
-export type CustomMenuMode = "append" | "replace";
+export type LayoutWrapperCustomMenuPosition = "top" | "left";
+type LayoutWrapperCustomMenuMode = "append" | "replace";
 
-export type MenuItem = NonNullable<MenuProps["items"]>[number] & {
+export type LayoutWrapperMenuItem = NonNullable<MenuProps["items"]>[number] & {
   /** 菜单顺序 */
   sort?: number;
 };
 
 export const refreshCustomMenuEventKey = "refreshCustomMenu";
 
-const customTopMenuSet = new Set<MenuItem>();
-const customLeftMenuSet = new Set<MenuItem>();
+const customTopMenuSet = new Set<LayoutWrapperMenuItem>();
+const customLeftMenuSet = new Set<LayoutWrapperMenuItem>();
 
 /**
  * 注册自定义菜单
  */
 export const registerCustomMenus = (
-  items: MenuItem[],
+  items: LayoutWrapperMenuItem[],
   options?: {
-    position?: CustomMenuPosition;
-    mode?: CustomMenuMode;
+    position?: LayoutWrapperCustomMenuPosition;
+    mode?: LayoutWrapperCustomMenuMode;
   },
 ) => {
   const { position = "left", mode = "append" } = options || {};
   // 检测位置
-  let activeSet: Set<MenuItem> | undefined = undefined;
+  let activeSet: Set<LayoutWrapperMenuItem> | undefined = undefined;
   if (position === "top") {
     activeSet = customTopMenuSet;
   } else if (position === "left") {
@@ -38,7 +38,7 @@ export const registerCustomMenus = (
   }
 
   // 检测模式
-  let clonedSet: Set<MenuItem> | undefined = undefined;
+  let clonedSet: Set<LayoutWrapperMenuItem> | undefined = undefined;
   if (mode === "append") {
     items.forEach((item) => {
       // 将本次项目追加至集合尾部
@@ -90,10 +90,12 @@ export const registerCustomMenus = (
 /**
  * 获取自定义菜单
  */
-export const getCustomMenus = (options?: { position?: CustomMenuPosition }) => {
+export const getCustomMenus = (options?: {
+  position?: LayoutWrapperCustomMenuPosition;
+}) => {
   const { position = "left" } = options || {};
 
-  let activeSet: Set<MenuItem> | undefined = undefined;
+  let activeSet: Set<LayoutWrapperMenuItem> | undefined = undefined;
   if (position === "top") {
     activeSet = customTopMenuSet;
   } else if (position === "left") {
@@ -110,7 +112,7 @@ export const getCustomMenus = (options?: { position?: CustomMenuPosition }) => {
 
 // #region 注册命名路由面包屑
 
-export type CrumbParams = {
+export type LayoutWrapperCrumbParams = {
   /**
    * 面包屑标题
    */
@@ -121,7 +123,7 @@ export type CrumbParams = {
   pathname?: string;
 };
 
-export type CrumbReturn = CrumbParams & {
+export type LayoutWrapperCrumbReturn = LayoutWrapperCrumbParams & {
   /**
    * 面包屑目标位置
    */
@@ -132,18 +134,20 @@ export type CrumbReturn = CrumbParams & {
   element?: ReactNode;
 };
 
-export type TransformCrumb = (params: CrumbParams) => false | CrumbReturn;
+export type LayoutWrapperTransformCrumb = (
+  params: LayoutWrapperCrumbParams,
+) => false | LayoutWrapperCrumbReturn;
 
 export const refreshRouteCrumbEventKey = "refreshRouteCrumb";
 
-const routeCrumbMap = new Map<string, TransformCrumb>();
+const routeCrumbMap = new Map<string, LayoutWrapperTransformCrumb>();
 
 /**
  * 注册命名路由面包屑转换函数
  */
 export const registerRouteCrumb = (
   routeName: string,
-  transformer: TransformCrumb,
+  transformer: LayoutWrapperTransformCrumb,
 ) => {
   routeCrumbMap.set(routeName, transformer);
   events.emit(refreshRouteCrumbEventKey);
@@ -159,7 +163,7 @@ export const registerRouteCrumb = (
  */
 export const invokeTransformCrumb = (
   routeName: string,
-  params: CrumbParams,
+  params: LayoutWrapperCrumbParams,
 ) => {
   const transformer = routeCrumbMap.get(routeName);
   const crumb = transformer ? transformer(params) : params;
@@ -167,8 +171,3 @@ export const invokeTransformCrumb = (
 };
 
 // #endregion
-
-/**
- * 静态配置左侧菜单
- */
-export const defaultLeftMenus: MenuItem[] = [];

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useForceUpdate } from "@/hooks";
 import * as types from "@/utils/types";
 import { useCustomMenus, useMatchMenuKeys } from "../hooks";
-import { defaultLeftMenus, MenuItem } from "../utils";
+import { LayoutWrapperMenuItem } from "../utils";
 import stl from "./index.module.less";
 
 export type LeftMenuProps = {
@@ -16,7 +16,7 @@ const LeftMenu = (props: LeftMenuProps) => {
   const [forceKey, forceUpdate] = useForceUpdate();
   const [openKeys, setOpenKeys] = useState<string[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
-  const [menus, setMenus] = useState<MenuItem[]>(defaultLeftMenus);
+  const [menus, setMenus] = useState<LayoutWrapperMenuItem[]>([]);
 
   const matchMenuKeys = useMatchMenuKeys();
   const customMenus = useCustomMenus();
@@ -28,7 +28,7 @@ const LeftMenu = (props: LeftMenuProps) => {
 
   // 自定义路由菜单
   useEffect(() => {
-    let list = customMenus.length ? customMenus : defaultLeftMenus;
+    let list = customMenus.length ? customMenus : [];
     list = list.filter(types.truthy);
     setMenus(list);
     forceUpdate();
