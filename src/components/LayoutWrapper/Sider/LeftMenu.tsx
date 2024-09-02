@@ -20,7 +20,6 @@ const LeftMenu = (props: LeftMenuProps) => {
 
   const matchMenuKeys = useMatchMenuKeys();
   const customMenus = useCustomMenus();
-
   // 从路由推导菜单 key
   useEffect(() => {
     setOpenKeys(matchMenuKeys);
@@ -31,7 +30,6 @@ const LeftMenu = (props: LeftMenuProps) => {
   useEffect(() => {
     let list = customMenus.length ? customMenus : defaultLeftMenus;
     list = list.filter(types.truthy);
-
     setMenus(list);
     forceUpdate();
   }, [customMenus, forceUpdate]);

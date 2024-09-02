@@ -8,28 +8,29 @@ import TreeDemo from "./TreeDemo";
 
 export const routes: RouteObject[] = [
   {
-    path: "/",
+    path: "",
     element: <Home />,
   },
   {
-    path: "/drag-container",
+    path: "drag-container",
     element: <DragContainerDemo />,
   },
   {
-    path: "/editable-table",
+    path: "editable-table",
     element: <EditableTableDemo />,
   },
   {
-    path: "/flex-tabs",
+    path: "flex-tabs",
     element: <FlexTabsDemo />,
   },
   {
-    path: "/tree",
+    path: "tree",
     element: <TreeDemo />,
   },
   {
-    path: "/page-layout",
+    path: "page-layout",
     element: <PageLayout />,
+    handle: { name: "page-layout", title: "页面布局", sider: true },
   },
 ];
 

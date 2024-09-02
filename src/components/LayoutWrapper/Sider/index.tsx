@@ -39,7 +39,6 @@ const Sider = (props: SiderProps) => {
     collapsed,
     onCollapse,
   } = props;
-
   return (
     <Layout.Sider
       className={cls(stl.sider, className)}

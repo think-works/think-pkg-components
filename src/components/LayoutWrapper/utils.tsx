@@ -104,7 +104,6 @@ export const getCustomMenus = (options?: { position?: CustomMenuPosition }) => {
   // 菜单排序
   const list = activeSet ? Array.from(activeSet) : [];
   list.sort(({ sort: aSort = 0 }, { sort: bSort = 0 }) => aSort - bSort);
-
   return list;
 };
 
