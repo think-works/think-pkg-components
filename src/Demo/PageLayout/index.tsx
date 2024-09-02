@@ -1,19 +1,17 @@
 import { useEffect } from "react";
 import LayoutWrapper from "@/components/LayoutWrapper";
-import { useRegisterCustomMenus } from "@/components/LayoutWrapper/hooks";
+import { registerCustomMenus } from "@/components/LayoutWrapper/utils";
 
 const DragContainerDemo = () => {
-  const registerCustomMenus = useRegisterCustomMenus();
-
   useEffect(() => {
-    registerCustomMenus?.([
+    return registerCustomMenus?.([
       {
         key: "page-layout",
         label: "page-layout",
       },
     ]);
-  }, [registerCustomMenus]);
-  return <LayoutWrapper header={<div>header</div>}>hahahah1233</LayoutWrapper>;
+  }, []);
+  return <LayoutWrapper header={<div>header</div>}>hahahah33</LayoutWrapper>;
 };
 
 export default DragContainerDemo;

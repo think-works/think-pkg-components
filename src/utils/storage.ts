@@ -2,7 +2,6 @@ import { keyPrefix } from "@/utils/config";
 import logger from "@/utils/logger";
 import * as tools from "@/utils/tools";
 
-export const appLayoutConfigKey = "appLayout";
 /**
  * 查询本地缓存
  */

@@ -1,7 +1,7 @@
 import { Layout } from "antd";
 import { useCallback, useState } from "react";
 import { theme } from "@/common/_export";
-import { appLayoutConfigKey, queryLocal, updateLocal } from "@/utils/storage";
+import { queryLocal, updateLocal } from "@/utils/storage";
 import Content from "./Content";
 import Footer from "./Footer";
 import { useSiderVisibility } from "./hooks";
@@ -9,6 +9,7 @@ import stl from "./index.module.less";
 import Sider from "./Sider";
 import { LayoutWrapperProps } from "./type";
 
+const appLayoutConfigKey = "appLayout";
 const storageVal = queryLocal(appLayoutConfigKey);
 const defaultCollapsed = storageVal?.collapsed || false;
 
