@@ -8,6 +8,9 @@ type AuthCombineMode = "OR" | "AND";
  * 路由权限
  */
 type RouteAuth = string | number | (string | number)[];
+/**
+ * 页面布局路由元信息
+ */
 export interface LayoutWrapperExtendRouteMeta extends Record<string, any> {
   /**
    * 页面标题
@@ -106,17 +109,17 @@ export interface LayoutWrapperProps {
      * 自定义菜单上方内容
      * @param siderWidth 侧边栏实际宽度 展开时为 siderWidth 收缩时为 collapsedWidth
      */
-    renderMenuTop?: (
-      siderWidth: number,
-      collapsed?: boolean,
-    ) => React.ReactNode;
+    renderMenuTop?: (params: {
+      siderWidth: number;
+      collapsed?: boolean;
+    }) => React.ReactNode;
     /**
      * 自定义菜单下方内容
      * @param siderWidth 侧边栏实际宽度 展开时为 siderWidth 收缩时为 collapsedWidth
      */
-    renderMenuBottom?: (
-      siderWidth: number,
-      collapsed?: boolean,
-    ) => React.ReactNode;
+    renderMenuBottom?: (params: {
+      siderWidth: number;
+      collapsed?: boolean;
+    }) => React.ReactNode;
   };
 }

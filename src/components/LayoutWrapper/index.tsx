@@ -14,7 +14,7 @@ const appLayoutConfigKey = "appLayout";
 const storageVal = queryLocal(appLayoutConfigKey);
 const defaultCollapsed = storageVal?.collapsed || false;
 
-export const LayoutWrapper = (props: LayoutWrapperProps) => {
+const LayoutWrapper = (props: LayoutWrapperProps) => {
   const { children, header, sider, childrenProps, footer, siderProps } = props;
   const { minFullWidth = 1200, crumbMode } = childrenProps || {};
   const {
@@ -80,7 +80,5 @@ export const LayoutWrapper = (props: LayoutWrapperProps) => {
 };
 
 LayoutWrapper.Crumb = Crumb;
-export * as layoutWrapperUtils from "./utils";
-export * as layoutWrapperHooks from "./hooks";
-export * from "./type";
+
 export default LayoutWrapper;
