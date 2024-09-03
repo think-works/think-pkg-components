@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import LayoutWrapper from "@/components/LayoutWrapper";
+import { LayoutWrapper } from "@/components/LayoutWrapper";
 import { registerCustomMenus } from "@/components/LayoutWrapper/utils";
 
 const DragContainerDemo = () => {

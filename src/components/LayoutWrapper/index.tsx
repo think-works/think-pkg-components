@@ -14,6 +14,11 @@ const appLayoutConfigKey = "appLayout";
 const storageVal = queryLocal(appLayoutConfigKey);
 const defaultCollapsed = storageVal?.collapsed || false;
 
+/**
+ * 页面布局组件
+ * @param props
+ * @returns
+ */
 const LayoutWrapper = (props: LayoutWrapperProps) => {
   const { children, header, sider, childrenProps, footer, siderProps } = props;
   const { minFullWidth = 1200, crumbMode } = childrenProps || {};
@@ -81,4 +86,4 @@ const LayoutWrapper = (props: LayoutWrapperProps) => {
 
 LayoutWrapper.Crumb = Crumb;
 
-export default LayoutWrapper;
+export { LayoutWrapper };
