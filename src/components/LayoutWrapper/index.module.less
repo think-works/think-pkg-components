@@ -1,0 +1,38 @@
+@import "@/styles/utils.less";
+
+.layout {
+  overflow: auto;
+  overflow: overlay;
+  height: 100vh; // 容器内滚动，而非 body 滚动
+  min-height: 100vh;
+  background: transparent;
+
+  .header {
+    position: sticky;
+    top: 0;
+    background-color: @colorBgContainer;
+  }
+  .footer {
+    position: sticky;
+    bottom: 0;
+  }
+  .main {
+    overflow: auto;
+    overflow: overlay;
+    transition: all 0.2s;
+  }
+  .sider {
+    position: fixed;
+    left: 0;
+  }
+  .content {
+    overflow: auto;
+    overflow: overlay;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.main {
+  background: transparent;
+}
