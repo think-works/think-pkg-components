@@ -24,11 +24,11 @@ const EditableHeader = (props: EditableHeaderProps) => {
     ...rest
   } = props;
 
-  const [val, setVal] = useState(value);
+  const [val, setVal] = useState(value || "key");
   const [isEdit, setIsEdit] = useState(false);
 
   useLayoutEffect(() => {
-    setVal(value);
+    setVal(value || "key");
   }, [value]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -41,16 +41,19 @@ const EditableHeader = (props: EditableHeaderProps) => {
     onBlur && onBlur(e);
     onChange &&
       onChange({
-        target: { value: val },
+        target: { value: val || "key" },
       } as any);
   };
 
   const handlePressEnter = (e: any) => {
+    if (!val) {
+      return;
+    }
     setIsEdit(false);
     onPressEnter && onPressEnter(e);
     onChange &&
       onChange({
-        target: { value: val },
+        target: { value: val || "key" },
       } as any);
   };
 
