@@ -1,8 +1,17 @@
-import { useEffect } from "react";
+import { Table } from "antd";
+import { useEffect, useState } from "react";
+import EditableTable from "@/components/EditableTable";
 import { LayoutWrapper } from "@/components/LayoutWrapper";
 import { registerCustomMenus } from "@/components/LayoutWrapper/utils";
 
+const { EditableHeader } = EditableTable;
+
 const DragContainerDemo = () => {
+  const [value, setValue] = useState("key");
+
+  const onChange = (e: any) => {
+    setValue(e.target.value);
+  };
   useEffect(() => {
     return registerCustomMenus?.([
       {
@@ -11,7 +20,21 @@ const DragContainerDemo = () => {
       },
     ]);
   }, []);
-  return <LayoutWrapper header={<div>header</div>}>hahahah33</LayoutWrapper>;
+
+  return (
+    <LayoutWrapper header={<div>header</div>}>
+      <Table
+        columns={[
+          {
+            title: (
+              <EditableHeader deletable value={value} onChange={onChange} />
+            ),
+            dataIndex: "key",
+          },
+        ]}
+      />
+    </LayoutWrapper>
+  );
 };
 
 export default DragContainerDemo;

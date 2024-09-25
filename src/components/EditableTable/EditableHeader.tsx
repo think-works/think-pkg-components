@@ -24,11 +24,11 @@ const EditableHeader = (props: EditableHeaderProps) => {
     ...rest
   } = props;
 
-  const [val, setVal] = useState(value || "key");
+  const [val, setVal] = useState(value);
   const [isEdit, setIsEdit] = useState(false);
 
   useLayoutEffect(() => {
-    setVal(value || "key");
+    setVal(value);
   }, [value]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -46,9 +46,6 @@ const EditableHeader = (props: EditableHeaderProps) => {
   };
 
   const handlePressEnter = (e: any) => {
-    if (!val) {
-      return;
-    }
     setIsEdit(false);
     onPressEnter && onPressEnter(e);
     onChange &&
@@ -81,6 +78,7 @@ const EditableHeader = (props: EditableHeaderProps) => {
   if (deletable) {
     return (
       <Tooltip
+        placement={"topLeft"}
         title={
           <Space>
             <span>{val}</span>
@@ -90,7 +88,15 @@ const EditableHeader = (props: EditableHeaderProps) => {
           </Space>
         }
       >
-        <span style={{ cursor: "pointer" }} onDoubleClick={handleDoubleClick}>
+        <span
+          style={{
+            display: "inline-block",
+            minWidth: 100,
+            height: 24,
+            cursor: "pointer",
+          }}
+          onDoubleClick={handleDoubleClick}
+        >
           {val}
         </span>
       </Tooltip>
