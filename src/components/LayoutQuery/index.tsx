@@ -22,12 +22,16 @@ export type LayoutQueryProps = {
     body?: Argument;
     tools?: Argument;
     result?: Argument;
+    title?: Argument;
+    extend?: Argument;
   };
   styles?: {
     head?: React.CSSProperties;
     body?: React.CSSProperties;
     tools?: React.CSSProperties;
     result?: React.CSSProperties;
+    title?: React.CSSProperties;
+    extend?: React.CSSProperties;
   };
 };
 
@@ -74,6 +78,8 @@ export const LayoutQuery = (props: LayoutQueryProps) => {
             size="middle"
             title={title}
             extend={action}
+            classNames={classNames}
+            styles={styles}
           />
         ) : null}
         <div
