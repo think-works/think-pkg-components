@@ -74,14 +74,14 @@ export const FilterForm = (props: FilterFormProps) => {
   };
 
   const list = useMemo(() => {
-    let _items = items || [];
-    _items = open ? _items : _items?.slice(0, maxItemCount);
-    _items = _items?.map((item, idx) => {
-      let children;
+    const _items = items?.map((item, idx) => {
+      let children: React.ReactNode;
       let colProps = {
         key: idx,
         span: itemColSpan,
       };
+      let clsName: Argument =
+        !open && idx >= maxItemCount ? stl.hideCol : undefined;
 
       if (isValidElement(item)) {
         colProps.key = item?.key || item?.props?.name || colProps.key;
@@ -91,16 +91,17 @@ export const FilterForm = (props: FilterFormProps) => {
           {}) as FilterFormItemConfig;
         children = child;
         colProps = Object.assign({}, colProps, col);
+        clsName = cls(clsName, col?.className);
       }
 
       return (
-        <Col {...colProps} key={colProps.key}>
+        <Col {...colProps} className={clsName} key={colProps.key}>
           {children}
         </Col>
       );
     });
 
-    return _items as React.ReactNode[];
+    return _items;
   }, [itemColSpan, items, maxItemCount, open]);
 
   return (

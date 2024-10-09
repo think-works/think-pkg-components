@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouteObject } from "react-router-dom";
 import DragContainerDemo from "./DragContainerDemo";
 import EditableTableDemo from "./EditableTableDemo";
+import FilterFormDemo from "./FilterFormDemo";
 import FlexTabsDemo from "./FlexTabsDemo";
 import Home from "./Home";
 import PageLayout from "./PageLayout";
@@ -26,6 +27,10 @@ export const routes: RouteObject[] = [
   {
     path: "/tree",
     element: <TreeDemo />,
+  },
+  {
+    path: "/filter-form",
+    element: <FilterFormDemo />,
   },
   {
     path: "/page-layout",
