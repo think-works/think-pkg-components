@@ -50,6 +50,11 @@ export class FilterTable extends React.Component<FilterTableProps, any> {
         filter: props.filter,
         filterKey: state.filterKey + 1,
       });
+    } else {
+      diff = Object.assign({}, diff, {
+        filter: props.filter,
+        filterKey: state.filterKey + 1,
+      });
     }
 
     return diff;
