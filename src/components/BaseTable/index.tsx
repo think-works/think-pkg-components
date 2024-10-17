@@ -37,8 +37,11 @@ export type BaseTableProps<RecordType = any> = Omit<
   "columns"
 > & {
   className?: Argument;
+  /** 表格列描述 */
   columns?: BaseTableColumn<RecordType>[];
+  /** 表格左下角扩展 */
   extend?: React.ReactNode;
+  /** 透传表格属性 */
   tableProps?: Record<string, any>;
 };
 

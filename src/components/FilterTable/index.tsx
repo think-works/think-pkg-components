@@ -30,9 +30,13 @@ export type FilterTableProps<
   FetchTableProps<RecordType>,
   "pageNo" | "pageSize" | "fetchData" | "onPagingChange"
 > & {
+  /** 默认页索引 */
   defaultPage?: number;
+  /** 默认页尺寸 */
   defaultSize?: number;
+  /** 筛选数据 */
   filter?: FilterType;
+  /** 获取数据函数 */
   fetchData?: FilterTableGetData<FilterType, DataItem>;
 };
 

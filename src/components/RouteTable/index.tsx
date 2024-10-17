@@ -42,6 +42,9 @@ const tryStringify = (value?: string) => {
   return value;
 };
 
+/**
+ * 清理查询参数中的分页查询参数
+ */
 const clearPageSearch = (search: string) => {
   const query = parseQuery(search);
   const newQuery = omit(query, [
@@ -53,6 +56,9 @@ const clearPageSearch = (search: string) => {
   return stringifyQuery(newQuery);
 };
 
+/**
+ * 从查询参数中获取分页查询参数
+ */
 const parsePageSearch = (search: string) => {
   const query = parseQuery(search);
 
@@ -67,6 +73,9 @@ const parsePageSearch = (search: string) => {
   };
 };
 
+/**
+ * 从查询参数中获取筛选条件
+ */
 const updatePageSearch = (search: string, diff: Record<string, any>) => {
   const query = parseQuery(search);
 
@@ -138,9 +147,13 @@ export type RouteTableProps<
   FetchTableProps<RecordType>,
   "pageNo" | "pageSize" | "fetchData" | "onPagingChange"
 > & {
+  /** 路由位置 */
   location: Location;
+  /** 路由导航 */
   navigate: NavigateFunction;
+  /** 筛选数据 */
   filter?: FilterType;
+  /** 获取数据函数 */
   fetchData?: RouteTableGetData<FilterType, DataItem>;
 };
 
