@@ -175,6 +175,14 @@ class RouteTableComponent extends React.Component<RouteTableProps, any> {
       });
     }
 
+    if (!diff) {
+      // 点击查询，参数不变，强制刷新
+      diff = Object.assign({}, diff, {
+        filter: filter,
+        filterKey: state.filterKey + 1,
+      });
+    }
+
     return diff;
   }
 
