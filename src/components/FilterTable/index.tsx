@@ -47,13 +47,22 @@ export class FilterTable extends React.Component<FilterTableProps, any> {
   static getDerivedStateFromProps(props: FilterTableProps, state: any) {
     let diff = null;
 
-    if (!isEqual(props.filter, state.filter)) {
-      // filter 变更，强制刷新，重置分页
-      diff = Object.assign({}, diff, {
-        pageNo: 1,
-        filter: props.filter,
-        filterKey: state.filterKey + 1,
-      });
+    // 浅层对比
+    if (props.filter !== state.filter) {
+      // 深层对比
+      if (isEqual(props.filter, state.filter)) {
+        // filter 没变，刷新当前分页
+        diff = Object.assign({}, diff, {
+          refreshKey: state.refreshKey + 1,
+        });
+      } else {
+        // filter 变更，强制刷新，重置分页
+        diff = Object.assign({}, diff, {
+          pageNo: 1,
+          filter: props.filter,
+          filterKey: state.filterKey + 1,
+        });
+      }
     }
 
     return diff;
@@ -68,6 +77,7 @@ export class FilterTable extends React.Component<FilterTableProps, any> {
       pageSize: defaultSize || BaseTableDefaultPageSize,
       filter: filter,
       filterKey: 0,
+      refreshKey: 0,
     };
   }
 
@@ -99,11 +109,12 @@ export class FilterTable extends React.Component<FilterTableProps, any> {
       "fetchData",
       "onPagingChange",
     ]);
-    const { pageNo, pageSize, filterKey } = this.state;
+    const { pageNo, pageSize, filterKey, refreshKey } = this.state;
 
     return (
       <FetchTable
         key={filterKey}
+        refreshKey={refreshKey}
         pageNo={pageNo}
         pageSize={pageSize}
         fetchData={this.fetchData}

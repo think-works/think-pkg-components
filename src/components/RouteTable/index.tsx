@@ -182,7 +182,7 @@ class RouteTableComponent extends React.Component<RouteTableProps, any> {
     if (!isEqual(filter, state.filter)) {
       // filter 变更，强制刷新，重置分页
       diff = Object.assign({}, diff, {
-        pageNo: 1, // 重置分页
+        pageNo: 1,
         filter: filter,
         filterKey: state.filterKey + 1,
       });
@@ -202,29 +202,35 @@ class RouteTableComponent extends React.Component<RouteTableProps, any> {
       pageSize: pageSize || BaseTableDefaultPageSize,
       filter: filter,
       filterKey: 0,
+      refreshKey: 0,
     };
   }
 
   componentDidUpdate(prevProps: any) {
-    let { filter: currFilter } = this.props;
-    let { filter: prevFilter } = prevProps;
+    const { filter: currFilter } = this.props;
+    const { filter: prevFilter } = prevProps;
 
-    currFilter = normalizeObject(currFilter as any, {
-      sortKey: true,
-      clearNull: true,
-      clearUndefined: true,
-    });
-    prevFilter = normalizeObject(prevFilter as any, {
-      sortKey: true,
-      clearNull: true,
-      clearUndefined: true,
-    });
+    // 浅层对比
+    if (currFilter !== prevFilter) {
+      // 深层对比
+      if (isEqual(currFilter, prevFilter)) {
+        // filter 没变，刷新当前分页(不经过路由)
+        this.setState({
+          refreshKey: this.state.refreshKey + 1,
+        });
+      } else {
+        // filter 变更，强制刷新，重置分页(经过路由)
+        const normalizeFilter = normalizeObject(currFilter as any, {
+          sortKey: true,
+          clearNull: true,
+          clearUndefined: true,
+        });
 
-    if (!isEqual(currFilter, prevFilter)) {
-      this.setQuery({
-        pageNo: 1, // 重置分页
-        filter: isEmpty(currFilter) ? "" : currFilter,
-      });
+        this.setQuery({
+          pageNo: 1,
+          filter: isEmpty(normalizeFilter) ? "" : normalizeFilter,
+        });
+      }
     }
   }
 
@@ -272,11 +278,12 @@ class RouteTableComponent extends React.Component<RouteTableProps, any> {
       "fetchData",
       "onPagingChange",
     ]);
-    const { pageNo, pageSize, filterKey } = this.state;
+    const { pageNo, pageSize, filterKey, refreshKey } = this.state;
 
     return (
       <FetchTable
         key={filterKey}
+        refreshKey={refreshKey}
         pageNo={pageNo}
         pageSize={pageSize}
         fetchData={this.fetchData}
