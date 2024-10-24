@@ -1,5 +1,12 @@
+import LayoutPanel from "@/components/LayoutPanel";
+import SubmissionList from "./List";
+
 const RouterTableDemo = () => {
-  return <div>RouterTableDemo</div>;
+  return (
+    <LayoutPanel>
+      <SubmissionList />
+    </LayoutPanel>
+  );
 };
 
 export default RouterTableDemo;

@@ -51,11 +51,14 @@ export class FilterTable extends React.Component<FilterTableProps, any> {
     if (props.filter !== state.filter) {
       // 深层对比
       if (isEqual(props.filter, state.filter)) {
+        console.log("filter 相同，刷新当前分页");
         // filter 没变，刷新当前分页
         diff = Object.assign({}, diff, {
           refreshKey: state.refreshKey + 1,
         });
       } else {
+        console.log("filter 不相同，刷新当前分页");
+
         // filter 变更，强制刷新，重置分页
         diff = Object.assign({}, diff, {
           pageNo: 1,

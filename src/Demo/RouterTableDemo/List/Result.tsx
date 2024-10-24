@@ -1,6 +1,8 @@
 import { useMemo } from "react";
-import FilterTable from "@/components/FilterTable";
-import { RouteTableParams, RouteTableProps } from "@/components/RouteTable";
+import RouteTable, {
+  RouteTableParams,
+  RouteTableProps,
+} from "@/components/RouteTable";
 import { queryPageTestFeature } from "@/Demo/api/controller/feature";
 
 export type ResultProps = {
@@ -44,7 +46,7 @@ const Result = (props: ResultProps) => {
   );
 
   return (
-    <FilterTable
+    <RouteTable
       bordered
       size="small"
       rowKey="testFeatureId"
