@@ -47,7 +47,7 @@ export type FetchTableProps<RecordType = any, DataItem = any> = Omit<
   /** 页尺寸 */
   pageSize?: number;
   /** 刷新当前分页 */
-  refreshKey?: number;
+  refreshKey?: number | string;
   /** 延时显示加载中(ms) */
   loadingDelay?: number;
   /** 获取数据函数 */

@@ -271,7 +271,7 @@ class RouteTableComponent extends React.Component<RouteTableProps, any> {
   };
 
   render() {
-    const { ...rest } = omit(this.props, [
+    const { refreshKey: propsRefreshKey, ...rest } = omit(this.props, [
       "location",
       "navigate",
       "pageNo",
@@ -285,7 +285,7 @@ class RouteTableComponent extends React.Component<RouteTableProps, any> {
     return (
       <FetchTable
         key={filterKey}
-        refreshKey={refreshKey}
+        refreshKey={`${propsRefreshKey}_${refreshKey}`}
         pageNo={pageNo}
         pageSize={pageSize}
         fetchData={this.fetchData}

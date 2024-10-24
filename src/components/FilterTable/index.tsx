@@ -103,7 +103,7 @@ export class FilterTable extends React.Component<FilterTableProps, any> {
   };
 
   render() {
-    const { ...rest } = omit(this.props, [
+    const { refreshKey: propsRefreshKey, ...rest } = omit(this.props, [
       "defaultPage",
       "defaultSize",
       "pageNo",
@@ -117,7 +117,7 @@ export class FilterTable extends React.Component<FilterTableProps, any> {
     return (
       <FetchTable
         key={filterKey}
-        refreshKey={refreshKey}
+        refreshKey={`${propsRefreshKey}_${refreshKey}`}
         pageNo={pageNo}
         pageSize={pageSize}
         fetchData={this.fetchData}
