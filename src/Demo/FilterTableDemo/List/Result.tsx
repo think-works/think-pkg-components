@@ -16,7 +16,7 @@ const Result = (props: ResultProps) => {
 
   const fetchData = async (params: RouteTableParams) => {
     const { filter = {}, ...rest } = params;
-    setList([]);
+    setList([list]);
     if (projectId && workspaceId) {
       const res = await queryPageTestFeature({
         ...rest,
