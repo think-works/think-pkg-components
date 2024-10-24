@@ -162,28 +162,59 @@ export type RouteTableProps<
  */
 class RouteTableComponent extends React.Component<RouteTableProps, any> {
   static getDerivedStateFromProps(props: RouteTableProps, state: any) {
+    // 从路由中提取查询参数
     const { location } = props;
-    const { pageNo, pageSize, filter } = parsePageSearch(location.search);
+    const query = parsePageSearch(location.search);
+
+    // 清理无效属性，避免干扰深层对比
+    const normalizePropsFilter = normalizeObject(props.filter as any, {
+      clearUndefined: true,
+    });
+    const normalizeStateFilter = normalizeObject(state.filter as any, {
+      clearUndefined: true,
+    });
+    const normalizeQueryFilter = normalizeObject(query.filter as any, {
+      clearUndefined: true,
+    });
 
     let diff = null;
 
-    if (pageNo !== state.pageNo) {
+    // 浅层对比 props.filter 和 state.filter
+    if (props.filter !== state.filter) {
+      // 保持同步 props.filter 和 state.filter
       diff = Object.assign({}, diff, {
-        pageNo,
+        filter: props.filter,
+      });
+
+      // 深层对比 props.filter 和 state.filter
+      if (isEqual(normalizePropsFilter, normalizeStateFilter)) {
+        // filter 没变，刷新当前分页
+        diff = Object.assign({}, diff, {
+          refreshKey: state.refreshKey + 1,
+        });
+      }
+    }
+
+    // 对比 query.pageNo 和 state.pageNo
+    if (query.pageNo !== state.pageNo) {
+      diff = Object.assign({}, diff, {
+        pageNo: query.pageNo,
       });
     }
 
-    if (pageSize !== state.pageSize) {
+    // 对比 query.pageSize 和 state.pageSize
+    if (query.pageSize !== state.pageSize) {
       diff = Object.assign({}, diff, {
-        pageSize,
+        pageSize: query.pageSize,
       });
     }
 
-    if (!isEqual(filter, state.filter)) {
+    // 深层对比 query.filter 和 state.filter
+    if (!isEqual(normalizeQueryFilter, normalizeStateFilter)) {
       // filter 变更，强制刷新，重置分页
       diff = Object.assign({}, diff, {
         pageNo: 1,
-        filter: filter,
+        filter: query.filter,
         filterKey: state.filterKey + 1,
       });
     }
@@ -207,32 +238,25 @@ class RouteTableComponent extends React.Component<RouteTableProps, any> {
   }
 
   componentDidUpdate(prevProps: any) {
-    const { filter: currFilter } = this.props;
-    const { filter: prevFilter } = prevProps;
+    const currProps = this.props;
 
-    // 浅层对比
-    if (currFilter !== prevFilter) {
-      // 深层对比
-      if (isEqual(currFilter, prevFilter)) {
-        console.log("isEqual 相同");
-        // filter 没变，刷新当前分页(不经过路由)
-        this.setState({
-          refreshKey: this.state.refreshKey + 1,
-        });
-      } else {
-        console.log("isEqual 不相同");
-        // filter 变更，强制刷新，重置分页(经过路由)
-        const normalizeFilter = normalizeObject(currFilter as any, {
-          sortKey: true,
-          // clearNull: true,
-          clearUndefined: true,
-        });
+    // 清理无效属性，避免干扰深层对比
+    const normalizeCurrFilter = normalizeObject(currProps.filter as any, {
+      sortKey: true,
+      clearUndefined: true,
+    });
+    const normalizePrevFilter = normalizeObject(prevProps.filter as any, {
+      sortKey: true,
+      clearUndefined: true,
+    });
 
-        this.setQuery({
-          pageNo: 1,
-          filter: isEmpty(normalizeFilter) ? "" : normalizeFilter,
-        });
-      }
+    // 深层对比 currProps.filter 和 prevProps.filter
+    if (!isEqual(normalizeCurrFilter, normalizePrevFilter)) {
+      // filter 变更，强制刷新，重置分页
+      this.setQuery({
+        pageNo: 1,
+        filter: isEmpty(normalizeCurrFilter) ? "" : normalizeCurrFilter,
+      });
     }
   }
 
@@ -271,7 +295,7 @@ class RouteTableComponent extends React.Component<RouteTableProps, any> {
   };
 
   render() {
-    const { refreshKey: propsRefreshKey, ...rest } = omit(this.props, [
+    const { ...rest } = omit(this.props, [
       "location",
       "navigate",
       "pageNo",
@@ -279,13 +303,15 @@ class RouteTableComponent extends React.Component<RouteTableProps, any> {
       "filter",
       "fetchData",
       "onPagingChange",
+      "refreshKey",
     ]);
+    const { refreshKey: propsRefreshKey } = this.props;
     const { pageNo, pageSize, filterKey, refreshKey } = this.state;
 
     return (
       <FetchTable
         key={filterKey}
-        refreshKey={`${propsRefreshKey}_${refreshKey}`}
+        refreshKey={`${propsRefreshKey}-${refreshKey}`}
         pageNo={pageNo}
         pageSize={pageSize}
         fetchData={this.fetchData}

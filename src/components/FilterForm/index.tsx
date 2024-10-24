@@ -3,7 +3,6 @@ import { ButtonProps } from "antd/lib";
 import cls, { Argument } from "classnames";
 import React, { isValidElement, useMemo, useState } from "react";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
-import { normalizeObject } from "@/utils/tools";
 import RouteTable from "../RouteTable";
 import stl from "./index.module.less";
 
@@ -70,12 +69,8 @@ export const FilterForm = (props: FilterFormProps) => {
     triggerChange({});
   };
 
-  const handelSubmit = async (newValue: any) => {
-    const normalizeFilter = normalizeObject(newValue as any, {
-      // clearNull: true,
-      clearUndefined: true,
-    });
-    triggerChange(normalizeFilter);
+  const handleFinish = (values: any) => {
+    triggerChange(values);
   };
 
   const list = useMemo(() => {
@@ -118,7 +113,7 @@ export const FilterForm = (props: FilterFormProps) => {
       form={form}
       labelCol={{ span: itemLabelSpan }}
       initialValues={initialValues}
-      onFinish={handelSubmit}
+      onFinish={handleFinish}
       {...rest}
     >
       <Row className={stl.row} gutter={[0, 8]}>

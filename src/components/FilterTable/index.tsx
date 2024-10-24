@@ -1,5 +1,6 @@
 import { isEqual, omit } from "lodash-es";
 import React from "react";
+import { normalizeObject } from "@/utils/tools";
 import { BaseTableDefaultPageSize } from "../BaseTable";
 import FetchTable, {
   FetchTableData,
@@ -45,24 +46,33 @@ export type FilterTableProps<
  */
 export class FilterTable extends React.Component<FilterTableProps, any> {
   static getDerivedStateFromProps(props: FilterTableProps, state: any) {
+    // 清理无效属性，避免干扰深层对比
+    const normalizePropsFilter = normalizeObject(props.filter as any, {
+      clearUndefined: true,
+    });
+    const normalizeStateFilter = normalizeObject(state.filter as any, {
+      clearUndefined: true,
+    });
+
     let diff = null;
 
-    // 浅层对比
+    // 浅层对比 props.filter 和 state.filter
     if (props.filter !== state.filter) {
-      // 深层对比
-      if (isEqual(props.filter, state.filter)) {
-        console.log("filter 相同，刷新当前分页");
+      // 保持同步 props.filter 和 state.filter
+      diff = Object.assign({}, diff, {
+        filter: props.filter,
+      });
+
+      // 深层对比 props.filter 和 state.filter
+      if (isEqual(normalizePropsFilter, normalizeStateFilter)) {
         // filter 没变，刷新当前分页
         diff = Object.assign({}, diff, {
           refreshKey: state.refreshKey + 1,
         });
       } else {
-        console.log("filter 不相同，刷新当前分页");
-
         // filter 变更，强制刷新，重置分页
         diff = Object.assign({}, diff, {
           pageNo: 1,
-          filter: props.filter,
           filterKey: state.filterKey + 1,
         });
       }
@@ -103,7 +113,7 @@ export class FilterTable extends React.Component<FilterTableProps, any> {
   };
 
   render() {
-    const { refreshKey: propsRefreshKey, ...rest } = omit(this.props, [
+    const { ...rest } = omit(this.props, [
       "defaultPage",
       "defaultSize",
       "pageNo",
@@ -111,13 +121,15 @@ export class FilterTable extends React.Component<FilterTableProps, any> {
       "filter",
       "fetchData",
       "onPagingChange",
+      "refreshKey",
     ]);
+    const { refreshKey: propsRefreshKey } = this.props;
     const { pageNo, pageSize, filterKey, refreshKey } = this.state;
 
     return (
       <FetchTable
         key={filterKey}
-        refreshKey={`${propsRefreshKey}_${refreshKey}`}
+        refreshKey={`${propsRefreshKey}-${refreshKey}`}
         pageNo={pageNo}
         pageSize={pageSize}
         fetchData={this.fetchData}
