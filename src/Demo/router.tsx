@@ -2,9 +2,11 @@ import { createBrowserRouter, RouteObject } from "react-router-dom";
 import DragContainerDemo from "./DragContainerDemo";
 import EditableTableDemo from "./EditableTableDemo";
 import FilterFormDemo from "./FilterFormDemo";
+import FilterTable from "./FilterTableDemo";
 import FlexTabsDemo from "./FlexTabsDemo";
 import Home from "./Home";
 import PageLayout from "./PageLayout";
+import RouterTable from "./RouterTableDemo";
 import TreeDemo from "./TreeDemo";
 
 export const routes: RouteObject[] = [
@@ -36,6 +38,14 @@ export const routes: RouteObject[] = [
     path: "/page-layout",
     element: <PageLayout />,
     handle: { name: "page-layout", title: "页面布局", sider: true },
+  },
+  {
+    path: "/filter-table",
+    element: <FilterTable />,
+  },
+  {
+    path: "/router-table",
+    element: <RouterTable />,
   },
 ];
 

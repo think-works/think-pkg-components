@@ -214,15 +214,17 @@ class RouteTableComponent extends React.Component<RouteTableProps, any> {
     if (currFilter !== prevFilter) {
       // 深层对比
       if (isEqual(currFilter, prevFilter)) {
+        console.log("isEqual 相同");
         // filter 没变，刷新当前分页(不经过路由)
         this.setState({
           refreshKey: this.state.refreshKey + 1,
         });
       } else {
+        console.log("isEqual 不相同");
         // filter 变更，强制刷新，重置分页(经过路由)
         const normalizeFilter = normalizeObject(currFilter as any, {
           sortKey: true,
-          clearNull: true,
+          // clearNull: true,
           clearUndefined: true,
         });
 
