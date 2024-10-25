@@ -193,10 +193,14 @@ class RouteTableComponent extends React.Component<RouteTableProps, any> {
 
     // 深层对比 query.filter 和 state.filter
     if (!isEqual(normalizeQueryFilter, normalizeStateFilter)) {
+      // 保持同步 query.filter 和 state.filter
+      diff = Object.assign({}, diff, {
+        filter: query.filter,
+      });
+
       // filter 变更，强制刷新，重置分页
       diff = Object.assign({}, diff, {
         pageNo: 1,
-        filter: query.filter,
         filterKey: state.filterKey + 1,
       });
     }
@@ -222,20 +226,20 @@ class RouteTableComponent extends React.Component<RouteTableProps, any> {
   componentDidUpdate(prevProps: any) {
     const currProps = this.props;
 
-    // 清理无效属性，避免干扰深层对比
-    const normalizeCurrFilter = normalizeObject(currProps.filter as any, {
-      sortKey: true,
-      clearUndefined: true,
-      clearRecursion: true,
-    });
-    const normalizePrevFilter = normalizeObject(prevProps.filter as any, {
-      sortKey: true,
-      clearUndefined: true,
-      clearRecursion: true,
-    });
-
     // 浅层对比 currProps.filter 和 prevProps.filter
     if (currProps.filter !== prevProps.filter) {
+      // 清理无效属性，避免干扰深层对比
+      const normalizeCurrFilter = normalizeObject(currProps.filter as any, {
+        sortKey: true,
+        clearUndefined: true,
+        clearRecursion: true,
+      });
+      const normalizePrevFilter = normalizeObject(prevProps.filter as any, {
+        sortKey: true,
+        clearUndefined: true,
+        clearRecursion: true,
+      });
+
       // 深层对比 currProps.filter 和 prevProps.filter
       if (isEqual(normalizeCurrFilter, normalizePrevFilter)) {
         // filter 没变，刷新当前分页(不经过路由)

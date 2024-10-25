@@ -46,14 +46,6 @@ export type FilterTableProps<
  */
 export class FilterTable extends React.Component<FilterTableProps, any> {
   static getDerivedStateFromProps(props: FilterTableProps, state: any) {
-    // 清理无效属性，避免干扰深层对比
-    const normalizePropsFilter = normalizeObject(props.filter as any, {
-      clearUndefined: true,
-    });
-    const normalizeStateFilter = normalizeObject(state.filter as any, {
-      clearUndefined: true,
-    });
-
     let diff = null;
 
     // 浅层对比 props.filter 和 state.filter
@@ -61,6 +53,14 @@ export class FilterTable extends React.Component<FilterTableProps, any> {
       // 保持同步 props.filter 和 state.filter
       diff = Object.assign({}, diff, {
         filter: props.filter,
+      });
+
+      // 清理无效属性，避免干扰深层对比
+      const normalizePropsFilter = normalizeObject(props.filter as any, {
+        clearUndefined: true,
+      });
+      const normalizeStateFilter = normalizeObject(state.filter as any, {
+        clearUndefined: true,
       });
 
       // 深层对比 props.filter 和 state.filter
