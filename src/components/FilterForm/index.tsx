@@ -17,17 +17,32 @@ type FilterFormItem = React.ReactNode | FilterFormItemConfig;
 export type FilterFormProps = Omit<FormProps, "action"> & {
   className?: Argument;
   style?: React.CSSProperties;
+  /** 默认展开 */
   defaultOpen?: boolean;
+  /** Col.span 属性 */
   itemColSpan?: number;
+  /** Form.labelCol.span 属性 */
   itemLabelSpan?: number;
+  /** 收起时显示的筛选项数量 */
   maxItemCount?: number;
+  /** 扩展操作 */
   action?: React.ReactNode;
+  /** 筛选项 */
   items?: FilterFormItem[];
+  /** 查询按钮文本 */
   submitText?: React.ReactNode;
+  /** 重置按钮文本 */
   resetText?: React.ReactNode;
+  /** 查询按钮属性 */
   submitProps?: ButtonProps;
+  /** 重置按钮属性(false 不显示重置按钮) */
   resetProps?: false | ButtonProps;
-  onFilterChange?: (params: Record<string, any>) => void;
+  /** 点击查询按钮 */
+  onSubmit?: (values: Record<string, any>) => void;
+  /** 点击重置按钮 */
+  onReset?: (values: Record<string, any>) => void;
+  /** 筛选项变更 */
+  onFilterChange?: (values: Record<string, any>) => void;
 };
 
 /**
@@ -47,6 +62,8 @@ export const FilterForm = (props: FilterFormProps) => {
     resetText,
     submitProps,
     resetProps,
+    onSubmit,
+    onReset,
     onFilterChange,
     ...rest
   } = props;
@@ -58,19 +75,17 @@ export const FilterForm = (props: FilterFormProps) => {
   const filterValue = RouteTable.useSearchFilterValue();
   const initialValues = filterValue || {};
 
-  const triggerChange = (values: any) => {
-    onFilterChange &&
-      onFilterChange({
-        ...values,
-      });
-  };
-
   const handleReset = () => {
-    triggerChange({});
+    const values = {};
+    onReset && onReset(values);
+    onFilterChange && onFilterChange(values);
   };
 
-  const handleFinish = (values: any) => {
-    triggerChange(values);
+  const handleSubmit = () => {
+    const formValues = form.getFieldsValue();
+    const values = { ...formValues };
+    onSubmit && onSubmit(values);
+    onFilterChange && onFilterChange(values);
   };
 
   const list = useMemo(() => {
@@ -113,7 +128,6 @@ export const FilterForm = (props: FilterFormProps) => {
       form={form}
       labelCol={{ span: itemLabelSpan }}
       initialValues={initialValues}
-      onFinish={handleFinish}
       {...rest}
     >
       <Row className={stl.row} gutter={[0, 8]}>
@@ -131,7 +145,12 @@ export const FilterForm = (props: FilterFormProps) => {
                   {resetText || "重置"}
                 </Button>
               )}
-              <Button type="primary" htmlType="submit" {...submitProps}>
+              <Button
+                type="primary"
+                htmlType="submit"
+                onClick={handleSubmit}
+                {...submitProps}
+              >
                 {submitText || "查询"}
               </Button>
               {action}
