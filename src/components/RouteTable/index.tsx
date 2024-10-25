@@ -62,9 +62,10 @@ const clearPageSearch = (search: string) => {
 const parsePageSearch = (search: string) => {
   const query = parseQuery(search);
 
-  const pageNo = tryParse(query[QUERY_PAGE_KEY]);
-  const pageSize = tryParse(query[QUERY_SIZE_KEY]);
-  const filter = tryParse(query[QUERY_FILTER_KEY]);
+  // 空字符串值认为是 undefined
+  const pageNo = tryParse(query[QUERY_PAGE_KEY] || undefined);
+  const pageSize = tryParse(query[QUERY_SIZE_KEY] || undefined);
+  const filter = tryParse(query[QUERY_FILTER_KEY] || undefined);
 
   return {
     pageNo,
@@ -167,9 +168,6 @@ class RouteTableComponent extends React.Component<RouteTableProps, any> {
     const query = parsePageSearch(location.search);
 
     // 清理无效属性，避免干扰深层对比
-    const normalizePropsFilter = normalizeObject(props.filter as any, {
-      clearUndefined: true,
-    });
     const normalizeStateFilter = normalizeObject(state.filter as any, {
       clearUndefined: true,
     });
@@ -178,22 +176,6 @@ class RouteTableComponent extends React.Component<RouteTableProps, any> {
     });
 
     let diff = null;
-
-    // 浅层对比 props.filter 和 state.filter
-    if (props.filter !== state.filter) {
-      // 保持同步 props.filter 和 state.filter
-      diff = Object.assign({}, diff, {
-        filter: props.filter,
-      });
-
-      // 深层对比 props.filter 和 state.filter
-      if (isEqual(normalizePropsFilter, normalizeStateFilter)) {
-        // filter 没变，刷新当前分页
-        diff = Object.assign({}, diff, {
-          refreshKey: state.refreshKey + 1,
-        });
-      }
-    }
 
     // 对比 query.pageNo 和 state.pageNo
     if (query.pageNo !== state.pageNo) {
@@ -244,19 +226,29 @@ class RouteTableComponent extends React.Component<RouteTableProps, any> {
     const normalizeCurrFilter = normalizeObject(currProps.filter as any, {
       sortKey: true,
       clearUndefined: true,
+      clearRecursion: true,
     });
     const normalizePrevFilter = normalizeObject(prevProps.filter as any, {
       sortKey: true,
       clearUndefined: true,
+      clearRecursion: true,
     });
 
-    // 深层对比 currProps.filter 和 prevProps.filter
-    if (!isEqual(normalizeCurrFilter, normalizePrevFilter)) {
-      // filter 变更，强制刷新，重置分页
-      this.setQuery({
-        pageNo: 1,
-        filter: isEmpty(normalizeCurrFilter) ? "" : normalizeCurrFilter,
-      });
+    // 浅层对比 currProps.filter 和 prevProps.filter
+    if (currProps.filter !== prevProps.filter) {
+      // 深层对比 currProps.filter 和 prevProps.filter
+      if (isEqual(normalizeCurrFilter, normalizePrevFilter)) {
+        // filter 没变，刷新当前分页(不经过路由)
+        this.setState({
+          refreshKey: this.state.refreshKey + 1,
+        });
+      } else {
+        // filter 变更，强制刷新，重置分页(经过路由)
+        this.setQuery({
+          pageNo: 1,
+          filter: isEmpty(normalizeCurrFilter) ? "" : normalizeCurrFilter,
+        });
+      }
     }
   }
 
