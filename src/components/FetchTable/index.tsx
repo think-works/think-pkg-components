@@ -58,10 +58,26 @@ export type FetchTableProps<RecordType = any, DataItem = any> = Omit<
   onChange?: (...rest: Parameters<RawOnChange>) => void | boolean;
 };
 
+export type FetchTableState = {
+  /** 加载中 */
+  loading: boolean;
+  /** 页索引 */
+  current: number;
+  /** 页尺寸 */
+  pageSize: number;
+  /** 总记录数量 */
+  total: number;
+  /** 当前页记录 */
+  dataSource: any[];
+};
+
 /**
  * 可查询表格
  */
-export class FetchTable extends React.Component<FetchTableProps, any> {
+export class FetchTable extends React.Component<
+  FetchTableProps,
+  FetchTableState
+> {
   mounted = false;
   queryTimer: any;
   loadingTimer: any;
@@ -98,7 +114,7 @@ export class FetchTable extends React.Component<FetchTableProps, any> {
     clearTimeout(this.loadingTimer);
   }
 
-  componentDidUpdate(prevProps: any) {
+  componentDidUpdate(prevProps: FetchTableProps) {
     const {
       pageNo: currPage,
       pageSize: currSize,

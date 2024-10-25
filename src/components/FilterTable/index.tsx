@@ -41,12 +41,31 @@ export type FilterTableProps<
   fetchData?: FilterTableGetData<FilterType, DataItem>;
 };
 
+export type FilterTableState = {
+  /** 页索引 */
+  pageNo: number;
+  /** 页尺寸 */
+  pageSize: number;
+  /** 筛选数据 */
+  filter: Record<string, any> | undefined;
+  /** 重置筛选表格 */
+  filterKey: number;
+  /** 刷新当前分页 */
+  refreshKey: number;
+};
+
 /**
  * 可筛选表格
  */
-export class FilterTable extends React.Component<FilterTableProps, any> {
-  static getDerivedStateFromProps(props: FilterTableProps, state: any) {
-    let diff = null;
+export class FilterTable extends React.Component<
+  FilterTableProps,
+  FilterTableState
+> {
+  static getDerivedStateFromProps(
+    props: FilterTableProps,
+    state: FilterTableState,
+  ) {
+    let diff: FilterTableState | null = null;
 
     // 浅层对比 props.filter 和 state.filter
     if (props.filter !== state.filter) {

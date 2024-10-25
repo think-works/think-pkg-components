@@ -158,11 +158,30 @@ export type RouteTableProps<
   fetchData?: RouteTableGetData<FilterType, DataItem>;
 };
 
+export type RouteTableState = {
+  /** 页索引 */
+  pageNo: number;
+  /** 页尺寸 */
+  pageSize: number;
+  /** 筛选数据 */
+  filter: Record<string, any> | undefined;
+  /** 重置筛选表格 */
+  filterKey: number;
+  /** 刷新当前分页 */
+  refreshKey: number;
+};
+
 /**
  * 路由表格
  */
-class RouteTableComponent extends React.Component<RouteTableProps, any> {
-  static getDerivedStateFromProps(props: RouteTableProps, state: any) {
+class RouteTableComponent extends React.Component<
+  RouteTableProps,
+  RouteTableState
+> {
+  static getDerivedStateFromProps(
+    props: RouteTableProps,
+    state: RouteTableState,
+  ) {
     // 从路由中提取查询参数
     const { location } = props;
     const query = parsePageSearch(location.search);
@@ -175,7 +194,7 @@ class RouteTableComponent extends React.Component<RouteTableProps, any> {
       clearUndefined: true,
     });
 
-    let diff = null;
+    let diff: RouteTableState | null = null;
 
     // 对比 query.pageNo 和 state.pageNo
     if (query.pageNo !== state.pageNo) {
@@ -223,7 +242,7 @@ class RouteTableComponent extends React.Component<RouteTableProps, any> {
     };
   }
 
-  componentDidUpdate(prevProps: any) {
+  componentDidUpdate(prevProps: RouteTableProps) {
     const currProps = this.props;
 
     // 浅层对比 currProps.filter 和 prevProps.filter
