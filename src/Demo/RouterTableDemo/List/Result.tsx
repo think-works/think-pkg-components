@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import RouteTable, {
   RouteTableParams,
   RouteTableProps,
@@ -14,9 +14,10 @@ const Result = (props: ResultProps) => {
 
   const workspaceId = "w00001";
   const projectId = "8f8d58";
-
+  const [list, setList] = useState<any[]>([]);
   const fetchData = async (params: RouteTableParams) => {
     const { filter = {}, ...rest } = params;
+    setList([list]);
     if (projectId && workspaceId) {
       const res = await queryPageTestFeature({
         ...rest,
