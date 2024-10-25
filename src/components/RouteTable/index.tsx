@@ -181,7 +181,7 @@ class RouteTableComponent extends React.Component<
   static getDerivedStateFromProps(
     props: RouteTableProps,
     state: RouteTableState,
-  ) {
+  ): RouteTableState | null {
     // 从路由中提取查询参数
     const { location } = props;
     const query = parsePageSearch(location.search);
@@ -199,14 +199,14 @@ class RouteTableComponent extends React.Component<
     // 对比 query.pageNo 和 state.pageNo
     if (query.pageNo !== state.pageNo) {
       diff = Object.assign({}, diff, {
-        pageNo: query.pageNo,
+        pageNo: query.pageNo, // 触发 FetchTable 内刷新
       });
     }
 
     // 对比 query.pageSize 和 state.pageSize
     if (query.pageSize !== state.pageSize) {
       diff = Object.assign({}, diff, {
-        pageSize: query.pageSize,
+        pageSize: query.pageSize, // 触发 FetchTable 内刷新
       });
     }
 
@@ -220,7 +220,7 @@ class RouteTableComponent extends React.Component<
       // filter 变更，强制刷新，重置分页
       diff = Object.assign({}, diff, {
         pageNo: 1,
-        filterKey: state.filterKey + 1,
+        filterKey: state.filterKey + 1, // 触发 FetchTable 销毁重建
       });
     }
 
@@ -269,8 +269,25 @@ class RouteTableComponent extends React.Component<
         // filter 变更，强制刷新，重置分页(经过路由)
         this.setQuery({
           pageNo: 1,
-          filter: isEmpty(normalizeCurrFilter) ? "" : normalizeCurrFilter,
+          filter: isEmpty(normalizeCurrFilter)
+            ? undefined
+            : normalizeCurrFilter,
         });
+
+        /**
+         * 预期出现 pageNo/pageSize/filter 变更，以便触发查询。
+         * 复用 getDerivedStateFromProps 的处理逻辑，进行检查。
+         * 如果返回 null 说明并不会触发查询，需要手动触发一下。
+         */
+        const diff = RouteTableComponent.getDerivedStateFromProps(
+          this.props,
+          this.state,
+        );
+        if (diff === null) {
+          this.setState({
+            refreshKey: this.state.refreshKey + 1,
+          });
+        }
       }
     }
   }

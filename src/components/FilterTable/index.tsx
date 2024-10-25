@@ -64,7 +64,7 @@ export class FilterTable extends React.Component<
   static getDerivedStateFromProps(
     props: FilterTableProps,
     state: FilterTableState,
-  ) {
+  ): FilterTableState | null {
     let diff: FilterTableState | null = null;
 
     // 浅层对比 props.filter 和 state.filter
@@ -86,13 +86,13 @@ export class FilterTable extends React.Component<
       if (isEqual(normalizePropsFilter, normalizeStateFilter)) {
         // filter 没变，刷新当前分页
         diff = Object.assign({}, diff, {
-          refreshKey: state.refreshKey + 1,
+          refreshKey: state.refreshKey + 1, // 触发 FetchTable 内刷新
         });
       } else {
         // filter 变更，强制刷新，重置分页
         diff = Object.assign({}, diff, {
           pageNo: 1,
-          filterKey: state.filterKey + 1,
+          filterKey: state.filterKey + 1, // 触发 FetchTable 销毁重建
         });
       }
     }
