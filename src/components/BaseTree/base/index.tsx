@@ -119,6 +119,7 @@ export interface BaseTreeProps<BaseNode extends BaseTreeNode> {
   renderContent?: (
     data: BaseTreeIndexItem<BaseNode>,
     context: BaseTreeItemContext,
+    onExpand: (expanded: boolean) => void,
   ) => React.ReactNode;
   /** 选中的Keys */
   checkedKeys?: BaseTreeKey[];

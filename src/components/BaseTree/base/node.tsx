@@ -21,6 +21,7 @@ export interface BaseTreeNodeProps<BaseNode extends BaseTreeNode> {
   renderContent?: (
     data: BaseTreeIndexItem<BaseNode>,
     context: BaseTreeItemContext,
+    onExpand: (expanded: boolean) => void,
   ) => React.ReactNode;
   dropAttrs: React.HTMLAttributes<HTMLDivElement>;
   /** 拖拽背景高亮 */
@@ -95,7 +96,7 @@ const TreeNode = <BaseNode extends BaseTreeNode>(
 
   const renderContent = () => {
     if (props.renderContent) {
-      return props.renderContent(data, { hover });
+      return props.renderContent(data, { hover }, props.onExpand);
     }
     return data.node.name;
   };
