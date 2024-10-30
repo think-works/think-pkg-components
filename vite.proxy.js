@@ -8,6 +8,10 @@ const commonOptions = {
 };
 
 export default ({ apiBase, target }) => ({
+  [`/quality/api`]: {
+    target,
+    ...commonOptions,
+  },
   [`${apiBase}api`]: {
     target,
     ...commonOptions,
