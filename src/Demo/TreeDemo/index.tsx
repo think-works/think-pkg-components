@@ -15,6 +15,7 @@ import styles from "./index.module.less";
 const TreeDemo = () => {
   const [treeData, setTreeData] = useState(defaultData);
   const [expandAll, setExpandAll] = useState<boolean | number>(2);
+  const [expendKeys, setExpendKeys] = useState<string[]>([]);
   const [search, setSearch] = useState<string>("");
   const treeRef = useRef<BaseTreeRef<any>>(null);
   const currentScrollRef = useRef({ list: [], index: 0 });
@@ -169,7 +170,9 @@ const TreeDemo = () => {
         <DirectoryTree
           ref={treeRef}
           showNodeCount
-          expandAll={expandAll}
+          // expandAll={expandAll}
+          expandedKeys={expendKeys}
+          onExpandedKeys={(keys) => setExpendKeys(keys as string[])}
           data={treeData as any}
           actions={getActions()}
           searchFilterProps={[["name"], ["rawData", "data", "primaryKey"]]}

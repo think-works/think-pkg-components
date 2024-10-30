@@ -34,6 +34,12 @@ interface Props<T extends BaseTreeNode, NODE_TYPE> {
    * @returns
    */
   onUpdate: () => void;
+  /**
+   * 展开节点 事件
+   * @param expanded
+   * @returns
+   */
+  onExpand: (expanded: boolean) => void;
   createTypes?: NODE_TYPE[];
   actions?: DirectoryTreeActions<DirectoryTreeNode<T, NODE_TYPE>>;
 
@@ -133,6 +139,7 @@ function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
       // 因为是临时添加 就算了
       data.expanded = true;
       props.onUpdate();
+      props.onExpand(true);
     },
     [data, props],
   );

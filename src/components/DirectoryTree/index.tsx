@@ -135,6 +135,7 @@ const DirectoryTree = <BASE_NODE extends BaseTreeNode, NODE_TYPE>(
         renderContent={(
           item: BaseTreeIndexItem<DirectoryTreeNode<BASE_NODE, NODE_TYPE>>,
           context: BaseTreeItemContext,
+          onExpand: (expanded: boolean) => void,
         ) => {
           return (
             <XDirectoryTreeNode<BASE_NODE, NODE_TYPE>
@@ -150,6 +151,7 @@ const DirectoryTree = <BASE_NODE extends BaseTreeNode, NODE_TYPE>(
               renderNodeIcon={renderNodeIcon}
               renderDropdownItems={renderDropdownItems}
               nameTextClassName={nameTextClassName}
+              onExpand={onExpand}
               {...context}
             />
           );
