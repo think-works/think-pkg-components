@@ -8,4 +8,7 @@ export const queryPageTestFeature = (
     workspaceId: string;
     projectId: string;
   },
-) => http.post("/feature/searchTestFeature", params);
+) =>
+  http.post("/feature/searchTestFeature", params, {
+    baseURL: "/quality",
+  });
