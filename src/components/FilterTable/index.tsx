@@ -1,5 +1,6 @@
 import { isEqual, omit } from "lodash-es";
 import React from "react";
+import { normalizeObject } from "@/utils/tools";
 import { BaseTableDefaultPageSize } from "../BaseTable";
 import FetchTable, {
   FetchTableData,
@@ -30,26 +31,74 @@ export type FilterTableProps<
   FetchTableProps<RecordType>,
   "pageNo" | "pageSize" | "fetchData" | "onPagingChange"
 > & {
+  /** 默认页索引 */
   defaultPage?: number;
+  /** 默认页尺寸 */
   defaultSize?: number;
+  /** 筛选数据 */
   filter?: FilterType;
+  /** 获取数据函数 */
   fetchData?: FilterTableGetData<FilterType, DataItem>;
+};
+
+export type FilterTableState = {
+  /** 页索引 */
+  pageNo: number;
+  /** 页尺寸 */
+  pageSize: number;
+  /** 筛选数据 */
+  filter: Record<string, any> | undefined;
+  /** 重置筛选表格 */
+  filterKey: number;
+  /** 刷新当前分页 */
+  refreshKey: number;
 };
 
 /**
  * 可筛选表格
  */
-export class FilterTable extends React.Component<FilterTableProps, any> {
-  static getDerivedStateFromProps(props: FilterTableProps, state: any) {
-    let diff = null;
+export class FilterTable extends React.Component<
+  FilterTableProps,
+  FilterTableState
+> {
+  static getDerivedStateFromProps(
+    props: FilterTableProps,
+    state: FilterTableState,
+  ): FilterTableState | null {
+    let diff: FilterTableState | null = null;
 
-    if (!isEqual(props.filter, state.filter)) {
-      // filter 变更，强制刷新，重置分页
+    // 浅层对比 props.filter 和 state.filter
+    if (props.filter !== state.filter) {
+      // 保持同步 props.filter 和 state.filter
       diff = Object.assign({}, diff, {
-        pageNo: 1,
         filter: props.filter,
-        filterKey: state.filterKey + 1,
       });
+
+      // 清理无效属性，避免干扰深层对比
+      const normalizePropsFilter =
+        props.filter &&
+        normalizeObject(props.filter as any, {
+          clearUndefined: true,
+        });
+      const normalizeStateFilter =
+        state.filter &&
+        normalizeObject(state.filter as any, {
+          clearUndefined: true,
+        });
+
+      // 深层对比 props.filter 和 state.filter
+      if (isEqual(normalizePropsFilter, normalizeStateFilter)) {
+        // filter 没变，刷新当前分页
+        diff = Object.assign({}, diff, {
+          refreshKey: state.refreshKey + 1, // 触发 FetchTable 内刷新
+        });
+      } else {
+        // filter 变更，强制刷新，重置分页
+        diff = Object.assign({}, diff, {
+          pageNo: 1,
+          filterKey: state.filterKey + 1, // 触发 FetchTable 销毁重建
+        });
+      }
     }
 
     return diff;
@@ -64,6 +113,7 @@ export class FilterTable extends React.Component<FilterTableProps, any> {
       pageSize: defaultSize || BaseTableDefaultPageSize,
       filter: filter,
       filterKey: 0,
+      refreshKey: 0,
     };
   }
 
@@ -94,12 +144,15 @@ export class FilterTable extends React.Component<FilterTableProps, any> {
       "filter",
       "fetchData",
       "onPagingChange",
+      "refreshKey",
     ]);
-    const { pageNo, pageSize, filterKey } = this.state;
+    const { refreshKey: propsRefreshKey } = this.props;
+    const { pageNo, pageSize, filterKey, refreshKey } = this.state;
 
     return (
       <FetchTable
         key={filterKey}
+        refreshKey={`${propsRefreshKey}-${refreshKey}`}
         pageNo={pageNo}
         pageSize={pageSize}
         fetchData={this.fetchData}

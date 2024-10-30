@@ -42,6 +42,9 @@ const tryStringify = (value?: string) => {
   return value;
 };
 
+/**
+ * 清理查询参数中的分页查询参数
+ */
 const clearPageSearch = (search: string) => {
   const query = parseQuery(search);
   const newQuery = omit(query, [
@@ -53,12 +56,16 @@ const clearPageSearch = (search: string) => {
   return stringifyQuery(newQuery);
 };
 
+/**
+ * 从查询参数中获取分页查询参数
+ */
 const parsePageSearch = (search: string) => {
   const query = parseQuery(search);
 
-  const pageNo = tryParse(query[QUERY_PAGE_KEY]);
-  const pageSize = tryParse(query[QUERY_SIZE_KEY]);
-  const filter = tryParse(query[QUERY_FILTER_KEY]);
+  // 空字符串值认为是 undefined
+  const pageNo = tryParse(query[QUERY_PAGE_KEY] || undefined);
+  const pageSize = tryParse(query[QUERY_SIZE_KEY] || undefined);
+  const filter = tryParse(query[QUERY_FILTER_KEY] || undefined);
 
   return {
     pageNo,
@@ -67,6 +74,9 @@ const parsePageSearch = (search: string) => {
   };
 };
 
+/**
+ * 从查询参数中获取筛选条件
+ */
 const updatePageSearch = (search: string, diff: Record<string, any>) => {
   const query = parseQuery(search);
 
@@ -138,16 +148,36 @@ export type RouteTableProps<
   FetchTableProps<RecordType>,
   "pageNo" | "pageSize" | "fetchData" | "onPagingChange"
 > & {
+  /** 路由位置 */
   location: Location;
+  /** 路由导航 */
   navigate: NavigateFunction;
+  /** 筛选数据 */
   filter?: FilterType;
+  /** 获取数据函数 */
   fetchData?: RouteTableGetData<FilterType, DataItem>;
+};
+
+export type RouteTableState = {
+  /** 页索引 */
+  pageNo: number;
+  /** 页尺寸 */
+  pageSize: number;
+  /** 筛选数据 */
+  filter: Record<string, any> | undefined;
+  /** 重置筛选表格 */
+  filterKey: number;
+  /** 刷新当前分页 */
+  refreshKey: number;
 };
 
 /**
  * 路由表格
  */
-class RouteTableComponent extends React.Component<RouteTableProps, any> {
+class RouteTableComponent extends React.Component<
+  RouteTableProps,
+  RouteTableState
+> {
   static getDerivedStateFromProps(props: RouteTableProps, state: any) {
     const { location } = props;
     const { pageNo, pageSize, filter } = parsePageSearch(location.search);
@@ -189,6 +219,7 @@ class RouteTableComponent extends React.Component<RouteTableProps, any> {
       pageSize: pageSize || BaseTableDefaultPageSize,
       filter: filter,
       filterKey: 0,
+      refreshKey: 0,
     };
   }
 
@@ -214,7 +245,6 @@ class RouteTableComponent extends React.Component<RouteTableProps, any> {
       });
     }
   }
-
   private setQuery = (diff: Record<string, any>) => {
     const { navigate, location } = this.props;
     const newSearch = updatePageSearch(location.search, diff);
@@ -258,12 +288,15 @@ class RouteTableComponent extends React.Component<RouteTableProps, any> {
       "filter",
       "fetchData",
       "onPagingChange",
+      "refreshKey",
     ]);
-    const { pageNo, pageSize, filterKey } = this.state;
+    const { refreshKey: propsRefreshKey } = this.props;
+    const { pageNo, pageSize, filterKey, refreshKey } = this.state;
 
     return (
       <FetchTable
         key={filterKey}
+        refreshKey={`${propsRefreshKey}-${refreshKey}`}
         pageNo={pageNo}
         pageSize={pageSize}
         fetchData={this.fetchData}

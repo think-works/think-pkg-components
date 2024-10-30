@@ -1,6 +1,13 @@
 // #region 通用辅助函数
 
 /**
+ * 类型检查
+ */
+export const isType = (val: any, type: string): boolean => {
+  return Object.prototype.toString.call(val) === `[object ${type}]`;
+};
+
+/**
  * 空白字符串检查
  */
 export const isBlank = (
@@ -38,6 +45,7 @@ export const normalizeObject = (
     clearNull?: boolean;
     clearEmpty?: boolean;
     clearSpace?: boolean;
+    clearRecursion?: boolean;
   },
 ) => {
   const {
@@ -46,6 +54,7 @@ export const normalizeObject = (
     clearNull = false,
     clearEmpty = false,
     clearSpace = false,
+    clearRecursion = false,
   } = options || {};
 
   let _obj = obj;
@@ -60,14 +69,18 @@ export const normalizeObject = (
     _obj = keys.reduce((ret, key) => {
       const val = obj[key];
 
-      const skip =
-        (clearUndefined && val === undefined) ||
-        (clearNull && val === null) ||
-        (clearEmpty && val === "") ||
-        (clearSpace && /^\s*$/.test(val));
+      if (clearRecursion && isType(val, "Object")) {
+        ret[key] = normalizeObject(val, options);
+      } else {
+        const skip =
+          (clearUndefined && val === undefined) ||
+          (clearNull && val === null) ||
+          (clearEmpty && val === "") ||
+          (clearSpace && /^\s*$/.test(val));
 
-      if (!skip) {
-        ret[key] = val;
+        if (!skip) {
+          ret[key] = val;
+        }
       }
 
       return ret;
@@ -126,10 +139,11 @@ export const parseQuery = (
       query[_key] = _val;
     }
 
-    // 按照 key 排序，并删除 value 为 undefined 的项。
+    // 按照 key 排序，并递归删除 value 为 undefined 的项。
     query = normalizeObject(query, {
       sortKey,
       clearUndefined: true,
+      clearRecursion: true,
     });
   }
 
@@ -150,10 +164,11 @@ export const stringifyQuery = (
   const { jsonVal = false, sortKey = false } = options || {};
 
   if (query) {
-    // 按照 key 排序，并删除 value 为 undefined 的项。
+    // 按照 key 排序，并递归删除 value 为 undefined 的项。
     const _query = normalizeObject(query, {
       sortKey,
       clearUndefined: true,
+      clearRecursion: true,
     });
 
     for (const key in _query) {

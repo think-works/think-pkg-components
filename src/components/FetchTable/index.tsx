@@ -15,16 +15,22 @@ const API_LIST_KEY = "list";
 type RawOnChange = NonNullable<BaseTableProps["onChange"]>;
 
 export type FetchTablePaging = {
+  /** 页索引 */
   pageNo: number;
+  /** 页尺寸 */
   pageSize: number;
 };
 
 export type FetchTableParams = FetchTablePaging;
 
 export type FetchTableData<Item = any> = {
+  /** 页索引 */
   pageNo?: number;
+  /** 页尺寸 */
   pageSize?: number;
+  /** 总记录数量 */
   total?: number;
+  /** 当前页记录 */
   list?: Item[];
 };
 
@@ -36,19 +42,42 @@ export type FetchTableProps<RecordType = any, DataItem = any> = Omit<
   BaseTableProps<RecordType>,
   "onChange"
 > & {
+  /** 页索引 */
   pageNo?: number;
+  /** 页尺寸 */
   pageSize?: number;
-  refreshKey?: number;
+  /** 刷新当前分页 */
+  refreshKey?: number | string;
+  /** 延时显示加载中(ms) */
   loadingDelay?: number;
+  /** 获取数据函数 */
   fetchData?: FetchTableGetData<DataItem>;
+  /** 分页变更 */
   onPagingChange?: (params: FetchTablePaging) => void;
+  /** 分页、排序、筛选变更(返回 true 可忽略后续流程) */
   onChange?: (...rest: Parameters<RawOnChange>) => void | boolean;
+};
+
+export type FetchTableState = {
+  /** 加载中 */
+  loading: boolean;
+  /** 页索引 */
+  current: number;
+  /** 页尺寸 */
+  pageSize: number;
+  /** 总记录数量 */
+  total: number;
+  /** 当前页记录 */
+  dataSource: any[];
 };
 
 /**
  * 可查询表格
  */
-export class FetchTable extends React.Component<FetchTableProps, any> {
+export class FetchTable extends React.Component<
+  FetchTableProps,
+  FetchTableState
+> {
   mounted = false;
   queryTimer: any;
   loadingTimer: any;
@@ -85,7 +114,7 @@ export class FetchTable extends React.Component<FetchTableProps, any> {
     clearTimeout(this.loadingTimer);
   }
 
-  componentDidUpdate(prevProps: any) {
+  componentDidUpdate(prevProps: FetchTableProps) {
     const {
       pageNo: currPage,
       pageSize: currSize,

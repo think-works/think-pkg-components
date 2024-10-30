@@ -11,11 +11,8 @@ import {
 import cls, { Argument } from "classnames";
 import { isString } from "lodash-es";
 import { useState } from "react";
+import { isType } from "@/utils/tools";
 import stl from "./index.module.less";
-
-const isType = (val: any, type: string): boolean => {
-  return Object.prototype.toString.call(val) === `[object ${type}]`;
-};
 
 const isPromise = (val: any): val is Promise<any> => {
   return isType(val, "Promise");
@@ -38,6 +35,9 @@ export type BaseActionProps = Omit<ButtonProps, "onClick"> & {
    * 气泡二次确认
    */
   popconfirm?: string | (PopconfirmProps & { stopPropagation?: boolean });
+  /**
+   * 按钮内容
+   */
   children?: React.ReactNode;
   /**
    * 按钮禁用
@@ -55,6 +55,9 @@ export type BaseActionProps = Omit<ButtonProps, "onClick"> & {
    * 文本内容居左 ｜ 居右
    */
   align?: "left" | "right";
+  /**
+   * 按钮点击被确认
+   */
   onClick?: (...rest: any[]) => any;
 };
 
