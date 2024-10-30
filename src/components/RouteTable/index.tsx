@@ -178,53 +178,30 @@ class RouteTableComponent extends React.Component<
   RouteTableProps,
   RouteTableState
 > {
-  static getDerivedStateFromProps(
-    props: RouteTableProps,
-    state: RouteTableState,
-  ): RouteTableState | null {
-    // 从路由中提取查询参数
+  static getDerivedStateFromProps(props: RouteTableProps, state: any) {
     const { location } = props;
-    const query = parsePageSearch(location.search);
+    const { pageNo, pageSize, filter } = parsePageSearch(location.search);
 
-    // 清理无效属性，避免干扰深层对比
-    const normalizeStateFilter =
-      state.filter &&
-      normalizeObject(state.filter as any, {
-        clearUndefined: true,
-      });
-    const normalizeQueryFilter =
-      query.filter &&
-      normalizeObject(query.filter as any, {
-        clearUndefined: true,
-      });
+    let diff = null;
 
-    let diff: RouteTableState | null = null;
-
-    // 对比 query.pageNo 和 state.pageNo
-    if (query.pageNo !== state.pageNo) {
+    if (pageNo !== state.pageNo) {
       diff = Object.assign({}, diff, {
-        pageNo: query.pageNo, // 触发 FetchTable 内刷新
+        pageNo,
       });
     }
 
-    // 对比 query.pageSize 和 state.pageSize
-    if (query.pageSize !== state.pageSize) {
+    if (pageSize !== state.pageSize) {
       diff = Object.assign({}, diff, {
-        pageSize: query.pageSize, // 触发 FetchTable 内刷新
+        pageSize,
       });
     }
 
-    // 深层对比 query.filter 和 state.filter
-    if (!isEqual(normalizeQueryFilter, normalizeStateFilter)) {
-      // 保持同步 query.filter 和 state.filter
-      diff = Object.assign({}, diff, {
-        filter: query.filter,
-      });
-
+    if (!isEqual(filter, state.filter)) {
       // filter 变更，强制刷新，重置分页
       diff = Object.assign({}, diff, {
-        pageNo: 1,
-        filterKey: state.filterKey + 1, // 触发 FetchTable 销毁重建
+        pageNo: 1, // 重置分页
+        filter: filter,
+        filterKey: state.filterKey + 1,
       });
     }
 
@@ -246,60 +223,28 @@ class RouteTableComponent extends React.Component<
     };
   }
 
-  componentDidUpdate(prevProps: RouteTableProps) {
-    const currProps = this.props;
+  componentDidUpdate(prevProps: any) {
+    let { filter: currFilter } = this.props;
+    let { filter: prevFilter } = prevProps;
 
-    // 浅层对比 currProps.filter 和 prevProps.filter
-    if (currProps.filter !== prevProps.filter) {
-      // 清理无效属性，避免干扰深层对比
-      const normalizeCurrFilter =
-        currProps.filter &&
-        normalizeObject(currProps.filter as any, {
-          sortKey: true,
-          clearUndefined: true,
-          clearRecursion: true,
-        });
-      const normalizePrevFilter =
-        prevProps.filter &&
-        normalizeObject(prevProps.filter as any, {
-          sortKey: true,
-          clearUndefined: true,
-          clearRecursion: true,
-        });
+    currFilter = normalizeObject(currFilter as any, {
+      sortKey: true,
+      clearNull: true,
+      clearUndefined: true,
+    });
+    prevFilter = normalizeObject(prevFilter as any, {
+      sortKey: true,
+      clearNull: true,
+      clearUndefined: true,
+    });
 
-      // 深层对比 currProps.filter 和 prevProps.filter
-      if (isEqual(normalizeCurrFilter, normalizePrevFilter)) {
-        // filter 没变，刷新当前分页(不经过路由)
-        this.setState({
-          refreshKey: this.state.refreshKey + 1,
-        });
-      } else {
-        // filter 变更，强制刷新，重置分页(经过路由)
-        this.setQuery({
-          pageNo: 1,
-          filter: isEmpty(normalizeCurrFilter)
-            ? undefined
-            : normalizeCurrFilter,
-        });
-
-        /**
-         * 预期出现 pageNo/pageSize/filter 变更，以便触发查询。
-         * 复用 getDerivedStateFromProps 的处理逻辑，进行检查。
-         * 如果返回 null 说明并不会触发查询，需要手动触发一下。
-         */
-        const diff = RouteTableComponent.getDerivedStateFromProps(
-          this.props,
-          this.state,
-        );
-        if (diff === null) {
-          this.setState({
-            refreshKey: this.state.refreshKey + 1,
-          });
-        }
-      }
+    if (!isEqual(currFilter, prevFilter)) {
+      this.setQuery({
+        pageNo: 1, // 重置分页
+        filter: isEmpty(currFilter) ? "" : currFilter,
+      });
     }
   }
-
   private setQuery = (diff: Record<string, any>) => {
     const { navigate, location } = this.props;
     const newSearch = updatePageSearch(location.search, diff);
