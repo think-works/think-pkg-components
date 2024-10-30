@@ -75,12 +75,16 @@ export class FilterTable extends React.Component<
       });
 
       // 清理无效属性，避免干扰深层对比
-      const normalizePropsFilter = normalizeObject(props.filter as any, {
-        clearUndefined: true,
-      });
-      const normalizeStateFilter = normalizeObject(state.filter as any, {
-        clearUndefined: true,
-      });
+      const normalizePropsFilter =
+        props.filter &&
+        normalizeObject(props.filter as any, {
+          clearUndefined: true,
+        });
+      const normalizeStateFilter =
+        state.filter &&
+        normalizeObject(state.filter as any, {
+          clearUndefined: true,
+        });
 
       // 深层对比 props.filter 和 state.filter
       if (isEqual(normalizePropsFilter, normalizeStateFilter)) {

@@ -187,12 +187,16 @@ class RouteTableComponent extends React.Component<
     const query = parsePageSearch(location.search);
 
     // 清理无效属性，避免干扰深层对比
-    const normalizeStateFilter = normalizeObject(state.filter as any, {
-      clearUndefined: true,
-    });
-    const normalizeQueryFilter = normalizeObject(query.filter as any, {
-      clearUndefined: true,
-    });
+    const normalizeStateFilter =
+      state.filter &&
+      normalizeObject(state.filter as any, {
+        clearUndefined: true,
+      });
+    const normalizeQueryFilter =
+      query.filter &&
+      normalizeObject(query.filter as any, {
+        clearUndefined: true,
+      });
 
     let diff: RouteTableState | null = null;
 
@@ -248,16 +252,20 @@ class RouteTableComponent extends React.Component<
     // 浅层对比 currProps.filter 和 prevProps.filter
     if (currProps.filter !== prevProps.filter) {
       // 清理无效属性，避免干扰深层对比
-      const normalizeCurrFilter = normalizeObject(currProps.filter as any, {
-        sortKey: true,
-        clearUndefined: true,
-        clearRecursion: true,
-      });
-      const normalizePrevFilter = normalizeObject(prevProps.filter as any, {
-        sortKey: true,
-        clearUndefined: true,
-        clearRecursion: true,
-      });
+      const normalizeCurrFilter =
+        currProps.filter &&
+        normalizeObject(currProps.filter as any, {
+          sortKey: true,
+          clearUndefined: true,
+          clearRecursion: true,
+        });
+      const normalizePrevFilter =
+        prevProps.filter &&
+        normalizeObject(prevProps.filter as any, {
+          sortKey: true,
+          clearUndefined: true,
+          clearRecursion: true,
+        });
 
       // 深层对比 currProps.filter 和 prevProps.filter
       if (isEqual(normalizeCurrFilter, normalizePrevFilter)) {
