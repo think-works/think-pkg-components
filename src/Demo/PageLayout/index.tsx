@@ -15,8 +15,24 @@ const DragContainerDemo = () => {
   useEffect(() => {
     return registerCustomMenus?.([
       {
-        key: "page-layout",
-        label: "page-layout",
+        key: "page-layout2",
+        label: "page-layout2",
+        children: [
+          {
+            key: "page-layout",
+            label: "page-layout",
+          },
+        ],
+      },
+      {
+        key: "page-layout3",
+        label: "page-layout3",
+        children: [
+          {
+            key: "page-layout4",
+            label: "page-layout4",
+          },
+        ],
       },
     ]);
   }, []);

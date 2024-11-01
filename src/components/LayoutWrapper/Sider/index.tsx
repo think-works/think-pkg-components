@@ -56,7 +56,7 @@ const Sider = (props: SiderProps) => {
         siderWidth: collapsed ? collapsedWidth : siderWidth,
         collapsed,
       })}
-      <LeftMenu />
+      <LeftMenu collapsed={collapsed} />
       {renderMenuBottom?.({
         siderWidth: collapsed ? collapsedWidth : siderWidth,
         collapsed,

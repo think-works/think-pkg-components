@@ -9,10 +9,14 @@ import stl from "./index.module.less";
 
 export type LeftMenuProps = {
   className?: Argument;
+  /**
+   * 是否收缩 true: 收缩 false: 展开
+   */
+  collapsed?: boolean;
 };
 
 const LeftMenu = (props: LeftMenuProps) => {
-  const { className } = props;
+  const { className, collapsed } = props;
   const [forceKey, forceUpdate] = useForceUpdate();
   const [openKeys, setOpenKeys] = useState<string[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
@@ -22,9 +26,16 @@ const LeftMenu = (props: LeftMenuProps) => {
   const customMenus = useCustomMenus();
   // 从路由推导菜单 key
   useEffect(() => {
-    setOpenKeys(matchMenuKeys);
+    /**
+     * 收缩时不展开菜单
+     */
+    if (collapsed) {
+      setOpenKeys([]);
+    } else {
+      setOpenKeys(matchMenuKeys);
+    }
     setSelectedKeys(matchMenuKeys);
-  }, [matchMenuKeys]);
+  }, [collapsed, matchMenuKeys]);
 
   // 自定义路由菜单
   useEffect(() => {
