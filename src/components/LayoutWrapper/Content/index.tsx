@@ -11,26 +11,17 @@ export type ContentProps = {
   crumbMode?: "title";
   siderWidth: number;
   minFullWidth: number;
-  collapsedWidth: number;
 };
 
 const Content = (props: ContentProps) => {
-  const {
-    className,
-    collapsed,
-    minFullWidth,
-    collapsedWidth,
-    crumbMode,
-    siderWidth,
-    children,
-  } = props;
+  const { className, minFullWidth, crumbMode, siderWidth, children } = props;
   const showBreadcrumb = useBreadcrumbVisibility();
 
   return (
     <Layout.Content
       className={cls(stl.content, className)}
       style={{
-        minWidth: minFullWidth - (collapsed ? collapsedWidth : siderWidth),
+        minWidth: minFullWidth - siderWidth,
       }}
     >
       {showBreadcrumb ? (

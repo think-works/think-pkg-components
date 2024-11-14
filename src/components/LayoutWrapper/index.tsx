@@ -1,18 +1,12 @@
 import { Layout } from "antd";
-import { useCallback, useState } from "react";
-import { theme } from "@/common/_export";
-import { queryLocal, updateLocal } from "@/utils/storage";
+import { useMemo } from "react";
 import Content from "./Content";
 import Crumb from "./Content/Crumb";
 import Footer from "./Footer";
 import { useSiderVisibility } from "./hooks";
 import stl from "./index.module.less";
 import Sider from "./Sider";
-import { LayoutWrapperProps } from "./type";
-
-const appLayoutConfigKey = "appLayout";
-const storageVal = queryLocal(appLayoutConfigKey);
-const defaultCollapsed = storageVal?.collapsed || false;
+import { LayoutSiderItemMode, LayoutWrapperProps } from "./type";
 
 /**
  * 页面布局组件
@@ -23,29 +17,36 @@ const LayoutWrapper = (props: LayoutWrapperProps) => {
   const { children, header, sider, childrenProps, footer, siderProps } = props;
   const { minFullWidth = 1200, crumbMode } = childrenProps || {};
   const {
-    siderWidth = 160,
-    collapsedWidth = theme.styleConfig.bizLayoutHeader,
+    mode = LayoutSiderItemMode.VERTICAL,
+    renderSiderWidth,
     renderMenuTop,
     renderMenuBottom,
   } = siderProps || {};
   const showSider = useSiderVisibility();
-  const [collapsed, setCollapsed] = useState(defaultCollapsed);
 
-  const handleCollapse = useCallback((val: boolean) => {
-    setCollapsed(val);
+  const siderWidth = useMemo(() => {
+    if (renderSiderWidth) {
+      return renderSiderWidth(mode);
+    }
+    if (mode === LayoutSiderItemMode.HORIZONTAL) {
+      return 148;
+    }
+    return 64;
+  }, [mode, renderSiderWidth]);
 
-    updateLocal(appLayoutConfigKey, {
-      collapsed: val,
-    });
-  }, []);
+  const collapsed = useMemo(() => {
+    if (mode === LayoutSiderItemMode.HORIZONTAL) {
+      return false;
+    }
+    return true;
+  }, [mode]);
 
   let innerSider: React.ReactNode = (
     <Sider
       className={stl.sider}
       collapsed={collapsed}
       siderWidth={siderWidth}
-      collapsedWidth={collapsedWidth}
-      onCollapse={handleCollapse}
+      collapsedWidth={siderWidth}
       renderMenuTop={renderMenuTop}
       renderMenuBottom={renderMenuBottom}
     />
@@ -63,7 +64,7 @@ const LayoutWrapper = (props: LayoutWrapperProps) => {
         style={
           showSider
             ? {
-                marginLeft: collapsed ? collapsedWidth : siderWidth,
+                marginLeft: siderWidth,
               }
             : undefined
         }
@@ -74,7 +75,6 @@ const LayoutWrapper = (props: LayoutWrapperProps) => {
           className={stl.content}
           siderWidth={siderWidth}
           minFullWidth={minFullWidth}
-          collapsedWidth={collapsedWidth}
         >
           {children}
         </Content>

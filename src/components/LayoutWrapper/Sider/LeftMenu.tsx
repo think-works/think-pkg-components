@@ -1,6 +1,7 @@
-import { Menu } from "antd";
+import { ConfigProvider, Menu } from "antd";
 import cls, { Argument } from "classnames";
 import { useEffect, useState } from "react";
+import { themeToken } from "@/common/theme";
 import { useForceUpdate } from "@/hooks";
 import * as types from "@/utils/types";
 import { useCustomMenus, useMatchMenuKeys } from "../hooks";
@@ -46,21 +47,32 @@ const LeftMenu = (props: LeftMenuProps) => {
   }, [customMenus, forceUpdate]);
 
   return (
-    <Menu
-      key={forceKey}
-      className={cls(stl.leftMenu, className)}
-      theme="light"
-      mode="inline"
-      openKeys={openKeys}
-      selectedKeys={selectedKeys}
-      onClick={(keys: any) => {
-        setSelectedKeys(keys);
+    <ConfigProvider
+      theme={{
+        components: {
+          Menu: {
+            subMenuItemBg: "#EFF2F7",
+            itemSelectedColor: "#FFF",
+            itemSelectedBg: themeToken.colorPrimary,
+          },
+        },
       }}
-      onOpenChange={(keys: any) => {
-        setOpenKeys(keys);
-      }}
-      items={menus}
-    />
+    >
+      <Menu
+        key={forceKey}
+        className={cls(stl.leftMenu, className)}
+        mode="inline"
+        openKeys={openKeys}
+        selectedKeys={selectedKeys}
+        onClick={({ keyPath }) => {
+          setSelectedKeys(keyPath);
+        }}
+        onOpenChange={(keys: any) => {
+          setOpenKeys(keys);
+        }}
+        items={menus}
+      />
+    </ConfigProvider>
   );
 };
 

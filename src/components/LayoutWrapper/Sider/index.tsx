@@ -4,10 +4,6 @@ import React from "react";
 import stl from "./index.module.less";
 import LeftMenu from "./LeftMenu";
 
-/**
- * 侧边栏扩展类名
- */
-const siderExtendClass = `Layout-Sider-Extend-${Date.now()}`;
 export type SiderProps = {
   className?: Argument;
   /**
@@ -45,7 +41,6 @@ const Sider = (props: SiderProps) => {
   return (
     <Layout.Sider
       className={cls(stl.sider, className)}
-      collapsible
       theme="light"
       width={siderWidth}
       collapsedWidth={collapsedWidth}
@@ -61,7 +56,6 @@ const Sider = (props: SiderProps) => {
         siderWidth: collapsed ? collapsedWidth : siderWidth,
         collapsed,
       })}
-      <div className={cls(stl.extend, siderExtendClass)} />
     </Layout.Sider>
   );
 };

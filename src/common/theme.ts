@@ -10,9 +10,9 @@ export const styleConfig = styles;
  */
 export const themeToken = {
   /** 主题色 */
-  colorPrimary: "#294bf5",
+  colorPrimary: "#2176FF",
   /** 链接色  */
-  colorLink: "#294bf5",
+  colorLink: "#2176FF",
   /** 信息色 */
   colorInfo: "#24A7Ff",
   /** 成功色 */

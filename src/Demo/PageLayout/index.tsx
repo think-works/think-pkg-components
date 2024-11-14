@@ -1,5 +1,7 @@
 import { Table } from "antd";
 import { useEffect, useState } from "react";
+import { HomeOutlined } from "@ant-design/icons";
+import { LayoutDetail, LayoutSiderItemMode } from "@/components/_export";
 import EditableTable from "@/components/EditableTable";
 import { LayoutWrapper } from "@/components/LayoutWrapper";
 import { registerCustomMenus } from "@/components/LayoutWrapper/utils";
@@ -16,21 +18,22 @@ const DragContainerDemo = () => {
     return registerCustomMenus?.([
       {
         key: "page-layout2",
-        label: "page-layout2",
-        children: [
-          {
-            key: "page-layout",
-            label: "page-layout",
-          },
-        ],
+        label: "工作台",
+        icon: <HomeOutlined />,
       },
       {
         key: "page-layout3",
-        label: "page-layout3",
+        label: "项目",
+        icon: <HomeOutlined />,
+      },
+      {
+        key: "page-layout4",
+        label: "系统管理",
+        icon: <HomeOutlined />,
         children: [
           {
-            key: "page-layout4",
-            label: "page-layout4",
+            key: "page-layout",
+            label: "配置管理",
           },
         ],
       },
@@ -38,17 +41,24 @@ const DragContainerDemo = () => {
   }, []);
 
   return (
-    <LayoutWrapper header={<div>header</div>}>
-      <Table
-        columns={[
-          {
-            title: (
-              <EditableHeader deletable value={value} onChange={onChange} />
-            ),
-            dataIndex: "key",
-          },
-        ]}
-      />
+    <LayoutWrapper
+      header={<div>header</div>}
+      siderProps={{
+        mode: LayoutSiderItemMode.HORIZONTAL,
+      }}
+    >
+      <LayoutDetail title="title">
+        <Table
+          columns={[
+            {
+              title: (
+                <EditableHeader deletable value={value} onChange={onChange} />
+              ),
+              dataIndex: "key",
+            },
+          ]}
+        />
+      </LayoutDetail>
     </LayoutWrapper>
   );
 };
