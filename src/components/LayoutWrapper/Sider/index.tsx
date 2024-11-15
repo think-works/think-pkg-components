@@ -1,13 +1,10 @@
 import { Layout } from "antd";
 import cls, { Argument } from "classnames";
 import React from "react";
+import { LayoutSiderItemMode } from "../type";
 import stl from "./index.module.less";
 import LeftMenu from "./LeftMenu";
 
-/**
- * 侧边栏扩展类名
- */
-const siderExtendClass = `Layout-Sider-Extend-${Date.now()}`;
 export type SiderProps = {
   className?: Argument;
   /**
@@ -27,41 +24,39 @@ export type SiderProps = {
     collapsed?: boolean;
   }) => React.ReactNode;
   collapsed?: boolean;
-  onCollapse?: (collapsed: boolean) => void;
+  /**
+   * 侧边栏菜单展示模式
+   */
+  mode: LayoutSiderItemMode;
   siderWidth: number;
-  collapsedWidth: number;
 };
 
 const Sider = (props: SiderProps) => {
   const {
     className,
+    mode,
     renderMenuTop,
     renderMenuBottom,
     siderWidth,
-    collapsedWidth,
     collapsed,
-    onCollapse,
   } = props;
   return (
     <Layout.Sider
       className={cls(stl.sider, className)}
-      collapsible
       theme="light"
       width={siderWidth}
-      collapsedWidth={collapsedWidth}
+      collapsedWidth={siderWidth}
       collapsed={collapsed}
-      onCollapse={onCollapse}
     >
       {renderMenuTop?.({
-        siderWidth: collapsed ? collapsedWidth : siderWidth,
+        siderWidth: siderWidth,
         collapsed,
       })}
-      <LeftMenu collapsed={collapsed} />
+      <LeftMenu mode={mode} collapsed={collapsed} />
       {renderMenuBottom?.({
-        siderWidth: collapsed ? collapsedWidth : siderWidth,
+        siderWidth: siderWidth,
         collapsed,
       })}
-      <div className={cls(stl.extend, siderExtendClass)} />
     </Layout.Sider>
   );
 };

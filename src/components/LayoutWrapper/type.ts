@@ -47,6 +47,19 @@ export interface LayoutWrapperExtendRouteMeta extends Record<string, any> {
    */
   authMode?: AuthCombineMode;
 }
+/**
+ * 页面布局路由
+ */
+export enum LayoutSiderItemMode {
+  /**
+   * 垂直排列 icon-text
+   */
+  VERTICAL = "VERTICAL",
+  /**
+   * 水平排列 icon-text
+   */
+  HORIZONTAL = "HORIZONTAL",
+}
 
 /**
  * 页面布局组件参数
@@ -96,15 +109,15 @@ export interface LayoutWrapperProps {
    */
   siderProps?: {
     /**
-     * 侧边栏宽度
-     * @default 160
+     * 侧边栏菜单项 icon和文本 排列方式 默认垂直排列
      */
-    siderWidth?: number;
+    mode?: LayoutSiderItemMode;
     /**
-     * 侧边栏收缩宽度
-     * @default theme.styleConfig.bizLayoutHeader
+     * 自定义侧边栏宽度
+     * @param mode
+     * @returns
      */
-    collapsedWidth?: number;
+    renderSiderWidth?: (mode: LayoutSiderItemMode) => number;
     /**
      * 自定义菜单上方内容
      * @param siderWidth 侧边栏实际宽度 展开时为 siderWidth 收缩时为 collapsedWidth

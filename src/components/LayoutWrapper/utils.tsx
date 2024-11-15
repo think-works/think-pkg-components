@@ -1,4 +1,5 @@
 import { MenuProps } from "antd";
+import { MenuItemType, SubMenuType } from "antd/es/menu/interface";
 import { ReactNode } from "react";
 import { To } from "react-router-dom";
 import * as events from "@/utils/events";
@@ -105,7 +106,7 @@ export const getCustomMenus = (options?: {
   // 菜单排序
   const list = activeSet ? Array.from(activeSet) : [];
   list.sort(({ sort: aSort = 0 }, { sort: bSort = 0 }) => aSort - bSort);
-  return list;
+  return list as (MenuItemType | SubMenuType)[];
 };
 
 // #endregion
