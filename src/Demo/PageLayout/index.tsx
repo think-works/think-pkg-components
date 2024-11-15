@@ -104,7 +104,7 @@ const DragContainerDemo = () => {
     <LayoutWrapper
       header={<div>header</div>}
       siderProps={{
-        mode: LayoutSiderItemMode.HORIZONTAL,
+        mode: LayoutSiderItemMode.VERTICAL,
       }}
     >
       <LayoutDetail title="title">

@@ -112,4 +112,17 @@
 }
 
 .horizontalMenu {
+  :global(.@{ant-prefix}-menu-item-selected) {
+    &::before {
+      content: "";
+      position: absolute;
+      left: -2px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 17px;
+      border-radius: 2px;
+      background-color: @colorPrimary;
+    }
+  }
 }
