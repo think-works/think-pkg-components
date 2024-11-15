@@ -1,11 +1,12 @@
 import { ConfigProvider, Menu } from "antd";
+import { MenuItemType, SubMenuType } from "antd/es/menu/interface";
 import cls, { Argument } from "classnames";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { themeToken } from "@/common/theme";
 import { useForceUpdate } from "@/hooks";
 import * as types from "@/utils/types";
 import { useCustomMenus, useMatchMenuKeys } from "../hooks";
-import { LayoutWrapperMenuItem } from "../utils";
+import { LayoutSiderItemMode } from "../type";
 import stl from "./index.module.less";
 
 export type LeftMenuProps = {
@@ -14,17 +15,85 @@ export type LeftMenuProps = {
    * 是否收缩 true: 收缩 false: 展开
    */
   collapsed?: boolean;
+  /**
+   * 侧边栏菜单展示模式
+   */
+  mode: LayoutSiderItemMode;
+};
+
+/**
+ * 处理垂直菜单样式
+ * @param menu
+ * @returns
+ */
+const onDealVerticalMenu = (menuList: (MenuItemType | SubMenuType)[]) => {
+  const loop = (menus: (MenuItemType | SubMenuType)[]) => {
+    return menus.map(
+      (
+        menu: MenuItemType | SubMenuType,
+      ): MenuItemType | SubMenuType<MenuItemType> => {
+        const { label, icon, ...others } = menu;
+        //@ts-ignore
+        if (menu.children) {
+          const { children } = menu as SubMenuType<MenuItemType>;
+          if (children) {
+            return {
+              ...others,
+              children: loop(children as (MenuItemType | SubMenuType)[]),
+              popupClassName: stl.verticalPopup,
+              label: (
+                <div className={stl.verticalItem}>
+                  <div className={stl.verticalIcon}>{icon}</div>
+                  <div className={stl.verticalLabel}>{label}</div>
+                </div>
+              ),
+            } as SubMenuType<MenuItemType>;
+          }
+        }
+        return {
+          ...others,
+          label: (
+            <div className={stl.verticalItem}>
+              <div className={stl.verticalIcon}>{icon}</div>
+              <div className={stl.verticalLabel}>{label}</div>
+            </div>
+          ),
+        } as MenuItemType;
+      },
+    );
+  };
+
+  return loop(menuList);
 };
 
 const LeftMenu = (props: LeftMenuProps) => {
-  const { className, collapsed } = props;
+  const { className, collapsed, mode } = props;
   const [forceKey, forceUpdate] = useForceUpdate();
   const [openKeys, setOpenKeys] = useState<string[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
-  const [menus, setMenus] = useState<LayoutWrapperMenuItem[]>([]);
+  const [menus, setMenus] = useState<(MenuItemType | SubMenuType)[]>([]);
 
   const matchMenuKeys = useMatchMenuKeys();
   const customMenus = useCustomMenus();
+
+  const menuTheme = useMemo(() => {
+    if (mode === LayoutSiderItemMode.HORIZONTAL) {
+      return {
+        subMenuItemBg: "#EFF2F7",
+        itemSelectedColor: themeToken.colorPrimary,
+        itemSelectedBg: "#FFF",
+        itemHeight: 32,
+      };
+    }
+
+    return {
+      subMenuItemBg: "#EFF2F7",
+      itemSelectedColor: "#FFF",
+      itemSelectedBg: themeToken.colorPrimary,
+      itemHeight: 56,
+    };
+  }, [mode]);
+
   // 从路由推导菜单 key
   useEffect(() => {
     /**
@@ -41,26 +110,36 @@ const LeftMenu = (props: LeftMenuProps) => {
   // 自定义路由菜单
   useEffect(() => {
     let list = customMenus.length ? customMenus : [];
-    list = list.filter(types.truthy);
+    list = list.filter(types.truthy) as (MenuItemType | SubMenuType)[];
+    /**
+     * 竖直模式下，菜单项样式调整
+     */
+    if (mode === LayoutSiderItemMode.VERTICAL) {
+      list = onDealVerticalMenu(list);
+    }
     setMenus(list);
+
     forceUpdate();
-  }, [customMenus, forceUpdate]);
+  }, [customMenus, forceUpdate, mode]);
 
   return (
     <ConfigProvider
       theme={{
         components: {
-          Menu: {
-            subMenuItemBg: "#EFF2F7",
-            itemSelectedColor: "#FFF",
-            itemSelectedBg: themeToken.colorPrimary,
-          },
+          Menu: menuTheme,
         },
       }}
     >
       <Menu
         key={forceKey}
-        className={cls(stl.leftMenu, className)}
+        triggerSubMenuAction="click"
+        className={cls(
+          stl.leftMenu,
+          mode === LayoutSiderItemMode.VERTICAL
+            ? stl.verticalMenu
+            : stl.horizontalMenu,
+          className,
+        )}
         mode="inline"
         openKeys={openKeys}
         selectedKeys={selectedKeys}

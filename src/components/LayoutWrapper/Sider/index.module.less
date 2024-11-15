@@ -47,3 +47,69 @@
     }
   }
 }
+
+.verticalMenu {
+  :global(.@{ant-prefix}-menu-item) {
+    padding: 0;
+    & > span {
+      display: inline-block;
+    }
+  }
+
+  :global(.@{ant-prefix}-menu-submenu) {
+    padding: 0;
+    :global(.@{ant-prefix}-menu-submenu-title) {
+      padding: 0;
+      & > span {
+        display: inline-block;
+      }
+    }
+  }
+
+  .verticalItem {
+    width: 56px;
+    height: 56px;
+    overflow: hidden;
+
+    .verticalIcon {
+      text-align: center;
+      height: 24px;
+      line-height: 36px;
+      & > span {
+        display: inline-block;
+        height: 24px;
+        line-height: 24px !important;
+      }
+    }
+    .verticalLabel {
+      font-size: 12px;
+      text-align: center;
+      line-height: 30px !important;
+    }
+  }
+}
+
+.verticalPopup {
+  &:global(.@{ant-prefix}-menu-submenu-popup) {
+    :global(.@{ant-prefix}-menu-item) {
+      line-height: 32px;
+      height: 32px;
+    }
+
+    :global(.@{ant-prefix}-menu-submenu-title) {
+      line-height: 32px !important;
+      height: 32px !important;
+    }
+
+    :global(.@{ant-prefix}-menu-submenu-selected) {
+      line-height: 32px !important;
+      height: 32px !important;
+      :global(.@{ant-prefix}-menu-submenu-title) {
+        color: @colorPrimary;
+      }
+    }
+  }
+}
+
+.horizontalMenu {
+}

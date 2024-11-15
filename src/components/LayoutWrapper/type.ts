@@ -109,7 +109,7 @@ export interface LayoutWrapperProps {
    */
   siderProps?: {
     /**
-     * 侧边栏菜单项 icon和文本 排列方式
+     * 侧边栏菜单项 icon和文本 排列方式 默认垂直排列
      */
     mode?: LayoutSiderItemMode;
     /**

@@ -8,6 +8,9 @@ import stl from "./index.module.less";
 import Sider from "./Sider";
 import { LayoutSiderItemMode, LayoutWrapperProps } from "./type";
 
+const HORIZONTAL_WIDTH = 192;
+const VERTICAL_WIDTH = 64;
+
 /**
  * 页面布局组件
  * @param props
@@ -29,9 +32,9 @@ const LayoutWrapper = (props: LayoutWrapperProps) => {
       return renderSiderWidth(mode);
     }
     if (mode === LayoutSiderItemMode.HORIZONTAL) {
-      return 148;
+      return HORIZONTAL_WIDTH;
     }
-    return 64;
+    return VERTICAL_WIDTH;
   }, [mode, renderSiderWidth]);
 
   const collapsed = useMemo(() => {
@@ -43,10 +46,10 @@ const LayoutWrapper = (props: LayoutWrapperProps) => {
 
   let innerSider: React.ReactNode = (
     <Sider
+      mode={mode}
       className={stl.sider}
       collapsed={collapsed}
       siderWidth={siderWidth}
-      collapsedWidth={siderWidth}
       renderMenuTop={renderMenuTop}
       renderMenuBottom={renderMenuBottom}
     />
