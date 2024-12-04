@@ -14,6 +14,7 @@ import {
 import { DeleteOutlined } from "@ant-design/icons";
 import { uuid4 } from "@/utils/crypto";
 import SortableTable from "../SortableTable";
+import DecoupleAutoComplete from "./DecoupleAutoComplete";
 import DecoupleInput from "./DecoupleInput";
 import DecoupleTextArea from "./DecoupleTextArea";
 import EditableHeader from "./EditableHeader";
@@ -444,5 +445,6 @@ export const EditableTable = (props: EditableTableProps) => {
 EditableTable.DecoupleInput = DecoupleInput;
 EditableTable.DecoupleTextArea = DecoupleTextArea;
 EditableTable.EditableHeader = EditableHeader;
+EditableTable.DecoupleAutoComplete = DecoupleAutoComplete;
 
 export default EditableTable;

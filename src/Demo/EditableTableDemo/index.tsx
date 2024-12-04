@@ -65,6 +65,24 @@ const EditableTableDemo = () => {
           );
         },
       },
+      {
+        title: "DecoupleAutoComplete",
+        dataIndex: "expectedResult",
+        render: (value: string) => {
+          return readOnly ? (
+            value
+          ) : (
+            <EditableTable.DecoupleAutoComplete
+              value={value}
+              options={[
+                { value: "Burns Bay Road" },
+                { value: "Downing Street" },
+                { value: "Wall Street" },
+              ]}
+            />
+          );
+        },
+      },
     ];
 
     return list;

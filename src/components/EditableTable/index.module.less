@@ -28,6 +28,14 @@
         border-color: @colorPrimary;
       }
     }
+    :global(.@{ant-prefix}-select-auto-complete) {
+      :global(.@{ant-prefix}-select-selector) {
+        border-color: transparent;
+        &:hover {
+          border-color: @colorPrimary;
+        }
+      }
+    }
   }
 }
 
