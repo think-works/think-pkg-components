@@ -83,7 +83,7 @@ export default defineConfig(({ mode }) => {
            * 在 js 中添加 css 导入语句，将样式交由本库的使用方处理。
            * https://github.com/vitejs/vite/issues/1579
            */
-          intro: `typeof window === "undefined" ? null : import("./${libraryName}.css");`,
+          // intro: `typeof window === "undefined" ? null : import("./${libraryName}.css");`,
           /**
            * 自定义 css 资源文件名
            * https://github.com/vitejs/vite/issues/4863#issuecomment-1812450561
