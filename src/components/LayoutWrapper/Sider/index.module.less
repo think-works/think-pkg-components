@@ -6,6 +6,7 @@
   height: 100%; // 基于窗口高度计算(等同于 100vh)，超出屏幕部分不可见
   box-shadow: unset !important;
   border-right: unset !important;
+  background-color: transparent !important;
 
   :global(.@{ant-prefix}-layout-sider-children) {
     flex: auto;
@@ -16,7 +17,7 @@
     flex: auto;
     overflow: auto;
     overflow: overlay;
-    background-color: @colorBg;
+    background-color: transparent;
     &::-webkit-scrollbar {
       display: none;
     }
