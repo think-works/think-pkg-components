@@ -82,6 +82,8 @@ const LeftMenu = (props: LeftMenuProps) => {
         subMenuItemBg: "transparent",
         itemSelectedColor: themeToken.colorPrimary,
         itemSelectedBg: "#FFF",
+        itemMarginBlock: 8,
+        itemMarginInline: 8,
         itemHeight: 32,
       };
     }
@@ -91,6 +93,8 @@ const LeftMenu = (props: LeftMenuProps) => {
       itemSelectedColor: "#FFF",
       itemSelectedBg: themeToken.colorPrimary,
       itemHeight: 56,
+      itemMarginBlock: 8,
+      itemMarginInline: 8,
     };
   }, [mode]);
 

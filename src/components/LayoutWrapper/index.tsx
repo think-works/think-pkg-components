@@ -9,7 +9,7 @@ import Sider from "./Sider";
 import { LayoutSiderItemMode, LayoutWrapperProps } from "./type";
 
 const HORIZONTAL_WIDTH = 192;
-const VERTICAL_WIDTH = 64;
+const VERTICAL_WIDTH = 70;
 
 /**
  * 页面布局组件
