@@ -1,0 +1,35 @@
+@import "@/styles/utils.less";
+
+.item {
+  display: flex;
+  &-text {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    background: @colorBgHover;
+    border: 1px solid @colorBorder;
+    border-right: none;
+    font-size: 14px;
+    padding: 0 10px;
+  }
+  &-form {
+    flex: 1;
+    &-select {
+      :global(.@{ant-prefix}-selector) {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+    }
+  }
+}
+.link {
+  border-top: 1px solid @colorBorder;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
