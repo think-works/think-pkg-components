@@ -162,7 +162,7 @@ function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
             await props.actions?.rename?.(data.node);
           }
           setEdit(false);
-        } catch (e) {
+        } catch {
           setEdit(true);
           setTimeout(() => ref.current?.focus(), 0);
         } finally {

@@ -33,23 +33,21 @@ const onDealVerticalMenu = (menuList: (MenuItemType | SubMenuType)[]) => {
         menu: MenuItemType | SubMenuType,
       ): MenuItemType | SubMenuType<MenuItemType> => {
         const { label, icon, ...others } = menu;
-        //@ts-ignore
-        if (menu.children) {
-          const { children } = menu as SubMenuType<MenuItemType>;
-          if (children) {
-            return {
-              ...others,
-              children: loop(children as (MenuItemType | SubMenuType)[]),
-              popupClassName: stl.verticalPopup,
-              label: (
-                <div className={stl.verticalItem}>
-                  <div className={stl.verticalIcon}>{icon}</div>
-                  <div className={stl.verticalLabel}>{label}</div>
-                </div>
-              ),
-            } as SubMenuType<MenuItemType>;
-          }
+        const { children } = menu as SubMenuType<MenuItemType>;
+        if (children) {
+          return {
+            ...others,
+            children: loop(children as (MenuItemType | SubMenuType)[]),
+            popupClassName: stl.verticalPopup,
+            label: (
+              <div className={stl.verticalItem}>
+                <div className={stl.verticalIcon}>{icon}</div>
+                <div className={stl.verticalLabel}>{label}</div>
+              </div>
+            ),
+          };
         }
+
         return {
           ...others,
           label: (
@@ -58,7 +56,7 @@ const onDealVerticalMenu = (menuList: (MenuItemType | SubMenuType)[]) => {
               <div className={stl.verticalLabel}>{label}</div>
             </div>
           ),
-        } as MenuItemType;
+        };
       },
     );
   };

@@ -34,7 +34,9 @@ export const SearchInput = (props: SearchInputProps) => {
     };
 
     setCache(nw);
-    onChange && onChange(nw);
+    if (typeof onChange === "function") {
+      onChange(nw);
+    }
   };
 
   const handleInputChange = (e: any) => {

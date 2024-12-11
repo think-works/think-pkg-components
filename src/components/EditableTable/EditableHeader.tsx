@@ -33,29 +33,39 @@ const EditableHeader = (props: EditableHeaderProps) => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setVal(e.target.value);
-    onChange && onChange(e);
+    if (typeof onChange === "function") {
+      onChange(e);
+    }
   };
 
   const handleBlur = (e: any) => {
     setIsEdit(false);
-    onBlur && onBlur(e);
-    onChange &&
+    if (typeof onBlur === "function") {
+      onBlur(e);
+    }
+    if (typeof onChange === "function") {
       onChange({
         target: { value: val || "key" },
       } as any);
+    }
   };
 
   const handlePressEnter = (e: any) => {
     setIsEdit(false);
-    onPressEnter && onPressEnter(e);
-    onChange &&
+    if (typeof onPressEnter === "function") {
+      onPressEnter(e);
+    }
+    if (typeof onChange === "function") {
       onChange({
         target: { value: val || "key" },
       } as any);
+    }
   };
 
   const handleConfirm = () => {
-    onDelete && onDelete();
+    if (typeof onDelete === "function") {
+      onDelete();
+    }
   };
 
   const handleDoubleClick = () => {

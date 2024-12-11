@@ -40,7 +40,7 @@ export const useForceUpdate = (): [number, React.DispatchWithoutAction] => {
  * https://reactjs.org/docs/hooks-faq.html#how-to-get-the-previous-props-or-state
  */
 export const usePrevious = <T = any>(value: T) => {
-  const ref = useRef<T>();
+  const ref = useRef<T | undefined>(undefined);
 
   useEffect(() => {
     ref.current = value;

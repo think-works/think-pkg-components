@@ -140,12 +140,13 @@ export class FetchTable extends React.Component<
   private updatePaging = (paging: any) => {
     const { pageNo, pageSize, onPagingChange } = this.props;
 
-    onPagingChange &&
+    if (typeof onPagingChange === "function") {
       onPagingChange({
         pageNo,
         pageSize,
         ...(paging || {}),
       });
+    }
   };
 
   // 查询分页数据

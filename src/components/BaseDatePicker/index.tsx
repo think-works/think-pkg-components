@@ -42,7 +42,9 @@ export const BaseDatePicker = (props: BaseDatePickerProps) => {
         }
       }
 
-      onChange && onChange(ret, timeString as string);
+      if (typeof onChange === "function") {
+        onChange(ret, timeString as string);
+      }
     },
     [onChange, startOf, endOf],
   );

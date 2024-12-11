@@ -131,8 +131,8 @@ export const parseQuery = (
         try {
           // 尝试 JSON 反序列化
           _val = JSON.parse(_val);
-        } catch (error) {
-          // console.warn(error);
+        } catch {
+          // ignore error
         }
       }
 
@@ -180,8 +180,8 @@ export const stringifyQuery = (
         try {
           // 尝试 JSON 序列化
           _val = JSON.stringify(_val);
-        } catch (error) {
-          // console.warn(error);
+        } catch {
+          // ignore error
         }
       }
 
@@ -218,8 +218,8 @@ export const queryStorage = <T = any>(
     try {
       // 尝试 JSON 反序列化
       _val = JSON.parse(_val);
-    } catch (error) {
-      // console.warn(error);
+    } catch {
+      // ignore error
     }
   }
 
@@ -246,8 +246,8 @@ export const updateStorage = <T = any>(
     try {
       // 尝试 JSON 序列化
       _val = JSON.stringify(_val);
-    } catch (error) {
-      // console.warn(error);
+    } catch {
+      // ignore error
     }
   }
 
@@ -297,7 +297,7 @@ export const msecToString = (timestamp: number, format: string) => {
     const lMinutes = sMinutes < 10 ? `0${sMinutes}` : sMinutes; // 长分钟
     const lSecond = sSecond < 10 ? `0${sSecond}` : sSecond; // 长秒
     const lMillisecond = sMillisecond < 10 ? `0${sMillisecond}` : sMillisecond; // 长毫秒
-    // eslint-disable-next-line no-nested-ternary
+
     const llMillisecond =
       sMillisecond < 10
         ? `00${sMillisecond}`

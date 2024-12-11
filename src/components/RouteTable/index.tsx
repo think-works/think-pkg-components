@@ -1,7 +1,11 @@
 import { isEmpty, isEqual, omit } from "lodash-es";
-import React, { useCallback } from "react";
-import { NavigateFunction, useLocation, useNavigate } from "react-router-dom";
-import type { Location } from "@remix-run/router";
+import React, { JSX, useCallback } from "react";
+import {
+  Location,
+  NavigateFunction,
+  useLocation,
+  useNavigate,
+} from "react-router";
 import { normalizeObject, parseQuery, stringifyQuery } from "@/utils/tools";
 import { BaseTableDefaultPageSize } from "../BaseTable";
 import FetchTable, {
@@ -21,8 +25,8 @@ const tryParse = (value?: string): any => {
     let val = value;
     try {
       val = JSON.parse(val);
-    } catch (error) {
-      // console.warn(error);
+    } catch {
+      // ignore error
     }
     return val;
   }
@@ -34,8 +38,8 @@ const tryStringify = (value?: string) => {
     let val = value;
     try {
       val = JSON.stringify(val);
-    } catch (error) {
-      // console.warn(error);
+    } catch {
+      // ignore error
     }
     return val;
   }
@@ -324,10 +328,13 @@ type WrapperComponent = withRouterResult & {
   useSearchFilterValue: typeof useSearchFilterValue;
 };
 
-const withRouter: withRouterFunc = (Component) => (props) => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  return <Component location={location} navigate={navigate} {...props} />;
+const withRouter: withRouterFunc = (Component) => {
+  const RouterCom = (props: Parameters<withRouterResult>[0]) => {
+    const location = useLocation();
+    const navigate = useNavigate();
+    return <Component location={location} navigate={navigate} {...props} />;
+  };
+  return RouterCom;
 };
 
 /**

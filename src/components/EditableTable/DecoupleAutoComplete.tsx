@@ -16,7 +16,9 @@ const DecoupleAutoComplete = (props: AutoCompleteProps<string>) => {
 
   const handleChange = (e: string, optionChange: any) => {
     setVal(e);
-    onChange && onChange(e, optionChange);
+    if (typeof onChange === "function") {
+      onChange(e, optionChange);
+    }
   };
   return (
     <AutoComplete

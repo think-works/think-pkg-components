@@ -1,35 +1,20 @@
-import React, { forwardRef } from "react";
+import { forwardRef } from "react";
 import Scrollbar from "./Scrollbar";
 import type { ScrollbarBase } from "./types";
-import { isEnableScrollbar, isEnableStyle } from "./utils";
+import { isEnableStyle } from "./utils";
 
-export interface MacScrollbarProps extends ScrollbarBase {
-  /**
-   * Custom element type.
-   * @defaultValue 'div'
-   */
-  as?: keyof JSX.IntrinsicElements | string;
-}
+export interface MacScrollbarProps extends ScrollbarBase {}
 
-export const MacScrollbar = forwardRef<HTMLElement, MacScrollbarProps>(
-  (
-    { suppressScrollX, suppressScrollY, as = "div", style, children, ...props },
+export const MacScrollbar = forwardRef<HTMLDivElement, MacScrollbarProps>(
+  function MacScrollbarCom(
+    { suppressScrollX, suppressScrollY, style, children, ...props },
     ref,
-  ) => {
+  ) {
     const currentStyle = {
       overflowX: isEnableStyle(suppressScrollX),
       overflowY: isEnableStyle(suppressScrollY),
       ...style,
     };
-    const Wrapper = as as unknown as React.HTMLFactory<HTMLElement>;
-
-    if (!isEnableScrollbar()) {
-      return (
-        <Wrapper style={currentStyle} ref={ref} {...props}>
-          {children}
-        </Wrapper>
-      );
-    }
 
     return (
       <Scrollbar
@@ -37,7 +22,6 @@ export const MacScrollbar = forwardRef<HTMLElement, MacScrollbarProps>(
         innerRef={ref}
         suppressScrollX={suppressScrollX}
         suppressScrollY={suppressScrollY}
-        Wrapper={Wrapper}
         {...props}
       >
         {children}

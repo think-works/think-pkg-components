@@ -16,7 +16,9 @@ const DecoupleTextArea = (props: TextAreaProps) => {
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setVal(e.target.value);
-    onChange && onChange(e);
+    if (typeof onChange === "function") {
+      onChange(e);
+    }
   };
   return <Input.TextArea value={val} onChange={handleChange} {...rest} />;
 };

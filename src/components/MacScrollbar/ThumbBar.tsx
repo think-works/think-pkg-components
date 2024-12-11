@@ -5,7 +5,7 @@ import type {
   RefObject,
   SetStateAction,
 } from "react";
-import React, { memo } from "react";
+import { memo } from "react";
 import "./ThumbBar.less";
 import { ActionPosition, BoxSize } from "./types";
 import { computeRatio, updateScrollPosition } from "./utils";
@@ -24,7 +24,7 @@ export interface ThumbBarProps {
   horizontal?: boolean;
   pin: boolean | undefined;
 
-  trackRef: RefObject<HTMLDivElement>;
+  trackRef: RefObject<HTMLDivElement | null>;
   boxSize: BoxSize;
 
   update: Dispatch<SetStateAction<ActionPosition>>;

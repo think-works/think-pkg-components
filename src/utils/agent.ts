@@ -8,7 +8,7 @@ export const supportStorage = () => {
       window.sessionStorage.setItem(item, item);
       window.sessionStorage.removeItem(item);
       return true;
-    } catch (e) {
+    } catch {
       return false;
     }
   } else {

@@ -52,7 +52,9 @@ export const BaseDateRangePicker = (props: BaseDateRangePickerProps) => {
         });
       }
 
-      onChange && onChange(ret, timeStrings);
+      if (typeof onChange === "function") {
+        onChange(ret, timeStrings);
+      }
     },
     [onChange, startOf, endOf],
   );

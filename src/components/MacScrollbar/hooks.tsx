@@ -94,7 +94,9 @@ export function useDebounceCallback<CallbackArguments extends any[]>(
 ): (...args: CallbackArguments) => void {
   const callbackRef = useLatest(callback);
   const prev = useRef(0);
-  const trailingTimeout = useRef<ReturnType<typeof setTimeout>>();
+  const trailingTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
   const clearTrailing = () =>
     trailingTimeout.current && clearTimeout(trailingTimeout.current);
 

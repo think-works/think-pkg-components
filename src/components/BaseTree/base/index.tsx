@@ -91,7 +91,7 @@ export interface BaseTreeRef<BaseNode extends BaseTreeNode> {
   focusReload?: () => void;
   scrollTo?: (index: number) => void;
   scrollToKey?: () => void;
-  containerRef?: React.RefObject<HTMLDivElement>;
+  containerRef?: React.RefObject<HTMLDivElement | null>;
   setCurrentDragKey?: (key: string) => void;
   getNodeList?: () => BaseNode[];
   checkAll?: () => void;
@@ -589,7 +589,6 @@ const Tree = <BaseNode extends BaseTreeNode>(
     node: BaseTreeIndexItem<BaseNode>,
     checked: boolean,
   ): void => {
-    // eslint-disable-next-line no-param-reassign
     node.checked = checked;
     const checkList: BaseTreeKey[] = [];
     const nodes: BaseNode[] = [];
@@ -876,6 +875,6 @@ const Tree = <BaseNode extends BaseTreeNode>(
 
 export default forwardRef(Tree) as <BaseNode extends BaseTreeNode>(
   props: BaseTreeProps<BaseNode> & {
-    ref: React.RefObject<BaseTreeRef<BaseNode>> | null;
+    ref: React.RefObject<BaseTreeRef<BaseNode> | null> | null;
   },
 ) => React.ReactElement;

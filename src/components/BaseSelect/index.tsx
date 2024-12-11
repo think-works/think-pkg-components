@@ -83,7 +83,9 @@ export const BaseSelect = (props: BaseSelectProps) => {
     const handleAll = () => {
       const optList = _options.filter((x) => !x.disabled);
       const valList = optList.map((x) => x.value);
-      onChange && onChange(valList, optList);
+      if (typeof onChange === "function") {
+        onChange(valList, optList);
+      }
     };
 
     dropdownRender = (origin: any) => (

@@ -28,7 +28,7 @@ const getRowKeyFunc =
     }
 
     if (typeof rowKey === "function") {
-      return rowKey(record);
+      return rowKey(record as any);
     }
 
     return (record as any)?.[rowKey];
@@ -64,7 +64,7 @@ const SortableRow = (props: SortableRowProps) => {
     <tr {...rest} ref={setNodeRef} style={style} {...attributes} tabIndex={-1}>
       {React.Children.map(children, (child) => {
         if ((child as React.ReactElement).key === sortableColumnKey && rowId) {
-          return React.cloneElement(child as React.ReactElement, {
+          return React.cloneElement<any>(child as React.ReactElement, {
             children: (
               <MenuOutlined
                 ref={setActivatorNodeRef}

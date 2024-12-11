@@ -25,7 +25,9 @@ export const on = (name: string, handler: EventHandler) => {
  */
 export const once = (name: string, handler: EventHandler) => {
   const _handler = (...arg: any) => {
-    handler && handler(...arg);
+    if (typeof handler === "function") {
+      handler(...arg);
+    }
     off(name, _handler);
   };
 
@@ -57,7 +59,9 @@ export const emit = (name: string, ...arg: any) => {
   const list = events[name];
 
   return (list || []).map(async (handler) => {
-    typeof handler === "function" && (await handler(...arg));
+    if (typeof handler === "function") {
+      await handler(...arg);
+    }
   });
 };
 

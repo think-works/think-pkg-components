@@ -15,7 +15,9 @@ const DecoupleInput = (props: InputProps) => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setVal(e.target.value);
-    onChange && onChange(e);
+    if (typeof onChange === "function") {
+      onChange(e);
+    }
   };
 
   return <Input value={val} onChange={handleChange} {...rest} />;

@@ -47,7 +47,9 @@ export class Uploader extends React.Component<UploaderProps, any> {
       beforeUpload: (file: any) => {
         const { size } = file;
         if (isNumber(maxSize) && size > maxSize) {
-          onSizeOver && onSizeOver(file);
+          if (typeof onSizeOver === "function") {
+            onSizeOver(file);
+          }
           return Upload.LIST_IGNORE;
         }
       },
@@ -56,12 +58,16 @@ export class Uploader extends React.Component<UploaderProps, any> {
         const { status } = file;
 
         if (status === "done") {
-          onSuccess && onSuccess(info);
+          if (typeof onSuccess === "function") {
+            onSuccess(info);
+          }
           return;
         }
 
         if (status === "error") {
-          onError && onError(info);
+          if (typeof onError === "function") {
+            onError(info);
+          }
           return;
         }
       },

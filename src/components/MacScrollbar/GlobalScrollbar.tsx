@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { useEventListener, useInitial } from "./hooks";
 import { TrackGap } from "./types";
 import type { GlobalScrollbarBase } from "./types";
 import useScrollbar from "./useScrollbar";
-import { isEnableScrollbar } from "./utils";
 
 export interface GlobalScrollbarProps extends GlobalScrollbarBase {
   /**
@@ -59,8 +58,5 @@ function GlobalScrollbarInject({
 }
 
 export function GlobalScrollbar(props: GlobalScrollbarProps) {
-  if (!isEnableScrollbar()) {
-    return null;
-  }
   return <GlobalScrollbarInject {...props} />;
 }

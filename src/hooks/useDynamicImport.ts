@@ -27,7 +27,7 @@ export const useDynamicImport = <Module = any>(
   // 维护 forceKey 和 loading 状态，主要是为了在模块加载后触发组件更新
   const [forceKey, forceUpdate] = useReducer((x: number) => x + 1, 0);
   const [loading, setLoading] = useState(false);
-  const refModule = useRef<Module>();
+  const refModule = useRef<Module | undefined>(undefined);
 
   useEffect(() => {
     forceUpdate();

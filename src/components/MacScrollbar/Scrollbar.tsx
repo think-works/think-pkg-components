@@ -4,8 +4,7 @@ import type { ScrollbarBase } from "./types";
 import useScrollbar from "./useScrollbar";
 
 export interface ScrollbarProps extends ScrollbarBase {
-  innerRef?: React.Ref<HTMLElement | null>;
-  Wrapper: React.HTMLFactory<HTMLElement>;
+  innerRef?: React.Ref<HTMLDivElement | null>;
 }
 
 export default function ScrollBar({
@@ -22,11 +21,10 @@ export default function ScrollBar({
   trackStyle,
   thumbStyle,
   minThumbSize,
-  Wrapper,
   ...props
 }: ScrollbarProps) {
-  const scrollBoxRef = useRef<HTMLElement>(null);
-  useImperativeHandle(innerRef, () => scrollBoxRef.current);
+  const scrollBoxRef = useRef<HTMLDivElement>(null);
+  useImperativeHandle(innerRef, () => scrollBoxRef.current!);
 
   const [
     horizontalBar,
@@ -42,21 +40,21 @@ export default function ScrollBar({
     suppressAutoHide,
   });
 
-  function handleScroll(evt: React.UIEvent<HTMLElement, UIEvent>) {
+  function handleScroll(evt: React.UIEvent<HTMLDivElement, UIEvent>) {
     if (onScroll) {
       onScroll(evt);
     }
     updateLayerThrottle();
   }
 
-  function handleMouseEnter(evt: React.MouseEvent<HTMLElement>) {
+  function handleMouseEnter(evt: React.MouseEvent<HTMLDivElement>) {
     if (onMouseEnter) {
       onMouseEnter(evt);
     }
     updateLayerNow();
   }
 
-  function handleMouseLeave(evt: React.MouseEvent<HTMLElement>) {
+  function handleMouseLeave(evt: React.MouseEvent<HTMLDivElement>) {
     if (onMouseLeave) {
       onMouseLeave(evt);
     }
@@ -64,7 +62,7 @@ export default function ScrollBar({
   }
 
   return (
-    <Wrapper
+    <div
       className={`ms-container${className && ` ${className}`}`}
       ref={scrollBoxRef}
       onScroll={handleScroll}
@@ -77,6 +75,6 @@ export default function ScrollBar({
         {!suppressScrollY && verticalBar}
       </div>
       {children}
-    </Wrapper>
+    </div>
   );
 }

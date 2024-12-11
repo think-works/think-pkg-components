@@ -77,15 +77,23 @@ export const FilterForm = (props: FilterFormProps) => {
 
   const handleReset = () => {
     const values = {};
-    onReset && onReset(values);
-    onFilterChange && onFilterChange(values);
+    if (typeof onReset === "function") {
+      onReset(values);
+    }
+    if (typeof onFilterChange === "function") {
+      onFilterChange(values);
+    }
   };
 
   const handleSubmit = () => {
     const formValues = form.getFieldsValue();
     const values = { ...formValues };
-    onSubmit && onSubmit(values);
-    onFilterChange && onFilterChange(values);
+    if (typeof onSubmit === "function") {
+      onSubmit(values);
+    }
+    if (typeof onFilterChange === "function") {
+      onFilterChange(values);
+    }
   };
 
   const list = useMemo(() => {
@@ -99,7 +107,7 @@ export const FilterForm = (props: FilterFormProps) => {
         !open && idx >= maxItemCount ? stl.hideCol : undefined;
 
       if (isValidElement(item)) {
-        colProps.key = item?.key || item?.props?.name || colProps.key;
+        colProps.key = item?.key || (item?.props as any)?.name || colProps.key;
         children = item;
       } else {
         const { children: child, colProps: col } = (item ||

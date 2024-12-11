@@ -1,5 +1,7 @@
-export const TreeFolderOpenIcon: React.FC<{ style?: React.CSSProperties }> = ({
+export const TreeFolderOpenIcon = ({
   style,
+}: {
+  style?: React.CSSProperties;
 }) => {
   return (
     <svg

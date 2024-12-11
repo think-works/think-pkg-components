@@ -23,95 +23,96 @@ export type ResizingProps = Omit<HTMLAttributes<HTMLDivElement>, "onResize"> & {
 /**
  * 可尺寸变更容器
  */
-export const Resizing = forwardRef(
-  (props: ResizingProps, ref: ForwardedRef<HTMLDivElement>) => {
-    const {
-      className,
-      throttle = 100,
-      detachFlow = true,
-      onResize,
-      ...rest
-    } = props || {};
+export const Resizing = forwardRef(function ResizingCom(
+  props: ResizingProps,
+  ref: ForwardedRef<HTMLDivElement>,
+) {
+  const {
+    className,
+    throttle = 100,
+    detachFlow = true,
+    onResize,
+    ...rest
+  } = props || {};
 
-    const refObserver = useRef<ResizeObserver>();
-    const refContainer = useRef<HTMLDivElement>(null);
+  const refObserver = useRef<ResizeObserver | undefined>(undefined);
+  const refContainer = useRef<HTMLDivElement>(null);
 
-    useImperativeHandle(ref, () => refContainer.current as HTMLDivElement, []);
+  useImperativeHandle(ref, () => refContainer.current as HTMLDivElement, []);
 
-    const handleContainerResize = useCallback(
-      (entries: ResizeObserverEntry[]) => {
-        const entry = entries[0];
+  const handleContainerResize = useCallback(
+    (entries: ResizeObserverEntry[]) => {
+      const entry = entries[0];
 
-        if (!onResize || !entry) {
-          return;
-        }
-
-        if (entry.contentBoxSize?.[0]) {
-          const { blockSize, inlineSize } = entry.contentBoxSize[0];
-          onResize(inlineSize, blockSize);
-          return;
-        }
-
-        const { width, height } = entry.contentRect;
-        onResize(width, height);
-      },
-      [onResize],
-    );
-
-    const handleWindowResize = useCallback(() => {
-      if (!onResize) {
+      if (!onResize || !entry) {
         return;
       }
 
-      const { width, height } = refContainer.current!.getBoundingClientRect();
+      if (entry.contentBoxSize?.[0]) {
+        const { blockSize, inlineSize } = entry.contentBoxSize[0];
+        onResize(inlineSize, blockSize);
+        return;
+      }
+
+      const { width, height } = entry.contentRect;
       onResize(width, height);
-    }, [onResize]);
+    },
+    [onResize],
+  );
 
-    const _handleContainerResize = useThrottle(handleContainerResize, throttle);
-    const _handleWindowResize = useThrottle(handleWindowResize, throttle);
+  const handleWindowResize = useCallback(() => {
+    if (!onResize) {
+      return;
+    }
 
-    const addListener = useCallback(() => {
-      if (window.ResizeObserver) {
-        refObserver.current = new ResizeObserver(_handleContainerResize);
-        refObserver.current.observe(refContainer.current!);
-      } else {
-        window.addEventListener("resize", _handleWindowResize);
-      }
-    }, [_handleContainerResize, _handleWindowResize]);
+    const { width, height } = refContainer.current!.getBoundingClientRect();
+    onResize(width, height);
+  }, [onResize]);
 
-    const removeListener = useCallback(() => {
-      _handleContainerResize.cancel();
-      _handleWindowResize.cancel();
+  const _handleContainerResize = useThrottle(handleContainerResize, throttle);
+  const _handleWindowResize = useThrottle(handleWindowResize, throttle);
 
-      if (window.ResizeObserver) {
-        refObserver.current?.disconnect();
-      } else {
-        window.removeEventListener("resize", _handleWindowResize);
-      }
-    }, [_handleContainerResize, _handleWindowResize]);
+  const addListener = useCallback(() => {
+    if (window.ResizeObserver) {
+      refObserver.current = new ResizeObserver(_handleContainerResize);
+      refObserver.current.observe(refContainer.current!);
+    } else {
+      window.addEventListener("resize", _handleWindowResize);
+    }
+  }, [_handleContainerResize, _handleWindowResize]);
 
-    useEffect(() => {
-      addListener();
+  const removeListener = useCallback(() => {
+    _handleContainerResize.cancel();
+    _handleWindowResize.cancel();
 
-      return () => {
-        removeListener();
-      };
-    }, [addListener, removeListener]);
+    if (window.ResizeObserver) {
+      refObserver.current?.disconnect();
+    } else {
+      window.removeEventListener("resize", _handleWindowResize);
+    }
+  }, [_handleContainerResize, _handleWindowResize]);
 
-    return (
-      <div
-        className={cls(
-          stl.resizing,
-          {
-            [stl.detachFlow]: detachFlow,
-          },
-          className,
-        )}
-        ref={refContainer}
-        {...rest}
-      />
-    );
-  },
-);
+  useEffect(() => {
+    addListener();
+
+    return () => {
+      removeListener();
+    };
+  }, [addListener, removeListener]);
+
+  return (
+    <div
+      className={cls(
+        stl.resizing,
+        {
+          [stl.detachFlow]: detachFlow,
+        },
+        className,
+      )}
+      ref={refContainer}
+      {...rest}
+    />
+  );
+});
 
 export default Resizing;
