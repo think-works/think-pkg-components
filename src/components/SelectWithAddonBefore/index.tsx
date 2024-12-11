@@ -33,7 +33,7 @@ export const SelectWithAddonBefore = (props: SelectWithAddonBeforeProps) => {
         className={styles["item-form"]}
         onChange={(e, option) => props?.onChange?.(e, option)}
         options={props.options}
-        rootClassName={styles["item-form-select"]}
+        rootClassName={addonBefore && styles["item-form-select"]}
         dropdownRender={
           renderLink
             ? (menu) => (
