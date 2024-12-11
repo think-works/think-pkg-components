@@ -9,7 +9,7 @@ export type UserModel = {
 };
 
 export const getUserName = ({ nickName, loginName }: UserModel) =>
-  nickName ? `${nickName}(${loginName})` : loginName;
+  loginName && nickName ? `${nickName}(${loginName})` : loginName || nickName;
 
 export type UserAvatarGroupProps = GetProps<typeof Avatar.Group> & {
   userModels?: (UserModel | undefined)[];
@@ -38,7 +38,12 @@ const UserAvatarGroup = (props: UserAvatarGroupProps) => {
         const userName = getUserName(item);
         return (
           <Tooltip key={userName} title={userName}>
-            <BaseAvatar className={stl.avatar} userInfo={{ name: nickName }} />
+            <span>
+              <BaseAvatar
+                className={stl.avatar}
+                userInfo={{ name: nickName }}
+              />
+            </span>
           </Tooltip>
         );
       })}

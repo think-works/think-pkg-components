@@ -5,7 +5,6 @@ import {
   BaseTreeMatchesSearch,
   BaseTreeRef,
   DirectoryTreeDropdownItem,
-  /*DirectoryTreeNode,*/
 } from "@/components/_export";
 import DirectoryTree from "@/components/DirectoryTree";
 import DirectoryTreeSearch from "@/components/DirectoryTree/search";

@@ -22,7 +22,11 @@ export const UserAvatar = (props: UserAvatarProps) => {
   const avatar = <BaseAvatar userInfo={{ name: nickName }} {...rest} />;
 
   if (hideName) {
-    return <Tooltip title={userName}>{avatar}</Tooltip>;
+    return (
+      <Tooltip title={userName}>
+        <span>{avatar}</span>
+      </Tooltip>
+    );
   }
 
   return (

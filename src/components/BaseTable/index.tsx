@@ -157,7 +157,7 @@ export const BaseTable = (props: BaseTableProps) => {
                 content
               ) : (
                 <Tooltip placement="topLeft" title={content}>
-                  {content}
+                  <div className={stl.tooltip}>{content}</div>
                 </Tooltip>
               );
             };
