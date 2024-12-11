@@ -16,10 +16,7 @@ const srcPath = fileURLToPath(new URL("src", import.meta.url));
 const external = Object.keys(peerDependencies || {}).concat([
   "react/jsx-runtime",
 ]);
-const libEntry = [
-  path.join(srcPath, "index.ts"),
-  path.join(srcPath, "node.ts"),
-];
+const libEntry = [path.join(srcPath, "index.ts")];
 
 export default defineConfig(({ mode }) => {
   const date = new Date().toISOString();
@@ -43,17 +40,9 @@ export default defineConfig(({ mode }) => {
   let apiBase = env.VITE_API_BASE || "/";
   apiBase = apiBase.endsWith("/") ? apiBase : `${apiBase}/`;
 
-  const lessModifyVars = {
-    antPrefixVar: env.VITE_ANTD_PREFIX_VAR,
-    antPrefixClass: env.VITE_ANTD_PREFIX_CLASS,
-    antPrefixIcon: env.VITE_ANTD_PREFIX_ICON,
-    bizLayoutZIndex: env.VITE_BIZ_LAYOUT_ZINDEX,
-    bizLayoutHeader: env.VITE_BIZ_LAYOUT_HEADER,
-  };
-
   const proxyCfg = proxy({
     apiBase,
-    target: proxyTarget,
+    proxyTarget,
   });
 
   return {
@@ -73,34 +62,19 @@ export default defineConfig(({ mode }) => {
       lib: {
         formats: ["es", "cjs"],
         entry: libEntry,
+        /** 为配合 tsc-alias 生成类型文件，使用入口文件名作为库导出名 */
+        // fileName: libraryName,
+        cssFileName: libraryName,
       },
       rollupOptions: {
         external,
         output: {
           sourcemapExcludeSources: true,
           banner: `/*!\n * APP_NAME: ${name}\n * APP_VERSION: ${version}\n * BUILD_DATE: ${date}\n * BUILD_COMMIT: ${commit}\n */\n`,
-          /**
-           * 在 js 中添加 css 导入语句，将样式交由本库的使用方处理。
-           * https://github.com/vitejs/vite/issues/1579
-           */
-          // intro: `typeof window === "undefined" ? null : import("./${libraryName}.css");`,
-          /**
-           * 自定义 css 资源文件名
-           * https://github.com/vitejs/vite/issues/4863#issuecomment-1812450561
-           */
-          assetFileNames: (assetInfo) => {
-            if (assetInfo.name === "style.css") return `${libraryName}.css`;
-            return assetInfo.name;
-          },
         },
       },
     },
     css: {
-      preprocessorOptions: {
-        less: {
-          modifyVars: lessModifyVars,
-        },
-      },
       modules: {
         /**
          * 自定义 classname 名称

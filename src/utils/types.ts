@@ -2,6 +2,7 @@
  * api 接口响应
  */
 export type ApiResponse<Data = any, Ext = any> = {
+  timestamp?: number;
   success?: boolean;
   message?: string;
   data?: Data;

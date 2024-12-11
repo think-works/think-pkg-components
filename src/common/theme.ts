@@ -1,9 +1,13 @@
-import * as styles from "@/utils/styles";
-
 /**
- * 样式配置
+ * 样式配置(与 @/styles/basic.less 保持一致)
  */
-export const styleConfig = styles;
+export const styleConfig = {
+  antPrefixVar: "ant",
+  antPrefixClass: "ant",
+  antPrefixIcon: "anticon",
+  bizLayoutZIndex: 100,
+  bizLayoutHeader: 48,
+};
 
 /**
  * 主题变量
@@ -31,7 +35,7 @@ export const themeToken = {
 export const themeConfig = {
   token: themeToken,
   cssVar: {
-    prefix: styles.antPrefixVar,
+    prefix: styleConfig.antPrefixVar,
   },
 };
 
@@ -39,7 +43,7 @@ export const themeConfig = {
  * 默认 ConfigProvider 配置
  */
 export const defaultConfigProviderProps = {
-  prefixCls: styles.antPrefixClass,
-  iconPrefixCls: styles.antPrefixIcon,
+  prefixCls: styleConfig.antPrefixClass,
+  iconPrefixCls: styleConfig.antPrefixIcon,
   theme: themeConfig,
 };

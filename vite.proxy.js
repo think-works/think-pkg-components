@@ -7,13 +7,22 @@ const commonOptions = {
   // },
 };
 
-export default ({ apiBase, target }) => ({
-  [`/quality/api`]: {
-    target,
+const getProxyRules = (proxyPaths, options) => {
+  return proxyPaths.reduce((rules, path) => {
+    rules[path] = { ...options };
+    return rules;
+  }, {});
+};
+
+const fullServiceTarget = "https://dev.xincetest.com:10443";
+
+export default ({ apiBase, proxyTarget }) => ({
+  ...getProxyRules([`/login`, `/meta`, `/quality/api`], {
     ...commonOptions,
-  },
+    target: fullServiceTarget,
+  }),
   [`${apiBase}api`]: {
-    target,
     ...commonOptions,
+    target: proxyTarget,
   },
 });
