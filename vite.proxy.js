@@ -23,6 +23,6 @@ export default ({ apiBase, proxyTarget }) => ({
   }),
   [`${apiBase}api`]: {
     ...commonOptions,
-    target: proxyTarget,
+    target: proxyTarget || fullServiceTarget,
   },
 });

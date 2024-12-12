@@ -39,11 +39,6 @@ export default defineConfig(({ mode }) => {
   let apiBase = env.VITE_API_BASE || "/";
   apiBase = apiBase.endsWith("/") ? apiBase : `${apiBase}/`;
 
-  const proxyCfg = proxy({
-    apiBase,
-    proxyTarget,
-  });
-
   return {
     clearScreen: false,
     resolve: {
@@ -53,7 +48,10 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       host: "0.0.0.0",
-      proxy: proxyTarget ? proxyCfg : undefined,
+      proxy: proxy({
+        apiBase,
+        proxyTarget,
+      }),
     },
     build: {
       minify: !buildIgnoreMinify,
@@ -85,9 +83,7 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       mockEnable
-        ? mockDevServer({
-            prefix: proxyTarget ? [] : Object.keys(proxyCfg),
-          })
+        ? mockDevServer()
         : undefined,
       checker({
         typescript: true,
