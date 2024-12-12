@@ -1,8 +1,13 @@
 /**
  * 千分位分割数值
  * https://en.wikipedia.org/wiki/Decimal_separator
+ * @param num 数值
+ * @param len 小数点位数
+ * @param pad 补全小数点位数
+ * @param split 千分位分隔符
+ * @returns
  */
-export const separator = (num: number, len = 0, pad = true) => {
+export const separator = (num: number, len = 0, pad = true, split = ",") => {
   let strNum = "";
   let decLen = 0;
 
@@ -31,7 +36,7 @@ export const separator = (num: number, len = 0, pad = true) => {
 
           target.push(item);
           if ((i + 1) % 3 === 0 && i !== source.length - 1) {
-            target.push(",");
+            target.push(split);
           }
         }
 
@@ -55,11 +60,31 @@ export const separator = (num: number, len = 0, pad = true) => {
 
 /**
  * 人类友好的时间间隔
- * @timestamp 时间戳
- * @units 单位
- * @split 分隔符
+ * @timestamp 时间间隔
+ * @units 单位文案(空字符串表示忽略当前单位)
+ * @split 单位分隔符
+ * @returns
  */
-export const timespan = (timestamp: number, units = {}, split = " ") => {
+export const timespan = (
+  timestamp: number,
+  units: {
+    /** 毫秒 */
+    S?: string;
+    /** 秒 */
+    s?: string;
+    /** 分钟 */
+    m?: string;
+    /** 小时 */
+    H?: string;
+    /** 天 */
+    D?: string;
+    /** 月 */
+    M?: string;
+    /** 年 */
+    Y?: string;
+  } = {},
+  split = " ",
+) => {
   const s = 1000;
   const m = s * 60;
   const H = m * 60;
@@ -122,8 +147,31 @@ export const timespan = (timestamp: number, units = {}, split = " ") => {
 
 /**
  * 人类友好的时间点
+ * @param timestamp 时间间隔
+ * @param units 单位文案(空字符串表示忽略当前单位)
+ * @param len 小数点位数
+ * @returns
  */
-export const datetime = (timestamp: number, len = 0, units = {}) => {
+export const datetime = (
+  timestamp: number,
+  units: {
+    /** 毫秒前 */
+    S?: string;
+    /** 秒前 */
+    s?: string;
+    /** 分钟前 */
+    m?: string;
+    /** 小时前 */
+    H?: string;
+    /** 天前 */
+    D?: string;
+    /** 月前 */
+    M?: string;
+    /** 年前 */
+    Y?: string;
+  } = {},
+  len = 0,
+) => {
   const s = 1000;
   const m = s * 60;
   const H = m * 60;
@@ -167,8 +215,35 @@ export const datetime = (timestamp: number, len = 0, units = {}) => {
 
 /**
  * 人类友好的存储
+ * @param num 数值
+ * @param units 单位文案(空字符串表示忽略当前单位)
+ * @param len 小数点位数
+ * @returns
  */
-export const storage = (num: number, len = 0, units = {}) => {
+export const storage = (
+  num: number,
+  units: {
+    /** B */
+    B?: string;
+    /** KiB */
+    K?: string;
+    /** MiB */
+    M?: string;
+    /** GiB */
+    G?: string;
+    /** TiB */
+    T?: string;
+    /** PiB */
+    P?: string;
+    /** EiB */
+    E?: string;
+    /** ZiB */
+    Z?: string;
+    /** YiB */
+    Y?: string;
+  } = {},
+  len = 0,
+) => {
   const K = 1024;
   const M = K * 1024;
   const G = M * 1024;
