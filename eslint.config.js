@@ -42,6 +42,13 @@ export default [
           ignoreRestSiblings: true,
         },
       ],
+      "@typescript-eslint/no-unused-expressions": [
+        "warn",
+        {
+          allowTernary: true,
+          allowShortCircuit: true,
+        }
+      ],
     },
   },
 ];
