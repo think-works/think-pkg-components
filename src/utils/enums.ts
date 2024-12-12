@@ -7,7 +7,7 @@ export type EnumFunc = <
 >(
   kov: BaseValue,
   retItem?: B,
-) => R;
+) => R | undefined;
 
 export type EnumItem<V = BaseValue> = {
   [k: string]: any;

@@ -100,7 +100,7 @@ export const timespan = (
     D: " 天",
     M: " 月",
     Y: " 年",
-    ...units,
+    ...(units || {}),
   };
 
   const list: string[] = [];
@@ -187,7 +187,7 @@ export const datetime = (
     D: " 天前",
     M: " 月前",
     Y: " 年前",
-    ...units,
+    ...(units || {}),
   };
 
   let ret: number | string = timestamp;
@@ -263,7 +263,7 @@ export const storage = (
     E: " EiB",
     Z: " ZiB",
     Y: " YiB",
-    ...units,
+    ...(units || {}),
   };
 
   let ret: number | string = num;
