@@ -82,9 +82,7 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       react(),
-      mockEnable
-        ? mockDevServer()
-        : undefined,
+      mockEnable ? mockDevServer() : undefined,
       checker({
         typescript: true,
         eslint: {
