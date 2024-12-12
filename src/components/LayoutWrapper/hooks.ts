@@ -1,8 +1,9 @@
 import { isArray, isString } from "lodash-es";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useMatches } from "react-router-dom";
 import { useForceUpdate } from "@/hooks";
 import * as events from "@/utils/events";
+import { truthy } from "@/utils/types";
 import { LayoutWrapperExtendRouteMeta } from "./type";
 import {
   getCustomMenus,
@@ -62,6 +63,8 @@ export const useMatchMenuKeys = () => {
  */
 export const useCustomMenus = (position?: LayoutWrapperCustomMenuPosition) => {
   const [forceKey, forceUpdate] = useForceUpdate();
+  const [menus, setMenus] = useState<ReturnType<typeof getCustomMenus>>();
+
   useEffect(() => {
     events.on(refreshCustomMenuEventKey, forceUpdate);
 
@@ -70,12 +73,12 @@ export const useCustomMenus = (position?: LayoutWrapperCustomMenuPosition) => {
     };
   }, [forceUpdate]);
 
-  const meuns = useMemo(() => {
-    return getCustomMenus({ position });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    const list = getCustomMenus({ position });
+    setMenus(list);
   }, [forceKey, position]);
 
-  return meuns;
+  return menus;
 };
 
 // #endregion
@@ -89,6 +92,7 @@ export const useMatchCrumbs = () => {
   const matches = useMatches();
 
   const [forceKey, forceUpdate] = useForceUpdate();
+  const [crumbs, setCrumbs] = useState<LayoutWrapperCrumbReturn[]>();
 
   useEffect(() => {
     events.on(refreshRouteCrumbEventKey, forceUpdate);
@@ -98,7 +102,7 @@ export const useMatchCrumbs = () => {
     };
   }, [forceUpdate]);
 
-  const crumbs = useMemo(() => {
+  useEffect(() => {
     // 用匹配路由的 crumb/title 和 pathname 作为面包屑
     const list = matches
       .map(({ pathname, handle }) => {
@@ -116,10 +120,9 @@ export const useMatchCrumbs = () => {
 
         return newCrumb;
       })
-      .filter((x) => x);
+      .filter(truthy);
 
-    return list as LayoutWrapperCrumbReturn[];
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setCrumbs(list);
   }, [forceKey, matches]);
 
   return crumbs;

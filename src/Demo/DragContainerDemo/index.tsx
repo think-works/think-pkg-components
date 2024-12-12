@@ -1,4 +1,4 @@
-import { DragContainer, FlexTabs } from "@/index";
+import { DragContainer, FlexTabs } from "@/components";
 
 const DragContainerDemo = () => {
   const simpleDemo = (

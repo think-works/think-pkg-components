@@ -88,7 +88,7 @@ export const useFetch = <
       fetch(...fetchParams);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetch, needFetch, refreshKey, ...fetchParams]);
+  }, [fetch, needFetch, refreshKey, ...fetchParams]); // 动态依赖数组
 
   return {
     /**

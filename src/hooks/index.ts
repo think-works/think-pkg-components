@@ -70,7 +70,8 @@ export const useEventCallback = <T extends (...args: any[]) => any>(
    */
   useEffect(() => {
     ref.current = func;
-  }, [func, ...deps]); // eslint-disable-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [func, ...deps]); // 动态依赖数组
 
   return useCallback((...rest: any[]) => ref.current(...rest), [ref]);
 };

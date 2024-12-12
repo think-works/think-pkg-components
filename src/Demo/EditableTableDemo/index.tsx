@@ -1,6 +1,6 @@
 import type { TableColumnType } from "antd";
 import { useMemo, useState } from "react";
-import { EditableTable } from "@/index";
+import { EditableTable } from "@/components";
 
 const EditableTableDemo = () => {
   const [readOnly] = useState<boolean>(false);

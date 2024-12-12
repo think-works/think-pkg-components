@@ -8,6 +8,7 @@ export default {
     "^[.]{2}/", // "../path"
     "^[.]/", // "./path"
   ],
+  importOrderSideEffects: false,
   importOrderSortSpecifiers: true,
   importOrderCaseInsensitive: true,
   plugins: ["@trivago/prettier-plugin-sort-imports"],

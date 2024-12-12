@@ -1,4 +1,4 @@
-import { FlexTabs, FlexTabsProps } from "@/index";
+import { FlexTabs, FlexTabsProps } from "@/components";
 
 const FlexTabsDemo = () => {
   const tabsProps: FlexTabsProps = {
