@@ -149,9 +149,3 @@ Thumbs.db
 # Local env files
 .env.local
 .env.*.local
-
-# 编译输出
-cjs
-esm
-umd
-types
