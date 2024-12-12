@@ -16,7 +16,6 @@ const srcPath = fileURLToPath(new URL("src", import.meta.url));
 const external = Object.keys(peerDependencies || {}).concat([
   "react/jsx-runtime",
 ]);
-const libEntry = [path.join(srcPath, "index.ts")];
 
 export default defineConfig(({ mode }) => {
   const date = new Date().toISOString();
@@ -61,7 +60,7 @@ export default defineConfig(({ mode }) => {
       sourcemap: buildSourcemap,
       lib: {
         formats: ["es", "cjs"],
-        entry: libEntry,
+        entry: path.join(srcPath, libraryName),
         /** 为配合 tsc-alias 生成类型文件，使用入口文件名作为库导出名 */
         // fileName: libraryName,
         cssFileName: libraryName,

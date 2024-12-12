@@ -27,7 +27,7 @@ const Crumb = (props: CrumbProps) => {
   const crumbItems = useMemo(
     () =>
       matchCrumbs
-        .map(({ title, pathname, to, element }, idx) => {
+        ?.map(({ title, pathname, to, element }, idx) => {
           const last = idx === matchCrumbs.length - 1;
           const key = `${title}-${pathname}-${idx}`;
 
@@ -61,7 +61,7 @@ const Crumb = (props: CrumbProps) => {
     [matchCrumbs],
   );
 
-  if (!crumbItems.length) {
+  if (!crumbItems?.length) {
     return null;
   }
 

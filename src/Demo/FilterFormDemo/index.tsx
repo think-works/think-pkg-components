@@ -1,5 +1,5 @@
 import { Form, Input, Select } from "antd";
-import { FilterForm } from "@/index";
+import { FilterForm } from "@/components";
 
 const defectPriority = [
   {

@@ -1,13 +1,13 @@
 export type BaseValue = string | number | boolean | null | undefined;
 
-export type Func = <
-  Result = BaseValue,
-  P extends BaseValue = boolean,
-  R = `${P}` extends "true" ? EnumItem<Result> : Result,
+export type EnumFunc = <
+  V = BaseValue,
+  B extends boolean = boolean,
+  R = `${B}` extends "true" ? EnumItem<V> : V,
 >(
   kov: BaseValue,
-  retItem?: P,
-) => R;
+  retItem?: B,
+) => R | undefined;
 
 export type EnumItem<V = BaseValue> = {
   [k: string]: any;
@@ -16,12 +16,11 @@ export type EnumItem<V = BaseValue> = {
   label: string;
 };
 
-export type EnumFunc = Record<string, any> & Func;
-
-export type EnumMap<V = BaseValue> = {
+export type EnumMap<V = BaseValue> = Record<string, any> & {
+  _label: Record<string, any>;
   _list: EnumItem<V>[];
-  _label: EnumFunc;
-} & EnumFunc;
+  _get: EnumFunc;
+};
 
 export type EnumList<T extends EnumMap> = T["_list"];
 
@@ -64,40 +63,43 @@ export type CombineUnion<T> = (
   : never;
 
 /**
- * key/value 映射
  * ```
+ * // 用 key 映射 value
  * DemoEnumMap.key -> value
+ * // 用 value 映射 key
  * DemoEnumMap.value -> key
  *
- * DemoEnumMap(key) -> value
- * DemoEnumMap(value) -> key
- *
- * DemoEnumMap(key, true) -> EnumItem
- * DemoEnumMap(value, true) -> EnumItem
+ * // 用 key 映射 label
+ * DemoEnumMap._label.key -> label
+ * // 用 value 映射 label
+ * DemoEnumMap._label.value -> label
  * ```
  */
 export type DefineEnum<T extends EnumItem[]> = CombineUnion<
   Transform<T[number]>
 > & {
   /**
-   * 原始输入数组
+   * ```
+   * // 原始输入数组
+   * DemoEnumMap._list
+   * ```
    */
   _list: T;
   /**
-   * label 映射
    * ```
-   * DemoEnumMap._label.key -> label
-   * DemoEnumMap._label.value -> label
+   * // 用 key 查找 value
+   * DemoEnumMap._get(key) -> value
+   * // 用 value 查找 key
+   * DemoEnumMap._get(value) -> key
    *
-   * DemoEnumMap._label(key) -> label
-   * DemoEnumMap._label(value) -> label
-   *
-   * DemoEnumMap._label(key, true) -> EnumItem
-   * DemoEnumMap._label(value, true) -> EnumItem
+   * // 用 key 查找 原始输入数组 中相关项
+   * DemoEnumMap._get(key, true) -> EnumItem
+   * // 用 value 查找 原始输入数组 中相关项
+   * DemoEnumMap._get(value, true) -> EnumItem
    * ```
    */
-  _label: Func;
-} & Func;
+  _get: EnumFunc;
+};
 
 /**
  * 定义枚举映射，如：
@@ -120,59 +122,34 @@ export type DefineEnum<T extends EnumItem[]> = CombineUnion<
  *
  * 使用枚举映射，如：
  *
- * key/value 映射
  * ```
+ * // 原始输入数组
+ * DemoEnumMap._list
+ *
+ * // 用 key 映射 value
  * DemoEnumMap.key -> value
+ * // 用 value 映射 key
  * DemoEnumMap.value -> key
  *
- * DemoEnumMap(key) -> value
- * DemoEnumMap(value) -> key
- *
- * DemoEnumMap(key, true) -> EnumItem
- * DemoEnumMap(value, true) -> EnumItem
- * ```
- *
- * 原始输入数组
- * ```
- * DemoEnumMap._list
- * ```
- *
- * label 映射
- * ```
+ * // 用 key 映射 label
  * DemoEnumMap._label.key -> label
+ * // 用 value 映射 label
  * DemoEnumMap._label.value -> label
  *
- * DemoEnumMap._label(key) -> label
- * DemoEnumMap._label(value) -> label
+ * // 用 key 查找 value
+ * DemoEnumMap._get(key) -> value
+ * // 用 value 查找 key
+ * DemoEnumMap._get(value) -> key
  *
- * DemoEnumMap._label(key, true) -> EnumItem
- * DemoEnumMap._label(value, true) -> EnumItem
+ * // 用 key 查找 原始输入数组 中相关项
+ * DemoEnumMap._get(key, true) -> EnumItem
+ * // 用 value 查找 原始输入数组 中相关项
+ * DemoEnumMap._get(value, true) -> EnumItem
  * ```
  */
 export const defEnumMap = <T extends EnumItem[]>(list: T): DefineEnum<T> => {
-  const kvMap: any = (kov: any, retItem?: boolean) => {
-    const kItem = list.find((x) => x.key === kov);
-    if (kItem) {
-      return retItem ? kItem : kItem.value;
-    }
-
-    const vItem = list.find((x) => x.value === kov);
-    if (vItem) {
-      return retItem ? vItem : vItem.key;
-    }
-  };
-
-  const lMap: any = (kov: any, retItem?: boolean) => {
-    const kItem = list.find((x) => x.key === kov);
-    if (kItem) {
-      return retItem ? kItem : kItem.label;
-    }
-
-    const vItem = list.find((x) => x.value === kov);
-    if (vItem) {
-      return retItem ? vItem : vItem.label;
-    }
-  };
+  const kvMap: any = {};
+  const lMap: any = {};
 
   list.forEach(({ key, label, value }) => {
     kvMap[value as any] = key;
@@ -185,6 +162,17 @@ export const defEnumMap = <T extends EnumItem[]>(list: T): DefineEnum<T> => {
   const kvlMap = kvMap;
   kvlMap._label = lMap;
   kvlMap._list = list;
+  kvlMap._get = (kov: any, retItem?: boolean) => {
+    const kItem = list.find((x) => x.key === kov);
+    if (kItem) {
+      return retItem ? kItem : kItem.value;
+    }
+
+    const vItem = list.find((x) => x.value === kov);
+    if (vItem) {
+      return retItem ? vItem : vItem.key;
+    }
+  };
 
   return kvlMap;
 };

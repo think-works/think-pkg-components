@@ -111,7 +111,7 @@ const LeftMenu = (props: LeftMenuProps) => {
 
   // 自定义路由菜单
   useEffect(() => {
-    let list = customMenus.length ? customMenus : [];
+    let list = customMenus?.length ? customMenus : [];
     list = list.filter(types.truthy) as (MenuItemType | SubMenuType)[];
     /**
      * 竖直模式下，菜单项样式调整
