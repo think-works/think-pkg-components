@@ -10,7 +10,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { MacScrollbar } from "@/components/MacScrollbar";
 import "./index.less";
 import TreeNode from "./node";
 import {
@@ -816,7 +815,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [expandAll]);
   return (
-    <MacScrollbar
+    <div
       ref={containerRef}
       draggable={false}
       onDragLeave={(e) => onDragLeave(e, kRootNode)}
@@ -869,7 +868,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
           );
         })}
       </div>
-    </MacScrollbar>
+    </div>
   );
 };
 
