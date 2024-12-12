@@ -16,8 +16,8 @@ export type EnumItem<V = BaseValue> = {
   label: string;
 };
 
-export type EnumMap<V = BaseValue> = Record<string, V> & {
-  _label: Record<string, V>;
+export type EnumMap<V = BaseValue> = Record<string, any> & {
+  _label: Record<string, any>;
   _list: EnumItem<V>[];
   _get: EnumFunc;
 };
