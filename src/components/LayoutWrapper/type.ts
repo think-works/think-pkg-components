@@ -1,4 +1,22 @@
+import { Argument } from "classnames";
+import { CrumbProps } from "./Crumb";
 import { FooterProps } from "./Footer";
+import { HeaderProps } from "./Header";
+import { SiderProps } from "./Sider";
+
+/**
+ * 侧边栏菜单模式
+ */
+export enum LayoutSiderItemMode {
+  /**
+   * 垂直排列 icon-text
+   */
+  VERTICAL = "VERTICAL",
+  /**
+   * 水平排列 icon-text
+   */
+  HORIZONTAL = "HORIZONTAL",
+}
 
 /**
  * 权限组合模式
@@ -47,92 +65,42 @@ export interface LayoutWrapperExtendRouteMeta extends Record<string, any> {
    */
   authMode?: AuthCombineMode;
 }
-/**
- * 页面布局路由
- */
-export enum LayoutSiderItemMode {
-  /**
-   * 垂直排列 icon-text
-   */
-  VERTICAL = "VERTICAL",
-  /**
-   * 水平排列 icon-text
-   */
-  HORIZONTAL = "HORIZONTAL",
-}
 
 /**
  * 页面布局组件参数
  */
 export interface LayoutWrapperProps {
+  className?: Argument;
+  children?: React.ReactNode;
+  /**
+   * 最小页面宽度
+   * 默认值 1200
+   */
+  minPageWidth?: number;
   /**
    * 页面顶部
+   * 快捷属性，等同于 headerProps.children
    */
   header?: React.ReactNode;
   /**
-   * 页面内容
-   */
-  children: React.ReactNode;
-  /**
-   * 页面内容配置参数
-   * @description 配置参数在非自定义 content 时生效
-   */
-  childrenProps?: {
-    /**
-     * 页面内容最小宽度
-     * @default 1200
-     */
-    minFullWidth?: number;
-    /*
-     * 面包屑模式
-     * title 标题模式
-     */
-    crumbMode?: "title";
-  };
-  /**
    * 页面底部
+   * 快捷属性，等同于 footerProps.children
    */
   footer?: React.ReactNode;
   /**
-   * 页面底部配置参数
-   * @description 配置参数在非自定义 footer 时生效
+   * 页头属性
+   */
+  headerProps?: HeaderProps;
+  /**
+   * 页脚属性
    */
   footerProps?: FooterProps;
   /**
-   * 页面侧边栏
-   * @description 侧边栏内容 默认使用组件内侧边栏
+   * 侧边栏属性
    */
-  sider?: React.ReactNode;
+  siderProps?: SiderProps;
   /**
-   * 侧边栏配置参数
-   * @description 配置参数在非自定义 sider 时生效
+   * 面包屑属性
    */
-  siderProps?: {
-    /**
-     * 侧边栏菜单项 icon和文本 排列方式 默认垂直排列
-     */
-    mode?: LayoutSiderItemMode;
-    /**
-     * 自定义侧边栏宽度
-     * @param mode
-     * @returns
-     */
-    renderSiderWidth?: (mode: LayoutSiderItemMode) => number;
-    /**
-     * 自定义菜单上方内容
-     * @param siderWidth 侧边栏实际宽度 展开时为 siderWidth 收缩时为 collapsedWidth
-     */
-    renderMenuTop?: (params: {
-      siderWidth: number;
-      collapsed?: boolean;
-    }) => React.ReactNode;
-    /**
-     * 自定义菜单下方内容
-     * @param siderWidth 侧边栏实际宽度 展开时为 siderWidth 收缩时为 collapsedWidth
-     */
-    renderMenuBottom?: (params: {
-      siderWidth: number;
-      collapsed?: boolean;
-    }) => React.ReactNode;
-  };
+  crumbProps?: CrumbProps;
 }

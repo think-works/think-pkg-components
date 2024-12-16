@@ -13,18 +13,23 @@
     display: flex;
     flex-direction: column;
   }
-  .leftMenu {
+
+  .top {
+  }
+
+  .bottom {
+  }
+
+  .menu {
     flex: auto;
     overflow: auto;
     overflow: overlay;
     background-color: transparent;
-    &::-webkit-scrollbar {
-      display: none;
+
+    .scrollbarModern(transparent, transparent);
+    &:hover {
+      .scrollbarModern();
     }
-  }
-  .extend {
-    flex: none;
-    margin-bottom: 50px;
   }
 }
 

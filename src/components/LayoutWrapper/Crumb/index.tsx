@@ -6,11 +6,6 @@ import * as types from "@/utils/types";
 import { useMatchCrumbs } from "../hooks";
 import stl from "./index.module.less";
 
-/**
- * 面包屑扩展类名
- */
-const breadcrumbExtendClass = `Layout-Breadcrumb-Extend-${Date.now()}`;
-
 export type CrumbProps = {
   className?: Argument;
   /*
@@ -18,10 +13,12 @@ export type CrumbProps = {
    * title 标题模式
    */
   crumbMode?: "title";
+  /** 面包屑右侧扩展 */
+  crumbExtend?: React.ReactNode;
 };
 
 const Crumb = (props: CrumbProps) => {
-  const { className, crumbMode } = props;
+  const { className, crumbMode, crumbExtend } = props;
   const matchCrumbs = useMatchCrumbs();
 
   const crumbItems = useMemo(
@@ -61,22 +58,24 @@ const Crumb = (props: CrumbProps) => {
     [matchCrumbs],
   );
 
-  if (!crumbItems?.length) {
-    return null;
-  }
+  const crumbCom = useMemo(() => {
+    if (!crumbItems?.length) {
+      return null;
+    }
+
+    return crumbMode === "title" ? (
+      <div className={stl.title}>
+        {crumbItems?.[crumbItems.length - 1]?.title}
+      </div>
+    ) : (
+      <Breadcrumb items={crumbItems} />
+    );
+  }, [crumbItems, crumbMode]);
 
   return (
     <div className={cls(stl.crumb, className)}>
-      <div className={stl.text}>
-        {crumbMode === "title" ? (
-          <div className={stl.title}>
-            {crumbItems[crumbItems.length - 1]?.title}
-          </div>
-        ) : (
-          <Breadcrumb items={crumbItems} />
-        )}
-      </div>
-      <div className={cls(stl.extend, breadcrumbExtendClass)} />
+      <div className={stl.main}>{crumbCom}</div>
+      <div className={stl.extend}>{crumbExtend}</div>
     </div>
   );
 };

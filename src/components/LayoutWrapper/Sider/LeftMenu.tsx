@@ -12,13 +12,13 @@ import stl from "./index.module.less";
 export type LeftMenuProps = {
   className?: Argument;
   /**
-   * 是否收缩 true: 收缩 false: 展开
+   * 侧边栏菜单模式
+   */
+  mode?: LayoutSiderItemMode;
+  /**
+   * 侧边栏收缩
    */
   collapsed?: boolean;
-  /**
-   * 侧边栏菜单展示模式
-   */
-  mode: LayoutSiderItemMode;
 };
 
 /**

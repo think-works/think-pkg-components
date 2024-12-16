@@ -1,92 +1,72 @@
 import { Layout } from "antd";
-import { useMemo } from "react";
-import Content from "./Content";
-import Crumb from "./Content/Crumb";
+import cls from "classnames";
+import Crumb from "./Crumb";
 import Footer from "./Footer";
-import { useSiderVisibility } from "./hooks";
+import Header from "./Header";
+import { useBreadcrumbVisibility, useSiderVisibility } from "./hooks";
 import stl from "./index.module.less";
-import Sider from "./Sider";
+import Sider, { getSiderCfg } from "./Sider";
 import { LayoutSiderItemMode, LayoutWrapperProps } from "./type";
 
-const HORIZONTAL_WIDTH = 192;
-const VERTICAL_WIDTH = 72;
+export * from "./type";
+export * as layoutWrapperUtils from "./utils";
+export * as layoutWrapperHooks from "./hooks";
 
 /**
  * 页面布局组件
- * @param props
- * @returns
  */
-const LayoutWrapper = (props: LayoutWrapperProps) => {
-  const { children, header, sider, childrenProps, footer, siderProps } = props;
-  const { minFullWidth = 1200, crumbMode } = childrenProps || {};
+export const LayoutWrapper = (props: LayoutWrapperProps) => {
   const {
-    mode = LayoutSiderItemMode.VERTICAL,
-    renderSiderWidth,
-    renderMenuTop,
-    renderMenuBottom,
-  } = siderProps || {};
+    className,
+    children,
+    minPageWidth = 1200,
+    header,
+    footer,
+    headerProps,
+    footerProps,
+    siderProps,
+    crumbProps,
+  } = props;
+  const { children: headerChildren = header, ...headerRestProps } =
+    headerProps || {};
+  const { children: footerChildren = footer, ...footerRestProps } =
+    footerProps || {};
+  const { mode: siderMode = LayoutSiderItemMode.VERTICAL, ...siderRestProps } =
+    siderProps || {};
+
+  const { collapsed, siderWidth, collapsedWidth } = getSiderCfg(siderMode);
+  const currentWidth = (collapsed ? collapsedWidth : siderWidth) || 0;
+
   const showSider = useSiderVisibility();
-
-  const siderWidth = useMemo(() => {
-    if (renderSiderWidth) {
-      return renderSiderWidth(mode);
-    }
-    if (mode === LayoutSiderItemMode.HORIZONTAL) {
-      return HORIZONTAL_WIDTH;
-    }
-    return VERTICAL_WIDTH;
-  }, [mode, renderSiderWidth]);
-
-  const collapsed = useMemo(() => {
-    if (mode === LayoutSiderItemMode.HORIZONTAL) {
-      return false;
-    }
-    return true;
-  }, [mode]);
-
-  let innerSider: React.ReactNode = (
-    <Sider
-      mode={mode}
-      className={stl.sider}
-      collapsed={collapsed}
-      siderWidth={siderWidth}
-      renderMenuTop={renderMenuTop}
-      renderMenuBottom={renderMenuBottom}
-    />
-  );
-  // 如果传入了自定义侧边栏，则使用自定义侧边栏
-  if (sider) {
-    innerSider = sider;
-  }
+  const showBreadcrumb = useBreadcrumbVisibility();
 
   return (
-    <Layout className={stl.layout}>
-      {header}
+    <Layout className={cls(stl.layout, className)}>
+      {headerChildren ? (
+        <Header {...headerRestProps}>{headerChildren}</Header>
+      ) : null}
       <Layout
         className={stl.main}
-        style={
-          showSider
-            ? {
-                marginLeft: siderWidth,
-              }
-            : undefined
-        }
+        style={showSider ? { marginLeft: currentWidth } : undefined}
       >
-        {showSider ? innerSider : undefined}
-        <Content
-          crumbMode={crumbMode}
+        {showSider ? (
+          <Sider className={stl.sider} mode={siderMode} {...siderRestProps} />
+        ) : null}
+        <Layout.Content
           className={stl.content}
-          siderWidth={siderWidth}
-          minFullWidth={minFullWidth}
+          style={{
+            minWidth: minPageWidth - currentWidth,
+          }}
         >
-          {children}
-        </Content>
+          {showBreadcrumb ? <Crumb {...crumbProps} /> : null}
+          <div className={stl.container}>{children}</div>
+        </Layout.Content>
       </Layout>
-      {footer ? footer : <Footer className={stl.footer} />}
+      {footerChildren ? (
+        <Footer {...footerRestProps}>{footerChildren}</Footer>
+      ) : null}
     </Layout>
   );
 };
 
-LayoutWrapper.Crumb = Crumb;
-
-export { LayoutWrapper };
+export default LayoutWrapper;

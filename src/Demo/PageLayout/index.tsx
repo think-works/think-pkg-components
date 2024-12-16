@@ -1,12 +1,16 @@
 import { Table } from "antd";
 import { useEffect, useState } from "react";
 import { HomeFilled } from "@ant-design/icons";
-import { LayoutDetail, LayoutSiderItemMode } from "@/components/_export";
-import EditableTable from "@/components/EditableTable";
-import { LayoutWrapper } from "@/components/LayoutWrapper";
-import { registerCustomMenus } from "@/components/LayoutWrapper/utils";
+import {
+  EditableTable,
+  LayoutDetail,
+  LayoutSiderItemMode,
+  LayoutWrapper,
+  layoutWrapperUtils,
+} from "@/components";
 
 const { EditableHeader } = EditableTable;
+const { registerCustomMenus } = layoutWrapperUtils;
 
 const DragContainerDemo = () => {
   const [value, setValue] = useState("key");

@@ -2,19 +2,19 @@ import { Layout } from "antd";
 import cls, { Argument } from "classnames";
 import stl from "./index.module.less";
 
-export type FooterProps = {
+export type HeaderProps = {
   className?: Argument;
   children?: React.ReactNode;
 };
 
-const Footer = (props: FooterProps) => {
+const Header = (props: HeaderProps) => {
   const { className, children } = props;
 
   return (
-    <Layout.Footer className={cls(stl.footer, className)}>
+    <Layout.Header className={cls(stl.header, className)}>
       {children}
-    </Layout.Footer>
+    </Layout.Header>
   );
 };
 
-export default Footer;
+export default Header;
