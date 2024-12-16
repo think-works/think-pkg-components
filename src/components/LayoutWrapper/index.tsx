@@ -69,4 +69,9 @@ export const LayoutWrapper = (props: LayoutWrapperProps) => {
   );
 };
 
+LayoutWrapper.Header = Header;
+LayoutWrapper.Footer = Footer;
+LayoutWrapper.Crumb = Crumb;
+LayoutWrapper.Sider = Sider;
+
 export default LayoutWrapper;
