@@ -77,21 +77,20 @@ const LeftMenu = (props: LeftMenuProps) => {
   const menuTheme = useMemo(() => {
     if (mode === LayoutSiderItemMode.HORIZONTAL) {
       return {
-        subMenuItemBg: "transparent",
-        itemSelectedColor: themeToken.colorPrimary,
-        itemSelectedBg: "#FFF",
         itemMarginBlock: 8,
         itemMarginInline: 8,
         itemHeight: 32,
+        radiusItem: 4,
+        subMenuItemBg: "transparent",
       };
     }
 
     return {
-      subMenuItemBg: "transparent",
-      itemSelectedColor: "#FFF",
-      itemSelectedBg: themeToken.colorPrimary,
+      itemSelectedColor: themeToken.colorPrimary,
+      itemSelectedBg: "#FFF",
       itemHeight: 56,
       itemMarginBlock: 8,
+      radiusItem: 4,
       itemMarginInline: 8,
     };
   }, [mode]);

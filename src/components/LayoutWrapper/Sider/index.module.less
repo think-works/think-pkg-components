@@ -7,7 +7,9 @@
   box-shadow: unset !important;
   border-right: unset !important;
   background-color: transparent !important;
-
+  &.horizontalSider {
+    background-color: #fff !important;
+  }
   :global(.@{ant-prefix}-layout-sider-children) {
     flex: auto;
     display: flex;
@@ -44,11 +46,6 @@
       color: inherit;
     }
   }
-  :global(.@{ant-prefix}-menu-submenu-selected) {
-    & > :global(.@{ant-prefix}-menu-submenu-title) {
-      color: @colorPrimary;
-    }
-  }
 }
 
 .verticalMenu {
@@ -68,7 +65,12 @@
       }
     }
   }
-
+  :global(.@{ant-prefix}-menu-submenu-selected) {
+    & > :global(.@{ant-prefix}-menu-submenu-title) {
+      color: @colorPrimary;
+      background-color: #fff;
+    }
+  }
   .verticalItem {
     width: 56px;
     height: 56px;
@@ -93,10 +95,15 @@
 }
 
 .verticalPopup {
+  padding-bottom: 8px;
   &:global(.@{ant-prefix}-menu-submenu-popup) {
     :global(.@{ant-prefix}-menu-item) {
       line-height: 32px;
       height: 32px;
+    }
+
+    :global(.@{ant-prefix}-menu-item-selected) {
+      background-color: #edf7ff;
     }
 
     :global(.@{ant-prefix}-menu-submenu-title) {
@@ -109,23 +116,24 @@
       height: 32px !important;
       :global(.@{ant-prefix}-menu-submenu-title) {
         color: @colorPrimary;
+        background-color: #edf7ff !important;
       }
     }
   }
 }
 
 .horizontalMenu {
-  :global(.@{ant-prefix}-menu-item-selected) {
-    &::before {
-      content: "";
-      position: absolute;
-      left: -2px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 4px;
-      height: 17px;
-      border-radius: 2px;
-      background-color: @colorPrimary;
-    }
-  }
+  // :global(.@{ant-prefix}-menu-item-selected) {
+  //   &::before {
+  //     content: "";
+  //     position: absolute;
+  //     left: -2px;
+  //     top: 50%;
+  //     transform: translateY(-50%);
+  //     width: 4px;
+  //     height: 17px;
+  //     border-radius: 2px;
+  //     background-color: @colorPrimary;
+  //   }
+  // }
 }

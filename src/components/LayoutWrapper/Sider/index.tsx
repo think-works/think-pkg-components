@@ -87,7 +87,11 @@ const Sider = (props: SiderProps) => {
 
   return (
     <Layout.Sider
-      className={cls(stl.sider, className)}
+      className={cls(
+        stl.sider,
+        mode === LayoutSiderItemMode.HORIZONTAL && stl.horizontalSider,
+        className,
+      )}
       theme="light"
       collapsed={siderCfg.collapsed}
       width={siderCfg.siderWidth}
