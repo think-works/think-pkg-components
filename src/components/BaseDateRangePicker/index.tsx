@@ -25,7 +25,11 @@ export const BaseDateRangePicker = (props: BaseDateRangePickerProps) => {
       ret = [];
       value.forEach((val: any, idx: any) => {
         if (val) {
-          ret[idx] = dayjs(val);
+          try {
+            ret[idx] = dayjs(val);
+          } catch (error) {
+            ret[idx] = undefined;
+          }
         }
       });
     }
