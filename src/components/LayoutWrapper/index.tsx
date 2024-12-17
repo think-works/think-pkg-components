@@ -34,8 +34,7 @@ export const LayoutWrapper = (props: LayoutWrapperProps) => {
   const { mode: siderMode = LayoutSiderItemMode.VERTICAL, ...siderRestProps } =
     siderProps || {};
 
-  const { collapsed, siderWidth, collapsedWidth } = getSiderCfg(siderMode);
-  const currentWidth = (collapsed ? collapsedWidth : siderWidth) || 0;
+  const { currentWidth = 0 } = getSiderCfg(siderMode);
 
   const showSider = useSiderVisibility();
   const showBreadcrumb = useBreadcrumbVisibility();

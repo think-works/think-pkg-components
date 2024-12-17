@@ -9,10 +9,16 @@ const HORIZONTAL_WIDTH = 192;
 const VERTICAL_WIDTH = 72;
 
 type SiderCfg = {
+  /** 菜单模式 */
   mode?: LayoutSiderItemMode;
+  /** 收起状态 */
   collapsed?: boolean;
+  /** 展开宽度 */
   siderWidth?: number;
+  /** 收起宽度 */
   collapsedWidth?: number;
+  /** 当前宽度 */
+  currentWidth?: number;
 };
 
 export const getSiderCfg = (mode?: LayoutSiderItemMode): SiderCfg => {
@@ -22,6 +28,7 @@ export const getSiderCfg = (mode?: LayoutSiderItemMode): SiderCfg => {
       collapsed: false,
       siderWidth: HORIZONTAL_WIDTH,
       collapsedWidth: HORIZONTAL_WIDTH,
+      currentWidth: HORIZONTAL_WIDTH,
     };
   }
 
@@ -30,6 +37,7 @@ export const getSiderCfg = (mode?: LayoutSiderItemMode): SiderCfg => {
     collapsed: true,
     siderWidth: VERTICAL_WIDTH,
     collapsedWidth: VERTICAL_WIDTH,
+    currentWidth: VERTICAL_WIDTH,
   };
 };
 
