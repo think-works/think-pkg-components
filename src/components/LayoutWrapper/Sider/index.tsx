@@ -8,7 +8,7 @@ import LeftMenu from "./LeftMenu";
 const HORIZONTAL_WIDTH = 192;
 const VERTICAL_WIDTH = 72;
 
-type SiderCfg = {
+export type SiderCfg = {
   /** 菜单模式 */
   mode?: LayoutSiderItemMode;
   /** 收起状态 */
