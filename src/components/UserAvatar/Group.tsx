@@ -12,6 +12,7 @@ export const getUserName = ({ nickName, loginName }: UserModel) =>
   loginName && nickName ? `${nickName}(${loginName})` : loginName || nickName;
 
 export type UserAvatarGroupProps = GetProps<typeof Avatar.Group> & {
+  maxCount?: number;
   userModels?: (UserModel | undefined)[];
 };
 
@@ -19,7 +20,7 @@ export type UserAvatarGroupProps = GetProps<typeof Avatar.Group> & {
  * 用户头像组
  */
 const UserAvatarGroup = (props: UserAvatarGroupProps) => {
-  const { userModels, ...rest } = props;
+  const { maxCount = 2, userModels, ...rest } = props;
   const list = userModels?.filter(truthy);
 
   if (!list?.length) {
@@ -30,7 +31,7 @@ const UserAvatarGroup = (props: UserAvatarGroupProps) => {
     <Avatar.Group
       className={stl.avatarGroup}
       size="small"
-      maxCount={2}
+      max={{ count: maxCount }}
       {...rest}
     >
       {list?.map((item) => {
@@ -39,10 +40,7 @@ const UserAvatarGroup = (props: UserAvatarGroupProps) => {
         return (
           <Tooltip key={userName} title={userName}>
             <span>
-              <BaseAvatar
-                className={stl.avatar}
-                userInfo={{ name: nickName }}
-              />
+              <BaseAvatar className={stl.avatar} name={nickName} />
             </span>
           </Tooltip>
         );

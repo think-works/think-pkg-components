@@ -3,13 +3,12 @@ import { useMemo } from "react";
 import { UserOutlined } from "@ant-design/icons";
 import { hashColor } from "@/common/colors";
 
-type UserInfo = {
-  name?: string | React.ReactNode;
-  avatar?: string | React.ReactNode;
-};
-
 export type BaseAvatarProps = AvatarProps & {
-  userInfo?: UserInfo;
+  /** 头像名称 */
+  name?: string | React.ReactNode;
+  /** 头像图片 */
+  avatar?: string | React.ReactNode;
+  /** 头像名称截取函数 */
   nameSlice?: (name: string) => string;
 };
 
@@ -17,8 +16,7 @@ export type BaseAvatarProps = AvatarProps & {
  * 基础头像
  */
 export const BaseAvatar = (props: BaseAvatarProps) => {
-  const { style, userInfo, nameSlice, ...rest } = props;
-  const { name, avatar } = userInfo || {};
+  const { className, style, name, avatar, nameSlice, ...rest } = props;
 
   const { src, color, child } = useMemo(() => {
     let src;
@@ -67,6 +65,7 @@ export const BaseAvatar = (props: BaseAvatarProps) => {
 
   return (
     <Avatar
+      className={className}
       size="small"
       src={src}
       style={{

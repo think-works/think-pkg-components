@@ -19,7 +19,7 @@ export const UserAvatar = (props: UserAvatarProps) => {
 
   const { nickName } = userModel;
   const userName = getUserName(userModel);
-  const avatar = <BaseAvatar userInfo={{ name: nickName }} {...rest} />;
+  const avatar = <BaseAvatar name={nickName} {...rest} />;
 
   if (hideName) {
     return (
