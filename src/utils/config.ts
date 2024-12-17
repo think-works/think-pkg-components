@@ -20,7 +20,7 @@ export const appName = APP_NAME;
 export const appVersion = APP_VERSION;
 
 /**
- * KEY 前缀
+ * KEY 前缀(无特殊字符的应用名称)
  */
 export const keyPrefix = APP_NAME.replaceAll("@", "").replaceAll("/", "_");
 
