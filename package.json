@@ -1,6 +1,6 @@
 {
   "name": "@think/components",
-  "version": "2.2.9",
+  "version": "2.2.10",
   "description": "基础组件库",
   "type": "module",
   "main": "./dist/components.cjs",
