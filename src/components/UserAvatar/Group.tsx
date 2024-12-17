@@ -29,7 +29,7 @@ const UserAvatarGroup = (props: UserAvatarGroupProps) => {
 
   return (
     <Avatar.Group
-      className={stl.avatarGroup}
+      className={stl.userAvatarGroup}
       size="small"
       max={{ count: maxCount }}
       {...rest}

@@ -1,11 +1,19 @@
 @import "@/styles/utils.less";
 
-.avatarGroup {
+.userAvatarGroup {
   &:hover {
     :global(.@{ant-prefix}-avatar) {
       margin-left: 0;
       margin-inline-start: 0;
       transition: all 0.1s;
     }
+  }
+}
+
+.userAvatar {
+  .name {
+    .ellipsis();
+    display: block;
+    max-width: 200px;
   }
 }

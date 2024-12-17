@@ -1,6 +1,7 @@
 import { Space, Tooltip } from "antd";
 import BaseAvatar, { BaseAvatarProps } from "../BaseAvatar";
 import UserAvatarGroup, { getUserName, UserModel } from "./Group";
+import stl from "./index.module.less";
 
 export type UserAvatarProps = Omit<BaseAvatarProps, "userInfo"> & {
   userModel?: UserModel;
@@ -19,7 +20,9 @@ export const UserAvatar = (props: UserAvatarProps) => {
 
   const { nickName } = userModel;
   const userName = getUserName(userModel);
-  const avatar = <BaseAvatar name={nickName} {...rest} />;
+  const avatar = (
+    <BaseAvatar className={stl.avatar} name={nickName} {...rest} />
+  );
 
   if (hideName) {
     return (
@@ -30,9 +33,11 @@ export const UserAvatar = (props: UserAvatarProps) => {
   }
 
   return (
-    <Space>
+    <Space className={stl.userAvatar}>
       {avatar}
-      <span>{userName}</span>
+      <span className={stl.name} title={userName}>
+        {userName}
+      </span>
     </Space>
   );
 };
