@@ -95,7 +95,7 @@
     "rollup-plugin-visualizer": "^5.12.0",
     "tsc-alias": "^1.8.10",
     "typescript": "^5.7.2",
-    "typescript-eslint": "^8.18.0",
+    "typescript-eslint": "^8.18.1",
     "vite": "^6.0.3",
     "vite-plugin-checker": "^0.8.0",
     "vite-plugin-mock-dev-server": "^1.8.3"
