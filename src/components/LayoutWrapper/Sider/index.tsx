@@ -6,7 +6,7 @@ import stl from "./index.module.less";
 import LeftMenu from "./LeftMenu";
 
 const HORIZONTAL_WIDTH = 192;
-const VERTICAL_WIDTH = 72;
+const VERTICAL_WIDTH = 80;
 
 export type SiderCfg = {
   /** 菜单模式 */

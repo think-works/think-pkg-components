@@ -47,3 +47,8 @@ export const defaultConfigProviderProps = {
   iconPrefixCls: styleConfig.antPrefixIcon,
   theme: themeConfig,
 };
+
+/**
+ * 业务布局边距 还有一个配置在 utils.less 中
+ */
+export const BizLayoutGap = 12;
