@@ -22,10 +22,12 @@ export type SortableContainerItemConfig = {
   children?: ReactNode;
   /** 隐藏排序手柄 */
   hideSortable?: boolean;
-  /** 拖拽中样式 */
-  draggingStyle?: React.CSSProperties;
+  /** 排序手柄类名 */
+  handleClassName?: Argument;
   /** 排序手柄样式 */
   handleStyle?: React.CSSProperties;
+  /** 拖拽中样式 */
+  draggingStyle?: React.CSSProperties;
 };
 
 export type SortableContainerItemProps = SortableContainerItemConfig & {
@@ -39,13 +41,14 @@ export const SortableContainerItem = (props: SortableContainerItemProps) => {
     itemKey,
     children,
     hideSortable,
-    draggingStyle = {
-      position: "relative",
-      zIndex: 10,
-    },
+    handleClassName,
     handleStyle = {
       touchAction: "none",
       cursor: "move",
+    },
+    draggingStyle = {
+      position: "relative",
+      zIndex: 10,
     },
   } = props;
 
@@ -78,7 +81,7 @@ export const SortableContainerItem = (props: SortableContainerItemProps) => {
     >
       {hideSortable ? null : (
         <MenuOutlined
-          className={stl.handle}
+          className={cls(stl.handle, handleClassName)}
           ref={setActivatorNodeRef}
           style={handleStyle}
           {...listeners}
@@ -105,7 +108,7 @@ export type SortableContainerProps = {
     from: number,
     to: number,
     items: SortableContainerItemConfig[],
-  ) => boolean | undefined;
+  ) => boolean | void;
   /** 排序项变更 */
   onItemChange?: (items: SortableContainerItemConfig[]) => void;
 };

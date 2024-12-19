@@ -116,7 +116,7 @@ export type SortableTableProps<
     from: number,
     to: number,
     dataSource: RecordType[],
-  ) => boolean | undefined;
+  ) => boolean | void;
   /** 数据源变更 */
   onDataSourceChange?: (dataSource: RecordType[]) => void;
 };
