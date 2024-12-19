@@ -36,28 +36,28 @@ export type EnumFunc<
    * DemoEnumMap._getLabel(keyOrValue) -> EnumItem
    * ```
    */
-  _getItem: (keyOrValue: BaseValue, find?: F) => IS;
+  _getItem: (keyOrValue: BaseValue, find?: F) => IS | undefined;
   /**
    * ```
    * // 用 key/value 查找 label
    * DemoEnumMap._getLabel(keyOrValue) -> label
    * ```
    */
-  _getLabel: (keyOrValue: BaseValue, find?: F) => LS;
+  _getLabel: (keyOrValue: BaseValue, find?: F) => LS | undefined;
   /**
    * ```
    * // 用 key 查找 value
    * DemoEnumMap._getValue(key) -> value
    * ```
    */
-  _getValue: (key: BaseValue) => VS;
+  _getValue: (key: BaseValue) => VS | undefined;
   /**
    * ```
    * // 用 value 查找 key
    * DemoEnumMap._getKey(value) -> key
    * ```
    */
-  _getKey: (value: BaseValue) => KS;
+  _getKey: (value: BaseValue) => KS | undefined;
 };
 
 export type Stringify<T> = T extends BaseValue ? `${T}` : never;
