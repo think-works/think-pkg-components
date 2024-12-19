@@ -14,7 +14,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import stl from "./index.module.less";
 
-type SortableItemConfig = {
+export type SortableContainerItemConfig = {
   [key: string]: any;
   className?: Argument;
   style?: React.CSSProperties;
@@ -28,11 +28,11 @@ type SortableItemConfig = {
   handleStyle?: React.CSSProperties;
 };
 
-type SortableItemProps = SortableItemConfig & {
+export type SortableContainerItemProps = SortableContainerItemConfig & {
   itemKey?: string | number;
 };
 
-const SortableItem = (props: SortableItemProps) => {
+export const SortableContainerItem = (props: SortableContainerItemProps) => {
   const {
     className,
     style,
@@ -99,9 +99,9 @@ export type SortableContainerProps = {
   /** 隐藏排序手柄 */
   hideSortable?: boolean;
   /** 排序项 */
-  items?: SortableItemConfig[];
+  items?: SortableContainerItemConfig[];
   /** 排序项变更 */
-  onItemChange?: (items: SortableItemConfig[]) => void;
+  onItemChange?: (items: SortableContainerItemConfig[]) => void;
 };
 
 export const SortableContainer = (props: SortableContainerProps) => {
@@ -115,7 +115,8 @@ export const SortableContainer = (props: SortableContainerProps) => {
     onItemChange,
   } = props;
 
-  const getItemKey = (item: SortableItemConfig, idx: number) => item.key ?? idx;
+  const getItemKey = (item: SortableContainerItemConfig, idx: number) =>
+    item.key ?? idx;
 
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
     if (active.id !== over?.id) {
@@ -146,7 +147,7 @@ export const SortableContainer = (props: SortableContainerProps) => {
             const { key, ...rest } = item;
             const itemKey = getItemKey(item, idx);
             return (
-              <SortableItem
+              <SortableContainerItem
                 key={itemKey}
                 itemKey={itemKey}
                 hideSortable={hideSortable}
