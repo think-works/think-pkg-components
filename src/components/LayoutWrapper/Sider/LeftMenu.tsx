@@ -133,7 +133,6 @@ const LeftMenu = (props: LeftMenuProps) => {
     >
       <Menu
         key={forceKey}
-        triggerSubMenuAction="click"
         className={cls(
           stl.leftMenu,
           mode === LayoutSiderItemMode.VERTICAL
