@@ -111,6 +111,12 @@ export type SortableTableProps<
   TableComponent?: React.ComponentType;
   /** 隐藏排序手柄 */
   hideSortable?: boolean;
+  /** 是否允许移动(返回 false 表示不允许) */
+  onItemMove?: (
+    from: number,
+    to: number,
+    dataSource: RecordType[],
+  ) => boolean | undefined;
   /** 数据源变更 */
   onDataSourceChange?: (dataSource: RecordType[]) => void;
 };
@@ -129,6 +135,7 @@ export const SortableTable = (props: SortableTableProps) => {
     rowKey = "key",
     columns = [],
     dataSource = [],
+    onItemMove,
     onDataSourceChange,
     ...rest
   } = props;
@@ -147,13 +154,19 @@ export const SortableTable = (props: SortableTableProps) => {
   }
 
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
-    if (active.id !== over?.id) {
-      const activeIndex = dataSource.findIndex(
-        (item) => rowKeyFunc(item) === active.id,
-      );
-      const overIndex = dataSource.findIndex(
-        (item) => rowKeyFunc(item) === over?.id,
-      );
+    if (!over || active.id === over.id) {
+      return;
+    }
+
+    const activeIndex = dataSource.findIndex(
+      (item) => rowKeyFunc(item) === active.id,
+    );
+    const overIndex = dataSource.findIndex(
+      (item) => rowKeyFunc(item) === over.id,
+    );
+
+    const allowMove = onItemMove?.(activeIndex, overIndex, dataSource as any[]);
+    if (allowMove !== false) {
       const list = arrayMove(dataSource as any[], activeIndex, overIndex);
       onDataSourceChange?.(list);
     }

@@ -100,6 +100,12 @@ export type SortableContainerProps = {
   hideSortable?: boolean;
   /** 排序项 */
   items?: SortableContainerItemConfig[];
+  /** 是否允许移动(返回 false 表示不允许) */
+  onItemMove?: (
+    from: number,
+    to: number,
+    items: SortableContainerItemConfig[],
+  ) => boolean | undefined;
   /** 排序项变更 */
   onItemChange?: (items: SortableContainerItemConfig[]) => void;
 };
@@ -112,6 +118,7 @@ export const SortableContainer = (props: SortableContainerProps) => {
     sortableContextProps,
     hideSortable = false,
     items = [],
+    onItemMove,
     onItemChange,
   } = props;
 
@@ -119,13 +126,19 @@ export const SortableContainer = (props: SortableContainerProps) => {
     item.key ?? idx;
 
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
-    if (active.id !== over?.id) {
-      const activeIndex = items.findIndex(
-        (item, idx) => getItemKey(item, idx) === active.id,
-      );
-      const overIndex = items.findIndex(
-        (item, idx) => getItemKey(item, idx) === over?.id,
-      );
+    if (!over || active.id === over.id) {
+      return;
+    }
+
+    const activeIndex = items.findIndex(
+      (item, idx) => getItemKey(item, idx) === active.id,
+    );
+    const overIndex = items.findIndex(
+      (item, idx) => getItemKey(item, idx) === over.id,
+    );
+
+    const allowMove = onItemMove?.(activeIndex, overIndex, items);
+    if (allowMove !== false) {
       const list = arrayMove(items, activeIndex, overIndex);
       onItemChange?.(list);
     }
