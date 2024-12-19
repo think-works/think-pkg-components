@@ -7,6 +7,8 @@ import FlexTabsDemo from "./FlexTabsDemo";
 import Home from "./Home";
 import PageLayout from "./PageLayout";
 import RouterTable from "./RouterTableDemo";
+import SortableContainerDemo from "./SortableContainerDemo";
+import SortableTableDemo from "./SortableTableDemo";
 import TreeDemo from "./TreeDemo";
 
 export const routes: RouteObject[] = [
@@ -46,6 +48,14 @@ export const routes: RouteObject[] = [
   {
     path: "/router-table",
     element: <RouterTable />,
+  },
+  {
+    path: "/sortable-container",
+    element: <SortableContainerDemo />,
+  },
+  {
+    path: "/sortable-table",
+    element: <SortableTableDemo />,
   },
 ];
 
