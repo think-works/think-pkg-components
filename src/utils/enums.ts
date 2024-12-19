@@ -1,14 +1,5 @@
 export type BaseValue = string | number | boolean | null | undefined;
 
-export type EnumFunc = <
-  V = BaseValue,
-  B extends boolean = boolean,
-  R = `${B}` extends "true" ? EnumItem<V> : V,
->(
-  kov: BaseValue,
-  retItem?: B,
-) => R | undefined;
-
 export type EnumItem<V = BaseValue> = {
   [k: string]: any;
   key: string;
@@ -16,16 +7,9 @@ export type EnumItem<V = BaseValue> = {
   label: string;
 };
 
-export type EnumMap<V = BaseValue> = Record<string, any> & {
-  _label: Record<string, any>;
+export type EnumMap<V = BaseValue> = {
+  [key: string]: any;
   _list: EnumItem<V>[];
-  _getValue: (key: string) => V;
-  _getKey: (value: V) => string;
-  _getLabelByKey: (key: string) => string;
-  _getLabelByValue: (value: V) => string;
-  _getItemByKey: (key: string) => EnumItem<V>;
-  _getItemByValue: (value: V) => EnumItem<V>;
-  _get: EnumFunc;
 };
 
 export type EnumList<T extends EnumMap> = T["_list"];
@@ -37,6 +21,44 @@ export type EnumKeys<T extends EnumMap> = EnumItems<T>["key"];
 export type EnumValues<T extends EnumMap> = EnumItems<T>["value"];
 
 export type EnumLabels<T extends EnumMap> = EnumItems<T>["label"];
+
+export type EnumFunc<
+  T extends EnumMap,
+  F = "key" | "value",
+  IS = EnumItems<T>,
+  KS = EnumKeys<T>,
+  VS = EnumValues<T>,
+  LS = EnumLabels<T>,
+> = {
+  /**
+   * ```
+   * // 用 key/value 查找 原始输入数组 中相关项
+   * DemoEnumMap._getLabel(keyOrValue) -> EnumItem
+   * ```
+   */
+  _getItem: (keyOrValue: BaseValue, find?: F) => IS;
+  /**
+   * ```
+   * // 用 key/value 查找 label
+   * DemoEnumMap._getLabel(keyOrValue) -> label
+   * ```
+   */
+  _getLabel: (keyOrValue: BaseValue, find?: F) => LS;
+  /**
+   * ```
+   * // 用 key 查找 value
+   * DemoEnumMap._getValue(key) -> value
+   * ```
+   */
+  _getValue: (key: BaseValue) => VS;
+  /**
+   * ```
+   * // 用 value 查找 key
+   * DemoEnumMap._getKey(value) -> key
+   * ```
+   */
+  _getKey: (value: BaseValue) => KS;
+};
 
 export type Stringify<T> = T extends BaseValue ? `${T}` : never;
 
@@ -99,64 +121,6 @@ export type DefineEnum<T extends EnumItem[]> = CombineUnion<
    * ```
    */
   _list: T;
-
-  /**
-   * ```
-   * // 用 key 查找 value
-   * DemoEnumMap._getValue(key) -> value
-   * ```
-   */
-  _getValue: EnumMap["_getValue"];
-  /**
-   * ```
-   * // 用 value 查找 key
-   * DemoEnumMap._getKey(value) -> key
-   * ```
-   */
-  _getKey: EnumMap["_getKey"];
-
-  /**
-   * ```
-   * // 用 key 查找 label
-   * DemoEnumMap._getLabelByKey(key) -> label
-   * ```
-   */
-  _getLabelByKey: EnumMap["_getLabelByKey"];
-  /**
-   * ```
-   * // 用 value 查找 label
-   * DemoEnumMap._getLabelByValue(value) -> label
-   * ```
-   */
-  _getLabelByValue: EnumMap["_getLabelByValue"];
-
-  /**
-   * ```
-   * // 用 key 查找 原始输入数组 中相关项
-   * DemoEnumMap._getItemByKey = (key) -> EnumItem
-   * ```
-   */
-  _getItemByKey: EnumMap["_getItemByKey"];
-  /**
-   * ```
-   * // 用 value 查找 原始输入数组 中相关项
-   * DemoEnumMap._getItemByValue = (value) -> EnumItem
-   * ```
-   */
-  _getItemByValue: EnumMap["_getItemByValue"];
-
-  /**
-   * @deprecated
-   * ```
-   * // 用 key/value 查找 value/key
-   * // 用 key/value 查找 原始输入数组 中相关项
-   * DemoEnumMap._get(key) -> value
-   * DemoEnumMap._get(value) -> key
-   * DemoEnumMap._get(key, true) -> EnumItem
-   * DemoEnumMap._get(value, true) -> EnumItem
-   * ```
-   */
-  _get: EnumMap["_get"];
 };
 
 /**
@@ -199,25 +163,20 @@ export type DefineEnum<T extends EnumItem[]> = CombineUnion<
  * // 用 value 查找 key
  * DemoEnumMap._getKey(value) -> key
  *
- * // 用 key 查找 label
- * DemoEnumMap._getLabelByKey(key) -> label
- * // 用 value 查找 label
- * DemoEnumMap._getLabelByValue(value) -> label
+ * // 用 key/value 查找 label
+ * DemoEnumMap._getLabel(keyOrValue) -> label
  *
- * // 用 key 查找 原始输入数组 中相关项
- * DemoEnumMap._getItemByKey = (key) -> EnumItem
- * // 用 value 查找 原始输入数组 中相关项
- * DemoEnumMap._getItemByValue = (value) -> EnumItem
- *
- * // 用 key/value 查找 value/key
  * // 用 key/value 查找 原始输入数组 中相关项
- * DemoEnumMap._get(key) -> value
- * DemoEnumMap._get(value) -> key
- * DemoEnumMap._get(key, true) -> EnumItem
- * DemoEnumMap._get(value, true) -> EnumItem
+ * DemoEnumMap._getLabel(keyOrValue) -> EnumItem
  * ```
  */
-export const defEnumMap = <T extends EnumItem[]>(list: T): DefineEnum<T> => {
+export const defEnumMap = <
+  T extends EnumItem[],
+  M extends EnumMap = DefineEnum<T>,
+  F = EnumFunc<M>,
+>(
+  list: T,
+): M & F => {
   const kvMap: any = {};
   const lMap: any = {};
 
@@ -239,45 +198,34 @@ export const defEnumMap = <T extends EnumItem[]>(list: T): DefineEnum<T> => {
   // 原始输入数组
   kvlMap._list = list;
 
+  // 用 key/value 查找 item
+  kvlMap._getItem = (keyOrValue: any, find?: "key" | "value") => {
+    let item: EnumItem | undefined;
+    if (!find || find === "key") {
+      item = list.find((x) => x.key === keyOrValue);
+    }
+    if (!find || find === "value") {
+      item = list.find((x) => x.value === keyOrValue);
+    }
+    return item;
+  };
+
+  // 用 key/value 查找 label
+  kvlMap._getLabel = (keyOrValue: any, find?: "key" | "value") => {
+    const item = kvlMap._getItem(keyOrValue, find);
+    return item?.label;
+  };
+
   // 用 key 查找 value
   kvlMap._getValue = (key: any) => {
-    return kvlMap._getItemByKey(key)?.value;
+    const item = kvlMap._getItem(key, "key");
+    return item?.value;
   };
+
   // 用 value 查找 key
   kvlMap._getKey = (value: any) => {
-    return kvlMap._getItemByValue(value)?.key;
-  };
-
-  // 用 key 查找 label
-  kvlMap._getLabelByKey = (key: any) => {
-    return kvlMap._getItemByKey(key)?.label;
-  };
-  // 用 value 查找 label
-  kvlMap._getLabelByValue = (value: any) => {
-    return kvlMap._getItemByValue(value)?.label;
-  };
-
-  // 用 key 查找 原始输入数组 中相关项
-  kvlMap._getItemByKey = (key: any) => {
-    return list.find((x) => x.key === key);
-  };
-  // 用 value 查找 原始输入数组 中相关项
-  kvlMap._getItemByValue = (value: any) => {
-    return list.find((x) => x.value === value);
-  };
-
-  // 用 key/value 查找 value/key
-  // 用 key/value 查找 原始输入数组 中相关项
-  kvlMap._get = (keyOrValue: any, getItem?: boolean) => {
-    const kItem = kvlMap._getItemByKey(keyOrValue);
-    if (kItem) {
-      return getItem ? kItem : kItem.value;
-    }
-
-    const vItem = kvlMap._getItemByValue(keyOrValue);
-    if (vItem) {
-      return getItem ? vItem : vItem.key;
-    }
+    const item = kvlMap._getItem(value, "value");
+    return item?.key;
   };
 
   return kvlMap;
