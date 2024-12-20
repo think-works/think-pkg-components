@@ -6,6 +6,7 @@ export * from "./BaseSelect";
 export * from "./BaseTable";
 export * from "./BaseText";
 export * from "./BaseTree";
+export * from "./BypassProps";
 
 export * from "./ColumnActions";
 export * from "./DirectoryTree/export";
