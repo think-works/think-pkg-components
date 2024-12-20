@@ -10,7 +10,7 @@ import {
 } from "antd";
 import cls, { Argument } from "classnames";
 import { isString } from "lodash-es";
-import { useState } from "react";
+import { ForwardedRef, forwardRef, useState } from "react";
 import { isType } from "@/utils/tools";
 import stl from "./index.module.less";
 
@@ -61,7 +61,10 @@ export type BaseActionProps = Omit<ButtonProps, "onClick"> & {
   onClick?: (...rest: any[]) => any;
 };
 
-export const BaseAction = (props: BaseActionProps) => {
+export const BaseAction = forwardRef(function BaseActionCom(
+  props: BaseActionProps,
+  ref: ForwardedRef<HTMLButtonElement | HTMLAnchorElement>,
+) {
   const {
     className,
     tooltip,
@@ -118,6 +121,7 @@ export const BaseAction = (props: BaseActionProps) => {
 
   const content = (
     <Button
+      ref={ref}
       className={cls(stl.baseAction, className, {
         [stl.inline]: inline,
         [stl.transparent]: transparent,
@@ -184,6 +188,6 @@ export const BaseAction = (props: BaseActionProps) => {
   }
 
   return content;
-};
+});
 
 export default BaseAction;

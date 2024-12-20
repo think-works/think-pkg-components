@@ -1,5 +1,5 @@
 import cls, { Argument } from "classnames";
-import React, { HTMLAttributes } from "react";
+import React, { ForwardedRef, forwardRef, HTMLAttributes } from "react";
 import stl from "./index.module.less";
 
 export type BaseTextProps = HTMLAttributes<HTMLSpanElement> & {
@@ -12,11 +12,15 @@ export type BaseTextProps = HTMLAttributes<HTMLSpanElement> & {
 /**
  * 基础文本
  */
-export const BaseText = (props: BaseTextProps) => {
+export const BaseText = forwardRef(function BaseTextCom(
+  props: BaseTextProps,
+  ref: ForwardedRef<HTMLSpanElement>,
+) {
   const { className, style, children, type, ...rest } = props;
 
   return (
     <span
+      ref={ref}
       className={cls(
         stl.baseText,
         {
@@ -35,6 +39,6 @@ export const BaseText = (props: BaseTextProps) => {
       {children}
     </span>
   );
-};
+});
 
 export default BaseText;

@@ -1,5 +1,12 @@
+import { RefSelectProps } from "antd";
 import { get } from "lodash-es";
-import { useCallback, useEffect, useState } from "react";
+import {
+  ForwardedRef,
+  forwardRef,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { useDebounce, useIsMounted } from "@/hooks";
 import BaseSelect, { BaseSelectProps } from "../BaseSelect";
 
@@ -30,7 +37,10 @@ export type FetchSelectProps = BaseSelectProps & {
 /**
  * 可查询下拉框
  */
-export const FetchSelect = (props: FetchSelectProps) => {
+export const FetchSelect = forwardRef(function FetchSelectCom(
+  props: FetchSelectProps,
+  ref: ForwardedRef<RefSelectProps>,
+) {
   const {
     showSearch = false,
     filterOption = true,
@@ -127,6 +137,7 @@ export const FetchSelect = (props: FetchSelectProps) => {
 
   return (
     <BaseSelect
+      ref={ref}
       loading={loading}
       options={list}
       showSearch={showSearch}
@@ -137,6 +148,6 @@ export const FetchSelect = (props: FetchSelectProps) => {
       {...rest}
     />
   );
-};
+});
 
 export default FetchSelect;
