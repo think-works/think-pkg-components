@@ -12,7 +12,7 @@ export type UserAvatarProps = Omit<BaseAvatarProps, "userInfo"> & {
 /**
  * 用户头像
  */
-export const UserAvatar = forwardRef(function UserAvatarCom(
+const UserAvatarBase = forwardRef(function UserAvatarCom(
   props: UserAvatarProps,
   ref: ForwardedRef<HTMLDivElement>,
 ) {
@@ -46,12 +46,12 @@ export const UserAvatar = forwardRef(function UserAvatarCom(
   );
 });
 
-const UserAvatarExtend = UserAvatar as typeof UserAvatar & {
+export const UserAvatar = UserAvatarBase as typeof UserAvatarBase & {
   getUserName: typeof getUserName;
   Group: typeof UserAvatarGroup;
 };
 
-UserAvatarExtend.getUserName = getUserName;
-UserAvatarExtend.Group = UserAvatarGroup;
+UserAvatar.getUserName = getUserName;
+UserAvatar.Group = UserAvatarGroup;
 
-export default UserAvatarExtend;
+export default UserAvatar;
