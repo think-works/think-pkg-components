@@ -202,7 +202,7 @@ export const datetime = (
     } else if (timestamp >= H && map.H) {
       ret = separator(timestamp / H, len) + map.H;
     } else if (timestamp >= m && map.m) {
-      ret = separator(timestamp / m, len) + map.M;
+      ret = separator(timestamp / m, len) + map.m;
     } else if (timestamp >= s && map.s) {
       ret = separator(timestamp / s, len) + map.s;
     } else if (map.S) {
