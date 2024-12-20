@@ -1,6 +1,6 @@
 import { DatePicker, DatePickerProps } from "antd";
 import dayjs, { Dayjs, OpUnitType } from "dayjs";
-import { useCallback, useMemo } from "react";
+import { forwardRef, useCallback, useMemo } from "react";
 
 export type BaseDateRangePickerProps = Omit<
   DatePickerProps,
@@ -15,7 +15,10 @@ export type BaseDateRangePickerProps = Omit<
 /**
  * 基础时间区间选择
  */
-export const BaseDateRangePicker = (props: BaseDateRangePickerProps) => {
+export const BaseDateRangePicker = forwardRef(function BaseDateRangePickerCom(
+  props: BaseDateRangePickerProps,
+  ref: BaseDateRangePickerProps["ref"],
+) {
   const { startOf, endOf, value, onChange, ...rest } = props || props;
 
   const _value = useMemo(() => {
@@ -66,11 +69,12 @@ export const BaseDateRangePicker = (props: BaseDateRangePickerProps) => {
    */
   return (
     <DatePicker.RangePicker
+      ref={ref}
       value={_value}
       onChange={_onChange}
       {...(rest as any)}
     />
   );
-};
+});
 
 export default BaseDateRangePicker;

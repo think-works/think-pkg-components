@@ -1,5 +1,5 @@
-import { Input, InputProps, Select } from "antd";
-import { useState } from "react";
+import { Input, InputProps, InputRef, Select } from "antd";
+import { ForwardedRef, forwardRef, useState } from "react";
 
 type SearchInputValue = {
   type?: string;
@@ -15,7 +15,10 @@ export type SearchInputProps = Omit<InputProps, "value" | "onChange"> & {
 /**
  * 搜索输入
  */
-export const SearchInput = (props: SearchInputProps) => {
+export const SearchInput = forwardRef(function SearchInputCom(
+  props: SearchInputProps,
+  ref: ForwardedRef<InputRef>,
+) {
   const { options, value, onChange, ...rest } = props || {};
 
   const _options = (options || []).map((option) => ({
@@ -50,6 +53,7 @@ export const SearchInput = (props: SearchInputProps) => {
 
   return (
     <Input
+      ref={ref}
       value={cache.text}
       onChange={handleInputChange}
       addonBefore={
@@ -62,6 +66,6 @@ export const SearchInput = (props: SearchInputProps) => {
       {...rest}
     />
   );
-};
+});
 
 export default SearchInput;

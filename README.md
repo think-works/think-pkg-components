@@ -11,16 +11,6 @@
 
 详见 `package.json` 中的 `peerDependencies` 字段。
 
-## 开发准备
-
-### 安装以来
-
-> 待 ahooks 升级，目前需要强制安装依赖
-
-```
-npm install -f
-```
-
 ## API
 
 详见 typescript 类型提示。

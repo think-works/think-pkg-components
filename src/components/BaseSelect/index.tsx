@@ -1,6 +1,7 @@
-import { Button, Divider, Select, SelectProps } from "antd";
+import { Button, Divider, RefSelectProps, Select, SelectProps } from "antd";
 import cls, { Argument } from "classnames";
 import { isArray, isObject } from "lodash-es";
+import { ForwardedRef, forwardRef } from "react";
 import stl from "./index.module.less";
 
 type BaseOption = {
@@ -21,7 +22,10 @@ export type BaseSelectProps = Omit<SelectProps, "options"> & {
 /**
  * 基础下拉框
  */
-export const BaseSelect = (props: BaseSelectProps) => {
+export const BaseSelect = forwardRef(function BaseSelectCom(
+  props: BaseSelectProps,
+  ref: ForwardedRef<RefSelectProps>,
+) {
   const {
     className,
     options,
@@ -104,6 +108,7 @@ export const BaseSelect = (props: BaseSelectProps) => {
 
   return (
     <Select
+      ref={ref}
       className={cls(stl.baseSelect, className)}
       value={value}
       onChange={onChange}
@@ -112,6 +117,6 @@ export const BaseSelect = (props: BaseSelectProps) => {
       {...rest}
     />
   );
-};
+});
 
 export default BaseSelect;

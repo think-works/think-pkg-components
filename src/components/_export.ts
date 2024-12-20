@@ -37,6 +37,7 @@ export * from "./Resizing";
 export * from "./RouteTable";
 export * from "./SearchInput";
 export * from "./SelectWithAddonBefore";
+export * from "./SortableContainer";
 export * from "./SortableTable";
 export * from "./Uploader";
 export * from "./UserAvatar";

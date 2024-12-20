@@ -1,4 +1,5 @@
 import { Space, Tooltip } from "antd";
+import { ForwardedRef, forwardRef } from "react";
 import BaseAvatar, { BaseAvatarProps } from "../BaseAvatar";
 import UserAvatarGroup, { getUserName, UserModel } from "./Group";
 import stl from "./index.module.less";
@@ -11,7 +12,10 @@ export type UserAvatarProps = Omit<BaseAvatarProps, "userInfo"> & {
 /**
  * 用户头像
  */
-export const UserAvatar = (props: UserAvatarProps) => {
+export const UserAvatar = forwardRef(function UserAvatarCom(
+  props: UserAvatarProps,
+  ref: ForwardedRef<HTMLDivElement>,
+) {
   const { userModel, hideName, ...rest } = props;
 
   if (!userModel) {
@@ -33,16 +37,21 @@ export const UserAvatar = (props: UserAvatarProps) => {
   }
 
   return (
-    <Space className={stl.userAvatar}>
+    <Space ref={ref} className={stl.userAvatar}>
       {avatar}
       <span className={stl.name} title={userName}>
         {userName}
       </span>
     </Space>
   );
+});
+
+const UserAvatarExtend = UserAvatar as typeof UserAvatar & {
+  getUserName: typeof getUserName;
+  Group: typeof UserAvatarGroup;
 };
 
-UserAvatar.getUserName = getUserName;
-UserAvatar.Group = UserAvatarGroup;
+UserAvatarExtend.getUserName = getUserName;
+UserAvatarExtend.Group = UserAvatarGroup;
 
-export default UserAvatar;
+export default UserAvatarExtend;

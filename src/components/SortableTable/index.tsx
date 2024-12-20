@@ -1,12 +1,13 @@
-import { GetProps, Table, TableProps } from "antd";
-import type { GetRowKey } from "antd/es/table/interface";
-import React, { useMemo } from "react";
+import { Table, TableProps } from "antd";
+import { Argument } from "classnames";
+import React, { Key, useMemo } from "react";
 import { MenuOutlined } from "@ant-design/icons";
 import { DndContext, DndContextProps, DragEndEvent } from "@dnd-kit/core";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
 import {
   arrayMove,
   SortableContext,
+  SortableContextProps,
   useSortable,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
@@ -14,32 +15,40 @@ import { CSS } from "@dnd-kit/utilities";
 
 const domDataRowKey = "data-row-key";
 const sortableColumnKey = "SORTABLE_TABLE_COLUMN_KEY";
+const draggingStyle: React.CSSProperties = {
+  position: "relative",
+  zIndex: 10,
+};
+
+type GetRowKey<RecordType = any> = (item: RecordType, index?: number) => Key;
+
+type RowKey<RecordType = any> =
+  | string
+  | keyof RecordType
+  | GetRowKey<RecordType>;
 
 const getRowKeyFunc =
   <
-    RowKey extends TableProps["rowKey"] = any,
-    RecordType = RowKey extends GetRowKey<infer RecordType> ? RecordType : any,
+    RKey extends RowKey = string,
+    RType = RKey extends GetRowKey<infer RecordType> ? RecordType : any,
   >(
-    rowKey: RowKey,
+    rowKey: RKey,
   ) =>
-  (record: RecordType) => {
-    if (!rowKey) {
-      return rowKey;
-    }
-
+  (record: RType) => {
     if (typeof rowKey === "function") {
-      return rowKey(record as any);
+      return rowKey(record);
     }
-
     return (record as any)?.[rowKey];
   };
 
 type SortableRowProps = React.HTMLAttributes<HTMLTableRowElement> & {
+  className?: Argument;
+  style?: React.CSSProperties;
   [domDataRowKey]: string;
 };
 
 const SortableRow = (props: SortableRowProps) => {
-  const { children, ...rest } = props;
+  const { children, className, style, ...rest } = props;
   const rowId = rest[domDataRowKey];
 
   const {
@@ -54,14 +63,22 @@ const SortableRow = (props: SortableRowProps) => {
     id: rowId,
   });
 
-  const style: React.CSSProperties = {
-    ...rest.style,
-    ...(rowId && isDragging ? { position: "relative", zIndex: 10 } : {}),
+  const newStyle: React.CSSProperties = {
+    ...(style || {}),
+    ...(rowId && isDragging ? draggingStyle : {}),
     transition,
     transform: CSS.Transform.toString(transform && { ...transform, scaleY: 1 }),
   };
+
   return (
-    <tr {...rest} ref={setNodeRef} style={style} {...attributes} tabIndex={-1}>
+    <tr
+      {...rest}
+      className={className}
+      style={newStyle}
+      ref={setNodeRef}
+      {...attributes}
+      tabIndex={-1}
+    >
       {React.Children.map(children, (child) => {
         if ((child as React.ReactElement).key === sortableColumnKey && rowId) {
           return React.cloneElement<any>(child as React.ReactElement, {
@@ -84,12 +101,24 @@ export type SortableTableProps<
   RecordType = any,
   ComponentProps = TableProps<RecordType>,
 > = ComponentProps & {
-  /** 隐藏排序按钮 */
-  hideSortable?: boolean;
-  TableComponent?: React.ComponentType;
-  onDataSourceChange?: (dataSource: RecordType[]) => void;
+  className?: Argument;
+  style?: React.CSSProperties;
+  /** 透传 DndContextProps */
   dndContextProps?: DndContextProps;
-  sortableContextProps?: GetProps<typeof SortableContext>;
+  /** 透传 SortableContextProps */
+  sortableContextProps?: SortableContextProps;
+  /** 表格组件 */
+  TableComponent?: React.ComponentType;
+  /** 隐藏排序手柄 */
+  hideSortable?: boolean;
+  /** 是否允许移动(返回 false 表示不允许) */
+  onItemMove?: (
+    from: number,
+    to: number,
+    dataSource: RecordType[],
+  ) => boolean | void;
+  /** 数据源变更 */
+  onDataSourceChange?: (dataSource: RecordType[]) => void;
 };
 
 /**
@@ -97,39 +126,52 @@ export type SortableTableProps<
  */
 export const SortableTable = (props: SortableTableProps) => {
   const {
-    TableComponent = Table,
-    onDataSourceChange,
+    className,
+    style,
     dndContextProps,
     sortableContextProps,
+    TableComponent = Table,
+    hideSortable = false,
     rowKey = "key",
     columns = [],
     dataSource = [],
-    hideSortable = false,
+    onItemMove,
+    onDataSourceChange,
     ...rest
   } = props;
+
   const rowKeyFunc = getRowKeyFunc(rowKey);
+
   const sortableColumns = useMemo(() => {
     if (hideSortable) {
       return columns;
     }
     return ([{ key: sortableColumnKey, width: 32 }] as any[]).concat(columns);
   }, [hideSortable, columns]);
+
   if (!onDataSourceChange) {
     return <TableComponent {...props} />;
   }
 
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
-    if (active.id !== over?.id) {
-      const activeIndex = dataSource.findIndex(
-        (item) => rowKeyFunc(item) === active.id,
-      );
-      const overIndex = dataSource.findIndex(
-        (item) => rowKeyFunc(item) === over?.id,
-      );
+    if (!over || active.id === over.id) {
+      return;
+    }
+
+    const activeIndex = dataSource.findIndex(
+      (item) => rowKeyFunc(item) === active.id,
+    );
+    const overIndex = dataSource.findIndex(
+      (item) => rowKeyFunc(item) === over.id,
+    );
+
+    const allowMove = onItemMove?.(activeIndex, overIndex, dataSource as any[]);
+    if (allowMove !== false) {
       const list = arrayMove(dataSource as any[], activeIndex, overIndex);
-      onDataSourceChange(list);
+      onDataSourceChange?.(list);
     }
   };
+
   return (
     <DndContext
       modifiers={[restrictToVerticalAxis]}
@@ -142,6 +184,8 @@ export const SortableTable = (props: SortableTableProps) => {
         {...sortableContextProps}
       >
         <TableComponent
+          className={className}
+          style={style}
           rowKey={rowKeyFunc}
           dataSource={dataSource}
           columns={sortableColumns}

@@ -1,7 +1,8 @@
 import { Table, TableProps, Tooltip } from "antd";
 import cls, { Argument } from "classnames";
 import { isBoolean, isNumber, isString } from "lodash-es";
-import { useMemo } from "react";
+import type { Reference } from "rc-table";
+import { ForwardedRef, forwardRef, useMemo } from "react";
 import { separator } from "@/utils/human";
 import { isBlank, msecToString } from "@/utils/tools";
 import stl from "./index.module.less";
@@ -48,7 +49,10 @@ export type BaseTableProps<RecordType = any> = Omit<
 /**
  * 基础表格
  */
-export const BaseTable = (props: BaseTableProps) => {
+export const BaseTable = forwardRef(function BaseTableCom(
+  props: BaseTableProps,
+  ref: ForwardedRef<Reference>,
+) {
   const { className, columns, pagination, extend, tableProps, ...rest } =
     props || {};
 
@@ -177,6 +181,7 @@ export const BaseTable = (props: BaseTableProps) => {
   return (
     <div className={cls(stl.baseTable, className)}>
       <Table
+        ref={ref}
         className={stl.table}
         columns={cols}
         pagination={
@@ -195,6 +200,6 @@ export const BaseTable = (props: BaseTableProps) => {
       {extend ? <div className={stl.extend}>{extend}</div> : null}
     </div>
   );
-};
+});
 
 export default BaseTable;

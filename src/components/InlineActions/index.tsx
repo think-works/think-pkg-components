@@ -1,6 +1,6 @@
 import { Divider, Space } from "antd";
 import cls, { Argument } from "classnames";
-import { HTMLAttributes } from "react";
+import { ForwardedRef, forwardRef, HTMLAttributes } from "react";
 import { truthy } from "@/utils/types";
 import BaseAction, { BaseActionProps } from "../BaseAction";
 import stl from "./index.module.less";
@@ -14,7 +14,10 @@ export type InlineActionsProps = HTMLAttributes<HTMLSpanElement> & {
 /**
  * 内敛操作
  */
-export const InlineActions = (props: InlineActionsProps) => {
+export const InlineActions = forwardRef(function InlineActionsCom(
+  props: InlineActionsProps,
+  ref: ForwardedRef<HTMLSpanElement>,
+) {
   const { className, actions, divider, ...rest } = props || {};
 
   const _actions = actions?.filter(truthy);
@@ -25,7 +28,7 @@ export const InlineActions = (props: InlineActionsProps) => {
 
   if (divider) {
     return (
-      <span className={cls(stl.inlineActions, className)} {...rest}>
+      <span ref={ref} className={cls(stl.inlineActions, className)} {...rest}>
         <Space size={4}>
           {_actions?.map((item, idx) => [
             idx === 0 ? null : (
@@ -50,7 +53,7 @@ export const InlineActions = (props: InlineActionsProps) => {
   }
 
   return (
-    <span className={cls(stl.inlineActions, className)} {...rest}>
+    <span ref={ref} className={cls(stl.inlineActions, className)} {...rest}>
       <Space size={8}>
         {_actions?.map((item, idx) => (
           <BaseAction
@@ -63,6 +66,6 @@ export const InlineActions = (props: InlineActionsProps) => {
       </Space>
     </span>
   );
-};
+});
 
 export default InlineActions;

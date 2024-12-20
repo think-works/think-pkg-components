@@ -1,7 +1,14 @@
 import { AutoComplete, AutoCompleteProps } from "antd";
 import cls, { Argument } from "classnames";
 import { get } from "lodash-es";
-import { useCallback, useEffect, useState } from "react";
+import type { BaseSelectRef } from "rc-select";
+import {
+  ForwardedRef,
+  forwardRef,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { useDebounce, useIsMounted } from "@/hooks";
 import stl from "./index.module.less";
 
@@ -25,7 +32,10 @@ export type FetchAutoCompleteProps = AutoCompleteProps & {
 /**
  * 可查询自动补全
  */
-export const FetchAutoComplete = (props: FetchAutoCompleteProps) => {
+export const FetchAutoComplete = forwardRef(function FetchAutoCompleteCom(
+  props: FetchAutoCompleteProps,
+  ref: ForwardedRef<BaseSelectRef>,
+) {
   const {
     className,
     filterOption = true,
@@ -122,6 +132,7 @@ export const FetchAutoComplete = (props: FetchAutoCompleteProps) => {
 
   return (
     <AutoComplete
+      ref={ref}
       className={cls(stl.fetchAutoComplete, className)}
       // loading={loading}
       options={list}
@@ -132,6 +143,6 @@ export const FetchAutoComplete = (props: FetchAutoCompleteProps) => {
       {...rest}
     />
   );
-};
+});
 
 export default FetchAutoComplete;

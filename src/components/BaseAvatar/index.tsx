@@ -1,5 +1,5 @@
 import { Avatar, AvatarProps } from "antd";
-import { useMemo } from "react";
+import { ForwardedRef, forwardRef, useMemo } from "react";
 import { UserOutlined } from "@ant-design/icons";
 import { hashColor } from "@/common/colors";
 
@@ -15,7 +15,10 @@ export type BaseAvatarProps = AvatarProps & {
 /**
  * 基础头像
  */
-export const BaseAvatar = (props: BaseAvatarProps) => {
+export const BaseAvatar = forwardRef(function BaseAvatarCom(
+  props: BaseAvatarProps,
+  ref: ForwardedRef<HTMLSpanElement>,
+) {
   const { className, style, name, avatar, nameSlice, ...rest } = props;
 
   const { src, color, child } = useMemo(() => {
@@ -65,6 +68,7 @@ export const BaseAvatar = (props: BaseAvatarProps) => {
 
   return (
     <Avatar
+      ref={ref}
       className={className}
       size="small"
       src={src}
@@ -79,6 +83,6 @@ export const BaseAvatar = (props: BaseAvatarProps) => {
       {child}
     </Avatar>
   );
-};
+});
 
 export default BaseAvatar;

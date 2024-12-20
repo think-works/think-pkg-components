@@ -52,6 +52,7 @@ export const FilterForm = (props: FilterFormProps) => {
   const {
     className,
     style,
+    form: outerForm,
     defaultOpen,
     itemColSpan,
     itemLabelSpan,
@@ -69,7 +70,9 @@ export const FilterForm = (props: FilterFormProps) => {
   } = props;
   const showMore = (items?.length || 0) > maxItemCount;
 
-  const [form] = Form.useForm();
+  const [innerForm] = Form.useForm();
+  const form = outerForm || innerForm;
+
   const [open, setOpen] = useState(defaultOpen);
 
   const filterValue = RouteTable.useSearchFilterValue();
