@@ -1,12 +1,13 @@
 import { createBrowserRouter, RouteObject } from "react-router-dom";
+import BypassPropsDemo from "./BypassPropsDemo";
 import DragContainerDemo from "./DragContainerDemo";
 import EditableTableDemo from "./EditableTableDemo";
 import FilterFormDemo from "./FilterFormDemo";
-import FilterTable from "./FilterTableDemo";
+import FilterTableDemo from "./FilterTableDemo";
 import FlexTabsDemo from "./FlexTabsDemo";
 import Home from "./Home";
-import PageLayout from "./PageLayout";
-import RouterTable from "./RouterTableDemo";
+import PageLayoutDemo from "./PageLayoutDemo";
+import RouterTableDemo from "./RouterTableDemo";
 import SortableContainerDemo from "./SortableContainerDemo";
 import SortableTableDemo from "./SortableTableDemo";
 import TreeDemo from "./TreeDemo";
@@ -38,16 +39,16 @@ export const routes: RouteObject[] = [
   },
   {
     path: "/page-layout",
-    element: <PageLayout />,
+    element: <PageLayoutDemo />,
     handle: { name: "page-layout", title: "页面布局", sider: true },
   },
   {
     path: "/filter-table",
-    element: <FilterTable />,
+    element: <FilterTableDemo />,
   },
   {
     path: "/router-table",
-    element: <RouterTable />,
+    element: <RouterTableDemo />,
   },
   {
     path: "/sortable-container",
@@ -56,6 +57,10 @@ export const routes: RouteObject[] = [
   {
     path: "/sortable-table",
     element: <SortableTableDemo />,
+  },
+  {
+    path: "/bypass-props",
+    element: <BypassPropsDemo />,
   },
 ];
 
