@@ -1,5 +1,4 @@
 import { MenuProps } from "antd";
-import { MenuItemType, SubMenuType } from "antd/es/menu/interface";
 import { ReactNode } from "react";
 import { To } from "react-router-dom";
 import * as events from "@/utils/events";
@@ -12,6 +11,10 @@ type LayoutWrapperCustomMenuMode = "append" | "replace";
 export type LayoutWrapperMenuItem = NonNullable<MenuProps["items"]>[number] & {
   /** 菜单顺序 */
   sort?: number;
+  /**
+   * 激活图标 (选中时切换)
+   */
+  activeIcon?: ReactNode;
 };
 
 export const refreshCustomMenuEventKey = "refreshCustomMenu";
@@ -106,7 +109,7 @@ export const getCustomMenus = (options?: {
   // 菜单排序
   const list = activeSet ? Array.from(activeSet) : [];
   list.sort(({ sort: aSort = 0 }, { sort: bSort = 0 }) => aSort - bSort);
-  return list as (MenuItemType | SubMenuType)[];
+  return list as LayoutWrapperMenuItem[];
 };
 
 // #endregion

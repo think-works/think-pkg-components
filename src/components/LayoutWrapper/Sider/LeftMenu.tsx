@@ -7,6 +7,7 @@ import { useForceUpdate } from "@/hooks";
 import * as types from "@/utils/types";
 import { useCustomMenus, useMatchMenuKeys } from "../hooks";
 import { LayoutSiderItemMode } from "../type";
+import { LayoutWrapperMenuItem } from "../utils";
 import stl from "./index.module.less";
 
 export type LeftMenuProps = {
@@ -20,13 +21,35 @@ export type LeftMenuProps = {
    */
   collapsed?: boolean;
 };
+/**
+ * 处理第一层菜单的 icon，激活时切换 icon
+ * @param props
+ * @returns
+ */
+const onDealMenuActiveIcon = (
+  menuList: LayoutWrapperMenuItem[],
+  selectedKeys: React.Key[],
+) => {
+  return menuList.map((menu) => {
+    const { type } = menu;
+    if (!type || type === "item") {
+      const { key, icon, activeIcon, ...others } = menu;
+      return {
+        ...others,
+        key,
+        icon: selectedKeys.includes(key) ? activeIcon || icon : icon,
+      } as MenuItemType;
+    }
+    return menu as MenuItemType;
+  });
+};
 
 /**
  * 处理垂直菜单样式
  * @param menu
  * @returns
  */
-const onDealVerticalMenu = (menuList: (MenuItemType | SubMenuType)[]) => {
+const onDealVerticalMenu = (menuList: MenuItemType[]) => {
   const loop = (menus: (MenuItemType | SubMenuType)[]) => {
     return menus.map(
       (
@@ -110,18 +133,20 @@ const LeftMenu = (props: LeftMenuProps) => {
 
   // 自定义路由菜单
   useEffect(() => {
-    let list = customMenus?.length ? customMenus : [];
-    list = list.filter(types.truthy) as (MenuItemType | SubMenuType)[];
+    let list = customMenus?.length
+      ? onDealMenuActiveIcon(customMenus, selectedKeys)
+      : [];
+    list = list.filter(types.truthy) as MenuItemType[];
     /**
      * 竖直模式下，菜单项样式调整
      */
     if (mode === LayoutSiderItemMode.VERTICAL) {
-      list = onDealVerticalMenu(list);
+      list = onDealVerticalMenu(list) as MenuItemType[];
     }
     setMenus(list);
 
     forceUpdate();
-  }, [customMenus, forceUpdate, mode]);
+  }, [customMenus, forceUpdate, selectedKeys, mode]);
 
   return (
     <ConfigProvider
