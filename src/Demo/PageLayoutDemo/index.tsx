@@ -40,7 +40,7 @@ const DragContainerDemo = () => {
       {
         key: "grp",
         label: "系统管理",
-        icon: <HomeFilled />,
+        icon: <OverviewSvg />,
         children: [
           {
             key: "page-layout471",
