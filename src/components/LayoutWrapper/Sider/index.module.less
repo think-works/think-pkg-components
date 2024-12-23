@@ -27,10 +27,12 @@
     overflow: auto;
     overflow: overlay;
     background-color: transparent;
-
     .scrollbarModern(transparent, transparent);
+    scrollbar-width: none;
+
     &:hover {
       .scrollbarModern();
+      scrollbar-width: none;
     }
   }
 }
