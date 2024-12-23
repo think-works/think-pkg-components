@@ -1,6 +1,7 @@
 import { ConfigProvider, Menu } from "antd";
 import { MenuItemType, SubMenuType } from "antd/es/menu/interface";
 import cls, { Argument } from "classnames";
+import classNames from "classnames";
 import { useEffect, useMemo, useState } from "react";
 import { BizLayoutGap, themeToken } from "@/common/theme";
 import { useForceUpdate } from "@/hooks";
@@ -64,7 +65,10 @@ const onDealVerticalMenu = (menuList: MenuItemType[]) => {
             popupClassName: stl.verticalPopup,
             label: (
               <div className={stl.verticalItem}>
-                <div className={stl.verticalIcon}>{icon}</div>
+                {/* 隐藏 tooltip中的 icon */}
+                <div className={classNames("anticon", stl.verticalIcon)}>
+                  {icon}
+                </div>
                 <div className={stl.verticalLabel}>{label}</div>
               </div>
             ),
@@ -75,7 +79,9 @@ const onDealVerticalMenu = (menuList: MenuItemType[]) => {
           ...others,
           label: (
             <div className={stl.verticalItem}>
-              <div className={stl.verticalIcon}>{icon}</div>
+              <div className={classNames("anticon", stl.verticalIcon)}>
+                {icon}
+              </div>
               <div className={stl.verticalLabel}>{label}</div>
             </div>
           ),
