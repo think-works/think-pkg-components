@@ -51,7 +51,7 @@ const onDealMenuActiveIcon = (
  * @returns
  */
 const onDealVerticalMenu = (menuList: MenuItemType[]) => {
-  const loop = (menus: (MenuItemType | SubMenuType)[]) => {
+  const loop = (menus: (MenuItemType | SubMenuType)[], deep = 1) => {
     return menus.map(
       (
         menu: MenuItemType | SubMenuType,
@@ -61,12 +61,19 @@ const onDealVerticalMenu = (menuList: MenuItemType[]) => {
         if (children) {
           return {
             ...others,
-            children: loop(children as (MenuItemType | SubMenuType)[]),
+            children: loop(
+              children as (MenuItemType | SubMenuType)[],
+              deep + 1,
+            ),
             popupClassName: stl.verticalPopup,
             label: (
               <div className={stl.verticalItem}>
-                {/* 隐藏 tooltip中的 icon */}
-                <div className={classNames("anticon", stl.verticalIcon)}>
+                <div
+                  className={classNames(
+                    stl.verticalIcon,
+                    deep === 1 && "anticon",
+                  )}
+                >
                   {icon}
                 </div>
                 <div className={stl.verticalLabel}>{label}</div>
@@ -79,7 +86,12 @@ const onDealVerticalMenu = (menuList: MenuItemType[]) => {
           ...others,
           label: (
             <div className={stl.verticalItem}>
-              <div className={classNames("anticon", stl.verticalIcon)}>
+              <div
+                className={classNames(
+                  stl.verticalIcon,
+                  deep === 1 && "anticon",
+                )}
+              >
                 {icon}
               </div>
               <div className={stl.verticalLabel}>{label}</div>

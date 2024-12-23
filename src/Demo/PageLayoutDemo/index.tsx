@@ -8,6 +8,7 @@ import {
   LayoutWrapper,
   layoutWrapperUtils,
 } from "@/components";
+import { ReactComponent as OverviewSvg } from "./Logo/overview.svg";
 
 const { EditableHeader } = EditableTable;
 const { registerCustomMenus } = layoutWrapperUtils;
@@ -23,7 +24,7 @@ const DragContainerDemo = () => {
       {
         key: "page-layout2",
         label: "工作台",
-        icon: <HomeFilled />,
+        icon: <OverviewSvg />,
         activeIcon: <HomeFilled style={{ color: "red" }} />,
       },
       {
