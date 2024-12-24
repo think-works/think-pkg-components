@@ -1,9 +1,11 @@
-import { Table } from "antd";
+import { Breadcrumb, Descriptions, Table } from "antd";
 import { useEffect, useState } from "react";
 import { HomeFilled } from "@ant-design/icons";
 import {
+  BaseAction,
   EditableTable,
   LayoutDetail,
+  LayoutPanel,
   LayoutSiderItemMode,
   LayoutWrapper,
   layoutWrapperUtils,
@@ -113,18 +115,70 @@ const DragContainerDemo = () => {
         mode: LayoutSiderItemMode.VERTICAL,
       }}
     >
-      <LayoutDetail title="title">
-        <Table
-          columns={[
-            {
-              title: (
-                <EditableHeader deletable value={value} onChange={onChange} />
-              ),
-              dataIndex: "key",
-            },
-          ]}
-        />
-      </LayoutDetail>
+      <LayoutPanel styles={{ body: { paddingLeft: 0 } }}>
+        <LayoutDetail
+          title="title"
+          crumb={
+            <Breadcrumb
+              items={[
+                {
+                  title: "Users",
+                },
+                {
+                  title: ":id",
+                  href: "",
+                },
+              ]}
+              params={{ id: 1 }}
+            />
+          }
+          description={
+            <Descriptions
+              items={[
+                {
+                  key: "1",
+                  label: "UserName",
+                  children: "Zhou Maomao",
+                },
+                {
+                  key: "2",
+                  label: "Telephone",
+                  children: "1810000000",
+                },
+                {
+                  key: "3",
+                  label: "Live",
+                  children: "Hangzhou, Zhejiang",
+                },
+                {
+                  key: "4",
+                  label: "Remark",
+                  children: "empty",
+                },
+                {
+                  key: "5",
+                  label: "Address",
+                  children:
+                    "No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China",
+                },
+              ]}
+            />
+          }
+          statistic={<div>statistic</div>}
+          action={<BaseAction type="primary">操作</BaseAction>}
+        >
+          <Table
+            columns={[
+              {
+                title: (
+                  <EditableHeader deletable value={value} onChange={onChange} />
+                ),
+                dataIndex: "key",
+              },
+            ]}
+          />
+        </LayoutDetail>
+      </LayoutPanel>
     </LayoutWrapper>
   );
 };

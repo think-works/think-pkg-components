@@ -30,6 +30,7 @@ export type LayoutDetailProps = {
     action?: Argument;
     description?: Argument;
     statistic?: Argument;
+    main?: Argument;
     content?: Argument;
   };
   styles?: {
@@ -41,6 +42,7 @@ export type LayoutDetailProps = {
     action?: React.CSSProperties;
     description?: React.CSSProperties;
     statistic?: React.CSSProperties;
+    main?: React.CSSProperties;
     content?: React.CSSProperties;
   };
 };
@@ -73,33 +75,45 @@ export const LayoutDetail = (props: LayoutDetailProps) => {
         })}
         style={styles?.head}
       >
-        {crumb ? (
+        {crumb || action ? (
           <div
             className={cls(stl.crumb, classNames?.crumb)}
             style={styles?.crumb}
           >
             {crumb}
+            {action}
           </div>
         ) : null}
-        {title || action ? (
-          <LayoutTitle
-            className={cls(stl.title, classNames?.title)}
-            style={styles?.title}
-            size="large"
-            title={title}
-            extend={action}
-          />
-        ) : null}
         <div
-          className={cls(stl.extend, classNames?.extend)}
-          style={styles?.extend}
+          className={cls(stl.content, classNames?.content)}
+          style={styles?.content}
         >
-          {description ? (
+          {title || description ? (
             <div
-              className={cls(stl.description, classNames?.description)}
-              style={styles?.description}
+              className={cls(stl.main, classNames?.main)}
+              style={styles?.main}
             >
-              {description}
+              {title ? (
+                <LayoutTitle
+                  className={cls(stl.title, classNames?.title)}
+                  style={styles?.title}
+                  size="large"
+                  title={title}
+                />
+              ) : null}
+              <div
+                className={cls(stl.extend, classNames?.extend)}
+                style={styles?.extend}
+              >
+                {description ? (
+                  <div
+                    className={cls(stl.description, classNames?.description)}
+                    style={styles?.description}
+                  >
+                    {description}
+                  </div>
+                ) : null}
+              </div>
             </div>
           ) : null}
           {statistic ? (

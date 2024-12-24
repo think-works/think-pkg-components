@@ -6,9 +6,11 @@
   height: 100%;
 
   .head {
+    border: 1px solid #ffffff;
+    overflow: hidden;
     flex: none;
-    padding: 4px @bizLayoutGap;
-    background-color: @colorBgContainer;
+    border-radius: 8px;
+    background: linear-gradient(#c3dcff 0%, #ffffff 30%, #ffffff);
 
     &.divider {
       border-bottom: 1px solid @colorBorderSecondary;
@@ -17,7 +19,7 @@
 
   .body {
     flex: auto;
-    padding: @bizLayoutGap;
+    padding: @bizLayoutGap 0;
 
     &.cling {
       padding-top: 0;
@@ -31,20 +33,39 @@
   }
 
   .crumb {
-  }
-
-  .title {
-  }
-
-  .extend {
+    height: 48px;
     display: flex;
+    align-items: center;
+    padding: 0 16px;
+    justify-content: space-between;
   }
 
-  .description {
-    flex: auto;
-  }
+  .content {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 16px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    overflow: hidden;
 
-  .statistic {
-    flex: none;
+    .main {
+      padding-bottom: @bizLayoutGap;
+      .title {
+      }
+
+      .extend {
+        display: flex;
+      }
+
+      .description {
+        flex: auto;
+      }
+    }
+
+    .statistic {
+      flex: none;
+      display: flex;
+      align-items: center;
+    }
   }
 }
