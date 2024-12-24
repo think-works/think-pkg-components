@@ -1,7 +1,6 @@
 import cProcess from "child_process";
 import path from "path";
 import process from "process";
-// import { visualizer } from "rollup-plugin-visualizer";
 import { fileURLToPath } from "url";
 import { defineConfig, loadEnv } from "vite";
 import checker from "vite-plugin-checker";
@@ -95,19 +94,20 @@ export default defineConfig(({ mode }) => {
       }),
       svgr({
         /**
-         * 指定为命名导入方式以避免不确定性
          * https://react-svgr.com/docs/rollup/
+         * https://react-svgr.com/docs/options/
+         * https://github.com/gregberge/svgr/blob/main/packages/plugin-svgo/src/config.test.ts
          */
         exportType: "named",
         ref: true,
+        memo: true,
         icon: true,
         svgProps: {
-          fill: "currentColor",
           focusable: false,
           "aria-hidden": true,
+          fill: "currentColor",
         },
       }),
-      // visualizer(),
     ],
   };
 });
