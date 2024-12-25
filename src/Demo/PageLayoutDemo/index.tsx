@@ -1,4 +1,4 @@
-import { Breadcrumb, Descriptions, Table } from "antd";
+import { Breadcrumb, Descriptions, Space, Table } from "antd";
 import { useEffect, useState } from "react";
 import { HomeFilled } from "@ant-design/icons";
 import {
@@ -10,6 +10,7 @@ import {
   LayoutWrapper,
   layoutWrapperUtils,
 } from "@/components";
+import { StatisticsCard } from "@/components/StatisticsCard";
 import { ReactComponent as OverviewSvg } from "./Logo/overview.svg";
 
 const { EditableHeader } = EditableTable;
@@ -134,6 +135,8 @@ const DragContainerDemo = () => {
           }
           description={
             <Descriptions
+              column={4}
+              size="small"
               items={[
                 {
                   key: "1",
@@ -164,7 +167,24 @@ const DragContainerDemo = () => {
               ]}
             />
           }
-          statistic={<div>statistic</div>}
+          statistic={
+            <Space>
+              <StatisticsCard
+                title="总销售额"
+                value={112893}
+                logo={<OverviewSvg />}
+                shadowColor="red"
+                onJump={() => {}}
+              />
+              <StatisticsCard
+                title="总销售额"
+                value={112893}
+                logo={<OverviewSvg />}
+                shadowColor="red"
+                onJump={() => {}}
+              />
+            </Space>
+          }
           action={<BaseAction type="primary">操作</BaseAction>}
         >
           <Table

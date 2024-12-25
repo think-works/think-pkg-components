@@ -1,0 +1,59 @@
+@import "@/styles/utils.less";
+
+.detailStatics {
+  display: flex;
+  flex: auto;
+  align-items: center;
+  border: 1px solid #ebeef5;
+  background-color: #fff;
+  height: 94px;
+  border-radius: 8px;
+  padding: 0 20px;
+  box-shadow: 0px 6px 24px 0 rgba(0, 0, 0, 0.04);
+  &.canJump {
+    cursor: pointer;
+    &:hover {
+      border-color: @colorPrimary;
+    }
+  }
+  .staticsImage {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 44px;
+    background-color: #eff2f7;
+    margin-right: 20px;
+    z-index: 1;
+    .shadowBox {
+      position: absolute;
+      top: 28px;
+      left: 14px;
+      width: 16px;
+      height: 6px;
+      border-radius: 50%;
+      opacity: 0.3;
+      z-index: -1;
+      filter: blur(2px);
+    }
+  }
+
+  .staticsItem {
+    .staticsItemTitle {
+      font-weight: 600;
+      font-size: 24px;
+      color: #323340;
+    }
+
+    .staticsItemContent {
+      display: flex;
+      align-items: center;
+      font-weight: 400;
+      font-size: 14px;
+      color: #7d7f8c;
+    }
+  }
+}
