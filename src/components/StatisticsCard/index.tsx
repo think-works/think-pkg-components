@@ -19,7 +19,7 @@ interface StatisticsProps {
   /**
    * @description icon 阴影颜色
    */
-  shadowColor: string;
+  shadowColor?: string;
   /**
    * 跳转事件
    * @returns
