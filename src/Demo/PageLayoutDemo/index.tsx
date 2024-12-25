@@ -172,14 +172,14 @@ const DragContainerDemo = () => {
               <StatisticsCard
                 title="总销售额"
                 value={112893}
-                logo={<OverviewSvg />}
+                icon={<OverviewSvg />}
                 shadowColor="red"
                 onJump={() => {}}
               />
               <StatisticsCard
                 title="总销售额"
                 value={112893}
-                logo={<OverviewSvg />}
+                icon={<OverviewSvg />}
                 shadowColor="red"
                 onJump={() => {}}
               />

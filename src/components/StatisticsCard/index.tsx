@@ -15,9 +15,9 @@ interface StatisticsProps {
   /**
    * @description 图标
    */
-  logo: React.ReactNode;
+  icon: React.ReactNode;
   /**
-   * @description logo 阴影颜色
+   * @description icon 阴影颜色
    */
   shadowColor: string;
   /**
@@ -33,14 +33,14 @@ interface StatisticsProps {
  * @returns
  */
 export const StatisticsCard = (props: StatisticsProps) => {
-  const { logo, title, value, shadowColor, onJump } = props;
+  const { icon, title, value, shadowColor, onJump } = props;
   return (
     <div
       className={classNames(stl.detailStatics, onJump && stl.canJump)}
       onClick={onJump}
     >
       <div className={stl.staticsImage}>
-        {logo}
+        {icon}
         <div className={stl.shadowBox} style={{ background: shadowColor }} />
       </div>
       <div className={stl.staticsItem}>
