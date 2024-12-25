@@ -97,7 +97,7 @@ export const LayoutDetail = (props: LayoutDetailProps) => {
                 <LayoutTitle
                   className={cls(stl.title, classNames?.title)}
                   style={styles?.title}
-                  size="large"
+                  size="middle"
                   title={title}
                 />
               ) : null}
