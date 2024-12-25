@@ -16,7 +16,14 @@ export type LayoutDetailProps = {
    */
   overflowContent?: boolean;
   crumb?: React.ReactNode;
+  /**
+   * 标题
+   */
   title?: React.ReactNode;
+  /**
+   * 标题扩展区域
+   */
+  titleExtend?: React.ReactNode;
   action?: React.ReactNode;
   description?: React.ReactNode;
   statistic?: React.ReactNode;
@@ -59,6 +66,7 @@ export const LayoutDetail = (props: LayoutDetailProps) => {
     overflowContent,
     crumb,
     title,
+    titleExtend,
     action,
     description,
     statistic,
@@ -88,17 +96,18 @@ export const LayoutDetail = (props: LayoutDetailProps) => {
           className={cls(stl.content, classNames?.content)}
           style={styles?.content}
         >
-          {title || description ? (
+          {title || description || titleExtend ? (
             <div
               className={cls(stl.main, classNames?.main)}
               style={styles?.main}
             >
-              {title ? (
+              {title || titleExtend ? (
                 <LayoutTitle
                   className={cls(stl.title, classNames?.title)}
                   style={styles?.title}
                   size="middle"
                   title={title}
+                  extend={titleExtend}
                 />
               ) : null}
               <div
