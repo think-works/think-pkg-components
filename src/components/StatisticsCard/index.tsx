@@ -1,5 +1,6 @@
 import classNames from "classnames";
-import React from "react";
+import React, { useMemo } from "react";
+import { separator } from "@/utils/human";
 import { ReactComponent as ArrowSvg } from "./arrow.svg";
 import stl from "./index.module.less";
 
@@ -9,9 +10,13 @@ interface StatisticsProps {
    */
   title: string;
   /**
-   * @description 数值
+   * @description 值
    */
-  value: number;
+  value: string | number | React.ReactNode;
+  /**
+   * @description 值样式
+   */
+  valueStyle?: React.CSSProperties;
   /**
    * @description 图标
    */
@@ -33,7 +38,15 @@ interface StatisticsProps {
  * @returns
  */
 export const StatisticsCard = (props: StatisticsProps) => {
-  const { icon, title, value, shadowColor, onJump } = props;
+  const { icon, title, value, valueStyle, shadowColor, onJump } = props;
+
+  const realValue = useMemo(() => {
+    if (typeof value === "number") {
+      return separator(value);
+    }
+    return value;
+  }, [value]);
+
   return (
     <div
       className={classNames(stl.detailStatics, onJump && stl.canJump)}
@@ -44,7 +57,9 @@ export const StatisticsCard = (props: StatisticsProps) => {
         <div className={stl.shadowBox} style={{ background: shadowColor }} />
       </div>
       <div className={stl.staticsItem}>
-        <div className={stl.staticsItemTitle}>{value}</div>
+        <div className={stl.staticsItemValue} style={valueStyle}>
+          {realValue}
+        </div>
         <div className={stl.staticsItemContent}>
           {title}
           {onJump && <ArrowSvg fill="#FFF" style={{ marginLeft: 4 }} />}

@@ -178,7 +178,14 @@ const DragContainerDemo = () => {
               />
               <StatisticsCard
                 title="总销售额"
-                value={112893}
+                value={9009123211}
+                valueStyle={{
+                  fontSize: 30,
+                  fontWeight: "400",
+                  color: "#FF4500",
+                  cursor: "pointer",
+                  textDecoration: "underline",
+                }}
                 icon={<OverviewSvg />}
                 shadowColor="red"
                 onJump={() => {}}
