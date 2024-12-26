@@ -18,7 +18,7 @@ export const styleConfig = {
   /** 业务布局顶部栏高度 */
   bizLayoutHeader: 48,
   /** 业务布局边距 */
-  bizLayoutGap: 48,
+  bizLayoutGap: 12,
 };
 
 /**
