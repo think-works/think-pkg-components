@@ -1,18 +1,32 @@
 /**
- * 样式配置(与 @/styles/basic.less 保持一致)
+ * 注意：
+ * 本文件需与 @/styles/basic.less 保持一致
+ */
+
+/**
+ * 样式配置
  */
 export const styleConfig = {
+  /** antd 变量前缀 */
   antPrefixVar: "ant",
+  /** antd 类名前缀 */
   antPrefixClass: "ant",
+  /** antd 图标前缀 */
   antPrefixIcon: "anticon",
+  /** 业务布局 z-index */
   bizLayoutZIndex: 100,
+  /** 业务布局顶部栏高度 */
   bizLayoutHeader: 48,
+  /** 业务布局边距 */
+  bizLayoutGap: 48,
 };
 
 /**
  * 主题变量
  */
 export const themeToken = {
+  // #region 状态色
+
   /** 主题色 */
   colorPrimary: "#2176FF",
   /** 链接色  */
@@ -25,8 +39,70 @@ export const themeToken = {
   colorWarning: "#fbc504",
   /** 失败色 */
   colorError: "#db4539",
-  /** 默认色(该 token 不存在，使用 colorTextQuaternary 作为默认状态色) */
+  /** 默认色(该 token 实际并不存在) */
   colorDefault: "rgba(0, 0, 0, 0.25)",
+
+  // #endregion
+
+  // #region 文本色
+
+  /** 第一级文本色 */
+  colorText: "rgba(0, 0, 0, 0.88)",
+  /** 第二级文本色 */
+  colorTextSecondary: "rgba(0, 0, 0, 0.65)",
+  /** 第三级文本色 */
+  colorTextTertiary: "rgba(0, 0, 0, 0.45)",
+  /** 第四级文本色 */
+  colorTextQuaternary: "rgba(0, 0, 0, 0.25)",
+
+  // #endregion
+
+  // #region 填充色
+
+  /** 第一级填充色 */
+  colorFill: "rgba(0, 0, 0, 0.15)",
+  /** 第二级填充色 */
+  colorFillSecondary: "rgba(0, 0, 0, 0.06)",
+  /** 第三级填充色 */
+  colorFillTertiary: "rgba(0, 0, 0, 0.04)",
+  /** 第四级填充色 */
+  colorFillQuaternary: "rgba(0, 0, 0, 0.02)",
+
+  // #endregion
+
+  // #region 边框色
+
+  /** 第一级边框色 */
+  colorBorder: "#d9d9d9",
+  /** 第二级边框色 */
+  colorBorderSecondary: "#f0f0f0",
+
+  // #endregion
+
+  // #region 阴影样式
+
+  /** 第一级阴影样式 */
+  boxShadow:
+    "0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05)",
+  /** 第二级阴影样式 */
+  boxShadowSecondary:
+    "0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05)",
+  /** 第三级阴影样式 */
+  boxShadowTertiary:
+    "0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02)",
+
+  // #endregion
+
+  // #region 阴影样式
+
+  /** 组件容器背景色 */
+  colorBgContainer: "#ffffff",
+  /** 浮层容器背景色 */
+  colorBgElevated: "#ffffff",
+  /** 浮层蒙层背景色 */
+  colorBgMask: "rgba(0, 0, 0, 0.45)",
+
+  // #endregion
 };
 
 /**
@@ -47,8 +123,3 @@ export const defaultConfigProviderProps = {
   iconPrefixCls: styleConfig.antPrefixIcon,
   theme: themeConfig,
 };
-
-/**
- * 业务布局边距 还有一个配置在 utils.less 中
- */
-export const BizLayoutGap = 12;

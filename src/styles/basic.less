@@ -1,30 +1,137 @@
-// #region 样式配置(与 @/common/theme.ts 保持一致)
+/**
+ * 注意：
+ * 本文件需与 @/common/theme.ts 保持一致
+ */
 
-// antd 变量前缀
+// #region 样式配置
+
+/** antd 变量前缀 */
 @antPrefixVar: ant;
-// antd 类名前缀
+/** antd 类名前缀 */
 @antPrefixClass: ant;
-// antd 图标前缀
+/** antd 图标前缀 */
 @antPrefixIcon: anticon;
-// 业务布局 z-index
+/** 业务布局 z-index */
 @bizLayoutZIndex: 100;
-// 业务布局顶部栏高度
-@bizLayoutHeader: 48;
+/** 业务布局顶部栏高度 */
+@bizLayoutHeader: 48px;
+/** 业务布局边距 */
+@bizLayoutGap: 12px;
 
-// 遗留的 antd 类名前缀
+/** 遗留的 antd 类名前缀 */
 @ant-prefix: @antPrefixClass;
 
 // #endregion
 
-// #region 变量映射
+// #region 主题变量-状态色
 
+/** 主题色 */
 @colorPrimary: var(~"--@{antPrefixVar}-color-primary", #2176ff);
+/** 链接色  */
 @colorLink: var(~"--@{antPrefixVar}-color-link", #2176ff);
+/** 信息色 */
 @colorInfo: var(~"--@{antPrefixVar}-color-info", #24a7ff);
+/** 成功色 */
 @colorSuccess: var(~"--@{antPrefixVar}-color-success", #36b257);
+/** 警告色 */
 @colorWarning: var(~"--@{antPrefixVar}-color-warning", #fbc504);
+/** 失败色 */
 @colorError: var(~"--@{antPrefixVar}-color-error", #db4539);
+/** 默认色(该 token 实际并不存在) */
 @colorDefault: rgba(0, 0, 0, 0.25);
+
+// #endregion
+
+// #region 主题变量-文本色
+
+/** 第一级文本色 */
+@colorText: var(~"--@{antPrefixVar}-color-text", rgba(0, 0, 0, 0.88));
+/** 第二级文本色 */
+@colorTextSecondary: var(
+  ~"--@{antPrefixVar}-color-text-secondary",
+  rgba(0, 0, 0, 0.65)
+);
+/** 第三级文本色 */
+@colorTextTertiary: var(
+  ~"--@{antPrefixVar}-color-text-tertiary",
+  rgba(0, 0, 0, 0.45)
+);
+/** 第四级文本色 */
+@colorTextQuaternary: var(
+  ~"--@{antPrefixVar}-color-text-quaternary",
+  rgba(0, 0, 0, 0.25)
+);
+
+// #endregion
+
+// #region 主题变量-填充色
+
+/** 第一级填充色 */
+@colorFill: var(~"--@{antPrefixVar}-color-fill", rgba(0, 0, 0, 0.15));
+/** 第二级填充色 */
+@colorFillSecondary: var(
+  ~"--@{antPrefixVar}-color-fill-secondary",
+  rgba(0, 0, 0, 0.06)
+);
+/** 第三级填充色 */
+@colorFillTertiary: var(
+  ~"--@{antPrefixVar}-color-fill-tertiary",
+  rgba(0, 0, 0, 0.04)
+);
+/** 第四级填充色 */
+@colorFillQuaternary: var(
+  ~"--@{antPrefixVar}-color-fill-quaternary",
+  rgba(0, 0, 0, 0.02)
+);
+
+// #endregion
+
+// #region 主题变量-边框色
+
+/** 第一级边框色 */
+@colorBorder: var(~"--@{antPrefixVar}-color-border", #d9d9d9);
+/** 第二级边框色 */
+@colorBorderSecondary: var(
+  ~"--@{antPrefixVar}-color-border-secondary",
+  #f0f0f0
+);
+
+// #endregion
+
+// #region 主题变量-阴影样式
+
+/** 第一级阴影样式 */
+@boxShadow: var(
+  ~"--@{antPrefixVar}-color-shadow",
+  0 6px 16px 0 rgba(0, 0, 0, 0.08),
+  0 3px 6px -4px rgba(0, 0, 0, 0.12),
+  0 9px 28px 8px rgba(0, 0, 0, 0.05)
+);
+/** 第二级阴影样式 */
+@boxShadowSecondary: var(
+  ~"--@{antPrefixVar}-color-shadow-secondary",
+  0 6px 16px 0 rgba(0, 0, 0, 0.08),
+  0 3px 6px -4px rgba(0, 0, 0, 0.12),
+  0 9px 28px 8px rgba(0, 0, 0, 0.05)
+);
+/** 第三级阴影样式 */
+@boxShadowTertiary: var(
+  ~"--@{antPrefixVar}-color-shadow-tertiary",
+  0 1px 2px 0 rgba(0, 0, 0, 0.03),
+  0 1px 6px -1px rgba(0, 0, 0, 0.02),
+  0 2px 4px 0 rgba(0, 0, 0, 0.02)
+);
+
+// #endregion
+
+// #region 主题变量-背景色
+
+/** 组件容器背景色 */
+@colorBgContainer: var(~"--@{antPrefixVar}-color-bg-container", #ffffff);
+/** 浮层容器背景色 */
+@colorBgElevated: var(~"--@{antPrefixVar}-color-bg-elevated", #ffffff);
+/** 浮层蒙层背景色 */
+@colorBgMask: var(~"--@{antPrefixVar}-color-bg-mask", rgba(0, 0, 0, 0.45));
 
 // #endregion
 

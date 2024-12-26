@@ -3,7 +3,7 @@ import { MenuItemType, SubMenuType } from "antd/es/menu/interface";
 import cls, { Argument } from "classnames";
 import classNames from "classnames";
 import { useEffect, useMemo, useState } from "react";
-import { BizLayoutGap, themeToken } from "@/common/theme";
+import { styleConfig, themeToken } from "@/common/theme";
 import { useForceUpdate } from "@/hooks";
 import * as types from "@/utils/types";
 import { useCustomMenus, useMatchMenuKeys } from "../hooks";
@@ -119,7 +119,7 @@ const LeftMenu = (props: LeftMenuProps) => {
     if (mode === LayoutSiderItemMode.HORIZONTAL) {
       return {
         itemMarginBlock: 8,
-        itemMarginInline: BizLayoutGap,
+        itemMarginInline: styleConfig.bizLayoutGap,
         itemHeight: 32,
         radiusItem: 4,
         subMenuItemBg: "transparent",
@@ -130,9 +130,9 @@ const LeftMenu = (props: LeftMenuProps) => {
       itemSelectedColor: themeToken.colorPrimary,
       itemSelectedBg: "#FFF",
       itemHeight: 56,
-      itemMarginBlock: BizLayoutGap,
+      itemMarginBlock: styleConfig.bizLayoutGap,
       radiusItem: 4,
-      itemMarginInline: BizLayoutGap,
+      itemMarginInline: styleConfig.bizLayoutGap,
     };
   }, [mode]);
 

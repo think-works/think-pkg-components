@@ -11,7 +11,7 @@
   .scrollbarModern();
 
   &.drag-over {
-    background: @colorBgHover;
+    background: @colorFillSecondary;
   }
   .x-tree-group-wrapper {
     // display: flex;
@@ -60,7 +60,7 @@
   .x-tree-item {
     &::after {
       content: "";
-      background: @colorBgHover;
+      background: @colorFillSecondary;
       // a2ff7a
       transition: background 0.2s ease-out;
       position: absolute;
@@ -104,7 +104,7 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  color: @colorTextHeading;
+  color: @colorText;
   // padding: 3px 0;
   box-sizing: border-box;
   &.border {
@@ -119,7 +119,7 @@
     align-items: center;
     width: 20px;
     height: 20px;
-    color: @colorTextHeading;
+    color: @colorText;
   }
   &-checkbox {
     margin-right: 5px;
@@ -170,10 +170,10 @@
   }
   &:hover::after {
     // 降低颜色透明度
-    background: @colorBgHover;
+    background: @colorFillSecondary;
   }
   &.active::after {
-    background: @colorBackgroundActive;
+    background: @colorFill;
   }
   &.search::after {
     border: 1px solid rgba(255, 147, 46, 1);
