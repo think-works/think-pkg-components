@@ -121,7 +121,7 @@ const LeftMenu = (props: LeftMenuProps) => {
         itemMarginBlock: 8,
         itemMarginInline: styleConfig.bizLayoutGap,
         itemHeight: 32,
-        radiusItem: 4,
+        itemBorderRadius: 4,
         subMenuItemBg: "transparent",
       };
     }
@@ -131,7 +131,7 @@ const LeftMenu = (props: LeftMenuProps) => {
       itemSelectedBg: "#FFF",
       itemHeight: 56,
       itemMarginBlock: styleConfig.bizLayoutGap,
-      radiusItem: 4,
+      itemBorderRadius: 4,
       itemMarginInline: styleConfig.bizLayoutGap,
     };
   }, [mode]);
