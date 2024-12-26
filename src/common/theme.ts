@@ -28,11 +28,11 @@ export const themeToken = {
   // #region 状态色
 
   /** 主题色 */
-  colorPrimary: "#2176FF", // #1677ff
+  colorPrimary: "#2176ff", // #1677ff
   /** 链接色  */
-  colorLink: "#2176FF", // #1677ff
+  colorLink: "#2176ff", // #1677ff
   /** 信息色 */
-  colorInfo: "#24A7Ff", // #1677ff
+  colorInfo: "#24a7ff", // #1677ff
   /** 成功色 */
   colorSuccess: "#36b257", // #52c41a
   /** 警告色 */
@@ -51,9 +51,9 @@ export const themeToken = {
   /** 第二级文本色 */
   colorTextSecondary: "#565866", // rgba(0, 0, 0, 0.65)
   /** 第三级文本色 */
-  colorTextTertiary: "#7D7F8C", // rgba(0, 0, 0, 0.45)
+  colorTextTertiary: "#7d7f8c", // rgba(0, 0, 0, 0.45)
   /** 第四级文本色 */
-  colorTextQuaternary: "#A8AAB3", // rgba(0, 0, 0, 0.25)
+  colorTextQuaternary: "#a8Aab3", // rgba(0, 0, 0, 0.25)
 
   // #endregion
 
@@ -95,6 +95,8 @@ export const themeToken = {
 
   // #region 阴影样式
 
+  /** 页面布局背景色 */
+  colorBgLayout: "#eff2F7", // #f5f5f5
   /** 组件容器背景色 */
   colorBgContainer: "#ffffff",
   /** 浮层容器背景色 */

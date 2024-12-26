@@ -1,24 +1,17 @@
-html,
-body {
-  margin: 0px;
-  padding: 0px;
-  height: 100%;
-}
-
-#app,
-.ant-app {
-  height: 100%;
-}
+@import "@/styles/utils.less";
 
 html,
 body {
   margin: 0px;
   padding: 0px;
   overscroll-behavior: none;
-  color: rgba(0, 0, 0, 0.88);
-  background-color: #eff2f7;
-  font-size: 14px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  color: @colorText;
+  background-color: @colorBgLayout;
+}
+
+html,
+body,
+#app,
+.ant-app {
+  height: 100%;
 }
