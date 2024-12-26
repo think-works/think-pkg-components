@@ -79,6 +79,32 @@ export const themeToken = {
 
   // #endregion
 
+  // #region 背景色
+
+  /** 页面布局背景色 */
+  colorBgLayout: "#eff2F7", // #f5f5f5
+  /** 组件容器背景色 */
+  colorBgContainer: "#ffffff",
+  /** 浮层容器背景色 */
+  colorBgElevated: "#ffffff",
+  /** 浮层蒙层背景色 */
+  colorBgMask: "rgba(0, 0, 0, 0.45)",
+
+  // #endregion
+
+  // #region 主题色的激活色和悬浮色
+
+  /** 主题色的背景色(激活色) */
+  colorPrimaryBg: "#e6f4ff",
+  /** 主题色的背景悬浮色 */
+  colorPrimaryBgHover: "#bae0ff",
+  /** 主题色的边框色(激活色) */
+  colorPrimaryBorder: "#91caff",
+  /** 主题色的边框悬浮色 */
+  colorPrimaryBorderHover: "#69b1ff",
+
+  // #endregion
+
   // #region 阴影样式
 
   /** 第一级阴影样式 */
@@ -90,19 +116,6 @@ export const themeToken = {
   /** 第三级阴影样式 */
   boxShadowTertiary:
     "0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02)",
-
-  // #endregion
-
-  // #region 阴影样式
-
-  /** 页面布局背景色 */
-  colorBgLayout: "#eff2F7", // #f5f5f5
-  /** 组件容器背景色 */
-  colorBgContainer: "#ffffff",
-  /** 浮层容器背景色 */
-  colorBgElevated: "#ffffff",
-  /** 浮层蒙层背景色 */
-  colorBgMask: "rgba(0, 0, 0, 0.45)",
 
   // #endregion
 };

@@ -101,6 +101,35 @@
 
 // #endregion
 
+// #region 主题变量-背景色
+
+/** 页面布局背景色 */
+@colorBgLayout: var(~"--@{antPrefixVar}-color-bg-layout", #eff2f7); // #f5f5f5
+/** 组件容器背景色 */
+@colorBgContainer: var(~"--@{antPrefixVar}-color-bg-container", #ffffff);
+/** 浮层容器背景色 */
+@colorBgElevated: var(~"--@{antPrefixVar}-color-bg-elevated", #ffffff);
+/** 浮层蒙层背景色 */
+@colorBgMask: var(~"--@{antPrefixVar}-color-bg-mask", rgba(0, 0, 0, 0.45));
+
+// #endregion
+
+// #region 主题变量-主题色的激活色和悬浮色
+
+/** 主题色的背景色(激活色) */
+@colorPrimaryBg: var(~"--@{antPrefixVar}-color-primary-bg", #e6f4ff);
+/** 主题色的背景悬浮色 */
+@colorPrimaryBgHover: var(~"--@{antPrefixVar}-color-primary-bg-hover", #bae0ff);
+/** 主题色的边框色(激活色) */
+@colorPrimaryBorder: var(~"--@{antPrefixVar}-color-primary-border", #91caff);
+/** 主题色的边框悬浮色 */
+@colorPrimaryBorderHover: var(
+  ~"--@{antPrefixVar}-color-primary-bg-border-hover",
+  #69b1ff
+);
+
+// #endregion
+
 // #region 主题变量-阴影样式
 
 /** 第一级阴影样式 */
@@ -124,19 +153,6 @@
   0 1px 6px -1px rgba(0, 0, 0, 0.02),
   0 2px 4px 0 rgba(0, 0, 0, 0.02)
 );
-
-// #endregion
-
-// #region 主题变量-背景色
-
-/** 页面布局背景色 */
-@colorBgLayout: var(~"--@{antPrefixVar}-color-bg-layout", #eff2f7); // #f5f5f5
-/** 组件容器背景色 */
-@colorBgContainer: var(~"--@{antPrefixVar}-color-bg-container", #ffffff);
-/** 浮层容器背景色 */
-@colorBgElevated: var(~"--@{antPrefixVar}-color-bg-elevated", #ffffff);
-/** 浮层蒙层背景色 */
-@colorBgMask: var(~"--@{antPrefixVar}-color-bg-mask", rgba(0, 0, 0, 0.45));
 
 // #endregion
 
