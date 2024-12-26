@@ -26,17 +26,17 @@
 // #region 主题变量-状态色
 
 /** 主题色 */
-@colorPrimary: var(~"--@{antPrefixVar}-color-primary", #2176ff);
+@colorPrimary: var(~"--@{antPrefixVar}-color-primary", #2176ff); // #1677ff
 /** 链接色  */
-@colorLink: var(~"--@{antPrefixVar}-color-link", #2176ff);
+@colorLink: var(~"--@{antPrefixVar}-color-link", #2176ff); // #1677ff
 /** 信息色 */
-@colorInfo: var(~"--@{antPrefixVar}-color-info", #24a7ff);
+@colorInfo: var(~"--@{antPrefixVar}-color-info", #24a7ff); // #1677ff
 /** 成功色 */
-@colorSuccess: var(~"--@{antPrefixVar}-color-success", #36b257);
+@colorSuccess: var(~"--@{antPrefixVar}-color-success", #36b257); // #52c41a
 /** 警告色 */
-@colorWarning: var(~"--@{antPrefixVar}-color-warning", #fbc504);
+@colorWarning: var(~"--@{antPrefixVar}-color-warning", #fbc504); // #faad14
 /** 失败色 */
-@colorError: var(~"--@{antPrefixVar}-color-error", #db4539);
+@colorError: var(~"--@{antPrefixVar}-color-error", #db4539); // #ff4d4f
 /** 默认色(该 token 实际并不存在) */
 @colorDefault: rgba(0, 0, 0, 0.25);
 
@@ -45,22 +45,25 @@
 // #region 主题变量-文本色
 
 /** 第一级文本色 */
-@colorText: var(~"--@{antPrefixVar}-color-text", rgba(0, 0, 0, 0.88));
+@colorText: var(
+  ~"--@{antPrefixVar}-color-text",
+  #323340
+); // rgba(0, 0, 0, 0.88)
 /** 第二级文本色 */
 @colorTextSecondary: var(
   ~"--@{antPrefixVar}-color-text-secondary",
-  rgba(0, 0, 0, 0.65)
-);
+  #565866
+); // rgba(0, 0, 0, 0.65)
 /** 第三级文本色 */
 @colorTextTertiary: var(
   ~"--@{antPrefixVar}-color-text-tertiary",
-  rgba(0, 0, 0, 0.45)
-);
+  #7d7f8c
+); // rgba(0, 0, 0, 0.45)
 /** 第四级文本色 */
 @colorTextQuaternary: var(
   ~"--@{antPrefixVar}-color-text-quaternary",
-  rgba(0, 0, 0, 0.25)
-);
+  #a8aab3
+); // rgba(0, 0, 0, 0.25)
 
 // #endregion
 

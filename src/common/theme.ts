@@ -28,17 +28,17 @@ export const themeToken = {
   // #region 状态色
 
   /** 主题色 */
-  colorPrimary: "#2176FF",
+  colorPrimary: "#2176FF", // #1677ff
   /** 链接色  */
-  colorLink: "#2176FF",
+  colorLink: "#2176FF", // #1677ff
   /** 信息色 */
-  colorInfo: "#24A7Ff",
+  colorInfo: "#24A7Ff", // #1677ff
   /** 成功色 */
-  colorSuccess: "#36b257",
+  colorSuccess: "#36b257", // #52c41a
   /** 警告色 */
-  colorWarning: "#fbc504",
+  colorWarning: "#fbc504", // #faad14
   /** 失败色 */
-  colorError: "#db4539",
+  colorError: "#db4539", // #ff4d4f
   /** 默认色(该 token 实际并不存在) */
   colorDefault: "rgba(0, 0, 0, 0.25)",
 
@@ -47,13 +47,13 @@ export const themeToken = {
   // #region 文本色
 
   /** 第一级文本色 */
-  colorText: "rgba(0, 0, 0, 0.88)",
+  colorText: "#323340", // rgba(0, 0, 0, 0.88)
   /** 第二级文本色 */
-  colorTextSecondary: "rgba(0, 0, 0, 0.65)",
+  colorTextSecondary: "#565866", // rgba(0, 0, 0, 0.65)
   /** 第三级文本色 */
-  colorTextTertiary: "rgba(0, 0, 0, 0.45)",
+  colorTextTertiary: "#7D7F8C", // rgba(0, 0, 0, 0.45)
   /** 第四级文本色 */
-  colorTextQuaternary: "rgba(0, 0, 0, 0.25)",
+  colorTextQuaternary: "#A8AAB3", // rgba(0, 0, 0, 0.25)
 
   // #endregion
 
