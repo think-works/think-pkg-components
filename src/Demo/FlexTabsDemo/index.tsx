@@ -4,7 +4,7 @@ import { FlexTabs, LayoutTabs, LayoutTabsProps } from "@/components";
 const FlexTabsDemo = () => {
   const tabsProps: LayoutTabsProps = {
     // size: "small",
-    tabPosition: "left",
+    // tabPosition: "top",
     // clingContent: true,
     title: "标题",
     extend: <Button>按钮</Button>,

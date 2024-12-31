@@ -1,5 +1,6 @@
 import { Segmented, SegmentedProps, Tabs, TabsProps } from "antd";
 import cls, { Argument } from "classnames";
+import { isValidElement } from "react";
 import stl from "./index.module.less";
 
 export type FlexTabsProps = TabsProps & {
@@ -38,12 +39,17 @@ export const FlexTabs = (props: FlexTabsProps) => {
   let extraRight: React.ReactNode;
 
   if (tabBarExtraContent) {
-    const { left, right } = tabBarExtraContent as Exclude<
-      TabsProps["tabBarExtraContent"],
-      React.ReactNode
-    >;
-    extraLeft = left;
-    extraRight = right || (tabBarExtraContent as React.ReactNode);
+    const valid = isValidElement(tabBarExtraContent);
+    if (valid) {
+      extraRight = tabBarExtraContent as React.ReactNode;
+    } else {
+      const { left, right } = tabBarExtraContent as Exclude<
+        TabsProps["tabBarExtraContent"],
+        React.ReactNode
+      >;
+      extraLeft = left;
+      extraRight = right;
+    }
   }
 
   const extraContent =
