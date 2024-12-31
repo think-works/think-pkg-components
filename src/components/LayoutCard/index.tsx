@@ -5,21 +5,6 @@ import stl from "./index.module.less";
 export type LayoutCardProps = {
   className?: Argument;
   style?: React.CSSProperties;
-  /** 头部分割线 */
-  divider?: boolean;
-  /** 组件边框 */
-  bordered?: boolean;
-  /** 内容区域紧贴头部 */
-  clingContent?: boolean;
-  /**
-   * 内容区域高度自适应。
-   * 若内容高度低于所在 flex 容器剩余空间则自动撑满，若超过则出现滚动条。
-   * 要求内容区域所在 flex 容器必须指定高度，或者其父容器也是 flex 容器。
-   */
-  overflowContent?: boolean;
-  title?: React.ReactNode;
-  extend?: React.ReactNode;
-  children?: React.ReactNode;
   classNames?: {
     head?: Argument;
     body?: Argument;
@@ -28,6 +13,25 @@ export type LayoutCardProps = {
     head?: React.CSSProperties;
     body?: React.CSSProperties;
   };
+  /** 头部分割线 */
+  divider?: boolean;
+  /** 组件边框 */
+  bordered?: boolean;
+  /** 无内边距 */
+  ultraThin?: boolean;
+  /** 内容区域紧贴头部 */
+  clingContent?: boolean;
+  /**
+   * 内容区域高度自适应。
+   * 若内容高度低于所在 flex 容器剩余空间则自动撑满，若超过则出现滚动条。
+   * 要求内容区域所在 flex 容器必须指定高度，或者其父容器也是 flex 容器。
+   */
+  overflowContent?: boolean;
+  /** 标题 */
+  title?: React.ReactNode;
+  /** 扩展 */
+  extend?: React.ReactNode;
+  children?: React.ReactNode;
 };
 
 /**
@@ -37,21 +41,23 @@ export const LayoutCard = (props: LayoutCardProps) => {
   const {
     className,
     style,
+    classNames,
+    styles,
     divider = true,
     bordered = true,
+    ultraThin,
     clingContent,
     overflowContent,
     title,
     extend,
     children,
-    classNames,
-    styles,
   } = props || {};
 
   return (
     <div
       className={cls(stl.layoutCard, className, {
         [stl.bordered]: bordered,
+        [stl.ultraThin]: ultraThin,
       })}
       style={style}
     >

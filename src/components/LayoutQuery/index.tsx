@@ -5,18 +5,6 @@ import stl from "./index.module.less";
 export type LayoutQueryProps = {
   className?: Argument;
   style?: React.CSSProperties;
-  /** 组件边框 */
-  bordered?: boolean;
-  /**
-   * 内容区域高度自适应。
-   * 若内容高度低于所在 flex 容器剩余空间则自动撑满，若超过则出现滚动条。
-   * 要求内容区域所在 flex 容器必须指定高度，或者其父容器也是 flex 容器。
-   */
-  overflowContent?: boolean;
-  filter?: React.ReactNode;
-  title?: React.ReactNode;
-  action?: React.ReactNode;
-  children?: React.ReactNode;
   classNames?: {
     head?: Argument;
     body?: Argument;
@@ -33,6 +21,21 @@ export type LayoutQueryProps = {
     title?: React.CSSProperties;
     extend?: React.CSSProperties;
   };
+  /** 组件边框 */
+  bordered?: boolean;
+  /**
+   * 内容区域高度自适应。
+   * 若内容高度低于所在 flex 容器剩余空间则自动撑满，若超过则出现滚动条。
+   * 要求内容区域所在 flex 容器必须指定高度，或者其父容器也是 flex 容器。
+   */
+  overflowContent?: boolean;
+  /** 筛选 */
+  filter?: React.ReactNode;
+  /** 标题 */
+  title?: React.ReactNode;
+  /** 扩展 */
+  action?: React.ReactNode;
+  children?: React.ReactNode;
 };
 
 /**
@@ -42,14 +45,14 @@ export const LayoutQuery = (props: LayoutQueryProps) => {
   const {
     className,
     style,
+    classNames,
+    styles,
     bordered = true,
     overflowContent,
     filter,
     title,
     action,
     children,
-    classNames,
-    styles,
   } = props || {};
 
   return (
