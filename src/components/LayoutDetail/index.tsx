@@ -61,7 +61,7 @@ export const LayoutDetail = (props: LayoutDetailProps) => {
   const {
     className,
     style,
-    divider,
+    divider = true,
     clingContent,
     overflowContent,
     crumb,

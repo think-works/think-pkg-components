@@ -35,7 +35,7 @@ export const LayoutSimple = (props: LayoutSimpleProps) => {
   const {
     className,
     style,
-    divider,
+    divider = true,
     clingContent,
     overflowContent,
     title,
