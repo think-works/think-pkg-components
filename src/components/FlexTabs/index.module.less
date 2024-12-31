@@ -6,48 +6,48 @@
   flex-direction: column;
   height: 100%;
 
-  :global(.@{ant-prefix}-tabs-nav) {
+  > :global(.@{ant-prefix}-tabs-nav) {
     flex: none;
   }
 
-  :global(.@{ant-prefix}-tabs-content-holder) {
+  > :global(.@{ant-prefix}-tabs-content-holder) {
     flex: auto;
     display: flex;
     flex-direction: column;
 
-    :global(.@{ant-prefix}-tabs-content) {
+    > :global(.@{ant-prefix}-tabs-content) {
       flex: auto;
       display: flex;
       flex-direction: column;
 
-      :global(.@{ant-prefix}-tabs-tabpane) {
+      > :global(.@{ant-prefix}-tabs-tabpane) {
         flex: auto;
       }
     }
   }
 
-  .tabBar {
+  > .tabBar {
     display: flex;
     align-items: center;
     padding: @bizLayoutGap 0;
 
-    .segmented {
+    > .segmented {
       flex: auto;
     }
 
-    .extraLeft,
-    .extraRight {
+    > .extraLeft,
+    > .extraRight {
       flex: none;
     }
   }
 
   &.top {
-    :global(.@{ant-prefix}-tabs-nav) {
+    > :global(.@{ant-prefix}-tabs-nav) {
       margin-bottom: @bizLayoutGap;
     }
   }
   &.bottom {
-    :global(.@{ant-prefix}-tabs-nav) {
+    > :global(.@{ant-prefix}-tabs-nav) {
       margin-top: @bizLayoutGap;
     }
   }
@@ -55,39 +55,39 @@
   &.right {
     flex-direction: row;
 
-    :global(
-      .@{ant-prefix}-tabs-content-holder
-        .@{ant-prefix}-tabs-content
-        .@{ant-prefix}-tabs-tabpane
-    ) {
-      padding: @bizLayoutGap;
-    }
-
-    .tabBar {
+    > .tabBar {
       flex-direction: column;
       padding: 0 @bizLayoutGap;
+    }
+
+    > :global(.@{ant-prefix}-tabs-content-holder) {
+      > :global(.@{ant-prefix}-tabs-content) {
+        > :global(.@{ant-prefix}-tabs-tabpane) {
+          padding: @bizLayoutGap;
+        }
+      }
     }
   }
 
   &.cling {
-    :global(.@{ant-prefix}-tabs-nav) {
-      margin-bottom: 0;
+    > .tabBar {
+      padding-bottom: 0;
     }
 
-    .tabBar {
-      padding-bottom: 0;
+    > :global(.@{ant-prefix}-tabs-nav) {
+      margin-bottom: 0;
     }
   }
 
   &.overflow {
-    :global(
-      .@{ant-prefix}-tabs-content-holder
-        .@{ant-prefix}-tabs-content
-        .@{ant-prefix}-tabs-tabpane
-    ) {
-      height: 0;
-      overflow-y: auto;
-      scrollbar-gutter: auto;
+    > :global(.@{ant-prefix}-tabs-content-holder) {
+      > :global(.@{ant-prefix}-tabs-content) {
+        > :global(.@{ant-prefix}-tabs-tabpane) {
+          height: 0;
+          overflow-y: auto;
+          scrollbar-gutter: auto;
+        }
+      }
     }
   }
 }

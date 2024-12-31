@@ -5,8 +5,8 @@
   flex-direction: column;
   height: 100%;
 
-  .head,
-  .body {
+  > .head,
+  > .body {
     padding: @bizLayoutGap;
     border-radius: @bizLayoutRadius;
     background-color: @colorBgContainer;
@@ -16,36 +16,36 @@
     }
   }
 
-  .head {
+  > .head {
     flex: none;
     margin-bottom: @bizLayoutGap;
   }
 
-  .body {
+  > .body {
     flex: auto;
     display: flex;
     flex-direction: column;
 
+    > .tools {
+      flex: none;
+    }
+
+    > .result {
+      flex: auto;
+
+      &.overflow {
+        height: 0;
+        overflow-y: auto;
+        scrollbar-gutter: auto;
+      }
+    }
+
     &.showTools {
       padding-top: 0;
 
-      .tools {
+      > .tools {
         min-height: 40px;
       }
-    }
-  }
-
-  .tools {
-    flex: none;
-  }
-
-  .result {
-    flex: auto;
-
-    &.overflow {
-      height: 0;
-      overflow-y: auto;
-      scrollbar-gutter: auto;
     }
   }
 }
