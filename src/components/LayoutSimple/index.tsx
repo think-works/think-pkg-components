@@ -7,8 +7,6 @@ export type LayoutSimpleProps = {
   style?: React.CSSProperties;
   /** 头部分割线 */
   divider?: boolean;
-  /** 组件边框 */
-  bordered?: boolean;
   /** 内容区域紧贴头部 */
   clingContent?: boolean;
   /**
@@ -38,7 +36,6 @@ export const LayoutSimple = (props: LayoutSimpleProps) => {
     className,
     style,
     divider,
-    bordered = true,
     clingContent,
     overflowContent,
     title,
@@ -49,12 +46,7 @@ export const LayoutSimple = (props: LayoutSimpleProps) => {
   } = props || {};
 
   return (
-    <div
-      className={cls(stl.layoutSimple, className, {
-        [stl.bordered]: bordered,
-      })}
-      style={style}
-    >
+    <div className={cls(stl.layoutSimple, className)} style={style}>
       {title || extend ? (
         <LayoutTitle
           className={cls(stl.head, classNames?.head)}
