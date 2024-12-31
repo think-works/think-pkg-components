@@ -1,5 +1,5 @@
 import cls, { Argument } from "classnames";
-import BaseText from "../BaseText";
+import LayoutTitle from "../LayoutTitle";
 import stl from "./index.module.less";
 
 export type LayoutCardProps = {
@@ -18,7 +18,7 @@ export type LayoutCardProps = {
    */
   overflowContent?: boolean;
   title?: React.ReactNode;
-  extra?: React.ReactNode;
+  extend?: React.ReactNode;
   children?: React.ReactNode;
   classNames?: {
     head?: Argument;
@@ -42,7 +42,7 @@ export const LayoutCard = (props: LayoutCardProps) => {
     clingContent,
     overflowContent,
     title,
-    extra,
+    extend,
     children,
     classNames,
     styles,
@@ -55,18 +55,15 @@ export const LayoutCard = (props: LayoutCardProps) => {
       })}
       style={style}
     >
-      {title || extra ? (
-        <div
-          className={cls(stl.head, classNames?.head, {
-            [stl.divider]: divider,
-          })}
+      {title || extend ? (
+        <LayoutTitle
+          className={cls(stl.head, classNames?.head)}
           style={styles?.head}
-        >
-          <div className={stl.title}>
-            <BaseText type="sub">{title}</BaseText>
-          </div>
-          <div className={stl.extra}>{extra}</div>
-        </div>
+          size="middle"
+          divider={divider}
+          title={title}
+          extend={extend}
+        />
       ) : null}
       <div
         className={cls(stl.body, classNames?.body, {

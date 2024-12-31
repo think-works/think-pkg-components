@@ -4,28 +4,26 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: @bizLayoutGap;
-  border-radius: 8px;
+  border-radius: @bizLayoutRadius;
   background-color: @colorBgContainer;
 
   &.bordered {
     border: 1px solid @colorBorderSecondary;
   }
 
-  &.showTitle {
-    padding-top: 0;
-
-    .head {
-      margin: @bizLayoutGap 0;
-    }
-  }
-
   .head {
     flex: none;
+    padding: 0 @bizLayoutGap;
+    height: 40px;
   }
 
   .body {
     flex: auto;
+    padding: @bizLayoutGap;
+
+    &.cling {
+      padding-top: 0;
+    }
 
     &.overflow {
       height: 0;

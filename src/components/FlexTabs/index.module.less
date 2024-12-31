@@ -45,18 +45,6 @@
     }
   }
 
-  &.overflow {
-    :global(
-      .@{ant-prefix}-tabs-content-holder
-        .@{ant-prefix}-tabs-content
-        .@{ant-prefix}-tabs-tabpane
-    ) {
-      height: 0;
-      overflow-y: auto;
-      scrollbar-gutter: auto;
-    }
-  }
-
   &.top {
     :global(.@{ant-prefix}-tabs-nav) {
       margin-bottom: @bizLayoutGap;
@@ -82,6 +70,28 @@
     .tabBar {
       flex-direction: column;
       padding: 0 @bizLayoutGap;
+    }
+  }
+
+  &.cling {
+    :global(.@{ant-prefix}-tabs-nav) {
+      margin-bottom: 0;
+    }
+
+    .tabBar {
+      padding-bottom: 0;
+    }
+  }
+
+  &.overflow {
+    :global(
+      .@{ant-prefix}-tabs-content-holder
+        .@{ant-prefix}-tabs-content
+        .@{ant-prefix}-tabs-tabpane
+    ) {
+      height: 0;
+      overflow-y: auto;
+      scrollbar-gutter: auto;
     }
   }
 }

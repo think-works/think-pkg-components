@@ -33,10 +33,10 @@ const FlexTabsDemo = () => {
   return (
     <div style={{ display: "flex", backgroundColor: "white" }}>
       <div style={{ flex: "auto", border: "1px solid red" }}>
-        <FlexTabs {...tabsProps} />
+        <FlexTabs {...tabsProps} clingContent />
       </div>
       <div style={{ flex: "auto", border: "1px solid green" }}>
-        <FlexTabs segmentedTabBar {...tabsProps} />
+        <FlexTabs segmentedTabBar {...tabsProps} clingContent />
       </div>
     </div>
   );

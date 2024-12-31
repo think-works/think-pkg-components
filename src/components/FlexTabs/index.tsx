@@ -10,6 +10,8 @@ export type FlexTabsProps = TabsProps & {
   tabBarStyle?: Argument;
   title?: React.ReactNode;
   extend?: React.ReactNode;
+  /** 内容区域紧贴头部 */
+  clingContent?: boolean;
   /**
    * 内容区域高度自适应。
    * 若内容高度低于所在 flex 容器剩余空间则自动撑满，若超过则出现滚动条。
@@ -34,6 +36,7 @@ export const FlexTabs = (props: FlexTabsProps) => {
     items,
     tabPosition = "top",
     tabBarExtraContent,
+    clingContent,
     overflowContent,
     segmentedTabBar,
     ...rest
@@ -96,10 +99,11 @@ export const FlexTabs = (props: FlexTabsProps) => {
       className={cls(
         stl.flexTabs,
         className,
+        tabPosition ? stl[tabPosition] : null,
         {
+          [stl.cling]: clingContent,
           [stl.overflow]: overflowContent,
         },
-        tabPosition ? stl[tabPosition] : null,
       )}
       size={size}
       items={items}

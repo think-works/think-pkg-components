@@ -61,7 +61,7 @@ export const LayoutDetail = (props: LayoutDetailProps) => {
   const {
     className,
     style,
-    divider = true,
+    divider,
     clingContent,
     overflowContent,
     crumb,
@@ -88,8 +88,8 @@ export const LayoutDetail = (props: LayoutDetailProps) => {
             className={cls(stl.crumb, classNames?.crumb)}
             style={styles?.crumb}
           >
-            {crumb}
-            {action}
+            <div>{crumb}</div>
+            <div>{action}</div>
           </div>
         ) : null}
         <div

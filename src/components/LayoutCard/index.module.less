@@ -3,7 +3,7 @@
 .layoutCard {
   display: flex;
   flex-direction: column;
-  border-radius: 8px;
+  border-radius: @bizLayoutRadius;
   background-color: @colorBgContainer;
 
   &.bordered {
@@ -12,24 +12,8 @@
 
   .head {
     flex: none;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     padding: 0 @bizLayoutGap;
-    min-height: 38px;
-
-    &.divider {
-      border-bottom: 1px solid @colorBorderSecondary;
-    }
-
-    .title {
-      flex: auto;
-      .ellipsis();
-    }
-
-    .extra {
-      flex: none;
-    }
+    height: 40px;
   }
 
   .body {

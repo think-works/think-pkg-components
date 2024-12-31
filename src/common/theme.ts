@@ -19,6 +19,8 @@ export const styleConfig = {
   bizLayoutHeader: 48,
   /** 业务布局边距 */
   bizLayoutGap: 12,
+  /** 业务布局圆角 */
+  bizLayoutRadius: 8,
 };
 
 /**
