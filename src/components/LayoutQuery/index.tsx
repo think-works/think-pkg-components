@@ -78,8 +78,6 @@ export const LayoutQuery = (props: LayoutQueryProps) => {
             size="middle"
             title={title}
             extend={action}
-            classNames={classNames}
-            styles={styles}
           />
         ) : null}
         <div

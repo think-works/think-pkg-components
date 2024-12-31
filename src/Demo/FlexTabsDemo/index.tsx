@@ -2,8 +2,14 @@ import { FlexTabs, FlexTabsProps } from "@/components";
 
 const FlexTabsDemo = () => {
   const tabsProps: FlexTabsProps = {
-    size: "small",
+    // size: "small",
+    tabPosition: "top",
+    title: "标题",
     defaultActiveKey: "tab-3",
+    // tabBarExtraContent: {
+    //   left: "left",
+    //   right: "right",
+    // },
     items: [
       {
         key: "tab-1",
@@ -25,12 +31,12 @@ const FlexTabsDemo = () => {
   };
 
   return (
-    <div style={{ display: "flex" }}>
+    <div style={{ display: "flex", backgroundColor: "white" }}>
       <div style={{ flex: "auto", border: "1px solid red" }}>
         <FlexTabs {...tabsProps} />
       </div>
       <div style={{ flex: "auto", border: "1px solid green" }}>
-        <FlexTabs radioGroupTabBar {...tabsProps} />
+        <FlexTabs segmentedTabBar {...tabsProps} />
       </div>
     </div>
   );

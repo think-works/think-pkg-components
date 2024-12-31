@@ -26,6 +26,25 @@
     }
   }
 
+  .tabBar {
+    display: flex;
+    align-items: center;
+    padding: @bizLayoutGap 0;
+
+    .segmented {
+      flex: auto;
+    }
+
+    .extraLeft,
+    .extraRight {
+      flex: none;
+    }
+
+    .title {
+      margin: 0 @bizLayoutGap;
+    }
+  }
+
   &.overflow {
     :global(
       .@{ant-prefix}-tabs-content-holder
@@ -59,9 +78,10 @@
     ) {
       padding: @bizLayoutGap;
     }
-  }
 
-  .radioGroupNav {
-    padding: @bizLayoutGap 0;
+    .tabBar {
+      flex-direction: column;
+      padding: 0 @bizLayoutGap;
+    }
   }
 }
