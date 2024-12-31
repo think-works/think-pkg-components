@@ -1,15 +1,10 @@
 import { Segmented, SegmentedProps, Tabs, TabsProps } from "antd";
 import cls, { Argument } from "classnames";
-import BaseText from "../BaseText";
 import stl from "./index.module.less";
 
 export type FlexTabsProps = TabsProps & {
   className?: Argument;
   style?: React.CSSProperties;
-  tabBarClassName?: Argument;
-  tabBarStyle?: Argument;
-  title?: React.ReactNode;
-  extend?: React.ReactNode;
   /** 内容区域紧贴头部 */
   clingContent?: boolean;
   /**
@@ -28,10 +23,7 @@ export type FlexTabsProps = TabsProps & {
 export const FlexTabs = (props: FlexTabsProps) => {
   const {
     className,
-    tabBarClassName,
-    tabBarStyle,
-    title,
-    extend,
+    style,
     size,
     items,
     tabPosition = "top",
@@ -42,9 +34,9 @@ export const FlexTabs = (props: FlexTabsProps) => {
     ...rest
   } = props;
 
-  // #region 扩展区域
   let extraLeft: React.ReactNode;
   let extraRight: React.ReactNode;
+
   if (tabBarExtraContent) {
     const { left, right } = tabBarExtraContent as Exclude<
       TabsProps["tabBarExtraContent"],
@@ -53,21 +45,11 @@ export const FlexTabs = (props: FlexTabsProps) => {
     extraLeft = left;
     extraRight = right || (tabBarExtraContent as React.ReactNode);
   }
-  if (!extraLeft && title) {
-    extraLeft = (
-      <BaseText className={stl.title} type="sub">
-        {title}
-      </BaseText>
-    );
-  }
-  if (!extraRight && extend) {
-    extraRight = extend;
-  }
+
   const extraContent =
     extraLeft || extraRight
       ? { left: extraLeft, right: extraRight }
       : undefined;
-  // #endregion
 
   const renderTabBar: TabsProps["renderTabBar"] = (tabBarProps) => {
     const { activeKey, onTabClick } = tabBarProps;
@@ -76,7 +58,7 @@ export const FlexTabs = (props: FlexTabsProps) => {
       {};
 
     return (
-      <div className={cls(stl.tabBar, tabBarClassName)} style={tabBarStyle}>
+      <div className={stl.tabBar}>
         <div className={stl.extraLeft}>{extraLeft}</div>
         <div className={stl.segmented}>
           <Segmented
@@ -111,6 +93,7 @@ export const FlexTabs = (props: FlexTabsProps) => {
           [stl.overflow]: overflowContent,
         },
       )}
+      style={style}
       size={size}
       items={items}
       tabPosition={tabPosition}

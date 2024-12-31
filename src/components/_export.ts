@@ -28,6 +28,7 @@ export * from "./LayoutDetail";
 export * from "./LayoutPanel";
 export * from "./LayoutQuery";
 export * from "./LayoutSimple";
+export * from "./LayoutTabs";
 export * from "./LayoutTitle";
 export * from "./LayoutWrapper";
 export * from "./Loading";
