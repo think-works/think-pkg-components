@@ -3,8 +3,8 @@ import { FlexTabs, FlexTabsProps } from "@/components";
 const FlexTabsDemo = () => {
   const tabsProps: FlexTabsProps = {
     // size: "small",
-    tabPosition: "top",
-    title: "标题",
+    // tabPosition: "top",
+    // title: "标题",
     defaultActiveKey: "tab-3",
     // tabBarExtraContent: {
     //   left: "left",
@@ -33,10 +33,10 @@ const FlexTabsDemo = () => {
   return (
     <div style={{ display: "flex", backgroundColor: "white" }}>
       <div style={{ flex: "auto", border: "1px solid red" }}>
-        <FlexTabs {...tabsProps} clingContent />
+        <FlexTabs {...tabsProps} />
       </div>
       <div style={{ flex: "auto", border: "1px solid green" }}>
-        <FlexTabs segmentedTabBar {...tabsProps} clingContent />
+        <FlexTabs segmentedTabBar {...tabsProps} />
       </div>
     </div>
   );
