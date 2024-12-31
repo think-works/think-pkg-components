@@ -42,32 +42,38 @@ export const FlexTabs = (props: FlexTabsProps) => {
     ...rest
   } = props;
 
+  // #region 扩展区域
+  let extraLeft: React.ReactNode;
+  let extraRight: React.ReactNode;
+  if (tabBarExtraContent) {
+    const { left, right } = tabBarExtraContent as Exclude<
+      TabsProps["tabBarExtraContent"],
+      React.ReactNode
+    >;
+    extraLeft = left;
+    extraRight = right || (tabBarExtraContent as React.ReactNode);
+  }
+  if (!extraLeft && title) {
+    extraLeft = (
+      <BaseText className={stl.title} type="sub">
+        {title}
+      </BaseText>
+    );
+  }
+  if (!extraRight && extend) {
+    extraRight = extend;
+  }
+  const extraContent =
+    extraLeft || extraRight
+      ? { left: extraLeft, right: extraRight }
+      : undefined;
+  // #endregion
+
   const renderTabBar: TabsProps["renderTabBar"] = (tabBarProps) => {
     const { activeKey, onTabClick } = tabBarProps;
     const segmentedProps =
       (typeof segmentedTabBar === "boolean" ? undefined : segmentedTabBar) ||
       {};
-
-    let extraLeft: React.ReactNode;
-    let extraRight: React.ReactNode;
-    if (title) {
-      extraLeft = (
-        <BaseText className={stl.title} type="sub">
-          {title}
-        </BaseText>
-      );
-    }
-    if (extend) {
-      extraRight = extend;
-    }
-    if (tabBarExtraContent) {
-      const { left, right } = tabBarExtraContent as Exclude<
-        TabsProps["tabBarExtraContent"],
-        React.ReactNode
-      >;
-      extraLeft = left;
-      extraRight = right || (tabBarExtraContent as React.ReactNode);
-    }
 
     return (
       <div className={cls(stl.tabBar, tabBarClassName)} style={tabBarStyle}>
@@ -108,7 +114,7 @@ export const FlexTabs = (props: FlexTabsProps) => {
       size={size}
       items={items}
       tabPosition={tabPosition}
-      tabBarExtraContent={tabBarExtraContent}
+      tabBarExtraContent={extraContent}
       renderTabBar={segmentedTabBar ? renderTabBar : undefined}
       {...rest}
     />

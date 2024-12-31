@@ -1,10 +1,12 @@
+import { Button } from "antd";
 import { FlexTabs, FlexTabsProps } from "@/components";
 
 const FlexTabsDemo = () => {
   const tabsProps: FlexTabsProps = {
     // size: "small",
     // tabPosition: "top",
-    // title: "标题",
+    title: "标题",
+    extend: <Button>按钮</Button>,
     defaultActiveKey: "tab-3",
     // tabBarExtraContent: {
     //   left: "left",
