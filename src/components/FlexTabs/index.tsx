@@ -66,8 +66,9 @@ export const FlexTabs = (props: FlexTabsProps) => {
     return (
       <div className={stl.tabBar}>
         <div className={stl.extraLeft}>{extraLeft}</div>
-        <div className={stl.segmented}>
+        <div className={stl.content}>
           <Segmented
+            className={stl.segmented}
             size={size}
             value={activeKey}
             vertical={tabPosition === "left" || tabPosition === "right"}

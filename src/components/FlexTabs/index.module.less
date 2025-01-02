@@ -31,13 +31,23 @@
     align-items: center;
     padding: @bizLayoutGap 0;
 
-    .segmented {
+    .content {
       flex: auto;
     }
 
     .extraLeft,
     .extraRight {
       flex: none;
+    }
+
+    .segmented {
+      > :global(.@{ant-prefix}-segmented-group) {
+        > :global(.@{ant-prefix}-segmented-item) {
+          &:global(.@{ant-prefix}-segmented-item-selected) {
+            color: @colorLink;
+          }
+        }
+      }
     }
   }
 
