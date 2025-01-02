@@ -5,8 +5,8 @@
   flex-direction: column;
   height: 100%;
 
-  > .head,
-  > .body {
+  .head,
+  .body {
     padding: @bizLayoutGap;
     border-radius: @bizLayoutRadius;
     background-color: @colorBgContainer;
@@ -16,21 +16,21 @@
     }
   }
 
-  > .head {
+  .head {
     flex: none;
     margin-bottom: @bizLayoutGap;
   }
 
-  > .body {
+  .body {
     flex: auto;
     display: flex;
     flex-direction: column;
 
-    > .tools {
+    .tools {
       flex: none;
     }
 
-    > .result {
+    .result {
       flex: auto;
 
       &.overflow {
