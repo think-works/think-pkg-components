@@ -18,7 +18,7 @@ export type LayoutCardProps = {
   /** 组件边框 */
   bordered?: boolean;
   /** 无内边距 */
-  ultraThin?: boolean;
+  rimless?: boolean;
   /** 内容区域紧贴头部 */
   clingContent?: boolean;
   /**
@@ -45,7 +45,7 @@ export const LayoutCard = (props: LayoutCardProps) => {
     styles,
     divider = true,
     bordered = true,
-    ultraThin,
+    rimless,
     clingContent,
     overflowContent,
     title,
@@ -57,7 +57,7 @@ export const LayoutCard = (props: LayoutCardProps) => {
     <div
       className={cls(stl.layoutCard, className, {
         [stl.bordered]: bordered,
-        [stl.ultraThin]: ultraThin,
+        [stl.rimless]: rimless,
       })}
       style={style}
     >

@@ -32,7 +32,7 @@ export type LayoutDetailProps = {
   /** 头部分割线 */
   divider?: boolean;
   /** 无内边距 */
-  ultraThin?: boolean;
+  rimless?: boolean;
   /** 内容区域紧贴头部 */
   clingContent?: boolean;
   /**
@@ -62,7 +62,7 @@ export const LayoutDetail = (props: LayoutDetailProps) => {
     classNames,
     styles,
     divider = true,
-    ultraThin,
+    rimless,
     clingContent,
     overflowContent,
     crumb,
@@ -77,7 +77,7 @@ export const LayoutDetail = (props: LayoutDetailProps) => {
   return (
     <div
       className={cls(stl.layoutDetail, className, {
-        [stl.ultraThin]: ultraThin,
+        [stl.rimless]: rimless,
       })}
       style={style}
     >

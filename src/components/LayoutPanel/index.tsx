@@ -18,7 +18,7 @@ export type LayoutPanelProps = {
   /** 头部分割线 */
   divider?: boolean;
   /** 无内边距 */
-  ultraThin?: boolean;
+  rimless?: boolean;
   /** 内容区域紧贴头部 */
   clingContent?: boolean;
   /**
@@ -45,7 +45,7 @@ export const LayoutPanel = (props: LayoutPanelProps) => {
     styles,
     stickyTitle,
     divider,
-    ultraThin,
+    rimless,
     clingContent,
     overflowContent,
     title,
@@ -56,7 +56,7 @@ export const LayoutPanel = (props: LayoutPanelProps) => {
   return (
     <div
       className={cls(stl.layoutPanel, className, {
-        [stl.ultraThin]: ultraThin,
+        [stl.rimless]: rimless,
       })}
       style={style}
     >
