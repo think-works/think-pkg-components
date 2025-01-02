@@ -1,5 +1,5 @@
 import cls, { Argument } from "classnames";
-import { LayoutTitle } from "../LayoutTitle";
+import { LayoutTitle, LayoutTitleProps } from "../LayoutTitle";
 import stl from "./index.module.less";
 
 export type LayoutDetailProps = {
@@ -29,7 +29,9 @@ export type LayoutDetailProps = {
     main?: React.CSSProperties;
     content?: React.CSSProperties;
   };
-  /** 头部分割线 */
+  /** 标题尺寸 */
+  titleSize?: LayoutTitleProps["size"];
+  /** 分割线 */
   divider?: boolean;
   /** 无内边距 */
   rimless?: boolean;
@@ -61,6 +63,7 @@ export const LayoutDetail = (props: LayoutDetailProps) => {
     style,
     classNames,
     styles,
+    titleSize = "middle",
     divider = true,
     rimless,
     clingContent,
@@ -109,7 +112,7 @@ export const LayoutDetail = (props: LayoutDetailProps) => {
                 <LayoutTitle
                   className={cls(stl.title, classNames?.title)}
                   style={styles?.title}
-                  size="middle"
+                  size={titleSize}
                   title={title}
                   extend={titleExtend}
                 />

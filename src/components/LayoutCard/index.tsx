@@ -1,5 +1,5 @@
 import cls, { Argument } from "classnames";
-import LayoutTitle from "../LayoutTitle";
+import LayoutTitle, { LayoutTitleProps } from "../LayoutTitle";
 import stl from "./index.module.less";
 
 export type LayoutCardProps = {
@@ -13,7 +13,9 @@ export type LayoutCardProps = {
     head?: React.CSSProperties;
     body?: React.CSSProperties;
   };
-  /** 头部分割线 */
+  /** 标题尺寸 */
+  titleSize?: LayoutTitleProps["size"];
+  /** 分割线 */
   divider?: boolean;
   /** 组件边框 */
   bordered?: boolean;
@@ -43,6 +45,7 @@ export const LayoutCard = (props: LayoutCardProps) => {
     style,
     classNames,
     styles,
+    titleSize = "middle",
     divider = true,
     bordered = true,
     rimless,
@@ -65,7 +68,7 @@ export const LayoutCard = (props: LayoutCardProps) => {
         <LayoutTitle
           className={cls(stl.head, classNames?.head)}
           style={styles?.head}
-          size="middle"
+          size={titleSize}
           divider={divider}
           title={title}
           extend={extend}

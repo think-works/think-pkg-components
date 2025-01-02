@@ -5,10 +5,6 @@ import stl from "./index.module.less";
 export type LayoutTitleProps = {
   className?: Argument;
   style?: React.CSSProperties;
-  size?: "large" | "middle" | "small";
-  divider?: boolean;
-  title?: React.ReactNode;
-  extend?: React.ReactNode;
   classNames?: {
     title?: Argument;
     extend?: Argument;
@@ -17,6 +13,14 @@ export type LayoutTitleProps = {
     title?: React.CSSProperties;
     extend?: React.CSSProperties;
   };
+  /** 尺寸 */
+  size?: "large" | "middle" | "small";
+  /** 分割线 */
+  divider?: boolean;
+  /** 标题 */
+  title?: React.ReactNode;
+  /** 扩展 */
+  extend?: React.ReactNode;
 };
 
 /**
@@ -26,12 +30,12 @@ export const LayoutTitle = (props: LayoutTitleProps) => {
   const {
     className,
     style,
+    classNames,
+    styles,
     size = "middle",
     divider,
     title,
     extend,
-    classNames,
-    styles,
   } = props || {};
 
   let textType: BaseTextProps["type"];

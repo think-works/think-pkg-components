@@ -1,5 +1,5 @@
 import cls, { Argument } from "classnames";
-import { LayoutTitle } from "../LayoutTitle";
+import { LayoutTitle, LayoutTitleProps } from "../LayoutTitle";
 import stl from "./index.module.less";
 
 export type LayoutPanelProps = {
@@ -13,9 +13,11 @@ export type LayoutPanelProps = {
     head?: React.CSSProperties;
     body?: React.CSSProperties;
   };
+  /** 标题尺寸 */
+  titleSize?: LayoutTitleProps["size"];
   /** 标题粘性吸顶 */
-  stickyTitle?: boolean;
-  /** 头部分割线 */
+  titleSticky?: boolean;
+  /** 分割线 */
   divider?: boolean;
   /** 无内边距 */
   rimless?: boolean;
@@ -43,7 +45,8 @@ export const LayoutPanel = (props: LayoutPanelProps) => {
     style,
     classNames,
     styles,
-    stickyTitle,
+    titleSize = "large",
+    titleSticky,
     divider = true,
     rimless,
     clingContent,
@@ -63,10 +66,10 @@ export const LayoutPanel = (props: LayoutPanelProps) => {
       {title || extend ? (
         <LayoutTitle
           className={cls(stl.head, classNames?.head, {
-            [stl.sticky]: stickyTitle,
+            [stl.sticky]: titleSticky,
           })}
           style={styles?.head}
-          size="large"
+          size={titleSize}
           divider={divider}
           title={title}
           extend={extend}

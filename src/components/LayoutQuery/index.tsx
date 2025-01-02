@@ -1,5 +1,5 @@
 import cls, { Argument } from "classnames";
-import { LayoutTitle } from "../LayoutTitle";
+import { LayoutTitle, LayoutTitleProps } from "../LayoutTitle";
 import stl from "./index.module.less";
 
 export type LayoutQueryProps = {
@@ -21,6 +21,8 @@ export type LayoutQueryProps = {
     title?: React.CSSProperties;
     extend?: React.CSSProperties;
   };
+  /** 标题尺寸 */
+  titleSize?: LayoutTitleProps["size"];
   /** 组件边框 */
   bordered?: boolean;
   /**
@@ -47,6 +49,7 @@ export const LayoutQuery = (props: LayoutQueryProps) => {
     style,
     classNames,
     styles,
+    titleSize = "middle",
     bordered = true,
     overflowContent,
     filter,
@@ -78,7 +81,7 @@ export const LayoutQuery = (props: LayoutQueryProps) => {
           <LayoutTitle
             className={cls(stl.tools, classNames?.tools)}
             style={styles?.tools}
-            size="middle"
+            size={titleSize}
             title={title}
             extend={action}
           />
