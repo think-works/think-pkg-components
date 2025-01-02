@@ -119,7 +119,7 @@ export const BaseAction = forwardRef(function BaseActionCom(
     }
   };
 
-  const content = (
+  let content = (
     <Button
       ref={ref}
       className={cls(stl.baseAction, className, {
@@ -144,7 +144,7 @@ export const BaseAction = forwardRef(function BaseActionCom(
       title = tooltip;
     }
 
-    return (
+    content = (
       <Tooltip title={title} {...tipRest}>
         <span>{content}</span>
       </Tooltip>
@@ -172,7 +172,7 @@ export const BaseAction = forwardRef(function BaseActionCom(
       return await onClick?.(e, ...args);
     };
 
-    return (
+    content = (
       <Popconfirm title={title} onConfirm={handleConfirmClick} {...popRest}>
         <span
           onClick={(e) => {

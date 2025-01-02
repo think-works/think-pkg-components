@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouteObject } from "react-router-dom";
+import ButtonDemo from "./ButtonDemo";
 import BypassPropsDemo from "./BypassPropsDemo";
 import DragContainerDemo from "./DragContainerDemo";
 import EditableTableDemo from "./EditableTableDemo";
@@ -16,6 +17,10 @@ export const routes: RouteObject[] = [
   {
     path: "/",
     element: <Home />,
+  },
+  {
+    path: "/button",
+    element: <ButtonDemo />,
   },
   {
     path: "/drag-container",
