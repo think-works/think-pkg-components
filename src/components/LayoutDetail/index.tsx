@@ -1,4 +1,5 @@
 import cls, { Argument } from "classnames";
+import { themeToken } from "@/common/theme";
 import { LayoutTitle, LayoutTitleSize } from "../LayoutTitle";
 import stl from "./index.module.less";
 
@@ -8,26 +9,22 @@ export type LayoutDetailProps = {
   classNames?: {
     head?: Argument;
     body?: Argument;
-    extend?: Argument;
     crumb?: Argument;
-    title?: Argument;
-    action?: Argument;
-    description?: Argument;
-    statistic?: Argument;
-    main?: Argument;
     content?: Argument;
+    main?: Argument;
+    statistic?: Argument;
+    title?: Argument;
+    description?: Argument;
   };
   styles?: {
     head?: React.CSSProperties;
     body?: React.CSSProperties;
-    extend?: React.CSSProperties;
     crumb?: React.CSSProperties;
-    title?: React.CSSProperties;
-    action?: React.CSSProperties;
-    description?: React.CSSProperties;
-    statistic?: React.CSSProperties;
-    main?: React.CSSProperties;
     content?: React.CSSProperties;
+    main?: React.CSSProperties;
+    statistic?: React.CSSProperties;
+    title?: React.CSSProperties;
+    description?: React.CSSProperties;
   };
   /** 标题尺寸 */
   titleSize?: LayoutTitleSize;
@@ -43,14 +40,20 @@ export type LayoutDetailProps = {
    * 要求内容区域所在 flex 容器必须指定高度，或者其父容器也是 flex 容器。
    */
   overflowContent?: boolean;
-  crumb?: React.ReactNode;
   /** 标题 */
   title?: React.ReactNode;
-  /** 标题扩展区域 */
-  titleExtend?: React.ReactNode;
+  /** 扩展 */
+  extend?: React.ReactNode;
+  /** 面包屑 */
+  crumb?: React.ReactNode;
+  /** 操作 */
   action?: React.ReactNode;
+  /** 描述 */
   description?: React.ReactNode;
+  /** 统计 */
   statistic?: React.ReactNode;
+  /** 实体配色 */
+  entityColor?: React.CSSProperties["color"];
   children?: React.ReactNode;
 };
 
@@ -68,14 +71,19 @@ export const LayoutDetail = (props: LayoutDetailProps) => {
     rimless,
     clingContent,
     overflowContent,
-    crumb,
     title,
-    titleExtend,
+    extend,
+    crumb,
     action,
     description,
     statistic,
+    entityColor = "#c3dcff",
     children,
   } = props || {};
+
+  const headBg = !entityColor
+    ? undefined
+    : `linear-gradient(${entityColor} 0%, ${themeToken.colorBgContainer} 50%)`;
 
   return (
     <div
@@ -88,7 +96,10 @@ export const LayoutDetail = (props: LayoutDetailProps) => {
         className={cls(stl.head, classNames?.head, {
           [stl.divider]: divider,
         })}
-        style={styles?.head}
+        style={{
+          background: headBg,
+          ...(styles?.head || {}),
+        }}
       >
         {crumb || action ? (
           <div
@@ -103,33 +114,28 @@ export const LayoutDetail = (props: LayoutDetailProps) => {
           className={cls(stl.content, classNames?.content)}
           style={styles?.content}
         >
-          {title || description || titleExtend ? (
+          {title || extend || description ? (
             <div
               className={cls(stl.main, classNames?.main)}
               style={styles?.main}
             >
-              {title || titleExtend ? (
+              {title || extend ? (
                 <LayoutTitle
                   className={cls(stl.title, classNames?.title)}
                   style={styles?.title}
                   size={titleSize}
                   title={title}
-                  extend={titleExtend}
+                  extend={extend}
                 />
               ) : null}
-              <div
-                className={cls(stl.extend, classNames?.extend)}
-                style={styles?.extend}
-              >
-                {description ? (
-                  <div
-                    className={cls(stl.description, classNames?.description)}
-                    style={styles?.description}
-                  >
-                    {description}
-                  </div>
-                ) : null}
-              </div>
+              {description ? (
+                <div
+                  className={cls(stl.description, classNames?.description)}
+                  style={styles?.description}
+                >
+                  {description}
+                </div>
+              ) : null}
             </div>
           ) : null}
           {statistic ? (
