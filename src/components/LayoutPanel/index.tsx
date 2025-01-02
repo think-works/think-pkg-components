@@ -44,7 +44,7 @@ export const LayoutPanel = (props: LayoutPanelProps) => {
     classNames,
     styles,
     stickyTitle,
-    divider,
+    divider = true,
     rimless,
     clingContent,
     overflowContent,
