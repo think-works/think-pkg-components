@@ -26,25 +26,25 @@
     }
   }
 
-  .tabBar {
+  > .tabBar {
     display: flex;
     align-items: center;
     padding: @bizLayoutGap 0;
 
-    .content {
-      flex: auto;
-    }
-
-    .extraLeft,
-    .extraRight {
+    > .extraLeft,
+    > .extraRight {
       flex: none;
     }
 
-    .segmented {
-      > :global(.@{ant-prefix}-segmented-group) {
-        > :global(.@{ant-prefix}-segmented-item) {
-          &:global(.@{ant-prefix}-segmented-item-selected) {
-            color: @colorLink;
+    > .content {
+      flex: auto;
+
+      > .segmented {
+        > :global(.@{ant-prefix}-segmented-group) {
+          > :global(.@{ant-prefix}-segmented-item) {
+            &:global(.@{ant-prefix}-segmented-item-selected) {
+              color: @colorLink;
+            }
           }
         }
       }

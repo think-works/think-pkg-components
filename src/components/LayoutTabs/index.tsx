@@ -74,6 +74,7 @@ export const LayoutTabs = (props: LayoutTabsProps) => {
         style={styles?.tabs}
         size={size}
         tabBarExtraContent={extraContent}
+        classNames={{ tabBar: stl.tabBar }}
         {...rest}
       />
     </div>

@@ -6,6 +6,14 @@ import stl from "./index.module.less";
 export type FlexTabsProps = TabsProps & {
   className?: Argument;
   style?: React.CSSProperties;
+  classNames?: {
+    tabBar?: Argument;
+    segmented?: Argument;
+  };
+  styles?: {
+    tabBar?: React.CSSProperties;
+    segmented?: React.CSSProperties;
+  };
   /** 内容区域紧贴头部 */
   clingContent?: boolean;
   /**
@@ -25,6 +33,8 @@ export const FlexTabs = (props: FlexTabsProps) => {
   const {
     className,
     style,
+    classNames,
+    styles,
     size,
     items,
     tabPosition = "top",
@@ -64,11 +74,15 @@ export const FlexTabs = (props: FlexTabsProps) => {
       {};
 
     return (
-      <div className={stl.tabBar}>
+      <div
+        className={cls(stl.tabBar, classNames?.tabBar)}
+        style={styles?.tabBar}
+      >
         <div className={stl.extraLeft}>{extraLeft}</div>
         <div className={stl.content}>
           <Segmented
-            className={stl.segmented}
+            className={cls(stl.segmented, classNames?.segmented)}
+            style={styles?.segmented}
             size={size}
             value={activeKey}
             vertical={tabPosition === "left" || tabPosition === "right"}

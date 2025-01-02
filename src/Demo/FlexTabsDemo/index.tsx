@@ -2,12 +2,10 @@ import { Button } from "antd";
 import { FlexTabs, LayoutTabs, LayoutTabsProps } from "@/components";
 
 const FlexTabsDemo = () => {
-  const tabsProps: LayoutTabsProps = {
+  const flexTabsProps: LayoutTabsProps = {
     // size: "small",
     // tabPosition: "top",
     // clingContent: true,
-    title: "标题",
-    extend: <Button>按钮</Button>,
     defaultActiveKey: "tab-3",
     items: [
       {
@@ -28,20 +26,25 @@ const FlexTabsDemo = () => {
       },
     ],
   };
+  const layoutTabsProps = {
+    ...flexTabsProps,
+    title: "标题",
+    extend: <Button>按钮</Button>,
+  };
 
   return (
-    <div>
+    <div style={{ backgroundColor: "#ddd" }}>
       <div style={{ border: "1px solid red" }}>
-        <FlexTabs {...tabsProps} />
+        <FlexTabs {...flexTabsProps} />
       </div>
       <div style={{ border: "1px solid green" }}>
-        <FlexTabs segmentedTabBar {...tabsProps} />
+        <FlexTabs segmentedTabBar {...flexTabsProps} />
       </div>
       <div style={{ border: "1px solid blue" }}>
-        <LayoutTabs {...tabsProps} />
+        <LayoutTabs {...layoutTabsProps} />
       </div>
       <div style={{ border: "1px solid yellow" }}>
-        <LayoutTabs segmentedTabBar {...tabsProps} />
+        <LayoutTabs segmentedTabBar {...layoutTabsProps} />
       </div>
     </div>
   );
