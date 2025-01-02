@@ -12,11 +12,18 @@
   }
 
   .head {
-    border: 1px solid @colorBgContainer;
-    overflow: hidden;
     flex: none;
     border-radius: @bizLayoutRadius;
     background-color: @colorBgContainer;
+
+    &.topBar {
+      border: 1px solid @colorBgContainer;
+
+      > .content {
+        background-color: @colorBgContainer;
+        border-top: 1px solid @colorBorderSecondary;
+      }
+    }
 
     &.divider {
       border-bottom: 1px solid @colorBorderSecondary;
@@ -26,18 +33,15 @@
       height: 48px;
       display: flex;
       align-items: center;
-      padding: 0 16px;
+      padding: 0 @bizLayoutGap;
       justify-content: space-between;
     }
 
     .content {
       display: flex;
       justify-content: space-between;
-      padding: 0 16px;
+      padding: 0 @bizLayoutGap;
       border-radius: @bizLayoutRadius;
-      background-color: @colorBgContainer;
-      border-top: 1px solid @colorBorderSecondary;
-      overflow: hidden;
 
       .main {
         padding: @bizLayoutGap 0;

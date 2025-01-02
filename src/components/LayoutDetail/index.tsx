@@ -81,9 +81,11 @@ export const LayoutDetail = (props: LayoutDetailProps) => {
     children,
   } = props || {};
 
-  const headBg = !entityColor
-    ? undefined
-    : `linear-gradient(${entityColor} 0%, ${themeToken.colorBgContainer} 50%)`;
+  const topBar = crumb || action;
+  const headBg =
+    topBar && entityColor
+      ? `linear-gradient(${entityColor} 0%, ${themeToken.colorBgContainer} 50%)`
+      : undefined;
 
   return (
     <div
@@ -95,13 +97,14 @@ export const LayoutDetail = (props: LayoutDetailProps) => {
       <div
         className={cls(stl.head, classNames?.head, {
           [stl.divider]: divider,
+          [stl.topBar]: topBar,
         })}
         style={{
           background: headBg,
           ...(styles?.head || {}),
         }}
       >
-        {crumb || action ? (
+        {topBar ? (
           <div
             className={cls(stl.crumb, classNames?.crumb)}
             style={styles?.crumb}
