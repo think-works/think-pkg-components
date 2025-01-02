@@ -28,6 +28,7 @@ const FlexTabsDemo = () => {
   };
   const layoutTabsProps = {
     ...flexTabsProps,
+    // rimless: true,
     title: "标题",
     extend: <Button>按钮</Button>,
   };

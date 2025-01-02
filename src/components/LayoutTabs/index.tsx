@@ -16,6 +16,8 @@ export type LayoutTabsProps = FlexTabsProps & {
     extend?: React.CSSProperties;
     tabs?: React.CSSProperties;
   };
+  /** 无内边距 */
+  rimless?: boolean;
   /** 标题 */
   title?: React.ReactNode;
   /** 扩展 */
@@ -32,6 +34,7 @@ export const LayoutTabs = (props: LayoutTabsProps) => {
     classNames,
     styles,
     size = "middle",
+    rimless,
     title,
     extend,
     ...rest
@@ -68,7 +71,12 @@ export const LayoutTabs = (props: LayoutTabsProps) => {
       : undefined;
 
   return (
-    <div className={cls(stl.layoutTabs, className)} style={style}>
+    <div
+      className={cls(stl.layoutTabs, className, {
+        [stl.rimless]: rimless,
+      })}
+      style={style}
+    >
       <FlexTabs
         className={cls(stl.tabs, classNames?.tabs)}
         style={styles?.tabs}

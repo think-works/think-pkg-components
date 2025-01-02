@@ -10,30 +10,35 @@
   .title {
     display: block;
     line-height: 1;
-    margin-right: 16px;
     padding-right: 16px;
+    margin-right: 16px;
     border-right: 1px solid @colorBorderSecondary;
   }
 
   .extend {
   }
-  .tabs {
+
+  > .tabs {
     > .tabBar {
-      margin-left: @bizLayoutGap;
-      margin-right: @bizLayoutGap;
+      padding-left: @bizLayoutGap;
+      padding-right: @bizLayoutGap;
     }
 
     > :global(.@{ant-prefix}-tabs-nav) {
-      margin-left: @bizLayoutGap;
-      margin-right: @bizLayoutGap;
+      padding-left: @bizLayoutGap;
+      padding-right: @bizLayoutGap;
     }
+  }
 
-    > :global(.@{ant-prefix}-tabs-content-holder) {
-      > :global(.@{ant-prefix}-tabs-content) {
-        > :global(.@{ant-prefix}-tabs-tabpane) {
-          margin-left: @bizLayoutGap;
-          margin-right: @bizLayoutGap;
-          margin-bottom: @bizLayoutGap;
+  &:not(.rimless) {
+    > .tabs {
+      > :global(.@{ant-prefix}-tabs-content-holder) {
+        > :global(.@{ant-prefix}-tabs-content) {
+          > :global(.@{ant-prefix}-tabs-tabpane) {
+            padding-left: @bizLayoutGap;
+            padding-right: @bizLayoutGap;
+            padding-bottom: @bizLayoutGap;
+          }
         }
       }
     }
