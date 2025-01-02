@@ -1,5 +1,5 @@
 import cls, { Argument } from "classnames";
-import { LayoutTitle, LayoutTitleProps } from "../LayoutTitle";
+import { LayoutTitle, LayoutTitleSize } from "../LayoutTitle";
 import stl from "./index.module.less";
 
 export type LayoutDetailProps = {
@@ -30,7 +30,7 @@ export type LayoutDetailProps = {
     content?: React.CSSProperties;
   };
   /** 标题尺寸 */
-  titleSize?: LayoutTitleProps["size"];
+  titleSize?: LayoutTitleSize;
   /** 分割线 */
   divider?: boolean;
   /** 无内边距 */

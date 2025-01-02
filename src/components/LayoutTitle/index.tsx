@@ -1,6 +1,8 @@
 import cls, { Argument } from "classnames";
-import { BaseText, BaseTextProps } from "../BaseText";
+import { BaseText, BaseTextType } from "../BaseText";
 import stl from "./index.module.less";
+
+export type LayoutTitleSize = "large" | "middle" | "small";
 
 export type LayoutTitleProps = {
   className?: Argument;
@@ -14,13 +16,29 @@ export type LayoutTitleProps = {
     extend?: React.CSSProperties;
   };
   /** 尺寸 */
-  size?: "large" | "middle" | "small";
+  size?: LayoutTitleSize;
   /** 分割线 */
   divider?: boolean;
   /** 标题 */
   title?: React.ReactNode;
   /** 扩展 */
   extend?: React.ReactNode;
+};
+
+export const layoutTitleSize2BaseTextType = (
+  size: LayoutTitleSize | undefined,
+) => {
+  let type: BaseTextType | undefined;
+
+  if (size === "large") {
+    type = "main";
+  } else if (size === "middle") {
+    type = "sub";
+  } else if (size === "small") {
+    type = "strong";
+  }
+
+  return type;
 };
 
 /**
@@ -38,14 +56,7 @@ export const LayoutTitle = (props: LayoutTitleProps) => {
     extend,
   } = props || {};
 
-  let textType: BaseTextProps["type"];
-  if (size === "large") {
-    textType = "main";
-  } else if (size === "middle") {
-    textType = "sub";
-  } else if (size === "small") {
-    textType = "strong";
-  }
+  const textType = layoutTitleSize2BaseTextType(size);
 
   return (
     <div

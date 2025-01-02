@@ -1,6 +1,7 @@
 import cls, { Argument } from "classnames";
-import BaseText, { BaseTextProps } from "../BaseText";
+import BaseText from "../BaseText";
 import FlexTabs, { FlexTabsProps } from "../FlexTabs";
+import { LayoutTitleSize, layoutTitleSize2BaseTextType } from "../LayoutTitle";
 import stl from "./index.module.less";
 
 export type LayoutTabsProps = FlexTabsProps & {
@@ -16,6 +17,8 @@ export type LayoutTabsProps = FlexTabsProps & {
     extend?: React.CSSProperties;
     tabs?: React.CSSProperties;
   };
+  /** 标题尺寸 */
+  titleSize?: LayoutTitleSize;
   /** 无内边距 */
   rimless?: boolean;
   /** 标题 */
@@ -34,20 +37,14 @@ export const LayoutTabs = (props: LayoutTabsProps) => {
     classNames,
     styles,
     size = "middle",
+    titleSize = "middle",
     rimless,
     title,
     extend,
     ...rest
   } = props || {};
 
-  let textType: BaseTextProps["type"];
-  if (size === "large") {
-    textType = "main";
-  } else if (size === "middle") {
-    textType = "sub";
-  } else if (size === "small") {
-    textType = "strong";
-  }
+  const textType = layoutTitleSize2BaseTextType(titleSize || size);
 
   const extraLeft = title ? (
     <BaseText

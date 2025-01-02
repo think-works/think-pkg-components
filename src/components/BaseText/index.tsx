@@ -2,11 +2,19 @@ import cls, { Argument } from "classnames";
 import React, { ForwardedRef, forwardRef, HTMLAttributes } from "react";
 import stl from "./index.module.less";
 
+export type BaseTextType =
+  | "main"
+  | "sub"
+  | "small"
+  | "strong"
+  | "help"
+  | "disabled";
+
 export type BaseTextProps = HTMLAttributes<HTMLSpanElement> & {
   className?: Argument;
   style?: React.CSSProperties;
   children?: React.ReactNode;
-  type?: "main" | "sub" | "small" | "strong" | "help" | "disabled";
+  type?: BaseTextType;
 };
 
 /**
