@@ -53,7 +53,7 @@ export type LayoutDetailProps = {
   /** 统计 */
   statistic?: React.ReactNode;
   /** 实体配色 */
-  entityColor?: React.CSSProperties["color"];
+  entityColor?: React.CSSProperties["color"] | false;
   children?: React.ReactNode;
 };
 
@@ -82,7 +82,7 @@ export const LayoutDetail = (props: LayoutDetailProps) => {
   } = props || {};
 
   const topBar = crumb || action;
-  const headBg =
+  const entityBg =
     topBar && entityColor
       ? `linear-gradient(${entityColor} 0%, ${themeToken.colorBgContainer} 50%)`
       : undefined;
@@ -98,9 +98,10 @@ export const LayoutDetail = (props: LayoutDetailProps) => {
         className={cls(stl.head, classNames?.head, {
           [stl.divider]: divider,
           [stl.topBar]: topBar,
+          [stl.entityBg]: entityBg,
         })}
         style={{
-          background: headBg,
+          background: entityBg,
           ...(styles?.head || {}),
         }}
       >

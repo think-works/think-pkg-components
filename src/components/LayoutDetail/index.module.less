@@ -17,11 +17,17 @@
     background-color: @colorBgContainer;
 
     &.topBar {
+      > .content {
+        border-top: 1px solid @colorBorderSecondary;
+      }
+    }
+
+    &.entityBg {
       border: 1px solid @colorBgContainer;
 
       > .content {
+        border-radius: @bizLayoutRadius;
         background-color: @colorBgContainer;
-        border-top: 1px solid @colorBorderSecondary;
       }
     }
 
@@ -41,7 +47,6 @@
       display: flex;
       justify-content: space-between;
       padding: 0 @bizLayoutGap;
-      border-radius: @bizLayoutRadius;
 
       .main {
         padding: @bizLayoutGap 0;

@@ -118,6 +118,7 @@ const DragContainerDemo = () => {
     >
       <LayoutPanel styles={{ body: { paddingLeft: 0 } }}>
         <LayoutDetail
+          // entityColor={false}
           title="title"
           crumb={
             <Breadcrumb
