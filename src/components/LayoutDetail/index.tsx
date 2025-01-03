@@ -28,18 +28,18 @@ export type LayoutDetailProps = {
   };
   /** 标题尺寸 */
   titleSize?: LayoutTitleSize;
-  /** 分割线 */
+  /** 头部分割线 */
   divider?: boolean;
   /** 无内边距 */
   rimless?: boolean;
   /** 内容区域紧贴头部 */
-  clingContent?: boolean;
+  cling?: boolean;
   /**
    * 内容区域高度自适应。
    * 若内容高度低于所在 flex 容器剩余空间则自动撑满，若超过则出现滚动条。
    * 要求内容区域所在 flex 容器必须指定高度，或者其父容器也是 flex 容器。
    */
-  overflowContent?: boolean;
+  overflow?: boolean;
   /** 标题 */
   title?: React.ReactNode;
   /** 扩展 */
@@ -69,8 +69,8 @@ export const LayoutDetail = (props: LayoutDetailProps) => {
     titleSize = "middle",
     divider = true,
     rimless,
-    clingContent,
-    overflowContent,
+    cling,
+    overflow,
     title,
     extend,
     crumb,
@@ -153,8 +153,8 @@ export const LayoutDetail = (props: LayoutDetailProps) => {
       </div>
       <div
         className={cls(stl.body, classNames?.body, {
-          [stl.cling]: clingContent,
-          [stl.overflow]: overflowContent,
+          [stl.cling]: cling,
+          [stl.overflow]: overflow,
         })}
         style={styles?.body}
       >

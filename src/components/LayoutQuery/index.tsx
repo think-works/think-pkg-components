@@ -30,7 +30,7 @@ export type LayoutQueryProps = {
    * 若内容高度低于所在 flex 容器剩余空间则自动撑满，若超过则出现滚动条。
    * 要求内容区域所在 flex 容器必须指定高度，或者其父容器也是 flex 容器。
    */
-  overflowContent?: boolean;
+  overflow?: boolean;
   /** 筛选 */
   filter?: React.ReactNode;
   /** 标题 */
@@ -51,7 +51,7 @@ export const LayoutQuery = (props: LayoutQueryProps) => {
     styles,
     titleSize = "middle",
     bordered = true,
-    overflowContent,
+    overflow,
     filter,
     title,
     action,
@@ -88,7 +88,7 @@ export const LayoutQuery = (props: LayoutQueryProps) => {
         ) : null}
         <div
           className={cls(stl.result, classNames?.result, {
-            [stl.overflow]: overflowContent,
+            [stl.overflow]: overflow,
           })}
           style={styles?.result}
         >

@@ -5,7 +5,7 @@ const FlexTabsDemo = () => {
   const flexTabsProps: LayoutTabsProps = {
     // size: "small",
     // tabPosition: "top",
-    // clingContent: true,
+    // cling: true,
     defaultActiveKey: "tab-3",
     items: [
       {
