@@ -36,7 +36,7 @@ export type LayoutQueryProps = {
   /** 标题 */
   title?: React.ReactNode;
   /** 扩展 */
-  action?: React.ReactNode;
+  extend?: React.ReactNode;
   children?: React.ReactNode;
 };
 
@@ -54,7 +54,7 @@ export const LayoutQuery = (props: LayoutQueryProps) => {
     overflow,
     filter,
     title,
-    action,
+    extend,
     children,
   } = props || {};
 
@@ -73,17 +73,17 @@ export const LayoutQuery = (props: LayoutQueryProps) => {
       <div
         className={cls(stl.body, classNames?.body, {
           [stl.bordered]: bordered,
-          [stl.showTools]: title || action,
+          [stl.showTools]: title || extend,
         })}
         style={styles?.body}
       >
-        {title || action ? (
+        {title || extend ? (
           <LayoutTitle
             className={cls(stl.tools, classNames?.tools)}
             style={styles?.tools}
             size={titleSize}
             title={title}
-            extend={action}
+            extend={extend}
           />
         ) : null}
         <div
