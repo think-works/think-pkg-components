@@ -98,6 +98,8 @@ export type MinimizeFilterProps = FormProps & {
   /** 筛选项值变更-防抖毫秒时间间隔(-1 禁止在 onValuesChange 事件中触发 onFilterChange 事件) */
   filterChangeDebounce?: number;
 
+  /** 更多按钮为主按钮 */
+  morePrimary?: boolean;
   /** 更多按钮文案 */
   moreText?: React.ReactNode;
   /** 更多按钮属性(false 不显示更多按钮) */
@@ -127,6 +129,7 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
     moreFilterProps,
     moreFilterValidCounter = filterValidCounter,
     filterChangeDebounce = 500,
+    morePrimary,
     moreText,
     moreProps,
     onInitValues,
@@ -269,7 +272,16 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
     moreText ||
     (items?.length ? "更多" : "") +
       "筛选" +
-      (moreButtonActive ? `(${moreFilterValidCount})` : "");
+      (moreButtonActive ? ` (${moreFilterValidCount})` : "");
+  const moreButtonProps = Object.assign(
+    morePrimary
+      ? {
+          ghost: false,
+          type: "primary" as const,
+        }
+      : {},
+    moreProps,
+  );
 
   const moreAction =
     moreProps === false ? null : (
@@ -299,7 +311,7 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
           icon={<FilterOutlined />}
           ghost={moreButtonActive}
           type={moreButtonActive ? "primary" : "default"}
-          {...moreProps}
+          {...moreButtonProps}
         >
           {moreButtonText}
         </Button>
