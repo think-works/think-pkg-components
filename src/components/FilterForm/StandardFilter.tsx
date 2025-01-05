@@ -69,12 +69,15 @@ export type StandardFilterProps = FormProps & {
 
   /** 初始化筛选项值 */
   onInitValues?: (values?: Record<string, any>) => void;
+  /** 筛选项值变更 */
+  onFilterChange?: (
+    values: Record<string, any>,
+    action?: "submit" | "reset",
+  ) => void;
   /** 点击查询按钮 */
   onSubmit?: (values: Record<string, any>) => void;
   /** 点击重置按钮 */
   onReset?: (values: Record<string, any>) => void;
-  /** 筛选项值变更 */
-  onFilterChange?: (values: Record<string, any>) => void;
 };
 
 /**
@@ -99,9 +102,9 @@ export const StandardFilter = (props: StandardFilterProps) => {
     submitProps,
     resetProps,
     onInitValues,
+    onFilterChange,
     onSubmit,
     onReset,
-    onFilterChange,
     ...rest
   } = props;
 
@@ -129,8 +132,8 @@ export const StandardFilter = (props: StandardFilterProps) => {
   const handleReset = useCallback(() => {
     const values = {};
 
+    onFilterChange?.(values, "reset");
     onReset?.(values);
-    onFilterChange?.(values);
   }, [onFilterChange, onReset]);
 
   // 点击查询按钮
@@ -138,8 +141,8 @@ export const StandardFilter = (props: StandardFilterProps) => {
     const formValues = form.getFieldsValue();
     const values = { ...(formValues || {}) };
 
+    onFilterChange?.(values, "submit");
     onSubmit?.(values);
-    onFilterChange?.(values);
   }, [form, onFilterChange, onSubmit]);
 
   const itemCols = useMemo(

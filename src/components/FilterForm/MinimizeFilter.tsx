@@ -106,9 +106,9 @@ export type MinimizeFilterProps = FormProps & {
   moreProps?: false | ButtonProps;
 
   /** 初始化筛选项值 */
-  onInitValues?: (values?: Record<string, any>) => void;
+  onInitValues?: StandardFilterProps["onInitValues"];
   /** 筛选项值变更 */
-  onFilterChange?: (values: Record<string, any>) => void;
+  onFilterChange?: StandardFilterProps["onFilterChange"];
 };
 
 /**
@@ -203,15 +203,25 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
     }
   }, [moreFilterForm, moreFilterValues, openPopover]);
 
-  // 最小化表单-触发筛选项变更
-  const handleFilterChange = useCallback(
+  // 最小化表单-获取合并后的筛选项值
+  const getMergedValues = useCallback(
     (moreValues?: Record<string, any>) => {
       const formValues = form.getFieldsValue();
       // 合并 最小化表单 和 更多表单 的筛选项值
-      const values = { ...(formValues || {}), ...(moreValues || {}) };
-      onFilterChange?.(values);
+      return { ...(formValues || {}), ...(moreValues || {}) };
     },
-    [form, onFilterChange],
+    [form],
+  );
+
+  // 最小化表单-触发筛选项变更
+  const handleFilterChange = useCallback<
+    NonNullable<StandardFilterProps["onFilterChange"]>
+  >(
+    (moreValues, action) => {
+      const mergedValues = getMergedValues(moreValues);
+      onFilterChange?.(mergedValues, action);
+    },
+    [getMergedValues, onFilterChange],
   );
 
   // 最小化表单-触发筛选项变更-防抖
@@ -225,12 +235,12 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
     NonNullable<FormProps["onValuesChange"]>
   >(
     (changedValues, allValues) => {
-      // 触发 传入的同名函数
+      // 触发 最小化表单-传入的同名函数
       onValuesChange?.(changedValues, allValues);
 
       if (filterChangeDebounce >= 0) {
         // 触发 最小化表单-触发筛选项变更-防抖
-        handleFilterChangeDebounce(moreFilterValues);
+        handleFilterChangeDebounce(moreFilterValues, "submit");
       }
     },
     [
@@ -246,19 +256,21 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
     (e: any) => {
       if (e?.key === "Enter" || e?.keyCode === 13) {
         // 触发 最小化表单-触发筛选项变更
-        handleFilterChange(moreFilterValues);
+        handleFilterChange(moreFilterValues || {}, "submit");
       }
     },
     [handleFilterChange, moreFilterValues],
   );
 
   // 更多表单-筛选项值变更
-  const handleMoreFilterChange = useCallback(
-    (values: Record<string, any>) => {
-      // 触发 传入的同名函数
-      onMoreFilterChange?.(values);
+  const handleMoreFilterChange = useCallback<
+    NonNullable<StandardFilterProps["onFilterChange"]>
+  >(
+    (values, action) => {
+      // 触发 更多表单-传入的同名函数
+      onMoreFilterChange?.(values, action);
       // 触发 最小化表单-触发筛选项变更
-      handleFilterChange(values);
+      handleFilterChange(values, action);
       // 更新 更多表单-筛选项值
       setMoreFilterValues(values);
       // 关闭 最小化表单-气泡卡片
@@ -267,6 +279,7 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
     [handleFilterChange, onMoreFilterChange],
   );
 
+  // 更多筛选按钮
   const moreButtonActive = moreFilterValidCount > 0;
   const moreButtonText =
     moreText ||
