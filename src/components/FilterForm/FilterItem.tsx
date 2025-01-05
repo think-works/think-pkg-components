@@ -5,6 +5,13 @@ import stl from "./index.module.less";
 export type FilterItemProps = FormItemProps & {
   className?: Argument;
   style?: React.CSSProperties;
+  classNames?: {
+    label?: Argument;
+  };
+  styles?: {
+    label?: React.CSSProperties;
+  };
+
   /** 定制样式 */
   customStyle?: boolean;
 };
@@ -16,6 +23,8 @@ export const FilterItem = (props: FilterItemProps) => {
   const {
     className,
     style,
+    classNames,
+    styles,
     customStyle = true,
     label,
     children,
@@ -30,7 +39,16 @@ export const FilterItem = (props: FilterItemProps) => {
       style={style}
       colon={customStyle ? false : undefined}
       label={
-        customStyle && label ? <div className={stl.label}>{label}</div> : label
+        customStyle && label ? (
+          <div
+            className={cls(stl.label, classNames?.label)}
+            style={styles?.label}
+          >
+            {label}
+          </div>
+        ) : (
+          label
+        )
       }
       {...rest}
     >

@@ -76,6 +76,12 @@ const filterValidCounter = (
 export type MinimizeFilterProps = FormProps & {
   className?: Argument;
   style?: React.CSSProperties;
+  classNames?: {
+    popoverContent?: Argument;
+  };
+  styles?: {
+    popoverContent?: React.CSSProperties;
+  };
 
   /** 扩展操作 */
   extend?: React.ReactNode;
@@ -110,6 +116,8 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
   const {
     className,
     style,
+    classNames,
+    styles,
     form: outerForm,
     initialValues,
     onValuesChange,
@@ -265,7 +273,10 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
         open={openPopover}
         onOpenChange={setOpenPopover}
         content={
-          <div className={stl.popoverPanel}>
+          <div
+            className={cls(stl.popoverContent, classNames?.popoverContent)}
+            style={styles?.popoverContent}
+          >
             <StandardFilter
               itemColSpan={12}
               items={moreItems}

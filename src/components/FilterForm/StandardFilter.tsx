@@ -33,6 +33,16 @@ export type FilterFormItemType = React.ReactElement | FilterFormItemConfig;
 export type StandardFilterProps = FormProps & {
   className?: Argument;
   style?: React.CSSProperties;
+  classNames?: {
+    row?: Argument;
+    col?: Argument;
+    actionCol?: Argument;
+  };
+  styles?: {
+    row?: React.CSSProperties;
+    col?: React.CSSProperties;
+    actionCol?: React.CSSProperties;
+  };
 
   /** 扩展操作 */
   extend?: React.ReactNode;
@@ -74,6 +84,8 @@ export const StandardFilter = (props: StandardFilterProps) => {
   const {
     className,
     style,
+    classNames,
+    styles,
     form: outerForm,
     initialValues,
     extend,
@@ -163,17 +175,26 @@ export const StandardFilter = (props: StandardFilterProps) => {
         }
 
         return (
-          <Col {...colProps} className={clsName} key={colProps.key}>
+          <Col
+            {...colProps}
+            key={colProps.key}
+            className={cls(clsName, classNames?.col)}
+            style={styles?.col}
+          >
             {children}
           </Col>
         );
       }),
-    [itemColSpan, items, unfold, visibleCount],
+    [classNames?.col, itemColSpan, items, styles?.col, unfold, visibleCount],
   );
 
   const actionCol = useMemo(
     () => (
-      <Col flex="auto" className={stl.actionCol}>
+      <Col
+        flex="auto"
+        className={cls(stl.actionCol, classNames?.actionCol)}
+        style={styles?.actionCol}
+      >
         <Form.Item>
           <Space>
             {showUnfold ? (
@@ -219,12 +240,14 @@ export const StandardFilter = (props: StandardFilterProps) => {
       </Col>
     ),
     [
+      classNames?.actionCol,
       extend,
       handleReset,
       handleSubmit,
       resetProps,
       resetText,
       showUnfold,
+      styles?.actionCol,
       submitProps,
       submitText,
       unfold,
@@ -241,7 +264,11 @@ export const StandardFilter = (props: StandardFilterProps) => {
       labelCol={{ span: itemLabelSpan }}
       {...rest}
     >
-      <Row className={stl.row} gutter={[16, 8]}>
+      <Row
+        className={cls(stl.row, classNames?.row)}
+        style={styles?.row}
+        gutter={[16, 8]}
+      >
         {itemCols}
         {actionCol}
       </Row>
