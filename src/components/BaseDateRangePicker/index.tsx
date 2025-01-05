@@ -1,9 +1,11 @@
-import { DatePicker, DatePickerProps } from "antd";
+import { DatePicker, GetProps } from "antd";
 import dayjs, { Dayjs, OpUnitType } from "dayjs";
 import { forwardRef, useCallback, useMemo } from "react";
 
+const { RangePicker } = DatePicker;
+
 export type BaseDateRangePickerProps = Omit<
-  DatePickerProps,
+  GetProps<typeof RangePicker>,
   "value" | "onChange"
 > & {
   startOf?: (OpUnitType | null)[];
@@ -62,18 +64,8 @@ export const BaseDateRangePicker = forwardRef(function BaseDateRangePickerCom(
     [onChange, startOf, endOf],
   );
 
-  /**
-   * 属性“defaultValue”的类型不兼容。
-   *  不能将类型“Dayjs | null | undefined”分配给类型“RangeValueType<Dayjs> | undefined”。
-   *   不能将类型“null”分配给类型“RangeValueType<Dayjs> | undefined”。ts(2322)
-   */
   return (
-    <DatePicker.RangePicker
-      ref={ref}
-      value={_value}
-      onChange={_onChange}
-      {...(rest as any)}
-    />
+    <RangePicker ref={ref} value={_value} onChange={_onChange} {...rest} />
   );
 });
 
