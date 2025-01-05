@@ -196,46 +196,48 @@ export const StandardFilter = (props: StandardFilterProps) => {
         style={styles?.actionCol}
       >
         <Form.Item>
-          <Space>
-            {showUnfold ? (
-              <a onClick={() => setUnfold(!unfold)}>
-                <Space size={4}>
-                  {unfold ? (
-                    <>
-                      <span>收起</span>
-                      <UpOutlined />
-                    </>
-                  ) : (
-                    <>
-                      <span>展开</span>
-                      <DownOutlined />
-                    </>
-                  )}
-                </Space>
-              </a>
-            ) : null}
-            {resetText === false ? null : (
-              <Button
-                type="default"
-                htmlType="reset"
-                onClick={handleReset}
-                {...resetProps}
-              >
-                {resetText || "重置"}
-              </Button>
-            )}
-            {submitText === false ? null : (
-              <Button
-                type="primary"
-                htmlType="submit"
-                onClick={handleSubmit}
-                {...submitProps}
-              >
-                {submitText || "查询"}
-              </Button>
-            )}
-            {extend}
-          </Space>
+          <div>
+            <Space>
+              {showUnfold ? (
+                <a onClick={() => setUnfold(!unfold)}>
+                  <Space size={4}>
+                    {unfold ? (
+                      <>
+                        <span>收起</span>
+                        <UpOutlined />
+                      </>
+                    ) : (
+                      <>
+                        <span>展开</span>
+                        <DownOutlined />
+                      </>
+                    )}
+                  </Space>
+                </a>
+              ) : null}
+              {resetText === false ? null : (
+                <Button
+                  type="default"
+                  htmlType="reset"
+                  onClick={handleReset}
+                  {...resetProps}
+                >
+                  {resetText || "重置"}
+                </Button>
+              )}
+              {submitText === false ? null : (
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  onClick={handleSubmit}
+                  {...submitProps}
+                >
+                  {submitText || "查询"}
+                </Button>
+              )}
+              {extend}
+            </Space>
+          </div>
         </Form.Item>
       </Col>
     ),
