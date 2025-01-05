@@ -1,81 +1,148 @@
-import { Form, Input, Select } from "antd";
-import { FilterForm } from "@/components";
+/* eslint-disable no-console */
+import { DatePicker, Input, Select } from "antd";
+import { useCallback } from "react";
+import { FilterForm, FilterFormProps } from "@/components";
 
-const defectPriority = [
-  {
-    key: "p1",
-    value: 1,
-    label: "P1",
-  },
-  {
-    key: "p2",
-    value: 2,
-    label: "P2",
-  },
-  {
-    key: "p3",
-    value: 3,
-    label: "P3",
-  },
-  {
-    key: "p4",
-    value: 4,
-    label: "P4",
-  },
-];
+const { RangePicker } = DatePicker;
+const { MinimizeFilter, FilterItem } = FilterForm;
 
-const defectSeverity = [
-  {
-    key: "fatal",
-    value: "FATAL",
-    label: "致命",
-  },
-  {
-    key: "critical",
-    value: "CRITICAL",
-    label: "严重",
-  },
-  {
-    key: "major",
-    value: "MAJOR",
-    label: "一般",
-  },
-  {
-    key: "minor",
-    value: "MINOR",
-    label: "轻微",
-  },
-];
+const FilterFormDemo = () => {
+  const handleInitValues = useCallback((values?: Record<string, any>) => {
+    console.log("handleInitValues", values);
+  }, []);
+  const handleFilterChange = useCallback((values: Record<string, any>) => {
+    console.log("handleFilterChange", values);
+  }, []);
 
-const FlexTabsDemo = () => {
-  const handleFilterChange = (params: Record<string, any>) => {
-    // eslint-disable-next-line no-console
-    console.log(params);
-  };
+  const getItems = (customStyle?: boolean): FilterFormProps["items"] => [
+    <FilterItem
+      customStyle={customStyle}
+      key="Input"
+      name="Input"
+      label="Input"
+    >
+      <Input allowClear />
+    </FilterItem>,
+    <FilterItem
+      customStyle={customStyle}
+      key="Select"
+      name="Select"
+      label="Select"
+    >
+      <Select
+        allowClear
+        options={[
+          {
+            value: 1,
+            label:
+              "选项一选项一选项一选项一选项一选项一选项一选项一选项一选项一选项一选项一",
+          },
+          { value: 2, label: "选项二" },
+        ]}
+      />
+    </FilterItem>,
+    <FilterItem
+      customStyle={customStyle}
+      key="Single"
+      name="Single"
+      label="Single"
+    >
+      <Select
+        allowClear
+        options={[
+          { value: 1, label: "选项一" },
+          { value: 2, label: "选项二" },
+        ]}
+      />
+    </FilterItem>,
+    <FilterItem
+      customStyle={customStyle}
+      key="Multiple"
+      name="Multiple"
+      label="Multiple"
+    >
+      <Select
+        allowClear
+        mode="multiple"
+        options={[
+          { value: 1, label: "选项一" },
+          { value: 2, label: "选项二" },
+        ]}
+      />
+    </FilterItem>,
+    <FilterItem
+      customStyle={customStyle}
+      key="DatePicker"
+      name="DatePicker"
+      label="DatePicker"
+    >
+      <DatePicker allowClear />
+    </FilterItem>,
+    <FilterItem
+      customStyle={customStyle}
+      key="DatePickerTime"
+      name="DatePickerTime"
+      label="DatePickerTime"
+    >
+      <DatePicker allowClear showTime />
+    </FilterItem>,
+    <FilterItem
+      customStyle={customStyle}
+      key="RangePicker"
+      name="RangePicker"
+      label="RangePicker"
+    >
+      <RangePicker allowClear />
+    </FilterItem>,
+    {
+      colProps: customStyle
+        ? {
+            span: 24,
+          }
+        : undefined,
+      children: (
+        <FilterItem
+          customStyle={customStyle}
+          key="RangePickerTime"
+          name="RangePickerTime"
+          label="RangePickerTime"
+        >
+          <RangePicker allowClear showTime />
+        </FilterItem>
+      ),
+    },
+  ];
 
   return (
-    <FilterForm
-      onFilterChange={handleFilterChange}
-      items={[
-        <Form.Item key="defectIdPattern" name="defectIdPattern" label="ID">
-          <Input allowClear />
-        </Form.Item>,
-        <Form.Item
-          key="defectNamePattern"
-          name="defectNamePattern"
-          label="名称"
-        >
-          <Input allowClear />
-        </Form.Item>,
-        <Form.Item key="priority" name="priority" label="优先级">
-          <Select allowClear options={defectPriority} />
-        </Form.Item>,
-        <Form.Item key="severity" name="severity" label="严重程度">
-          <Select allowClear options={defectSeverity} />
-        </Form.Item>,
-      ]}
-    />
+    <div style={{ height: "100%", backgroundColor: "#fff" }}>
+      <FilterForm
+        items={getItems(false)}
+        onInitValues={handleInitValues}
+        onFilterChange={handleFilterChange}
+      />
+      <hr />
+      <MinimizeFilter
+        moreFilterItems={getItems()}
+        onInitValues={handleInitValues}
+        onFilterChange={handleFilterChange}
+        items={[
+          <FilterItem key="Keyword" name="Keyword" label="Keyword">
+            <Input allowClear placeholder="Keyword" />
+          </FilterItem>,
+          <FilterItem key="Type" name="Type" label="Type">
+            <Select
+              allowClear
+              placeholder="Type"
+              options={[
+                { value: 1, label: "选项一" },
+                { value: 2, label: "选项二" },
+              ]}
+            />
+          </FilterItem>,
+        ]}
+      />
+    </div>
   );
 };
 
-export default FlexTabsDemo;
+export default FilterFormDemo;

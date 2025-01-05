@@ -12,7 +12,7 @@ import { useThrottle } from "@/hooks";
 import stl from "./index.module.less";
 
 export type ResizingProps = Omit<HTMLAttributes<HTMLDivElement>, "onResize"> & {
-  /** 防抖毫秒时间间隔 */
+  /** 节流毫秒时间间隔 */
   throttle?: number;
   /** 将子标签脱离文档流以避免撑开所在容器 */
   detachFlow?: boolean;

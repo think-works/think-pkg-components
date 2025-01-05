@@ -1,5 +1,5 @@
 import { isEmpty, isEqual, omit } from "lodash-es";
-import React, { JSX, useCallback } from "react";
+import React, { JSX, useCallback, useMemo } from "react";
 import {
   Location,
   NavigateFunction,
@@ -104,13 +104,13 @@ const updatePageSearch = (search: string, diff: Record<string, any>) => {
  * 清理路由查询参数中的分页查询参数
  */
 const useClearPageSearch = () => {
-  const location = useLocation();
+  const { search } = useLocation();
   const navigate = useNavigate();
 
   const clear = useCallback(() => {
-    const search = clearPageSearch(location.search);
-    navigate({ search }, { replace: true });
-  }, [location.search, navigate]);
+    const clearedSearch = clearPageSearch(search);
+    navigate({ search: clearedSearch }, { replace: true });
+  }, [search, navigate]);
 
   return clear;
 };
@@ -119,8 +119,8 @@ const useClearPageSearch = () => {
  * 从路由查询参数中获取分页查询参数
  */
 const useParsePageSearch = () => {
-  const location = useLocation();
-  const query = parsePageSearch(location.search);
+  const { search } = useLocation();
+  const query = useMemo(() => parsePageSearch(search), [search]);
   return query;
 };
 
