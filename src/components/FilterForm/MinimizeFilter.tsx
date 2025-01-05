@@ -264,6 +264,13 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
     [handleFilterChange, onMoreFilterChange],
   );
 
+  const moreButtonActive = moreFilterValidCount > 0;
+  const moreButtonText =
+    moreText ||
+    (items?.length ? "更多" : "") +
+      "筛选" +
+      (moreButtonActive ? `(${moreFilterValidCount})` : "");
+
   const moreAction =
     moreProps === false ? null : (
       <Popover
@@ -290,12 +297,11 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
       >
         <Button
           icon={<FilterOutlined />}
-          ghost={moreFilterValidCount > 0}
-          type={moreFilterValidCount > 0 ? "primary" : "default"}
+          ghost={moreButtonActive}
+          type={moreButtonActive ? "primary" : "default"}
           {...moreProps}
         >
-          {moreText ||
-            `更多筛选 ${moreFilterValidCount > 0 ? `(${moreFilterValidCount})` : ""}`}
+          {moreButtonText}
         </Button>
       </Popover>
     );
