@@ -319,6 +319,7 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
             style={styles?.popoverContent}
           >
             <StandardFilter
+              submitText="筛选"
               itemColSpan={12}
               items={moreItems}
               form={moreFilterForm}
