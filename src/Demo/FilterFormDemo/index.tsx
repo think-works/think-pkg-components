@@ -110,7 +110,7 @@ const FilterFormDemo = () => {
       <Space wrap>{getItems(FilterItem, { outlined: true })}</Space>
       <h3>标准筛选表单</h3>
       <FilterForm
-        outlinedItem
+        // outlinedItem
         items={getItems()}
         onInitValues={handleInitValues}
         onFilterChange={handleFilterChange}
@@ -118,7 +118,6 @@ const FilterFormDemo = () => {
       <h3>最小化筛选表单</h3>
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <MinimizeFilter
-          outlinedItem
           moreFilterItems={getItems()}
           onInitValues={handleInitValues}
           onFilterChange={handleFilterChange}

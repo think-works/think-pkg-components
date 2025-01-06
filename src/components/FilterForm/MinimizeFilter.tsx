@@ -132,7 +132,7 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
     moreFilterItems,
     moreFilterProps,
     moreFilterValidCounter = filterValidCounter,
-    outlinedItem,
+    outlinedItem = true,
     filterChangeDebounce = 500,
     morePrimary,
     moreText,
