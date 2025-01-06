@@ -14,21 +14,11 @@ const FilterFormDemo = () => {
     console.log("handleFilterChange", values);
   }, []);
 
-  const getItems = (customStyle?: boolean): FilterFormProps["items"] => [
-    <FilterItem
-      customStyle={customStyle}
-      key="Input"
-      name="Input"
-      label="Input"
-    >
+  const getItems = (standard?: boolean): FilterFormProps["items"] => [
+    <FilterItem standard={standard} key="Input" name="Input" label="Input">
       <Input allowClear />
     </FilterItem>,
-    <FilterItem
-      customStyle={customStyle}
-      key="Select"
-      name="Select"
-      label="Select"
-    >
+    <FilterItem standard={standard} key="Select" name="Select" label="Select">
       <Select
         allowClear
         options={[
@@ -41,12 +31,7 @@ const FilterFormDemo = () => {
         ]}
       />
     </FilterItem>,
-    <FilterItem
-      customStyle={customStyle}
-      key="Single"
-      name="Single"
-      label="Single"
-    >
+    <FilterItem standard={standard} key="Single" name="Single" label="Single">
       <Select
         allowClear
         options={[
@@ -56,7 +41,7 @@ const FilterFormDemo = () => {
       />
     </FilterItem>,
     <FilterItem
-      customStyle={customStyle}
+      standard={standard}
       key="Multiple"
       name="Multiple"
       label="Multiple"
@@ -71,7 +56,7 @@ const FilterFormDemo = () => {
       />
     </FilterItem>,
     <FilterItem
-      customStyle={customStyle}
+      standard={standard}
       key="DatePicker"
       name="DatePicker"
       label="DatePicker"
@@ -79,7 +64,7 @@ const FilterFormDemo = () => {
       <DatePicker allowClear />
     </FilterItem>,
     <FilterItem
-      customStyle={customStyle}
+      standard={standard}
       key="DatePickerTime"
       name="DatePickerTime"
       label="DatePickerTime"
@@ -87,7 +72,7 @@ const FilterFormDemo = () => {
       <DatePicker allowClear showTime />
     </FilterItem>,
     <FilterItem
-      customStyle={customStyle}
+      standard={standard}
       key="RangePicker"
       name="RangePicker"
       label="RangePicker"
@@ -95,14 +80,14 @@ const FilterFormDemo = () => {
       <RangePicker allowClear />
     </FilterItem>,
     {
-      colProps: customStyle
+      colProps: standard
         ? {
             span: 24,
           }
         : undefined,
       children: (
         <FilterItem
-          customStyle={customStyle}
+          standard={standard}
           key="RangePickerTime"
           name="RangePickerTime"
           label="RangePickerTime"
@@ -116,7 +101,7 @@ const FilterFormDemo = () => {
   return (
     <div style={{ height: "100%", backgroundColor: "#fff" }}>
       <FilterForm
-        items={getItems(false)}
+        items={getItems(true)}
         onInitValues={handleInitValues}
         onFilterChange={handleFilterChange}
       />

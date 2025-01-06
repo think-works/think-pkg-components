@@ -12,8 +12,8 @@ export type FilterItemProps = FormItemProps & {
     label?: React.CSSProperties;
   };
 
-  /** 定制样式 */
-  customStyle?: boolean;
+  /** 标准样式 */
+  standard?: boolean;
 };
 
 /**
@@ -25,7 +25,7 @@ export const FilterItem = (props: FilterItemProps) => {
     style,
     classNames,
     styles,
-    customStyle = true,
+    standard,
     label,
     children,
     ...rest
@@ -34,15 +34,16 @@ export const FilterItem = (props: FilterItemProps) => {
   return (
     <Form.Item
       className={cls(stl.filterItem, className, {
-        [stl.customStyle]: customStyle,
+        [stl.outlined]: !standard,
       })}
       style={style}
-      colon={customStyle ? false : undefined}
+      colon={standard ? undefined : false}
       label={
-        customStyle && label ? (
+        !standard && label ? (
           <div
             className={cls(stl.label, classNames?.label)}
             style={styles?.label}
+            title={typeof label === "string" ? label : undefined}
           >
             {label}
           </div>
