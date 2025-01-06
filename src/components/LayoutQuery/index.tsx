@@ -25,6 +25,8 @@ export type LayoutQueryProps = {
   titleSize?: LayoutTitleSize;
   /** 组件边框 */
   bordered?: boolean;
+  /** 无内边距 */
+  rimless?: boolean;
   /**
    * 内容区域高度自适应。
    * 若内容高度低于所在 flex 容器剩余空间则自动撑满，若超过则出现滚动条。
@@ -51,6 +53,7 @@ export const LayoutQuery = (props: LayoutQueryProps) => {
     styles,
     titleSize = "middle",
     bordered = true,
+    rimless,
     overflow,
     filter,
     title,
@@ -59,20 +62,20 @@ export const LayoutQuery = (props: LayoutQueryProps) => {
   } = props || {};
 
   return (
-    <div className={cls(stl.layoutQuery, className)} style={style}>
+    <div
+      className={cls(stl.layoutQuery, className, {
+        [stl.bordered]: bordered,
+        [stl.rimless]: rimless,
+      })}
+      style={style}
+    >
       {filter ? (
-        <div
-          className={cls(stl.head, classNames?.head, {
-            [stl.bordered]: bordered,
-          })}
-          style={styles?.head}
-        >
+        <div className={cls(stl.head, classNames?.head)} style={styles?.head}>
           {filter}
         </div>
       ) : null}
       <div
         className={cls(stl.body, classNames?.body, {
-          [stl.bordered]: bordered,
           [stl.showTools]: title || extend,
         })}
         style={styles?.body}

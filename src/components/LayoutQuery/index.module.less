@@ -5,15 +5,25 @@
   flex-direction: column;
   height: 100%;
 
+  &.bordered {
+    > .head,
+    > .body {
+      border: 1px solid @colorBorderSecondary;
+    }
+  }
+
+  &.rimless {
+    > .head,
+    > .body {
+      padding: 0;
+    }
+  }
+
   .head,
   .body {
     padding: @bizLayoutGap;
     border-radius: @bizLayoutRadius;
     background-color: @colorBgContainer;
-
-    &.bordered {
-      border: 1px solid @colorBorderSecondary;
-    }
   }
 
   .head {

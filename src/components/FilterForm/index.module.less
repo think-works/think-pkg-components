@@ -18,7 +18,7 @@
     background-color: var(--ant-color-fill-tertiary, rgba(0, 0, 0, 0.04));
 
     // 隐藏标签后面的冒号
-    & > label {
+    > label {
       &:after {
         content: "\a0";
       }
@@ -27,7 +27,7 @@
 
   // 输入组件边框和背景
   :global(.@{ant-prefix}-form-item-control-input-content) {
-    & > * {
+    > * {
       // 隐藏边框
       border: none;
       background-color: transparent;
@@ -52,7 +52,7 @@
 
   // 输入组件边框和背景
   :global(.@{ant-prefix}-form-item-control-input-content) {
-    & > * {
+    > * {
       // 撑满筛选项
       width: 100%;
     }
