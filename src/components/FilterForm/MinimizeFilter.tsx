@@ -77,9 +77,11 @@ export type MinimizeFilterProps = FormProps & {
   className?: Argument;
   style?: React.CSSProperties;
   classNames?: {
+    popover?: Argument;
     popoverContent?: Argument;
   };
   styles?: {
+    popover?: React.CSSProperties;
     popoverContent?: React.CSSProperties;
   };
 
@@ -95,6 +97,8 @@ export type MinimizeFilterProps = FormProps & {
   /** 更多筛选项的有效性计数器 */
   moreFilterValidCounter?: (values?: Record<string, any>) => number;
 
+  /** 定制筛选项边框样式 */
+  outlinedItem?: boolean;
   /** 筛选项值变更-防抖毫秒时间间隔(-1 禁止在 onValuesChange 事件中触发 onFilterChange 事件) */
   filterChangeDebounce?: number;
 
@@ -128,6 +132,7 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
     moreFilterItems,
     moreFilterProps,
     moreFilterValidCounter = filterValidCounter,
+    outlinedItem,
     filterChangeDebounce = 500,
     morePrimary,
     moreText,
@@ -299,6 +304,8 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
   const moreAction =
     moreProps === false ? null : (
       <Popover
+        className={cls(classNames?.popover)}
+        style={styles?.popover}
         trigger="click"
         fresh={true}
         destroyTooltipOnHide={false}
@@ -306,7 +313,9 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
         onOpenChange={setOpenPopover}
         content={
           <div
-            className={cls(stl.popoverContent, classNames?.popoverContent)}
+            className={cls(stl.popoverContent, classNames?.popoverContent, {
+              [stl.outlined]: outlinedItem,
+            })}
             style={styles?.popoverContent}
           >
             <StandardFilter
@@ -333,7 +342,9 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
 
   return (
     <Form
-      className={cls(stl.filterForm, stl.minimizeFilter, className)}
+      className={cls(stl.minimizeFilter, className, {
+        [stl.outlined]: outlinedItem,
+      })}
       style={style}
       layout="inline"
       form={form}

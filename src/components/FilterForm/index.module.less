@@ -1,13 +1,106 @@
 @import "@/styles/utils.less";
 
-.filterForm {
-  :global(.@{ant-prefix}-form-item) {
-    margin-right: 0;
+// 定制筛选项边框样式
+.outlinedItem() {
+  // 筛选项边框和背景
+  border-width: var(--ant-line-width, 1px);
+  border-style: var(--ant-line-type, solid);
+  border-color: var(--ant-color-border, #d9d9d9);
+  border-radius: var(--ant-border-radius, 6px);
+  background-color: var(--ant-color-bg-container, #fff);
+
+  // 标签边框和背景
+  :global(.@{ant-prefix}-form-item-label) {
+    border-right-width: var(--ant-line-width, 1px);
+    border-right-style: var(--ant-line-type, solid);
+    border-right-color: var(--ant-color-border, #d9d9d9);
+    padding-left: var(--ant-padding-sm, 12px);
+    background-color: var(--ant-color-fill-tertiary, rgba(0, 0, 0, 0.04));
+
+    // 隐藏标签后面的冒号
+    & > label {
+      &:after {
+        content: "\a0";
+      }
+    }
+  }
+
+  // 输入组件边框和背景
+  :global(.@{ant-prefix}-form-item-control-input-content) {
+    & > * {
+      // 隐藏边框
+      border: none;
+      background-color: transparent;
+    }
 
     // 选择器的样式比较特殊
     :global(.@{ant-prefix}-select) {
-      min-width: 100px;
+      :global(.@{ant-prefix}-select-selector) {
+        // 隐藏边框
+        border: none;
+        background-color: transparent;
+      }
     }
+  }
+}
+
+// 定制筛选项布局样式
+.layoutItem() {
+  // 移除外边距
+  margin-right: 0;
+  margin-bottom: 0;
+
+  // 输入组件边框和背景
+  :global(.@{ant-prefix}-form-item-control-input-content) {
+    & > * {
+      // 撑满筛选项
+      width: 100%;
+    }
+
+    // 选择器的样式比较特殊
+    :global(.@{ant-prefix}-select) {
+      // 避免无选中项时没有宽度
+      min-width: 120px;
+
+      // 单选选择器会被选中项撑开宽度
+      &:global(.@{ant-prefix}-select-single) {
+        :global(.@{ant-prefix}-select-selector) {
+          // 避免选中项过长时挤占标签的空间
+          width: 0;
+        }
+      }
+    }
+  }
+}
+
+.outlined {
+  &.filterItem {
+    .outlinedItem();
+  }
+
+  &.standardFilter,
+  &.minimizeFilter,
+  &.popoverContent {
+    :global(.@{ant-prefix}-form-item) {
+      .outlinedItem();
+
+      // 隐藏边框
+      &.actionItem {
+        border: none;
+        background-color: transparent;
+      }
+    }
+  }
+}
+
+.filterItem {
+  .layoutItem();
+}
+
+.standardFilter,
+.minimizeFilter {
+  :global(.@{ant-prefix}-form-item) {
+    .layoutItem();
   }
 }
 
@@ -23,7 +116,9 @@
   }
 
   .actionCol {
-    text-align: right;
+    .actionSpace {
+      justify-content: flex-end;
+    }
   }
 }
 
@@ -31,63 +126,6 @@
 }
 
 .popoverContent {
-  width: 950px; // 适配两列布局时，四个字标签的时间选择器的宽度
-
-  // 格栅布局
-  :global(.@{ant-prefix}-form-item-control-input-content) {
-    & > * {
-      width: 100%; // 撑满表单项
-    }
-
-    // 选择器的样式比较特殊
-    :global(.@{ant-prefix}-select) {
-      :global(.@{ant-prefix}-select-selector) {
-        width: 0; // 避免选中项过长时挤占标签的空间
-      }
-    }
-  }
-}
-
-.filterItem {
-  // 定制样式
-  &.outlined {
-    // 表单项边框和背景
-    border-width: var(--ant-line-width, 1px);
-    border-style: var(--ant-line-type, solid);
-    border-color: var(--ant-color-border, #d9d9d9);
-    border-radius: var(--ant-border-radius, 6px);
-    background-color: var(--ant-color-bg-container, #fff);
-
-    // 标签边框和背景
-    :global(.@{ant-prefix}-form-item-label) {
-      flex: none;
-      border-right-width: var(--ant-line-width, 1px);
-      border-right-style: var(--ant-line-type, solid);
-      border-right-color: var(--ant-color-border, #d9d9d9);
-      padding-left: calc(var(--ant-padding-sm, 12px) - 1px);
-      background-color: var(--ant-color-fill-tertiary, rgba(0, 0, 0, 0.04));
-    }
-
-    // 输入组件边框和背景
-    :global(.@{ant-prefix}-form-item-control-input-content) {
-      & > * {
-        border: none;
-        background-color: transparent;
-      }
-
-      // 选择器的样式比较特殊
-      :global(.@{ant-prefix}-select) {
-        :global(.@{ant-prefix}-select-selector) {
-          border: none;
-          background-color: transparent;
-        }
-      }
-    }
-
-    // 标签超长截断
-    .label {
-      .ellipsis();
-      max-width: 120px;
-    }
-  }
+  // 两列布局时 四字标签的 日期(含时间)选择器 输入组件的宽度
+  width: 950px;
 }

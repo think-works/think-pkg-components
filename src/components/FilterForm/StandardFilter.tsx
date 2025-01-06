@@ -49,6 +49,8 @@ export type StandardFilterProps = FormProps & {
   /** 筛选项(Form.Item 的 name 仅支持字符串) */
   items?: FilterFormItemType[];
 
+  /** 定制筛选项边框样式 */
+  outlinedItem?: boolean;
   /** 收起时可见的筛选项数量 */
   visibleCount?: number;
   /** 默认展开 */
@@ -93,6 +95,7 @@ export const StandardFilter = (props: StandardFilterProps) => {
     initialValues,
     extend,
     items,
+    outlinedItem,
     visibleCount = 3,
     defaultUnfold,
     itemColSpan,
@@ -198,49 +201,47 @@ export const StandardFilter = (props: StandardFilterProps) => {
         className={cls(stl.actionCol, classNames?.actionCol)}
         style={styles?.actionCol}
       >
-        <Form.Item>
-          <div>
-            <Space>
-              {showUnfold ? (
-                <a onClick={() => setUnfold(!unfold)}>
-                  <Space size={4}>
-                    {unfold ? (
-                      <>
-                        <span>收起</span>
-                        <UpOutlined />
-                      </>
-                    ) : (
-                      <>
-                        <span>展开</span>
-                        <DownOutlined />
-                      </>
-                    )}
-                  </Space>
-                </a>
-              ) : null}
-              {resetText === false ? null : (
-                <Button
-                  type="default"
-                  htmlType="reset"
-                  onClick={handleReset}
-                  {...resetProps}
-                >
-                  {resetText || "重置"}
-                </Button>
-              )}
-              {submitText === false ? null : (
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  onClick={handleSubmit}
-                  {...submitProps}
-                >
-                  {submitText || "查询"}
-                </Button>
-              )}
-              {extend}
-            </Space>
-          </div>
+        <Form.Item className={stl.actionItem}>
+          <Space className={stl.actionSpace}>
+            {showUnfold ? (
+              <a onClick={() => setUnfold(!unfold)}>
+                <Space size={4}>
+                  {unfold ? (
+                    <>
+                      <span>收起</span>
+                      <UpOutlined />
+                    </>
+                  ) : (
+                    <>
+                      <span>展开</span>
+                      <DownOutlined />
+                    </>
+                  )}
+                </Space>
+              </a>
+            ) : null}
+            {resetText === false ? null : (
+              <Button
+                type="default"
+                htmlType="reset"
+                onClick={handleReset}
+                {...resetProps}
+              >
+                {resetText || "重置"}
+              </Button>
+            )}
+            {submitText === false ? null : (
+              <Button
+                type="primary"
+                htmlType="submit"
+                onClick={handleSubmit}
+                {...submitProps}
+              >
+                {submitText || "查询"}
+              </Button>
+            )}
+            {extend}
+          </Space>
         </Form.Item>
       </Col>
     ),
@@ -261,7 +262,9 @@ export const StandardFilter = (props: StandardFilterProps) => {
 
   return (
     <Form
-      className={cls(stl.filterForm, stl.standardFilter, className)}
+      className={cls(stl.standardFilter, className, {
+        [stl.outlined]: outlinedItem,
+      })}
       style={style}
       layout="inline"
       form={form}
