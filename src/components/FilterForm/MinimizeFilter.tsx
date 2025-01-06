@@ -362,6 +362,7 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
   );
 };
 
+/** 筛选项的有效性计数器 */
 MinimizeFilter.filterValidCounter = filterValidCounter;
 
 export default MinimizeFilter;
