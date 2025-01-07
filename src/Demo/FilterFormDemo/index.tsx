@@ -1,28 +1,54 @@
 /* eslint-disable no-console */
-import { DatePicker, Form, Input, Select, Space, Tooltip } from "antd";
+import { Button, Form, Input, Select, Space, Tooltip } from "antd";
 import { useCallback } from "react";
-import { FilterForm } from "@/components";
+import { useSearchParams } from "react-router-dom";
+import { BaseDatePicker, BaseDateRangePicker, FilterForm } from "@/components";
 
-const { RangePicker } = DatePicker;
 const { MinimizeFilter, FilterItem } = FilterForm;
 
 const FilterFormDemo = () => {
+  const [_searchParams, setSearchParams] = useSearchParams();
+
   const handleInitValues = useCallback((values?: Record<string, any>) => {
     console.log("handleInitValues", values);
   }, []);
+
   const handleFilterChange = useCallback((values: Record<string, any>) => {
     console.log("handleFilterChange", values);
   }, []);
+
+  const handleQuery = useCallback(() => {
+    const filter = {
+      Keyword: "Keyword",
+      Type: 1,
+
+      Input: "Input",
+      Select: 1,
+      Single: 1,
+      Multiple: [1, 2],
+      DatePicker: Date.now(),
+      DatePickerTime: Date.now(),
+      RangePicker: [Date.now(), Date.now() + 1000 * 60 * 60 * 24],
+      RangePickerTime: [Date.now(), Date.now() + 1000 * 60 * 60 * 24],
+    };
+
+    setSearchParams({
+      filter: JSON.stringify(filter),
+    });
+    window.location.reload();
+  }, [setSearchParams]);
 
   const getItems = (
     Item: React.ElementType = Form.Item,
     params?: Record<string, any>,
   ) => {
+    const { outlined = false } = params || {};
+
     const items = [
-      <Item key="Input" name="Input" label="Input" {...params}>
+      <Item key="Input" name="Input" label="Input" outlined={outlined}>
         <Input allowClear />
       </Item>,
-      <Item key="Select" name="Select" label="Select" {...params}>
+      <Item key="Select" name="Select" label="Select" outlined={outlined}>
         <Select
           allowClear
           options={[
@@ -35,7 +61,7 @@ const FilterFormDemo = () => {
           ]}
         />
       </Item>,
-      <Item key="Single" name="Single" label="Single" {...params}>
+      <Item key="Single" name="Single" label="Single" outlined={outlined}>
         <Select
           allowClear
           options={[
@@ -44,7 +70,7 @@ const FilterFormDemo = () => {
           ]}
         />
       </Item>,
-      <Item key="Multiple" name="Multiple" label="Multiple" {...params}>
+      <Item key="Multiple" name="Multiple" label="Multiple" outlined={outlined}>
         <Select
           allowClear
           mode="multiple"
@@ -55,28 +81,46 @@ const FilterFormDemo = () => {
           ]}
         />
       </Item>,
-      <Item key="DatePicker" name="DatePicker" label="DatePicker" {...params}>
-        <DatePicker allowClear />
+      <Item
+        key="DatePicker"
+        name="DatePicker"
+        label="DatePicker"
+        outlined={outlined}
+      >
+        <BaseDatePicker allowClear />
       </Item>,
       <Item
         key="DatePickerTime"
         name="DatePickerTime"
         label="DatePickerTime"
-        {...params}
+        outlined={outlined}
       >
-        <DatePicker allowClear showTime />
+        <BaseDatePicker allowClear showTime />
       </Item>,
       <Item
         key="RangePicker"
         name="RangePicker"
         label="RangePicker"
-        {...params}
+        outlined={outlined}
       >
-        <RangePicker allowClear />
+        <BaseDateRangePicker allowClear />
       </Item>,
+    ];
+
+    return items;
+  };
+
+  const getRangePickerTime = (
+    Item: React.ElementType = Form.Item,
+    params?: Record<string, any>,
+  ) => {
+    const { outlined = false } = params || {};
+
+    const item = (
       <Item
         key="RangePickerTime"
         name="RangePickerTime"
+        outlined={outlined}
         label={
           <Tooltip title="超长截断和文字提示，需业务方自行处理。">
             <div
@@ -91,13 +135,12 @@ const FilterFormDemo = () => {
             </div>
           </Tooltip>
         }
-        {...params}
       >
-        <RangePicker allowClear showTime />
-      </Item>,
-    ];
+        <BaseDateRangePicker allowClear showTime />
+      </Item>
+    );
 
-    return items;
+    return item;
   };
 
   return (
@@ -105,23 +148,39 @@ const FilterFormDemo = () => {
       style={{ height: "100%", backgroundColor: "#fff", overflow: "hidden" }}
     >
       <h3>标准表单项</h3>
-      <Space wrap>{getItems(FilterItem)}</Space>
+      <Space wrap>
+        {[...getItems(FilterItem), getRangePickerTime(FilterItem)]}
+      </Space>
       <h3>定制表单项</h3>
-      <Space wrap>{getItems(FilterItem, { outlined: true })}</Space>
+      <Space wrap>
+        {[
+          ...getItems(FilterItem, { outlined: true }),
+          getRangePickerTime(FilterItem, { outlined: true }),
+        ]}
+      </Space>
       <h3>标准筛选表单</h3>
       <FilterForm
         // outlinedItem
-        items={getItems()}
         onInitValues={handleInitValues}
         onFilterChange={handleFilterChange}
+        items={[...getItems(), getRangePickerTime()]}
       />
       <h3>最小化筛选表单</h3>
-      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <Button onClick={handleQuery}>验证表单初始化</Button>
         <MinimizeFilter
           // filterChangeDebounce={-1}
-          moreFilterItems={getItems()}
           onInitValues={handleInitValues}
           onFilterChange={handleFilterChange}
+          moreFilterItems={[
+            ...getItems(),
+            {
+              children: getRangePickerTime(),
+              colProps: {
+                span: 16,
+              },
+            },
+          ]}
           items={[
             <Form.Item key="Keyword" name="Keyword">
               <Input allowClear placeholder="Keyword" />

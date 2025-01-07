@@ -2,14 +2,19 @@ import { DatePicker, DatePickerProps } from "antd";
 import dayjs, { Dayjs, OpUnitType } from "dayjs";
 import { forwardRef, useCallback, useMemo } from "react";
 
+type OfType = OpUnitType | null;
+type ValueType = number | null;
+type DateType = Dayjs | null;
+type DateString = string | string[];
+
 export type BaseDatePickerProps = Omit<
   DatePickerProps,
   "value" | "onChange"
 > & {
-  startOf?: OpUnitType | null;
-  endOf?: OpUnitType | null;
-  value?: number;
-  onChange?: (time: number, timeString: string) => any;
+  startOf?: OfType;
+  endOf?: OfType;
+  value?: ValueType;
+  onChange?: (time: ValueType, timeString: DateString) => any;
 };
 
 /**
@@ -32,7 +37,7 @@ export const BaseDatePicker = forwardRef(function BaseDatePickerCom(
   }, [value]);
 
   const _onChange = useCallback(
-    (time: Dayjs | null, timeString: string | string[]) => {
+    (time: DateType, timeString: DateString) => {
       let ret: any = time;
 
       if (time) {
@@ -46,7 +51,7 @@ export const BaseDatePicker = forwardRef(function BaseDatePickerCom(
       }
 
       if (typeof onChange === "function") {
-        onChange(ret, timeString as string);
+        onChange(ret, timeString);
       }
     },
     [onChange, startOf, endOf],

@@ -4,14 +4,22 @@ import { forwardRef, useCallback, useMemo } from "react";
 
 const { RangePicker } = DatePicker;
 
+type OfType = OpUnitType | null;
+type ValueType = number | null;
+type DateType = Dayjs | null;
+type DateString = [string, string];
+
 export type BaseDateRangePickerProps = Omit<
   GetProps<typeof RangePicker>,
   "value" | "onChange"
 > & {
-  startOf?: (OpUnitType | null)[];
-  endOf?: (OpUnitType | null)[];
-  value?: number[];
-  onChange?: (time: number[], timeString: string[]) => any;
+  startOf?: [OfType, OfType];
+  endOf?: [OfType, OfType];
+  value?: [ValueType, ValueType] | null;
+  onChange?: (
+    time: [ValueType, ValueType] | null,
+    timeString: DateString,
+  ) => any;
 };
 
 /**
@@ -26,8 +34,8 @@ export const BaseDateRangePicker = forwardRef(function BaseDateRangePickerCom(
   const _value = useMemo(() => {
     let ret: any = value;
 
-    if (value) {
-      ret = [];
+    if (value?.length) {
+      ret = [...value];
       value.forEach((val: any, idx: any) => {
         if (val) {
           ret[idx] = dayjs(val);
@@ -39,12 +47,12 @@ export const BaseDateRangePicker = forwardRef(function BaseDateRangePickerCom(
   }, [value]);
 
   const _onChange = useCallback(
-    (times: (Dayjs | null)[] | null, timeStrings: any) => {
+    (times: [DateType, DateType] | null, timeStrings: DateString) => {
       let ret: any = times;
 
-      if (times) {
-        ret = [];
-        times.forEach((time: any, idx: any) => {
+      if (times?.length) {
+        ret = [...times];
+        times.forEach((time, idx) => {
           if (time) {
             if (startOf?.[idx]) {
               ret[idx] = time.startOf(startOf[idx]).valueOf();
