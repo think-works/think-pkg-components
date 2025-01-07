@@ -103,6 +103,7 @@ export class FetchTable extends React.Component<
      * <StrictMode /> 下触发两次符合预期行为
      * https://react.dev/reference/react/StrictMode#fixing-bugs-found-by-double-rendering-in-development
      */
+    clearTimeout(this.queryTimer);
     this.queryTimer = setTimeout(() => {
       this.queryData();
     }, 0);
@@ -159,6 +160,7 @@ export class FetchTable extends React.Component<
     };
 
     // 加载很快时，不显示
+    clearTimeout(this.loadingTimer);
     this.loadingTimer = setTimeout(() => {
       this.setState({
         loading: true,

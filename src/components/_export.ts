@@ -33,7 +33,6 @@ export * from "./LayoutTitle";
 export * from "./LayoutWrapper";
 export * from "./Loading";
 
-export * from "./MacScrollbar";
 export * from "./Portal";
 export * from "./Resizing";
 export * from "./RouteTable";
