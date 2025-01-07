@@ -118,6 +118,7 @@ const FilterFormDemo = () => {
       <h3>最小化筛选表单</h3>
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <MinimizeFilter
+          // filterChangeDebounce={-1}
           moreFilterItems={getItems()}
           onInitValues={handleInitValues}
           onFilterChange={handleFilterChange}

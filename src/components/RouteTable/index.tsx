@@ -1,4 +1,4 @@
-import { isEmpty, isEqual, omit } from "lodash-es";
+import { isEmpty, isEqual, isNumber, isPlainObject, omit } from "lodash-es";
 import React, { JSX, useCallback, useMemo } from "react";
 import {
   Location,
@@ -67,9 +67,21 @@ const parsePageSearch = (search: string) => {
   const query = parseQuery(search);
 
   // 空字符串值认为是 undefined
-  const pageNo = tryParse(query[QUERY_PAGE_KEY] || undefined);
-  const pageSize = tryParse(query[QUERY_SIZE_KEY] || undefined);
-  const filter = tryParse(query[QUERY_FILTER_KEY] || undefined);
+  const pageStr = query[QUERY_PAGE_KEY] || undefined;
+  const sizeStr = query[QUERY_SIZE_KEY] || undefined;
+  const filterStr = query[QUERY_FILTER_KEY] || undefined;
+
+  // 尝试解析字符串为原始值
+  const pageVal = tryParse(pageStr) ?? undefined;
+  const sizeVal = tryParse(sizeStr) ?? undefined;
+  const filterVal = tryParse(filterStr) ?? undefined;
+
+  // 检查原始值的格式
+  const pageNo = isNumber(pageVal) ? pageVal : undefined;
+  const pageSize = isNumber(sizeVal) ? sizeVal : undefined;
+  const filter = isPlainObject(filterVal)
+    ? (filterVal as Record<string, any>)
+    : undefined;
 
   return {
     pageNo,

@@ -194,10 +194,18 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
 
   // 最小化表单-组件实例化时触发一次初始化
   useEffect(() => {
-    refOnInitValues.current?.(refInitValues.current);
-    // 初始化 更多表单-筛选项值
-    setMoreFilterValues(refInitValues.current);
+    const initVal = refInitValues.current;
+    refOnInitValues.current?.(initVal);
   }, []);
+
+  // 最小化表单-初始化 更多表单-筛选项值
+  useEffect(() => {
+    const initVal = refInitValues.current;
+    const moreInitVal = moreFilterNames?.length
+      ? pick(initVal, moreFilterNames)
+      : {};
+    setMoreFilterValues(moreInitVal);
+  }, [moreFilterNames]);
 
   // 最小化表单-气泡卡片 开启时重置 更多表单
   useEffect(() => {

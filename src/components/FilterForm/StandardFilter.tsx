@@ -128,7 +128,8 @@ export const StandardFilter = (props: StandardFilterProps) => {
 
   // 组件实例化时触发一次初始化
   useEffect(() => {
-    refOnInitValues.current?.(refInitValues.current);
+    const initVal = refInitValues.current;
+    refOnInitValues.current?.(initVal);
   }, []);
 
   // 点击重置按钮
