@@ -10,7 +10,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import "./index.less";
+import stl from "./index.module.less";
 import TreeNode from "./node";
 import {
   BaseTreeIndexItem,
@@ -822,7 +822,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
       onDragOver={(e) => onDragOver(e, kRootNode)}
       onDrop={(e) => onDrop(e, kRootNode)}
       className={classNames([
-        "x-tree-group",
+        stl["x-tree-group"],
         props.className,
         { "drag-over": dragTargetKey === kRootNode },
       ])}
@@ -833,7 +833,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
     >
       <div
         ref={wrapperRef}
-        className="x-tree-group-wrapper"
+        className={stl["x-tree-group-wrapper"]}
         style={{ height: props.maxHeight }}
       >
         {list.map((item) => {

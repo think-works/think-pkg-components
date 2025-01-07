@@ -2,6 +2,7 @@ import { Checkbox, Dropdown, Menu } from "antd";
 import classNames from "classnames";
 import { useMemo, useState } from "react";
 import { CaretDownOutlined, CaretRightOutlined } from "@ant-design/icons";
+import stl from "./index.module.less";
 import {
   BaseTreeIndexItem,
   BaseTreeItemContext,
@@ -109,7 +110,7 @@ const TreeNode = <BaseNode extends BaseTreeNode>(
     if (innerMenu) {
       return (
         <Menu
-          className="x-tree-node__dropdown"
+          className={stl["x-tree-node__dropdown"]}
           subMenuCloseDelay={0.1}
           subMenuOpenDelay={0.2}
           onClick={() => {
@@ -169,16 +170,19 @@ const TreeNode = <BaseNode extends BaseTreeNode>(
     return (
       <div
         {...props.dropAttrs}
-        className={classNames("x-tree-node", {
-          "drag-over": props.dragHighlight,
+        className={classNames(stl["x-tree-node"], {
+          [stl["drag-over"]]: props.dragHighlight,
           context: contextMenuOpen,
         })}
         // style={{ paddingLeft: 16 * (props.data.deep - 1) }}
       >
-        <div className="x-tree-indent" style={{ width: 16 * (data.deep - 1) }}>
+        <div
+          className={stl["x-tree-indent"]}
+          style={{ width: 16 * (data.deep - 1) }}
+        >
           {props.showIndentBorder &&
             Array.from({ length: data.deep - 1 }).map((_, index) => {
-              return <div key={index} className="x-tree-indent-unit" />;
+              return <div key={index} className={stl["x-tree-indent-unit"]} />;
             })}
         </div>
         <div
@@ -186,17 +190,17 @@ const TreeNode = <BaseNode extends BaseTreeNode>(
           onMouseEnter={() => setHover(true)}
           title={data?.node?.name?.toString()}
           className={classNames({
-            "x-tree-item": true,
+            [stl["x-tree-item"]]: true,
             active: data.key === props.activeKey,
             search: data.searched,
           })}
           onClick={(e) => onClick(e)}
         >
-          <div className="x-tree-item-icon" onClick={onExpanded}>
+          <div className={stl["x-tree-item-icon"]} onClick={onExpanded}>
             {renderIcon()}
           </div>
           {props.checkable && (
-            <div className="x-tree-item-checkbox">
+            <div className={stl["x-tree-item-checkbox"]}>
               <Checkbox
                 disabled={data.disabled}
                 indeterminate={data.indeterminate}
@@ -207,7 +211,7 @@ const TreeNode = <BaseNode extends BaseTreeNode>(
             </div>
           )}
           <div
-            className="x-tree-item-content"
+            className={stl["x-tree-item-content"]}
             onClick={(e) => {
               if (props.disabledNodeClick) {
                 e.stopPropagation();
