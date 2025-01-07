@@ -1,3 +1,4 @@
+import { Button } from "antd";
 import { useMemo, useState } from "react";
 import FilterTable from "@/components/FilterTable";
 import { RouteTableParams, RouteTableProps } from "@/components/RouteTable";
@@ -47,13 +48,15 @@ const Result = (props: ResultProps) => {
 
   return (
     <FilterTable
-      bordered
+      sticky
+      stickyPagination
       size="small"
       rowKey="testFeatureId"
       scroll={{ x: "max-content" }}
       columns={columns}
       filter={filter}
       fetchData={fetchData}
+      extend={<Button>扩展按钮</Button>}
     />
   );
 };

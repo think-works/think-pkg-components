@@ -1,7 +1,6 @@
 @import "@/styles/utils.less";
 
 .baseTable {
-  position: relative;
   .table {
     :global(.@{ant-prefix}-table) {
       :global(.@{ant-prefix}-table-thead) {
@@ -23,9 +22,35 @@
       color: inherit;
     }
   }
-  .extend {
-    position: absolute;
-    left: 0;
-    bottom: 16px;
+
+  .pagination {
+    &.extend {
+      :global(.@{ant-prefix}-pagination-total-text) {
+        flex: auto;
+      }
+
+      .total {
+        display: flex;
+        justify-content: space-between;
+
+        .extend,
+        .count {
+          color: inherit; // 占位
+        }
+      }
+    }
+
+    &.sticky {
+      position: sticky;
+      bottom: 0;
+      z-index: 2;
+      margin: 0;
+      padding: var(--ant-margin, 16px)
+        var(--ant-table-cell-padding-inline-md, 8px);
+      border-top-width: var(--ant-line-width, 1px);
+      border-top-style: var(--ant-line-type, solid);
+      border-top-color: var(--ant-table-border-color, #f0f0f0);
+      background-color: var(--ant-color-bg-container, #fff);
+    }
   }
 }

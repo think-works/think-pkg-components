@@ -42,6 +42,8 @@ export type BaseTableProps<RecordType = any> = Omit<
   columns?: BaseTableColumn<RecordType>[];
   /** 表格左下角扩展 */
   extend?: React.ReactNode;
+  /** 粘性分页 */
+  stickyPagination?: boolean;
   /** 透传表格属性 */
   tableProps?: Record<string, any>;
 };
@@ -53,8 +55,15 @@ export const BaseTable = forwardRef(function BaseTableCom(
   props: BaseTableProps,
   ref: ForwardedRef<Reference>,
 ) {
-  const { className, columns, pagination, extend, tableProps, ...rest } =
-    props || {};
+  const {
+    className,
+    columns,
+    pagination,
+    extend,
+    tableProps,
+    stickyPagination,
+    ...rest
+  } = props || {};
 
   const cols = useMemo(
     () =>
@@ -188,16 +197,23 @@ export const BaseTable = forwardRef(function BaseTableCom(
           isBoolean(pagination)
             ? pagination
             : {
-                showTotal: (total) => `共 ${total} 条`,
+                className: cls(stl.pagination, {
+                  [stl.extend]: extend,
+                  [stl.sticky]: stickyPagination,
+                }),
                 showSizeChanger: true,
-                // hideOnSinglePage: true,
+                showTotal: (total) => (
+                  <div className={stl.total}>
+                    <div className={stl.extend}>{extend}</div>
+                    <div className={stl.count}>共 {total} 条</div>
+                  </div>
+                ),
                 ...(pagination || {}),
               }
         }
         {...rest}
         {...(tableProps || {})}
       />
-      {extend ? <div className={stl.extend}>{extend}</div> : null}
     </div>
   );
 });
