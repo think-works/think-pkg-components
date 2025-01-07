@@ -824,7 +824,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
       className={classNames([
         stl["x-tree-group"],
         props.className,
-        { "drag-over": dragTargetKey === kRootNode },
+        { [stl["drag-over"]]: dragTargetKey === kRootNode },
       ])}
       style={{
         height: props.maxHeight ? "auto" : 0,

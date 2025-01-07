@@ -1,6 +1,6 @@
 {
   "name": "@think/components",
-  "version": "2.2.72",
+  "version": "2.2.74",
   "description": "基础组件库",
   "type": "module",
   "main": "./dist/components.cjs",
@@ -29,7 +29,7 @@
     "build:watch": "vite build -w",
     "prepare": "husky",
     "version": "npm install && npm run build && git add .",
-    "postversion": "git push && git push --tags",
+    "postversion": "git push --follow-tags --set-upstream origin $(git branch --show-current)",
     "release": "npm version ${npm_package_version%%-*} --allow-same-version && npm publish",
     "release:major": "npm version major && npm publish",
     "release:minor": "npm version minor && npm publish",
