@@ -172,7 +172,7 @@ const TreeNode = <BaseNode extends BaseTreeNode>(
         {...props.dropAttrs}
         className={classNames(stl["x-tree-node"], {
           [stl["drag-over"]]: props.dragHighlight,
-          context: contextMenuOpen,
+          [stl["context"]]: contextMenuOpen,
         })}
         // style={{ paddingLeft: 16 * (props.data.deep - 1) }}
       >
@@ -191,8 +191,8 @@ const TreeNode = <BaseNode extends BaseTreeNode>(
           title={data?.node?.name?.toString()}
           className={classNames({
             [stl["x-tree-item"]]: true,
-            active: data.key === props.activeKey,
-            search: data.searched,
+            [stl["active"]]: data.key === props.activeKey,
+            [stl["search"]]: data.searched,
           })}
           onClick={(e) => onClick(e)}
         >
