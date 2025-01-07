@@ -42,6 +42,13 @@ const Result = (props: ResultProps) => {
         title: "名称",
         dataIndex: "name",
       },
+      {
+        title: "很长的行",
+        dataIndex: "long",
+        render() {
+          return "long".repeat(100);
+        },
+      },
     ],
     [],
   );

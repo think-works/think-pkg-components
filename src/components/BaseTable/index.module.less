@@ -53,4 +53,11 @@
       background-color: var(--ant-color-bg-container, #fff);
     }
   }
+
+  // 避免表格横向滚动与粘性表头同时使用时出现双重滚动条
+  // https://github.com/ant-design/ant-design/issues/33762
+  // https://github.com/ant-design/ant-design/issues/30868
+  :global(.@{ant-prefix}-table-sticky-scroll) {
+    display: none;
+  }
 }
