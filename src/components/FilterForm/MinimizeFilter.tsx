@@ -102,8 +102,6 @@ export type MinimizeFilterProps = FormProps & {
   /** 筛选项值变更-防抖毫秒时间间隔(-1 禁止在 onValuesChange 事件中触发 onFilterChange 事件) */
   filterChangeDebounce?: number;
 
-  /** 更多按钮为主按钮 */
-  morePrimary?: boolean;
   /** 更多按钮文案 */
   moreText?: React.ReactNode;
   /** 更多按钮属性(false 不显示更多按钮) */
@@ -134,7 +132,6 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
     moreFilterValidCounter = filterValidCounter,
     outlinedItem = true,
     filterChangeDebounce = 200,
-    morePrimary,
     moreText,
     moreProps,
     onInitValues,
@@ -299,15 +296,6 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
     (items?.length ? "更多" : "") +
       "筛选" +
       (moreButtonActive ? ` (${moreFilterValidCount})` : "");
-  const moreButtonProps = Object.assign(
-    morePrimary
-      ? {
-          ghost: false,
-          type: "primary" as const,
-        }
-      : {},
-    moreProps,
-  );
 
   const moreAction =
     moreProps === false ? null : (
@@ -328,10 +316,11 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
           >
             <StandardFilter
               submitText="筛选"
-              itemColSpan={12}
+              itemColSpan={12} // 两列布局
+              initialValues={{}} // 会在打开气泡卡片时，手动初始化更多表单
+              visibleCount={Number.MAX_SAFE_INTEGER} // 不显示展开收起
               items={moreItems}
               form={moreFilterForm}
-              initialValues={{}} // 会在打开气泡卡片时，手动初始化更多表单
               onFilterChange={handleMoreFilterChange}
               {...restMoreFilter}
             />
@@ -342,7 +331,7 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
           icon={<FilterOutlined />}
           ghost={moreButtonActive}
           type={moreButtonActive ? "primary" : "default"}
-          {...moreButtonProps}
+          {...moreProps}
         >
           {moreButtonText}
         </Button>
