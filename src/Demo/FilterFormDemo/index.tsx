@@ -125,7 +125,7 @@ const FilterFormDemo = () => {
           <Tooltip title="超长截断和文字提示，需业务方自行处理。">
             <div
               style={{
-                maxWidth: 80,
+                maxWidth: 70,
                 overflow: "hidden",
                 textOverflow: "ellipsis",
                 whiteSpace: "nowrap",
