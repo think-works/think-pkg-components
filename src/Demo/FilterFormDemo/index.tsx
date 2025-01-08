@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { Button, Form, Input, Select, Space, Tooltip } from "antd";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { BaseDatePicker, BaseDateRangePicker, FilterForm } from "@/components";
 
@@ -8,12 +8,16 @@ const { MinimizeFilter, FilterItem } = FilterForm;
 
 const FilterFormDemo = () => {
   const [_searchParams, setSearchParams] = useSearchParams();
+  const [filter, setFilter] = useState<Record<string, any>>();
+
+  console.log("filter", filter);
 
   const handleInitValues = useCallback((values?: Record<string, any>) => {
     console.log("handleInitValues", values);
   }, []);
 
   const handleFilterChange = useCallback((values: Record<string, any>) => {
+    setFilter(values);
     console.log("handleFilterChange", values);
   }, []);
 
@@ -42,13 +46,11 @@ const FilterFormDemo = () => {
     Item: React.ElementType = Form.Item,
     params?: Record<string, any>,
   ) => {
-    const { outlined = false } = params || {};
-
     const items = [
-      <Item key="Input" name="Input" label="Input" outlined={outlined}>
+      <Item key="Input" name="Input" label="Input" {...params}>
         <Input allowClear />
       </Item>,
-      <Item key="Select" name="Select" label="Select" outlined={outlined}>
+      <Item key="Select" name="Select" label="Select" {...params}>
         <Select
           allowClear
           options={[
@@ -61,7 +63,7 @@ const FilterFormDemo = () => {
           ]}
         />
       </Item>,
-      <Item key="Single" name="Single" label="Single" outlined={outlined}>
+      <Item key="Single" name="Single" label="Single" {...params}>
         <Select
           allowClear
           options={[
@@ -70,7 +72,7 @@ const FilterFormDemo = () => {
           ]}
         />
       </Item>,
-      <Item key="Multiple" name="Multiple" label="Multiple" outlined={outlined}>
+      <Item key="Multiple" name="Multiple" label="Multiple" {...params}>
         <Select
           allowClear
           mode="multiple"
@@ -81,19 +83,14 @@ const FilterFormDemo = () => {
           ]}
         />
       </Item>,
-      <Item
-        key="DatePicker"
-        name="DatePicker"
-        label="DatePicker"
-        outlined={outlined}
-      >
+      <Item key="DatePicker" name="DatePicker" label="DatePicker" {...params}>
         <BaseDatePicker allowClear />
       </Item>,
       <Item
         key="DatePickerTime"
         name="DatePickerTime"
         label="DatePickerTime"
-        outlined={outlined}
+        {...params}
       >
         <BaseDatePicker allowClear showTime />
       </Item>,
@@ -101,7 +98,7 @@ const FilterFormDemo = () => {
         key="RangePicker"
         name="RangePicker"
         label="RangePicker"
-        outlined={outlined}
+        {...params}
       >
         <BaseDateRangePicker allowClear />
       </Item>,
@@ -114,13 +111,10 @@ const FilterFormDemo = () => {
     Item: React.ElementType = Form.Item,
     params?: Record<string, any>,
   ) => {
-    const { outlined = false } = params || {};
-
     const item = (
       <Item
         key="RangePickerTime"
         name="RangePickerTime"
-        outlined={outlined}
         label={
           <Tooltip title="超长截断和文字提示，需业务方自行处理。">
             <div
@@ -135,6 +129,7 @@ const FilterFormDemo = () => {
             </div>
           </Tooltip>
         }
+        {...params}
       >
         <BaseDateRangePicker allowClear showTime />
       </Item>

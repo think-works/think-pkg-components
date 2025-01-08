@@ -20,6 +20,7 @@ import {
 import { FilterOutlined } from "@ant-design/icons";
 import { types } from "@/components";
 import { useDebounce } from "@/hooks";
+import { jsonTryParse, jsonTryStringify } from "@/utils/tools";
 import RouteTable from "../RouteTable";
 import stl from "./index.module.less";
 import StandardFilter, { StandardFilterProps } from "./StandardFilter";
@@ -168,14 +169,20 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
     [moreItems],
   );
 
-  // 更多表单-筛选项值的有效性计数器
-  const moreFilterValidCount = useMemo(
-    () =>
-      moreFilterValidCounter(moreFilterValues, {
-        validKeys: moreFilterNames,
-      }),
-    [moreFilterNames, moreFilterValidCounter, moreFilterValues],
+  // 更多表单-筛选项名-字符串化防止表单项不稳定
+  const moreFilterNamesStr = useMemo(
+    () => jsonTryStringify(moreFilterNames),
+    [moreFilterNames],
   );
+
+  // 更多表单-筛选项值的有效性计数器
+  const moreFilterValidCount = useMemo(() => {
+    const names = jsonTryParse(moreFilterNamesStr);
+    const count = moreFilterValidCounter(moreFilterValues, {
+      validKeys: names,
+    });
+    return count;
+  }, [moreFilterNamesStr, moreFilterValidCounter, moreFilterValues]);
 
   // 最小化表单-气泡卡片
   const [openPopover, setOpenPopover] = useState(false);
@@ -198,11 +205,10 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
   // 最小化表单-初始化 更多表单-筛选项值
   useEffect(() => {
     const initVal = refInitValues.current;
-    const moreInitVal = moreFilterNames?.length
-      ? pick(initVal, moreFilterNames)
-      : {};
+    const names = jsonTryParse(moreFilterNamesStr);
+    const moreInitVal = names?.length ? pick(initVal, names) : {};
     setMoreFilterValues(moreInitVal);
-  }, [moreFilterNames]);
+  }, [moreFilterNamesStr]);
 
   // 最小化表单-气泡卡片 开启时重置 更多表单
   useEffect(() => {

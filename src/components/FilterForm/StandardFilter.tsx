@@ -1,5 +1,6 @@
 import {
   Button,
+  ButtonProps,
   Col,
   ColProps,
   Form,
@@ -8,7 +9,6 @@ import {
   Row,
   Space,
 } from "antd";
-import { ButtonProps } from "antd/lib";
 import cls, { Argument } from "classnames";
 import React, {
   isValidElement,

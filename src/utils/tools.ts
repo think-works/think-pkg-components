@@ -92,6 +92,44 @@ export const normalizeObject = (
 
 // #endregion
 
+// #region JSON 序列化
+
+/**
+ * 尝试 JSON 序列化
+ */
+export const jsonTryStringify = <T = any>(value?: T, dftValue?: string) => {
+  let ret: string | undefined = dftValue;
+
+  if (value) {
+    try {
+      ret = JSON.stringify(value);
+    } catch {
+      // ignore error
+    }
+  }
+
+  return ret;
+};
+
+/**
+ * 尝试 JSON 反序列化
+ */
+export const jsonTryParse = <T = any>(value?: string, dftValue?: T) => {
+  let ret: T | undefined = dftValue;
+
+  if (value) {
+    try {
+      ret = JSON.parse(value);
+    } catch {
+      // ignore error
+    }
+  }
+
+  return ret;
+};
+
+// #endregion
+
 // #region 解析查询参数
 
 /**

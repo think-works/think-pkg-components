@@ -6,7 +6,13 @@ import {
   useLocation,
   useNavigate,
 } from "react-router";
-import { normalizeObject, parseQuery, stringifyQuery } from "@/utils/tools";
+import {
+  jsonTryParse,
+  jsonTryStringify,
+  normalizeObject,
+  parseQuery,
+  stringifyQuery,
+} from "@/utils/tools";
 import { BaseTableDefaultPageSize } from "../BaseTable";
 import FetchTable, {
   FetchTableData,
@@ -19,32 +25,6 @@ import { FilterTableParams } from "../FilterTable";
 const QUERY_PAGE_KEY = "pageNo";
 const QUERY_SIZE_KEY = "pageSize";
 const QUERY_FILTER_KEY = "filter";
-
-const tryParse = (value?: string): any => {
-  if (value) {
-    let val = value;
-    try {
-      val = JSON.parse(val);
-    } catch {
-      // ignore error
-    }
-    return val;
-  }
-  return value;
-};
-
-const tryStringify = (value?: string) => {
-  if (value) {
-    let val = value;
-    try {
-      val = JSON.stringify(val);
-    } catch {
-      // ignore error
-    }
-    return val;
-  }
-  return value;
-};
 
 /**
  * 清理查询参数中的分页查询参数
@@ -72,9 +52,9 @@ const parsePageSearch = (search: string) => {
   const filterStr = query[QUERY_FILTER_KEY] || undefined;
 
   // 尝试解析字符串为原始值
-  const pageVal = tryParse(pageStr) ?? undefined;
-  const sizeVal = tryParse(sizeStr) ?? undefined;
-  const filterVal = tryParse(filterStr) ?? undefined;
+  const pageVal = jsonTryParse(pageStr) ?? undefined;
+  const sizeVal = jsonTryParse(sizeStr) ?? undefined;
+  const filterVal = jsonTryParse(filterStr) ?? undefined;
 
   // 检查原始值的格式
   const pageNo = isNumber(pageVal) ? pageVal : undefined;
@@ -98,7 +78,7 @@ const updatePageSearch = (search: string, diff: Record<string, any>) => {
 
   const _diff: Record<string, any> = {};
   Object.keys(diff).forEach((key) => {
-    _diff[key] = tryStringify(diff[key]);
+    _diff[key] = jsonTryStringify(diff[key]);
   });
 
   return stringifyQuery(
