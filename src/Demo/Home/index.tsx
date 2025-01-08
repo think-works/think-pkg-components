@@ -1,6 +1,6 @@
 import { routes } from "../router";
 
-const DragContainerDemo = () => {
+const Home = () => {
   return (
     <ul>
       {routes.map(({ path }) => (
@@ -12,4 +12,4 @@ const DragContainerDemo = () => {
   );
 };
 
-export default DragContainerDemo;
+export default Home;

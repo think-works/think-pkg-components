@@ -130,20 +130,22 @@ export const StandardFilter = (props: StandardFilterProps) => {
   useEffect(() => {
     const initVal = refInitValues.current;
     refOnInitValues.current?.(initVal);
-  }, []);
+    form.setFieldsValue(initVal || {}); // 不使用 initialValues
+  }, [form]);
 
   // 点击重置按钮
   const handleReset = useCallback(() => {
-    const values = {};
+    form.resetFields(); // 清空表单
+    const values = form.getFieldsValue();
 
     onFilterChange?.(values, "reset");
     onReset?.(values);
-  }, [onFilterChange, onReset]);
+  }, [form, onFilterChange, onReset]);
 
   // 点击查询按钮
   const handleSubmit = useCallback(() => {
-    const formValues = form.getFieldsValue();
-    const values = { ...(formValues || {}) };
+    let values = form.getFieldsValue();
+    values = Object.assign({}, values); // 浅层克隆
 
     onFilterChange?.(values, "submit");
     onSubmit?.(values);
@@ -224,7 +226,7 @@ export const StandardFilter = (props: StandardFilterProps) => {
             {resetText === false ? null : (
               <Button
                 type="default"
-                htmlType="reset"
+                htmlType="button"
                 onClick={handleReset}
                 {...resetProps}
               >

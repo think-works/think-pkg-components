@@ -200,7 +200,8 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
   useEffect(() => {
     const initVal = refInitValues.current;
     refOnInitValues.current?.(initVal);
-  }, []);
+    form.setFieldsValue(initVal || {}); // 不使用 initialValues
+  }, [form]);
 
   // 最小化表单-初始化 更多表单-筛选项值
   useEffect(() => {
@@ -219,25 +220,23 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
     }
   }, [moreFilterForm, moreFilterValues, openPopover]);
 
-  // 最小化表单-获取合并后的筛选项值
-  const getMergedValues = useCallback(
-    (moreValues?: Record<string, any>) => {
-      const formValues = form.getFieldsValue();
-      // 合并 最小化表单 和 更多表单 的筛选项值
-      return { ...(formValues || {}), ...(moreValues || {}) };
-    },
-    [form],
-  );
-
   // 最小化表单-触发筛选项变更
   const handleFilterChange = useCallback<
     NonNullable<StandardFilterProps["onFilterChange"]>
   >(
     (moreValues, action) => {
-      const mergedValues = getMergedValues(moreValues);
-      onFilterChange?.(mergedValues, action);
+      // 点击重置按钮
+      if (action === "reset") {
+        form.resetFields(); // 清空表单
+      }
+
+      // 合并 最小化表单 和 更多表单 的筛选项值
+      let values = form.getFieldsValue();
+      values = Object.assign({}, values, moreValues); // 浅层克隆
+
+      onFilterChange?.(values, action);
     },
-    [getMergedValues, onFilterChange],
+    [form, onFilterChange],
   );
 
   // 最小化表单-触发筛选项变更-防抖
@@ -352,7 +351,6 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
       style={style}
       layout="inline"
       form={form}
-      initialValues={refInitValues.current}
       onValuesChange={handleValuesChange}
       {...rest}
     >

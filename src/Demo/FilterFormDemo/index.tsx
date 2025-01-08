@@ -8,9 +8,7 @@ const { MinimizeFilter, FilterItem } = FilterForm;
 
 const FilterFormDemo = () => {
   const [_searchParams, setSearchParams] = useSearchParams();
-  const [filter, setFilter] = useState<Record<string, any>>();
-
-  console.log("filter", filter);
+  const [_filter, setFilter] = useState<Record<string, any>>();
 
   const handleInitValues = useCallback((values?: Record<string, any>) => {
     console.log("handleInitValues", values);
