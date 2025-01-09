@@ -10,20 +10,13 @@
   .title {
     display: block;
     line-height: 1;
-    padding-right: 16px;
-    margin-right: 16px;
-    border-right: 1px solid @colorBorderSecondary;
   }
 
   .extend {
   }
 
   > .tabs {
-    > .tabBar {
-      padding-left: @bizLayoutGap;
-      padding-right: @bizLayoutGap;
-    }
-
+    > .tabBar,
     > :global(.@{ant-prefix}-tabs-nav) {
       padding-left: @bizLayoutGap;
       padding-right: @bizLayoutGap;
@@ -39,6 +32,35 @@
             padding-right: @bizLayoutGap;
             padding-bottom: @bizLayoutGap;
           }
+        }
+      }
+    }
+  }
+
+  &.top,
+  &.bottom {
+    > .tabs {
+      > .tabBar,
+      > :global(.@{ant-prefix}-tabs-nav) {
+        .title {
+          padding-right: 16px;
+          margin-right: 16px;
+          border-right: 1px solid @colorBorderSecondary;
+        }
+      }
+    }
+  }
+
+  &.left,
+  &.right {
+    > .tabs {
+      > .tabBar,
+      > :global(.@{ant-prefix}-tabs-nav) {
+        padding-left: 0;
+        padding-right: 0;
+
+        .title {
+          margin: 8px 0;
         }
       }
     }

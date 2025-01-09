@@ -6,30 +6,12 @@
   flex-direction: column;
   height: 100%;
 
-  > :global(.@{ant-prefix}-tabs-nav) {
-    flex: none;
-  }
-
-  > :global(.@{ant-prefix}-tabs-content-holder) {
-    flex: auto;
-    display: flex;
-    flex-direction: column;
-
-    > :global(.@{ant-prefix}-tabs-content) {
-      flex: auto;
-      display: flex;
-      flex-direction: column;
-
-      > :global(.@{ant-prefix}-tabs-tabpane) {
-        flex: auto;
-      }
-    }
-  }
-
   > .tabBar {
     display: flex;
     align-items: center;
-    padding: @bizLayoutGap 0;
+    padding: 0;
+    min-height: @bizLayoutTitle;
+    line-height: @bizLayoutTitle;
 
     > .extraLeft,
     > .extraRight {
@@ -51,12 +33,44 @@
     }
   }
 
+  > :global(.@{ant-prefix}-tabs-nav) {
+    flex: none;
+
+    > :global(.@{ant-prefix}-tabs-nav-wrap) {
+      > :global(.@{ant-prefix}-tabs-nav-list) {
+        > :global(.@{ant-prefix}-tabs-tab) {
+          padding: 0;
+          min-height: @bizLayoutTitle;
+          line-height: @bizLayoutTitle;
+        }
+      }
+    }
+  }
+
+  > :global(.@{ant-prefix}-tabs-content-holder) {
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+
+    > :global(.@{ant-prefix}-tabs-content) {
+      flex: auto;
+      display: flex;
+      flex-direction: column;
+
+      > :global(.@{ant-prefix}-tabs-tabpane) {
+        flex: auto;
+      }
+    }
+  }
+
   &.top {
+    > .tabBar,
     > :global(.@{ant-prefix}-tabs-nav) {
       margin-bottom: @bizLayoutGap;
     }
   }
   &.bottom {
+    > .tabBar,
     > :global(.@{ant-prefix}-tabs-nav) {
       margin-top: @bizLayoutGap;
     }
@@ -67,7 +81,17 @@
 
     > .tabBar {
       flex-direction: column;
-      padding: 0 @bizLayoutGap;
+      margin: 0 @bizLayoutGap;
+    }
+
+    > :global(.@{ant-prefix}-tabs-nav) {
+      > :global(.@{ant-prefix}-tabs-nav-wrap) {
+        > :global(.@{ant-prefix}-tabs-nav-list) {
+          > :global(.@{ant-prefix}-tabs-tab) {
+            padding: 0 @bizLayoutGap;
+          }
+        }
+      }
     }
 
     > :global(.@{ant-prefix}-tabs-content-holder) {
@@ -80,10 +104,7 @@
   }
 
   &.cling {
-    > .tabBar {
-      padding-bottom: 0;
-    }
-
+    > .tabBar,
     > :global(.@{ant-prefix}-tabs-nav) {
       margin-bottom: 0;
     }

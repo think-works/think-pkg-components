@@ -38,6 +38,7 @@ export const LayoutTabs = (props: LayoutTabsProps) => {
     styles,
     size = "middle",
     titleSize = "middle",
+    tabPosition = "top",
     rimless,
     title,
     extend,
@@ -69,15 +70,21 @@ export const LayoutTabs = (props: LayoutTabsProps) => {
 
   return (
     <div
-      className={cls(stl.layoutTabs, className, {
-        [stl.rimless]: rimless,
-      })}
+      className={cls(
+        stl.layoutTabs,
+        className,
+        tabPosition ? stl[tabPosition] : null,
+        {
+          [stl.rimless]: rimless,
+        },
+      )}
       style={style}
     >
       <FlexTabs
         className={cls(stl.tabs, classNames?.tabs)}
         style={styles?.tabs}
         size={size}
+        tabPosition={tabPosition}
         tabBarExtraContent={extraContent}
         classNames={{ tabBar: stl.tabBar }}
         {...rest}

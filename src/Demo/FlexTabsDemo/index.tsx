@@ -4,7 +4,7 @@ import { FlexTabs, LayoutTabs, LayoutTabsProps } from "@/components";
 const FlexTabsDemo = () => {
   const flexTabsProps: LayoutTabsProps = {
     // size: "small",
-    // tabPosition: "top",
+    // tabPosition: "left",
     // cling: true,
     defaultActiveKey: "tab-3",
     items: [
