@@ -303,7 +303,7 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
       (moreButtonActive ? ` (${moreFilterValidCount})` : "");
 
   const moreAction =
-    moreProps === false ? null : (
+    moreProps === false || !moreItems?.length ? null : (
       <Popover
         className={cls(classNames?.popover)}
         style={styles?.popover}
