@@ -1,9 +1,55 @@
 // #region 通用辅助函数
+import { LiteralUnion } from "./types";
 
 /**
  * 类型检查
  */
-export const isType = (val: any, type: string): boolean => {
+export const isType = (
+  val: any,
+  type: LiteralUnion<
+    | "Undefined"
+    | "Null"
+    | "Boolean"
+    | "Number"
+    | "String"
+    | "Object"
+    | "Array"
+    | "Function"
+    | "Error"
+    | "Date"
+    | "RegExp"
+    | "Promise"
+    | "Map"
+    | "Set"
+    | "WeakMap"
+    | "WeakSet"
+    | "BigInt"
+    | "DataView"
+    | "ArrayBuffer"
+    | "SharedArrayBuffer"
+    | "Int8Array"
+    | "Uint8Array"
+    | "Uint8ClampedArray"
+    | "Int16Array"
+    | "Uint16Array"
+    | "Int32Array"
+    | "Uint32Array"
+    | "Float16Array"
+    | "Float32Array"
+    | "Float64Array"
+    | "BigInt64Array"
+    | "BigUint64Array"
+    | "JSON"
+    | "Math"
+    | "Intl"
+    | "Symbol"
+    | "Proxy"
+    | "Reflect"
+    | "Atomics"
+    | "WebAssembly"
+    | "GeneratorFunction"
+  >,
+): boolean => {
   return Object.prototype.toString.call(val) === `[object ${type}]`;
 };
 
@@ -11,7 +57,7 @@ export const isType = (val: any, type: string): boolean => {
  * 空白字符串检查
  */
 export const isBlank = (
-  text: any,
+  text: string | null | undefined,
   options?: {
     detectEmpty?: boolean;
     detectSpace?: boolean;
@@ -246,13 +292,13 @@ export const queryStorage = <T = any>(
     session?: boolean;
     jsonVal?: boolean;
   },
-): T | void => {
+) => {
   const { session = false, jsonVal = false } = options || {};
   const storage = session ? sessionStorage : localStorage;
 
-  let _val: any = storage.getItem(key);
+  let _val = storage.getItem(key);
 
-  if (jsonVal && _val !== undefined && _val !== "") {
+  if (jsonVal && _val !== undefined && _val !== null && _val !== "") {
     try {
       // 尝试 JSON 反序列化
       _val = JSON.parse(_val);
@@ -261,7 +307,7 @@ export const queryStorage = <T = any>(
     }
   }
 
-  return _val;
+  return _val as T;
 };
 
 /**
@@ -274,13 +320,13 @@ export const updateStorage = <T = any>(
     session?: boolean;
     jsonVal?: boolean;
   },
-): void => {
+) => {
   const { session = false, jsonVal = false } = options || {};
   const storage = session ? sessionStorage : localStorage;
 
   let _val: any = val;
 
-  if (jsonVal && _val !== undefined && _val !== "") {
+  if (jsonVal && _val !== undefined && _val !== null && _val !== "") {
     try {
       // 尝试 JSON 序列化
       _val = JSON.stringify(_val);
@@ -300,7 +346,7 @@ export const deleteStorage = (
   options?: {
     session?: boolean;
   },
-): void => {
+) => {
   const { session = false } = options || {};
   const storage = session ? sessionStorage : localStorage;
 
@@ -315,7 +361,7 @@ export const deleteStorage = (
  * 毫秒转换为 YYYY-MM-DD HH:mm:ss.SSS
  */
 export const msecToString = (timestamp: number, format: string) => {
-  let ret = "";
+  let ret;
 
   if (timestamp && format) {
     const time = new Date(timestamp);
