@@ -31,7 +31,7 @@ export const LayoutActions = (props: LayoutActionsProps) => {
     classNames,
     styles,
     titleSize = "middle",
-    divider = true,
+    divider,
     title,
     extend,
   } = props || {};
