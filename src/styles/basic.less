@@ -1,6 +1,7 @@
 /**
  * 注意：
- * 本文件需与 @/common/theme.ts 保持一致
+ * 本文件中的 样式配置 和 主题变量 部分，
+ * 需与 @/common/theme.ts 保持一致。
  */
 
 // #region 样式配置
@@ -11,36 +12,49 @@
 @antPrefixClass: ant;
 /** antd 图标前缀 */
 @antPrefixIcon: anticon;
+/** 遗留的 antd 类名前缀 */
+@ant-prefix: @antPrefixClass;
+
 /** 业务布局 z-index */
 @bizLayoutZIndex: 100;
 /** 业务布局顶部栏高度 */
 @bizLayoutHeader: 48px;
 /** 业务布局标题栏高度 */
-@bizLayoutTitle: 40px;
+@bizLayoutTitle: 42px;
 /** 业务布局边距 */
 @bizLayoutGap: 12px;
 /** 业务布局圆角 */
 @bizLayoutRadius: 8px;
-
-/** 遗留的 antd 类名前缀 */
-@ant-prefix: @antPrefixClass;
+/** 业务布局边框颜色 */
+@bizLayoutBorderColor: #ebeef5;
 
 // #endregion
+
+// #region 主题变量
 
 // #region 主题变量-状态色
 
 /** 主题色 */
-@colorPrimary: var(~"--@{antPrefixVar}-color-primary", #2176ff); // #1677ff
+@colorPrimary: var(
+  ~"--@{antPrefixVar}-color-primary",
+  #2176ff
+); // 默认值: #1677ff
 /** 链接色  */
-@colorLink: var(~"--@{antPrefixVar}-color-link", #2176ff); // #1677ff
+@colorLink: var(~"--@{antPrefixVar}-color-link", #2176ff); // 默认值: #1677ff
 /** 信息色 */
-@colorInfo: var(~"--@{antPrefixVar}-color-info", #24a7ff); // #1677ff
+@colorInfo: var(~"--@{antPrefixVar}-color-info", #24a7ff); // 默认值: #1677ff
 /** 成功色 */
-@colorSuccess: var(~"--@{antPrefixVar}-color-success", #36b257); // #52c41a
+@colorSuccess: var(
+  ~"--@{antPrefixVar}-color-success",
+  #36b257
+); // 默认值: #52c41a
 /** 警告色 */
-@colorWarning: var(~"--@{antPrefixVar}-color-warning", #fbc504); // #faad14
+@colorWarning: var(
+  ~"--@{antPrefixVar}-color-warning",
+  #fbc504
+); // 默认值: #faad14
 /** 失败色 */
-@colorError: var(~"--@{antPrefixVar}-color-error", #db4539); // #ff4d4f
+@colorError: var(~"--@{antPrefixVar}-color-error", #db4539); // 默认值: #ff4d4f
 /** 默认色(该 token 实际并不存在) */
 @colorDefault: rgba(0, 0, 0, 0.25);
 
@@ -52,22 +66,22 @@
 @colorText: var(
   ~"--@{antPrefixVar}-color-text",
   #323340
-); // rgba(0, 0, 0, 0.88)
+); // 默认值: rgba(0, 0, 0, 0.88)
 /** 第二级文本色 */
 @colorTextSecondary: var(
   ~"--@{antPrefixVar}-color-text-secondary",
   #565866
-); // rgba(0, 0, 0, 0.65)
+); // 默认值: rgba(0, 0, 0, 0.65)
 /** 第三级文本色 */
 @colorTextTertiary: var(
   ~"--@{antPrefixVar}-color-text-tertiary",
   #7d7f8c
-); // rgba(0, 0, 0, 0.45)
+); // 默认值: rgba(0, 0, 0, 0.45)
 /** 第四级文本色 */
 @colorTextQuaternary: var(
   ~"--@{antPrefixVar}-color-text-quaternary",
   #a8aab3
-); // rgba(0, 0, 0, 0.25)
+); // 默认值: rgba(0, 0, 0, 0.25)
 
 // #endregion
 
@@ -105,10 +119,28 @@
 
 // #endregion
 
+// #region 主题变量-边框圆角
+
+/** 基础组件的圆角大小 */
+@borderRadius: var(~"--@{antPrefixVar}-border-radius", 4px); // 默认值: 6px
+/** LG号圆角，用于组件中的一些大圆角 */
+@borderRadiusLG: var(~"--@{antPrefixVar}-border-radius-lg", 8px);
+/** SM号圆角，用于组件小尺寸下的圆角 */
+@borderRadiusSM: var(~"--@{antPrefixVar}-border-radius-sm", 4px);
+/** XS号圆角，用于组件中的一些小圆角 */
+@borderRadiusXS: var(~"--@{antPrefixVar}-border-radius-xs", 2px);
+/** 外部圆角 */
+@borderRadiusOuter: var(~"--@{antPrefixVar}-border-radius-outer", 4px);
+
+// #endregion
+
 // #region 主题变量-背景色
 
 /** 页面布局背景色 */
-@colorBgLayout: var(~"--@{antPrefixVar}-color-bg-layout", #eff2f7); // #f5f5f5
+@colorBgLayout: var(
+  ~"--@{antPrefixVar}-color-bg-layout",
+  #eff2f7
+); // 默认值: #f5f5f5
 /** 组件容器背景色 */
 @colorBgContainer: var(~"--@{antPrefixVar}-color-bg-container", #ffffff);
 /** 浮层容器背景色 */
@@ -160,9 +192,49 @@
 
 // #endregion
 
+// #endregion
+
+// #region 组件覆盖
+
+/** table 样式覆盖 */
+.antTableOverride() {
+  .@{antPrefixVar}-table {
+    .@{antPrefixVar}-table-thead {
+      .@{antPrefixVar}-table-cell {
+        background-color: #f5f7fa;
+      }
+    }
+  }
+}
+
+/** tabs 样式覆盖 */
+.antTabsOverride() {
+  .@{antPrefixVar}-tabs {
+    .@{antPrefixVar}-tabs-nav-list {
+      .@{antPrefixVar}-tabs-tab {
+        padding-left: 16px;
+        padding-right: 16px;
+
+        + .@{antPrefixVar}-tabs-tab {
+          margin-top: 0;
+          margin-left: 0;
+        }
+      }
+    }
+  }
+}
+
+/** 组件级别的样式覆盖 */
+.antComponentsOverride() {
+  .antTableOverride();
+  .antTabsOverride();
+}
+
+// #endregion
+
 // #region 混入函数
 
-// 清除浮动
+/** 清除浮动 */
 .clear() {
   zoom: 1;
   &:after {
@@ -175,14 +247,14 @@
   }
 }
 
-// 单行超出截断
+/** 单行超出截断 */
 .ellipsis() {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-// 多行超出截断
+/** 多行超出截断 */
 .lineEllipsis(@line) {
   overflow: hidden;
   word-break: break-all;
@@ -195,18 +267,18 @@
 
 // #region 自定义滚动条
 
-// 滚动条滑块颜色
+/** 滚动条滑块颜色 */
 @scrollbarThumb: #c1c1c1;
-// 滚动条轨道颜色
+/** 滚动条轨道颜色 */
 @scrollbarTrack: transparent;
 
-// 现代的滚动条
+/** 现代的滚动条 */
 .scrollbarModern(@thumb: @scrollbarThumb, @track: @scrollbarTrack) {
   scrollbar-width: thin;
   scrollbar-color: @thumb @track;
 }
 
-// 遗留的滚动条
+/** 遗留的滚动条 */
 .scrollbarLegacy(@thumb: @scrollbarThumb, @track: @scrollbarTrack) {
   &::-webkit-scrollbar {
     background-color: @track;
@@ -219,7 +291,7 @@
   }
 }
 
-// 匹配 * 的滚动条
+/** 匹配 * 的滚动条 */
 .scrollbarStarSelector(@thumb: @scrollbarThumb, @track: @scrollbarTrack) {
   @supports (scrollbar-width: thin) {
     * {
@@ -233,7 +305,7 @@
   }
 }
 
-// 匹配 *:hover 的滚动条
+/** 匹配 *:hover 的滚动条 */
 .scrollbarStarSelectorHover (@thumb: @scrollbarThumb, @track: @scrollbarTrack) {
   @supports (scrollbar-width: thin) {
     * {

@@ -1,11 +1,14 @@
-import { Button } from "antd";
+import { Button, Radio, TabsProps } from "antd";
+import { useState } from "react";
 import { FlexTabs, LayoutTabs, LayoutTabsProps } from "@/components";
 
 const FlexTabsDemo = () => {
+  const [position, setPosition] = useState<TabsProps["tabPosition"]>("top");
+
   const flexTabsProps: LayoutTabsProps = {
     // size: "small",
-    // tabPosition: "left",
     // cling: true,
+    tabPosition: position,
     defaultActiveKey: "tab-3",
     items: [
       {
@@ -26,6 +29,15 @@ const FlexTabsDemo = () => {
       },
     ],
   };
+
+  const flexExtraTabsProps = {
+    ...flexTabsProps,
+    tabBarExtraContent: {
+      left: "left",
+      right: "right",
+    },
+  };
+
   const layoutTabsProps = {
     ...flexTabsProps,
     // rimless: true,
@@ -35,11 +47,18 @@ const FlexTabsDemo = () => {
 
   return (
     <div style={{ backgroundColor: "#ddd" }}>
+      <Radio.Group
+        value={position}
+        onChange={(e) => setPosition(e.target.value)}
+        options={["top", "bottom", "left", "right"]}
+      />
+      <br />
+      <br />
       <div style={{ border: "1px solid red" }}>
-        <FlexTabs {...flexTabsProps} />
+        <FlexTabs {...flexExtraTabsProps} />
       </div>
       <div style={{ border: "1px solid green" }}>
-        <FlexTabs segmentedTabBar {...flexTabsProps} />
+        <FlexTabs segmentedTabBar {...flexExtraTabsProps} />
       </div>
       <div style={{ border: "1px solid blue" }}>
         <LayoutTabs {...layoutTabsProps} />

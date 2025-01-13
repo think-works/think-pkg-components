@@ -23,6 +23,7 @@ export * from "./FlexTabs";
 
 export * from "./HelpTips";
 export * from "./InlineActions";
+export * from "./LayoutActions";
 export * from "./LayoutCard";
 export * from "./LayoutDetail";
 export * from "./LayoutPanel";

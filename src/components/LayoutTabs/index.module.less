@@ -15,22 +15,61 @@
   .extend {
   }
 
-  > .tabs {
-    > .tabBar,
-    > :global(.@{ant-prefix}-tabs-nav) {
-      padding-left: @bizLayoutGap;
-      padding-right: @bizLayoutGap;
-    }
-  }
-
   &:not(.rimless) {
     > .tabs {
       > :global(.@{ant-prefix}-tabs-content-holder) {
         > :global(.@{ant-prefix}-tabs-content) {
           > :global(.@{ant-prefix}-tabs-tabpane) {
-            padding-left: @bizLayoutGap;
-            padding-right: @bizLayoutGap;
-            padding-bottom: @bizLayoutGap;
+            padding: @bizLayoutGap;
+          }
+        }
+      }
+    }
+
+    &.top {
+      > .tabs {
+        > :global(.@{ant-prefix}-tabs-content-holder) {
+          > :global(.@{ant-prefix}-tabs-content) {
+            > :global(.@{ant-prefix}-tabs-tabpane) {
+              padding-top: 0;
+            }
+          }
+        }
+      }
+    }
+    &.bottom {
+      > .tabs {
+        > :global(.@{ant-prefix}-tabs-content-holder) {
+          > :global(.@{ant-prefix}-tabs-content) {
+            > :global(.@{ant-prefix}-tabs-tabpane) {
+              padding-bottom: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.rimless {
+    &.left {
+      > .tabs {
+        > :global(.@{ant-prefix}-tabs-content-holder) {
+          > :global(.@{ant-prefix}-tabs-content) {
+            > :global(.@{ant-prefix}-tabs-tabpane) {
+              padding-left: 0;
+            }
+          }
+        }
+      }
+    }
+
+    &.right {
+      > .tabs {
+        > :global(.@{ant-prefix}-tabs-content-holder) {
+          > :global(.@{ant-prefix}-tabs-content) {
+            > :global(.@{ant-prefix}-tabs-tabpane) {
+              padding-right: 0;
+            }
           }
         }
       }
@@ -42,10 +81,13 @@
     > .tabs {
       > .tabBar,
       > :global(.@{ant-prefix}-tabs-nav) {
+        padding-left: @bizLayoutGap;
+        padding-right: @bizLayoutGap;
+
         .title {
           padding-right: 16px;
           margin-right: 16px;
-          border-right: 1px solid @colorBorderSecondary;
+          border-right: 1px solid @bizLayoutBorderColor;
         }
       }
     }
@@ -56,12 +98,8 @@
     > .tabs {
       > .tabBar,
       > :global(.@{ant-prefix}-tabs-nav) {
-        padding-left: 0;
-        padding-right: 0;
-
-        .title {
-          margin: 8px 0;
-        }
+        padding-top: @bizLayoutGap;
+        padding-bottom: @bizLayoutGap;
       }
     }
   }

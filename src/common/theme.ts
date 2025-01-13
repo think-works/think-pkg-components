@@ -1,7 +1,9 @@
 /**
  * 注意：
- * 本文件需与 @/styles/basic.less 保持一致
+ * 本文件中的 样式配置 和 主题变量 部分，
+ * 需与 @/styles/basic.less 保持一致。
  */
+import { ConfigProviderProps, ThemeConfig } from "antd";
 
 /**
  * 样式配置
@@ -13,6 +15,7 @@ export const styleConfig = {
   antPrefixClass: "ant",
   /** antd 图标前缀 */
   antPrefixIcon: "anticon",
+
   /** 业务布局 z-index */
   bizLayoutZIndex: 100,
   /** 业务布局顶部栏高度 */
@@ -23,6 +26,8 @@ export const styleConfig = {
   bizLayoutGap: 12,
   /** 业务布局圆角 */
   bizLayoutRadius: 8,
+  /** 业务布局边框颜色 */
+  bizLayoutBorderColor: "#ebeef5",
 };
 
 /**
@@ -32,17 +37,17 @@ export const themeToken = {
   // #region 状态色
 
   /** 主题色 */
-  colorPrimary: "#2176ff", // #1677ff
+  colorPrimary: "#2176ff", // 默认值: #1677ff
   /** 链接色  */
-  colorLink: "#2176ff", // #1677ff
+  colorLink: "#2176ff", // 默认值: #1677ff
   /** 信息色 */
-  colorInfo: "#24a7ff", // #1677ff
+  colorInfo: "#24a7ff", // 默认值: #1677ff
   /** 成功色 */
-  colorSuccess: "#36b257", // #52c41a
+  colorSuccess: "#36b257", // 默认值: #52c41a
   /** 警告色 */
-  colorWarning: "#fbc504", // #faad14
+  colorWarning: "#fbc504", // 默认值: #faad14
   /** 失败色 */
-  colorError: "#db4539", // #ff4d4f
+  colorError: "#db4539", // 默认值: #ff4d4f
   /** 默认色(该 token 实际并不存在) */
   colorDefault: "rgba(0, 0, 0, 0.25)",
 
@@ -51,13 +56,13 @@ export const themeToken = {
   // #region 文本色
 
   /** 第一级文本色 */
-  colorText: "#323340", // rgba(0, 0, 0, 0.88)
+  colorText: "#323340", // 默认值: rgba(0, 0, 0, 0.88)
   /** 第二级文本色 */
-  colorTextSecondary: "#565866", // rgba(0, 0, 0, 0.65)
+  colorTextSecondary: "#565866", // 默认值: rgba(0, 0, 0, 0.65)
   /** 第三级文本色 */
-  colorTextTertiary: "#7d7f8c", // rgba(0, 0, 0, 0.45)
+  colorTextTertiary: "#7d7f8c", // 默认值: rgba(0, 0, 0, 0.45)
   /** 第四级文本色 */
-  colorTextQuaternary: "#a8Aab3", // rgba(0, 0, 0, 0.25)
+  colorTextQuaternary: "#a8Aab3", // 默认值: rgba(0, 0, 0, 0.25)
 
   // #endregion
 
@@ -83,10 +88,25 @@ export const themeToken = {
 
   // #endregion
 
+  // #region 边框圆角
+
+  /** 基础组件的圆角大小 */
+  borderRadius: 4, // 默认值: 6
+  /** LG号圆角，用于组件中的一些大圆角 */
+  borderRadiusLG: 8,
+  /** SM号圆角，用于组件小尺寸下的圆角 */
+  borderRadiusSM: 4,
+  /** XS号圆角，用于组件中的一些小圆角 */
+  borderRadiusXS: 2,
+  /** 外部圆角 */
+  borderRadiusOuter: 4,
+
+  // #endregion
+
   // #region 背景色
 
   /** 页面布局背景色 */
-  colorBgLayout: "#eff2F7", // #f5f5f5
+  colorBgLayout: "#eff2F7", // 默认值: #f5f5f5
   /** 组件容器背景色 */
   colorBgContainer: "#ffffff",
   /** 浮层容器背景色 */
@@ -122,6 +142,8 @@ export const themeToken = {
     "0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02)",
 
   // #endregion
+} satisfies ThemeConfig["token"] & {
+  colorDefault?: string;
 };
 
 /**
@@ -132,7 +154,7 @@ export const themeConfig = {
   cssVar: {
     prefix: styleConfig.antPrefixVar,
   },
-};
+} satisfies ThemeConfig;
 
 /**
  * 默认 ConfigProvider 配置
@@ -141,4 +163,4 @@ export const defaultConfigProviderProps = {
   prefixCls: styleConfig.antPrefixClass,
   iconPrefixCls: styleConfig.antPrefixIcon,
   theme: themeConfig,
-};
+} satisfies ConfigProviderProps;

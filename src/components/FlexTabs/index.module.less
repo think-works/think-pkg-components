@@ -6,45 +6,11 @@
   flex-direction: column;
   height: 100%;
 
-  > .tabBar {
-    display: flex;
-    align-items: center;
-    padding: 0;
-    min-height: @bizLayoutTitle;
-    line-height: @bizLayoutTitle;
+  // #region 传递 flex 布局
 
-    > .extraLeft,
-    > .extraRight {
-      flex: none;
-    }
-
-    > .content {
-      flex: auto;
-
-      > .segmented {
-        > :global(.@{ant-prefix}-segmented-group) {
-          > :global(.@{ant-prefix}-segmented-item) {
-            &:global(.@{ant-prefix}-segmented-item-selected) {
-              color: @colorLink;
-            }
-          }
-        }
-      }
-    }
-  }
-
+  > .tabBar,
   > :global(.@{ant-prefix}-tabs-nav) {
     flex: none;
-
-    > :global(.@{ant-prefix}-tabs-nav-wrap) {
-      > :global(.@{ant-prefix}-tabs-nav-list) {
-        > :global(.@{ant-prefix}-tabs-tab) {
-          padding: 0;
-          min-height: @bizLayoutTitle;
-          line-height: @bizLayoutTitle;
-        }
-      }
-    }
   }
 
   > :global(.@{ant-prefix}-tabs-content-holder) {
@@ -63,50 +29,132 @@
     }
   }
 
+  // #endregion
+
+  // #region 导航栏内部样式
+
+  > .tabBar {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    min-height: @bizLayoutTitle;
+    line-height: @bizLayoutTitle;
+
+    > .extraLeft,
+    > .extraRight {
+      flex: none;
+    }
+
+    > .content {
+      flex: auto;
+
+      > .segmented {
+        background-color: #f5f7fa;
+
+        > :global(.@{ant-prefix}-segmented-group) {
+          > :global(.@{ant-prefix}-segmented-item) {
+            border: 1px solid transparent;
+
+            > :global(.@{ant-prefix}-segmented-item-label) {
+              padding: 0 16px;
+            }
+
+            &:global(.@{ant-prefix}-segmented-item-selected) {
+              color: @colorLink;
+              border-color: #e6e9f0;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  > :global(.@{ant-prefix}-tabs-nav) {
+    > :global(.@{ant-prefix}-tabs-nav-wrap) {
+      > :global(.@{ant-prefix}-tabs-nav-list) {
+        > :global(.@{ant-prefix}-tabs-tab) {
+          padding-top: 0;
+          padding-bottom: 0;
+          min-height: @bizLayoutTitle;
+          line-height: @bizLayoutTitle;
+        }
+      }
+    }
+  }
+
+  // #endregion
+
+  // #region 导航栏位置覆盖
+
   &.top {
     > .tabBar,
     > :global(.@{ant-prefix}-tabs-nav) {
       margin-bottom: @bizLayoutGap;
     }
   }
+
   &.bottom {
+    > .tabBar {
+      order: 1;
+    }
+
     > .tabBar,
     > :global(.@{ant-prefix}-tabs-nav) {
       margin-top: @bizLayoutGap;
     }
   }
+
   &.left,
   &.right {
     flex-direction: row;
 
     > .tabBar {
       flex-direction: column;
-      margin: 0 @bizLayoutGap;
     }
+  }
 
-    > :global(.@{ant-prefix}-tabs-nav) {
-      > :global(.@{ant-prefix}-tabs-nav-wrap) {
-        > :global(.@{ant-prefix}-tabs-nav-list) {
-          > :global(.@{ant-prefix}-tabs-tab) {
-            padding: 0 @bizLayoutGap;
-          }
-        }
-      }
-    }
-
+  &.left {
     > :global(.@{ant-prefix}-tabs-content-holder) {
       > :global(.@{ant-prefix}-tabs-content) {
         > :global(.@{ant-prefix}-tabs-tabpane) {
-          padding: @bizLayoutGap;
+          padding-left: @bizLayoutGap;
         }
       }
     }
   }
 
+  &.right {
+    > .tabBar {
+      order: 1;
+    }
+
+    > :global(.@{ant-prefix}-tabs-content-holder) {
+      > :global(.@{ant-prefix}-tabs-content) {
+        > :global(.@{ant-prefix}-tabs-tabpane) {
+          padding-right: @bizLayoutGap;
+        }
+      }
+    }
+  }
+
+  // #endregion
+
+  // #region 业务样式覆盖
+
   &.cling {
     > .tabBar,
     > :global(.@{ant-prefix}-tabs-nav) {
+      margin-top: 0;
       margin-bottom: 0;
+    }
+
+    > :global(.@{ant-prefix}-tabs-content-holder) {
+      > :global(.@{ant-prefix}-tabs-content) {
+        > :global(.@{ant-prefix}-tabs-tabpane) {
+          padding-left: 0;
+          padding-right: 0;
+        }
+      }
     }
   }
 
@@ -121,4 +169,6 @@
       }
     }
   }
+
+  // #endregion
 }
