@@ -20,7 +20,12 @@ import {
 import { FilterOutlined } from "@ant-design/icons";
 import { types } from "@/components";
 import { useDebounce } from "@/hooks";
-import { isType, jsonTryParse, jsonTryStringify } from "@/utils/tools";
+import {
+  isType,
+  jsonTryParse,
+  jsonTryStringify,
+  normalizeObject,
+} from "@/utils/tools";
 import RouteTable from "../RouteTable";
 import stl from "./index.module.less";
 import StandardFilter, { StandardFilterProps } from "./StandardFilter";
@@ -105,6 +110,8 @@ export type MinimizeFilterProps = FormProps & {
   outlinedItem?: boolean;
   /** 筛选项值变更-防抖毫秒时间间隔(-1 禁止在 onValuesChange 事件中触发 onFilterChange 事件) */
   filterChangeDebounce?: number;
+  /** 预处理筛选项值 */
+  normalizeValues?: boolean | Parameters<typeof normalizeObject>[1];
 
   /** 更多按钮文案 */
   moreText?: React.ReactNode;
@@ -136,6 +143,7 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
     moreFilterValidCounter = filterValidCounter,
     outlinedItem = true,
     filterChangeDebounce = 200,
+    normalizeValues,
     moreText,
     moreProps,
     onInitValues,
@@ -237,9 +245,21 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
       let values = form.getFieldsValue();
       values = Object.assign({}, values, moreValues); // 浅层克隆
 
+      // 递归清理前后空格
+      if (normalizeValues) {
+        const options =
+          normalizeValues === true
+            ? {
+                trimVal: true,
+                clearRecursion: true,
+              }
+            : normalizeValues;
+        values = normalizeObject(values, options);
+      }
+
       onFilterChange?.(values, action);
     },
-    [form, onFilterChange],
+    [form, normalizeValues, onFilterChange],
   );
 
   // 最小化表单-触发筛选项变更-防抖

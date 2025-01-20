@@ -19,6 +19,7 @@ import React, {
   useState,
 } from "react";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
+import { normalizeObject } from "@/utils/tools";
 import RouteTable from "../RouteTable";
 import stl from "./index.module.less";
 
@@ -59,6 +60,8 @@ export type StandardFilterProps = FormProps & {
   itemColSpan?: number;
   /** Form.labelCol.span 属性 */
   itemLabelSpan?: number;
+  /** 预处理筛选项值 */
+  normalizeValues?: boolean | Parameters<typeof normalizeObject>[1];
 
   /** 查询按钮文本(false 不显示查询按钮)*/
   submitText?: false | React.ReactNode;
@@ -100,6 +103,7 @@ export const StandardFilter = (props: StandardFilterProps) => {
     defaultUnfold,
     itemColSpan,
     itemLabelSpan,
+    normalizeValues,
     submitText,
     resetText,
     submitProps,
@@ -147,9 +151,21 @@ export const StandardFilter = (props: StandardFilterProps) => {
     let values = form.getFieldsValue();
     values = Object.assign({}, values); // 浅层克隆
 
+    // 递归清理前后空格
+    if (normalizeValues) {
+      const options =
+        normalizeValues === true
+          ? {
+              trimVal: true,
+              clearRecursion: true,
+            }
+          : normalizeValues;
+      values = normalizeObject(values, options);
+    }
+
     onFilterChange?.(values, "submit");
     onSubmit?.(values);
-  }, [form, onFilterChange, onSubmit]);
+  }, [form, normalizeValues, onFilterChange, onSubmit]);
 
   const itemCols = useMemo(
     () =>

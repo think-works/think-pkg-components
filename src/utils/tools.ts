@@ -139,7 +139,7 @@ export const normalizeObject = (
           let _val = val;
 
           if (trimVal && isType<string>(val, "String")) {
-            _val = val?.trim();
+            _val = val.trim();
           }
 
           ret[key] = _val;
