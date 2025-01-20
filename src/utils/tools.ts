@@ -4,7 +4,7 @@ import { LiteralUnion } from "./types";
 /**
  * 类型检查
  */
-export const isType = (
+export const isType = <T = any>(
   val: any,
   type: LiteralUnion<
     | "Undefined"
@@ -49,7 +49,7 @@ export const isType = (
     | "WebAssembly"
     | "GeneratorFunction"
   >,
-): boolean => {
+): val is T => {
   return Object.prototype.toString.call(val) === `[object ${type}]`;
 };
 
@@ -59,7 +59,9 @@ export const isType = (
 export const isBlank = (
   text: string | null | undefined,
   options?: {
+    /** 检查空字符串 */
     detectEmpty?: boolean;
+    /** 检查空白字符 */
     detectSpace?: boolean;
   },
 ): boolean => {
@@ -86,16 +88,25 @@ export const isBlank = (
 export const normalizeObject = (
   obj: Record<string, any>,
   options?: {
+    /** 排序 key */
     sortKey?: boolean;
+    /** 移除 value 前后空格 */
+    trimVal?: boolean;
+    /** 清理 undefined */
     clearUndefined?: boolean;
+    /** 清理 null */
     clearNull?: boolean;
+    /** 清理空字符串 */
     clearEmpty?: boolean;
+    /** 清理空白字符 */
     clearSpace?: boolean;
+    /** 递归清理 */
     clearRecursion?: boolean;
   },
 ) => {
   const {
     sortKey = false,
+    trimVal = false,
     clearUndefined = false,
     clearNull = false,
     clearEmpty = false,
@@ -115,7 +126,7 @@ export const normalizeObject = (
     _obj = keys.reduce((ret, key) => {
       const val = obj[key];
 
-      if (clearRecursion && isType(val, "Object")) {
+      if (clearRecursion && isType<Record<string, any>>(val, "Object")) {
         ret[key] = normalizeObject(val, options);
       } else {
         const skip =
@@ -125,7 +136,13 @@ export const normalizeObject = (
           (clearSpace && /^\s*$/.test(val));
 
         if (!skip) {
-          ret[key] = val;
+          let _val = val;
+
+          if (trimVal && isType<string>(val, "String")) {
+            _val = val?.trim();
+          }
+
+          ret[key] = _val;
         }
       }
 
@@ -184,7 +201,9 @@ export const jsonTryParse = <T = any>(value?: string, dftValue?: T) => {
 export const parseQuery = (
   search: string,
   options?: {
+    /** JSON 反序列化 value */
     jsonVal?: boolean;
+    /** 排序 key */
     sortKey?: boolean;
   },
 ) => {
@@ -240,7 +259,9 @@ export const parseQuery = (
 export const stringifyQuery = (
   query: Record<string, any>,
   options?: {
+    /** JSON 序列化 value */
     jsonVal?: boolean;
+    /** 排序 key */
     sortKey?: boolean;
   },
 ) => {
@@ -289,7 +310,9 @@ export const stringifyQuery = (
 export const queryStorage = <T = any>(
   key: string,
   options?: {
+    /** 使用 sessionStorage */
     session?: boolean;
+    /** JSON 反序列化 value */
     jsonVal?: boolean;
   },
 ) => {
@@ -317,7 +340,9 @@ export const updateStorage = <T = any>(
   key: string,
   val: T,
   options?: {
+    /** 使用 sessionStorage */
     session?: boolean;
+    /** JSON 序列化 value */
     jsonVal?: boolean;
   },
 ) => {
@@ -344,6 +369,7 @@ export const updateStorage = <T = any>(
 export const deleteStorage = (
   key: string,
   options?: {
+    /** 使用 sessionStorage */
     session?: boolean;
   },
 ) => {
