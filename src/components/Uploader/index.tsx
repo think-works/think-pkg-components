@@ -1,10 +1,12 @@
 import { Upload, UploadProps } from "antd";
 import axios, { AxiosInstance } from "axios";
 import cls, { Argument } from "classnames";
-import { isNumber } from "lodash-es";
 import React from "react";
 import logger from "@/utils/logger";
+import { isType } from "@/utils/tools";
 import stl from "./index.module.less";
+
+const isNumber = (val: any) => isType<number>(val, "Number");
 
 export type UploaderProps = UploadProps & {
   className?: Argument;

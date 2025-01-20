@@ -1,11 +1,13 @@
 import { omit } from "lodash-es";
-import { isBoolean } from "lodash-es";
 import React from "react";
 import logger from "@/utils/logger";
+import { isType } from "@/utils/tools";
 import BaseTable, {
   BaseTableDefaultPageSize,
   BaseTableProps,
 } from "../BaseTable";
+
+const isBoolean = (val: any) => isType<boolean>(val, "Boolean");
 
 const API_PAGE_KEY = "pageNo";
 const API_SIZE_KEY = "pageSize";

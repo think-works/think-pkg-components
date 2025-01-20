@@ -1,8 +1,8 @@
-import { isArray, isString } from "lodash-es";
 import { useEffect, useMemo, useState } from "react";
 import { useMatches } from "react-router-dom";
 import { useForceUpdate } from "@/hooks";
 import * as events from "@/utils/events";
+import { isType } from "@/utils/tools";
 import { truthy } from "@/utils/types";
 import { LayoutWrapperExtendRouteMeta } from "./type";
 import {
@@ -13,6 +13,9 @@ import {
   refreshCustomMenuEventKey,
   refreshRouteCrumbEventKey,
 } from "./utils";
+
+const isString = (val: any) => isType<string>(val, "String");
+const isArray = (val: any) => isType<any[]>(val, "Array");
 
 // #region 自定义菜单
 

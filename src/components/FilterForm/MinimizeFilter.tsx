@@ -8,7 +8,7 @@ import {
   Space,
 } from "antd";
 import cls, { Argument } from "classnames";
-import { isArray, isString, pick } from "lodash-es";
+import { pick } from "lodash-es";
 import {
   isValidElement,
   useCallback,
@@ -20,10 +20,13 @@ import {
 import { FilterOutlined } from "@ant-design/icons";
 import { types } from "@/components";
 import { useDebounce } from "@/hooks";
-import { jsonTryParse, jsonTryStringify } from "@/utils/tools";
+import { isType, jsonTryParse, jsonTryStringify } from "@/utils/tools";
 import RouteTable from "../RouteTable";
 import stl from "./index.module.less";
 import StandardFilter, { StandardFilterProps } from "./StandardFilter";
+
+const isString = (val: any) => isType<string>(val, "String");
+const isArray = (val: any) => isType<any[]>(val, "Array");
 
 /** 筛选项的有效性计数器 */
 const filterValidCounter = (

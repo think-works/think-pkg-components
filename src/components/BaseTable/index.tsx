@@ -1,11 +1,14 @@
 import { Table, TableProps, Tooltip } from "antd";
 import cls, { Argument } from "classnames";
-import { isBoolean, isNumber, isString } from "lodash-es";
 import type { Reference } from "rc-table";
 import { ForwardedRef, forwardRef, useMemo } from "react";
 import { separator } from "@/utils/human";
-import { isBlank, msecToString } from "@/utils/tools";
+import { isBlank, isType, msecToString } from "@/utils/tools";
 import stl from "./index.module.less";
+
+const isString = (val: any) => isType<string>(val, "String");
+const isNumber = (val: any) => isType<number>(val, "Number");
+const isBoolean = (val: any) => isType<boolean>(val, "Boolean");
 
 const isBlankString = (text?: string) =>
   isBlank(text, {

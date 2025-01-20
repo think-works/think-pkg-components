@@ -1,4 +1,4 @@
-import { isEmpty, isEqual, isNumber, isPlainObject, omit } from "lodash-es";
+import { isEmpty, isEqual, isPlainObject, omit } from "lodash-es";
 import React, { JSX, useCallback, useMemo } from "react";
 import {
   Location,
@@ -7,6 +7,7 @@ import {
   useNavigate,
 } from "react-router";
 import {
+  isType,
   jsonTryParse,
   jsonTryStringify,
   normalizeObject,
@@ -21,6 +22,8 @@ import FetchTable, {
   FetchTableProps,
 } from "../FetchTable";
 import { FilterTableParams } from "../FilterTable";
+
+const isNumber = (val: any) => isType<number>(val, "Number");
 
 const QUERY_PAGE_KEY = "pageNo";
 const QUERY_SIZE_KEY = "pageSize";

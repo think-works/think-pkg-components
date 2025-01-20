@@ -1,7 +1,7 @@
 import { Button, Space, Table, TableProps, Tooltip } from "antd";
 import type { ColumnType } from "antd/lib/table/interface";
 import cls from "classnames";
-import { cloneDeep, get, isFunction, set } from "lodash-es";
+import { cloneDeep, get, set } from "lodash-es";
 import {
   cloneElement,
   isValidElement,
@@ -13,12 +13,16 @@ import {
 } from "react";
 import { DeleteOutlined } from "@ant-design/icons";
 import { uuid4 } from "@/utils/crypto";
+import { isType } from "@/utils/tools";
 import SortableTable from "../SortableTable";
 import DecoupleAutoComplete from "./DecoupleAutoComplete";
 import DecoupleInput from "./DecoupleInput";
 import DecoupleTextArea from "./DecoupleTextArea";
 import EditableHeader from "./EditableHeader";
 import stl from "./index.module.less";
+
+const isFunction = (val: any) =>
+  isType<(...rest: any[]) => any>(val, "Function");
 
 type DataRow = Record<string, any>;
 

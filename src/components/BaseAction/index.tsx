@@ -9,14 +9,12 @@ import {
   TooltipProps,
 } from "antd";
 import cls, { Argument } from "classnames";
-import { isString } from "lodash-es";
 import { ForwardedRef, forwardRef, useState } from "react";
 import { isType } from "@/utils/tools";
 import stl from "./index.module.less";
 
-const isPromise = (val: any): val is Promise<any> => {
-  return isType(val, "Promise");
-};
+const isString = (val: any) => isType<string>(val, "String");
+const isPromise = (val: any) => isType<Promise<any>>(val, "Promise");
 
 /**
  * 基础操作按钮

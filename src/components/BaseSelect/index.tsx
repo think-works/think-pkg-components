@@ -1,8 +1,11 @@
 import { Button, Divider, RefSelectProps, Select, SelectProps } from "antd";
 import cls, { Argument } from "classnames";
-import { isArray, isObject } from "lodash-es";
 import { ForwardedRef, forwardRef } from "react";
+import { isType } from "@/utils/tools";
 import stl from "./index.module.less";
+
+const isArray = (val: any) => isType<any[]>(val, "Array");
+const isObject = (val: any) => isType<string>(val, "Object");
 
 type BaseOption = {
   [key: string]: any;
