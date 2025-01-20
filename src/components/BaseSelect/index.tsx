@@ -5,7 +5,7 @@ import { isType } from "@/utils/tools";
 import stl from "./index.module.less";
 
 const isArray = (val: any) => isType<any[]>(val, "Array");
-const isObject = (val: any) => isType<string>(val, "Object");
+const isObject = (val: any) => isType<Record<string, any>>(val, "Object");
 
 type BaseOption = {
   [key: string]: any;
