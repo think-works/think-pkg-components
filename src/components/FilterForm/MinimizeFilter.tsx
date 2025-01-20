@@ -110,8 +110,8 @@ export type MinimizeFilterProps = FormProps & {
   outlinedItem?: boolean;
   /** 筛选项值变更-防抖毫秒时间间隔(-1 禁止在 onValuesChange 事件中触发 onFilterChange 事件) */
   filterChangeDebounce?: number;
-  /** 预处理筛选项值 */
-  normalizeValues?: boolean | Parameters<typeof normalizeObject>[1];
+  /** 预处理筛选项值(true 递归清理前后空格) */
+  normalizeValues?: StandardFilterProps["normalizeValues"];
 
   /** 更多按钮文案 */
   moreText?: React.ReactNode;

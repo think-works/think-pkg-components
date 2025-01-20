@@ -60,8 +60,8 @@ export type StandardFilterProps = FormProps & {
   itemColSpan?: number;
   /** Form.labelCol.span 属性 */
   itemLabelSpan?: number;
-  /** 预处理筛选项值 */
-  normalizeValues?: boolean | Parameters<typeof normalizeObject>[1];
+  /** 预处理筛选项值(true 递归清理前后空格) */
+  normalizeValues?: true | Parameters<typeof normalizeObject>[1];
 
   /** 查询按钮文本(false 不显示查询按钮)*/
   submitText?: false | React.ReactNode;
