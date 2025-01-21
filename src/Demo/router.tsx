@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouteObject } from "react-router-dom";
+import AvatarDemo from "./AvatarDemo";
 import ButtonDemo from "./ButtonDemo";
 import BypassPropsDemo from "./BypassPropsDemo";
 import DragContainerDemo from "./DragContainerDemo";
@@ -21,6 +22,10 @@ export const routes: RouteObject[] = [
   {
     path: "/button",
     element: <ButtonDemo />,
+  },
+  {
+    path: "/avatar",
+    element: <AvatarDemo />,
   },
   {
     path: "/drag-container",

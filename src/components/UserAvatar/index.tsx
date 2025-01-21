@@ -1,12 +1,27 @@
-import { Space, Tooltip } from "antd";
+import { Tooltip, TooltipProps } from "antd";
+import cls, { Argument } from "classnames";
 import { ForwardedRef, forwardRef } from "react";
+import { isType } from "@/utils/tools";
 import BaseAvatar, { BaseAvatarProps } from "../BaseAvatar";
 import UserAvatarGroup, { getUserName, UserModel } from "./Group";
 import stl from "./index.module.less";
 
-export type UserAvatarProps = Omit<BaseAvatarProps, "userInfo"> & {
-  userModel?: UserModel;
+const isBoolean = (val: any) => isType<boolean>(val, "Boolean");
+
+export type UserAvatarProps = BaseAvatarProps & {
+  className?: Argument;
+  style?: React.CSSProperties;
+  classNames?: {
+    avatar?: Argument;
+    name?: Argument;
+  };
+  styles?: {
+    avatar?: React.CSSProperties;
+    name?: React.CSSProperties;
+  };
   hideName?: boolean;
+  showTooltip?: boolean | TooltipProps;
+  userModel?: UserModel;
 };
 
 /**
@@ -16,33 +31,59 @@ const UserAvatarBase = forwardRef(function UserAvatarCom(
   props: UserAvatarProps,
   ref: ForwardedRef<HTMLDivElement>,
 ) {
-  const { userModel, hideName, ...rest } = props;
+  const {
+    className,
+    style,
+    classNames,
+    styles,
+    userModel,
+    hideName,
+    showTooltip,
+    ...rest
+  } = props;
 
   if (!userModel) {
     return null;
   }
 
-  const { nickName } = userModel;
+  const tooltipProps = isBoolean(showTooltip) ? undefined : showTooltip;
+  const { nickName, loginName } = userModel;
   const userName = getUserName(userModel);
-  const avatar = (
-    <BaseAvatar className={stl.avatar} name={nickName} {...rest} />
+
+  const avatarCom = (
+    <BaseAvatar
+      className={cls(stl.avatar, classNames?.avatar)}
+      style={styles?.avatar}
+      name={nickName || loginName}
+      {...rest}
+    />
   );
 
   if (hideName) {
     return (
-      <Tooltip title={userName}>
-        <span>{avatar}</span>
+      <Tooltip title={userName} {...(tooltipProps || {})}>
+        {avatarCom}
       </Tooltip>
     );
   }
 
   return (
-    <Space ref={ref} className={stl.userAvatar}>
-      {avatar}
-      <span className={stl.name} title={userName}>
-        {userName}
+    <div ref={ref} className={cls(stl.userAvatar, className)} style={style}>
+      {showTooltip ? (
+        <Tooltip title={userName} {...(tooltipProps || {})}>
+          {avatarCom}
+        </Tooltip>
+      ) : (
+        avatarCom
+      )}
+      <span
+        className={cls(stl.name, classNames?.name)}
+        style={styles?.name}
+        title={userName}
+      >
+        {nickName || loginName}
       </span>
-    </Space>
+    </div>
   );
 });
 
