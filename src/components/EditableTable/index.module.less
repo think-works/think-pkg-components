@@ -1,9 +1,9 @@
 @import "@/styles/utils.less";
 
 .table {
-  :global(.@{ant-prefix}-table) {
-    :global(.@{ant-prefix}-table-tbody) {
-      :global(.@{ant-prefix}-table-row) {
+  :global(.@{antPrefixClass}-table) {
+    :global(.@{antPrefixClass}-table-tbody) {
+      :global(.@{antPrefixClass}-table-row) {
         &:hover {
           .cell,
           .action {
@@ -22,14 +22,14 @@
   }
 
   .cell {
-    :global(.@{ant-prefix}-input) {
+    :global(.@{antPrefixClass}-input) {
       border-color: transparent;
       &:hover {
         border-color: @colorPrimary;
       }
     }
-    :global(.@{ant-prefix}-select-auto-complete) {
-      :global(.@{ant-prefix}-select-selector) {
+    :global(.@{antPrefixClass}-select-auto-complete) {
+      :global(.@{antPrefixClass}-select-selector) {
         border-color: transparent;
         &:hover {
           border-color: @colorPrimary;

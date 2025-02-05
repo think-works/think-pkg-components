@@ -9,21 +9,21 @@
   // #region 传递 flex 布局
 
   > .tabBar,
-  > :global(.@{ant-prefix}-tabs-nav) {
+  > :global(.@{antPrefixClass}-tabs-nav) {
     flex: none;
   }
 
-  > :global(.@{ant-prefix}-tabs-content-holder) {
+  > :global(.@{antPrefixClass}-tabs-content-holder) {
     flex: auto;
     display: flex;
     flex-direction: column;
 
-    > :global(.@{ant-prefix}-tabs-content) {
+    > :global(.@{antPrefixClass}-tabs-content) {
       flex: auto;
       display: flex;
       flex-direction: column;
 
-      > :global(.@{ant-prefix}-tabs-tabpane) {
+      > :global(.@{antPrefixClass}-tabs-tabpane) {
         flex: auto;
       }
     }
@@ -51,15 +51,15 @@
       > .segmented {
         background-color: #f5f7fa;
 
-        > :global(.@{ant-prefix}-segmented-group) {
-          > :global(.@{ant-prefix}-segmented-item) {
+        > :global(.@{antPrefixClass}-segmented-group) {
+          > :global(.@{antPrefixClass}-segmented-item) {
             border: 1px solid transparent;
 
-            > :global(.@{ant-prefix}-segmented-item-label) {
+            > :global(.@{antPrefixClass}-segmented-item-label) {
               padding: 0 16px;
             }
 
-            &:global(.@{ant-prefix}-segmented-item-selected) {
+            &:global(.@{antPrefixClass}-segmented-item-selected) {
               color: @colorLink;
               border-color: #e6e9f0;
             }
@@ -69,10 +69,10 @@
     }
   }
 
-  > :global(.@{ant-prefix}-tabs-nav) {
-    > :global(.@{ant-prefix}-tabs-nav-wrap) {
-      > :global(.@{ant-prefix}-tabs-nav-list) {
-        > :global(.@{ant-prefix}-tabs-tab) {
+  > :global(.@{antPrefixClass}-tabs-nav) {
+    > :global(.@{antPrefixClass}-tabs-nav-wrap) {
+      > :global(.@{antPrefixClass}-tabs-nav-list) {
+        > :global(.@{antPrefixClass}-tabs-tab) {
           padding-top: 0;
           padding-bottom: 0;
           min-height: @bizLayoutTitle;
@@ -88,7 +88,7 @@
 
   &.top {
     > .tabBar,
-    > :global(.@{ant-prefix}-tabs-nav) {
+    > :global(.@{antPrefixClass}-tabs-nav) {
       margin-bottom: @bizLayoutGap;
     }
   }
@@ -99,7 +99,7 @@
     }
 
     > .tabBar,
-    > :global(.@{ant-prefix}-tabs-nav) {
+    > :global(.@{antPrefixClass}-tabs-nav) {
       margin-top: @bizLayoutGap;
     }
   }
@@ -114,9 +114,9 @@
   }
 
   &.left {
-    > :global(.@{ant-prefix}-tabs-content-holder) {
-      > :global(.@{ant-prefix}-tabs-content) {
-        > :global(.@{ant-prefix}-tabs-tabpane) {
+    > :global(.@{antPrefixClass}-tabs-content-holder) {
+      > :global(.@{antPrefixClass}-tabs-content) {
+        > :global(.@{antPrefixClass}-tabs-tabpane) {
           padding-left: @bizLayoutGap;
         }
       }
@@ -128,9 +128,9 @@
       order: 1;
     }
 
-    > :global(.@{ant-prefix}-tabs-content-holder) {
-      > :global(.@{ant-prefix}-tabs-content) {
-        > :global(.@{ant-prefix}-tabs-tabpane) {
+    > :global(.@{antPrefixClass}-tabs-content-holder) {
+      > :global(.@{antPrefixClass}-tabs-content) {
+        > :global(.@{antPrefixClass}-tabs-tabpane) {
           padding-right: @bizLayoutGap;
         }
       }
@@ -143,14 +143,14 @@
 
   &.cling {
     > .tabBar,
-    > :global(.@{ant-prefix}-tabs-nav) {
+    > :global(.@{antPrefixClass}-tabs-nav) {
       margin-top: 0;
       margin-bottom: 0;
     }
 
-    > :global(.@{ant-prefix}-tabs-content-holder) {
-      > :global(.@{ant-prefix}-tabs-content) {
-        > :global(.@{ant-prefix}-tabs-tabpane) {
+    > :global(.@{antPrefixClass}-tabs-content-holder) {
+      > :global(.@{antPrefixClass}-tabs-content) {
+        > :global(.@{antPrefixClass}-tabs-tabpane) {
           padding-left: 0;
           padding-right: 0;
         }
@@ -159,9 +159,9 @@
   }
 
   &.overflow {
-    > :global(.@{ant-prefix}-tabs-content-holder) {
-      > :global(.@{ant-prefix}-tabs-content) {
-        > :global(.@{ant-prefix}-tabs-tabpane) {
+    > :global(.@{antPrefixClass}-tabs-content-holder) {
+      > :global(.@{antPrefixClass}-tabs-content) {
+        > :global(.@{antPrefixClass}-tabs-tabpane) {
           height: 0;
           overflow-y: auto;
           scrollbar-gutter: auto;

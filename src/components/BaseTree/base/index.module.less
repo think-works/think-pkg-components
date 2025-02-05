@@ -18,17 +18,17 @@
     // flex-direction: column;
   }
   // 禁用 ant-checkbox 动画
-  :global(.@{ant-prefix}-checkbox-checked)::after {
+  :global(.@{antPrefixClass}-checkbox-checked)::after {
     animation: none;
   }
-  :global(.@{ant-prefix}-checkbox-inner) {
+  :global(.@{antPrefixClass}-checkbox-inner) {
     transition: none;
   }
-  :global(.@{ant-prefix}-checkbox-inner)::after {
+  :global(.@{antPrefixClass}-checkbox-inner)::after {
     transition: none;
   }
-  :global(.@{ant-prefix}-checkbox-checked)
-    :global(.@{ant-prefix}-checkbox-inner)::after {
+  :global(.@{antPrefixClass}-checkbox-checked)
+    :global(.@{antPrefixClass}-checkbox-inner)::after {
     transition: none;
   }
 

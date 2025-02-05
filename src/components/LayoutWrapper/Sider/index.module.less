@@ -10,7 +10,7 @@
   &.horizontalSider {
     background-color: #fff !important;
   }
-  :global(.@{ant-prefix}-layout-sider-children) {
+  :global(.@{antPrefixClass}-layout-sider-children) {
     flex: auto;
     display: flex;
     flex-direction: column;
@@ -38,37 +38,37 @@
 }
 
 .leftMenu {
-  &:global(.@{ant-prefix}-menu.@{ant-prefix}-menu-root) {
+  &:global(.@{antPrefixClass}-menu.@{antPrefixClass}-menu-root) {
     border-right: none;
     border-inline-end: none;
   }
 
-  :global(.@{ant-prefix}-menu-submenu) {
-    :global(.@{ant-prefix}-menu-submenu-title) a {
+  :global(.@{antPrefixClass}-menu-submenu) {
+    :global(.@{antPrefixClass}-menu-submenu-title) a {
       color: inherit;
     }
   }
 }
 
 .verticalMenu {
-  :global(.@{ant-prefix}-menu-item) {
+  :global(.@{antPrefixClass}-menu-item) {
     padding: 0;
     & > span {
       display: inline-block;
     }
   }
 
-  :global(.@{ant-prefix}-menu-submenu) {
+  :global(.@{antPrefixClass}-menu-submenu) {
     padding: 0;
-    :global(.@{ant-prefix}-menu-submenu-title) {
+    :global(.@{antPrefixClass}-menu-submenu-title) {
       padding: 0;
       & > span {
         display: inline-block;
       }
     }
   }
-  :global(.@{ant-prefix}-menu-submenu-selected) {
-    & > :global(.@{ant-prefix}-menu-submenu-title) {
+  :global(.@{antPrefixClass}-menu-submenu-selected) {
+    & > :global(.@{antPrefixClass}-menu-submenu-title) {
       color: @colorPrimary;
       background-color: #fff;
     }
@@ -100,25 +100,25 @@
 
 .verticalPopup {
   padding-bottom: @bizLayoutGap;
-  &:global(.@{ant-prefix}-menu-submenu-popup) {
-    :global(.@{ant-prefix}-menu-item) {
+  &:global(.@{antPrefixClass}-menu-submenu-popup) {
+    :global(.@{antPrefixClass}-menu-item) {
       line-height: 32px;
       height: 32px;
     }
 
-    :global(.@{ant-prefix}-menu-item-selected) {
+    :global(.@{antPrefixClass}-menu-item-selected) {
       background-color: #edf7ff;
     }
 
-    :global(.@{ant-prefix}-menu-submenu-title) {
+    :global(.@{antPrefixClass}-menu-submenu-title) {
       line-height: 32px !important;
       height: 32px !important;
     }
 
-    :global(.@{ant-prefix}-menu-submenu-selected) {
+    :global(.@{antPrefixClass}-menu-submenu-selected) {
       line-height: 32px !important;
       height: 32px !important;
-      :global(.@{ant-prefix}-menu-submenu-title) {
+      :global(.@{antPrefixClass}-menu-submenu-title) {
         color: @colorPrimary;
         background-color: #edf7ff !important;
       }
@@ -127,7 +127,7 @@
 }
 
 .horizontalMenu {
-  // :global(.@{ant-prefix}-menu-item-selected) {
+  // :global(.@{antPrefixClass}-menu-item-selected) {
   //   &::before {
   //     content: "";
   //     position: absolute;
