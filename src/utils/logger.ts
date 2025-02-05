@@ -1,6 +1,9 @@
 /* eslint-disable no-console */
 import { appName } from "@/utils/config";
 
+/**
+ * 创建日志记录器
+ */
 export const createLogger = (scope: string) => {
   const debug = (...rest: any[]) => {
     console.debug(`[${scope}]`, ...rest);
@@ -31,6 +34,9 @@ export const createLogger = (scope: string) => {
   };
 };
 
+/**
+ * 默认日志记录器
+ */
 const logger = createLogger(appName);
 
 export default logger;
