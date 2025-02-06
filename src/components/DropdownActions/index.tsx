@@ -30,8 +30,14 @@ export type DropdownActionsProps = (
  * 下拉操作
  */
 export const DropdownActions = (props: DropdownActionsProps) => {
-  const { className, buttonTrigger, actions, actionAlign, children, ...rest } =
-    props || {};
+  const {
+    className,
+    buttonTrigger,
+    actions,
+    actionAlign = "left",
+    children,
+    ...rest
+  } = props || {};
 
   const _actions = actions?.filter(truthy);
 
