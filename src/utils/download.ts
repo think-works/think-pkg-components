@@ -90,7 +90,7 @@ export const downloadBlobFileByResponse = async (
   // 预检查响应体
   const valid = preCheckBlob ? await preCheckBlob(response) : true;
   if (!valid) {
-    return;
+    return false;
   }
 
   // 侦测文件名称
@@ -114,4 +114,5 @@ export const downloadBlobFileByResponse = async (
 
   // 触发下载
   downloadBlobFile(data, detectName || "download");
+  return true;
 };
