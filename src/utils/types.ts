@@ -91,6 +91,9 @@ export type LiteralUnion<T extends string | number> =
  */
 export const truthy = <T>(
   value: T,
-): value is Exclude<T, false | "" | 0 | null | undefined> => {
-  return Boolean(value);
-};
+): value is Exclude<T, false | "" | 0 | null | undefined> => Boolean(value);
+
+/**
+ * 元组类型
+ */
+export const tuple = <T extends [any, ...any[]]>(value: T) => value;
