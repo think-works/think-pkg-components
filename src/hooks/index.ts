@@ -147,6 +147,7 @@ export const useThrottle = <T extends (...args: any[]) => any>(
 
 /**
  * setInterval
+ * delay 为 -1 时不执行
  */
 export const useInterval = <T extends (...args: any[]) => any>(
   func: T,
@@ -178,6 +179,7 @@ export const useInterval = <T extends (...args: any[]) => any>(
 
 /**
  * setTimeout
+ * delay 为 -1 时不执行
  */
 export const useTimeout = <T extends (...args: any[]) => any>(
   func: T,
