@@ -4,7 +4,7 @@ import styles from "./index.module.less";
 
 export type SelectWithAddonBeforeProps = SelectProps & {
   /** 前置文本 */
-  addonBefore?: string;
+  addonBefore?: React.ReactNode;
   /** 选择器宽度 */
   width?: number;
   /** 自定义下拉框 里面的菜单下方的链接 */
@@ -33,7 +33,7 @@ export const SelectWithAddonBefore = forwardRef(
           className={styles["item-form"]}
           onChange={(e, option) => props?.onChange?.(e, option)}
           options={props.options}
-          rootClassName={addonBefore && styles["item-form-select"]}
+          rootClassName={addonBefore ? styles["item-form-select"] : undefined}
           dropdownRender={
             renderLink
               ? (menu) => (
