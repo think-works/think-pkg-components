@@ -1,158 +1,251 @@
-import { Upload, UploadProps } from "antd";
+import { DraggerProps, Upload, UploadProps } from "antd";
 import axios, { AxiosInstance } from "axios";
-import cls, { Argument } from "classnames";
-import React from "react";
+import cls from "classnames";
 import logger from "@/utils/logger";
 import { isType } from "@/utils/tools";
 import stl from "./index.module.less";
 
 const isNumber = (val: any) => isType<number>(val, "Number");
+const isFunction = (val: any) =>
+  isType<(...params: any[]) => any>(val, "Function");
 
-export type UploaderProps = UploadProps & {
-  className?: Argument;
-  children?: React.ReactNode;
+type BeforeUploadParams = Parameters<NonNullable<UploadProps["beforeUpload"]>>;
+type OnChangeParams = Parameters<NonNullable<UploadProps["onChange"]>>;
+type CustomRequestParams = Parameters<
+  NonNullable<UploadProps["customRequest"]>
+>;
+
+export type UploaderProps<T = any> = UploadProps<T> & {
+  /** 最大文件大小 */
   maxSize?: number;
-  onSizeOver?: (file: any) => void;
-  onSuccess?: (info: any) => void;
-  onError?: (info: any) => void;
+  /** 超出文件大小限制 */
+  onSizeOver?: (
+    file: BeforeUploadParams[0],
+    fileList: BeforeUploadParams[1],
+  ) => void;
+  /** 超出文件类型限制 */
+  onAcceptOver?: (
+    file: BeforeUploadParams[0],
+    fileList: BeforeUploadParams[1],
+  ) => void;
+  /** 上传成功 */
+  onSuccess?: (info: OnChangeParams[0]) => void;
+  /** 上传失败 */
+  onError?: (info: OnChangeParams[0]) => void;
+  /** axios 实例 */
   axiosInstance?: AxiosInstance;
+  /** axios 配置 */
   axiosConfig?: Record<string, any>;
 };
 
-/**
- * 异步上传
- */
-export class Uploader extends React.Component<UploaderProps, any> {
-  static Dragger: any;
+const getUploadProps = (props: UploaderProps): UploadProps => {
+  const {
+    maxSize,
+    onSizeOver,
+    onAcceptOver,
+    onSuccess,
+    onError,
+    axiosInstance = axios,
+    axiosConfig = {},
 
-  protected getUploadProps = () => {
-    const {
-      className,
-      children,
-      maxSize,
-      onSizeOver,
-      onSuccess,
-      onError,
-      axiosInstance = axios,
-      axiosConfig = {},
-      ...rest
-    } = this.props;
+    name = "file",
+    accept,
+    beforeUpload,
+    onChange,
+    customRequest,
+    ...rest
+  } = props;
+  const { onUploadProgress, ...axiosRest } = axiosConfig || {};
 
-    return {
-      name: "file",
-      maxCount: 1,
-      showUploadList: {
-        showPreviewIcon: false,
-        showRemoveIcon: false,
-        showDownloadIcon: false,
-      },
-      beforeUpload: (file: any) => {
-        const { size } = file;
-        if (isNumber(maxSize) && size > maxSize) {
-          if (typeof onSizeOver === "function") {
-            onSizeOver(file);
+  return {
+    name,
+    accept,
+    maxCount: 1,
+    showUploadList: {
+      showPreviewIcon: false,
+      showRemoveIcon: false,
+      showDownloadIcon: false,
+    },
+    beforeUpload: (file, fileList) => {
+      if (isFunction(beforeUpload)) {
+        const ret = beforeUpload(file, fileList);
+        if (ret || ret === false) {
+          return ret;
+        }
+      }
+
+      // 检查文件大小
+      if (isNumber(maxSize) && file.size > maxSize) {
+        if (isFunction(onSizeOver)) {
+          onSizeOver(file, fileList);
+        }
+        return Upload.LIST_IGNORE;
+      }
+
+      // 检查文件类型
+      if (accept) {
+        let exist = false;
+
+        // 以 , 分隔的类型，如 .png, image/png, image/* 等。
+        const allowType = accept
+          .split(",")
+          .map((x) => x.trim().toLocaleLowerCase())
+          .filter(Boolean);
+        // 以 . 开头的后缀名，如 .png 等。
+        const allowSuffix = allowType.filter((x) => x.startsWith("."));
+        // 有 / 的 MIME 类型，如 image/png, image/* 等。并替换结尾 /* 为 / 以便使用。
+        const allowMime = allowType
+          .filter((x) => x.includes("/"))
+          .map((x) => x.replace(/\/\*$/, "/"));
+
+        // 检查后缀名
+        const suffix = file.name.split(".").pop()?.trim().toLocaleLowerCase();
+        if (!exist && suffix && allowSuffix.some((x) => x === `.${suffix}`)) {
+          exist = true;
+        }
+
+        // 检查 MIME (暂不考虑前缀相同的类型，如 application/ATF 和 application/ATFX )
+        const mime = file.type.trim().toLocaleLowerCase();
+        if (!exist && mime && allowMime.some((x) => mime.startsWith(x))) {
+          exist = true;
+        }
+
+        if (!exist) {
+          if (isFunction(onAcceptOver)) {
+            onAcceptOver(file, fileList);
           }
           return Upload.LIST_IGNORE;
         }
-      },
-      onChange: (info: any) => {
-        const { file } = info;
-        const { status } = file;
+      }
+    },
+    onChange: (info) => {
+      if (isFunction(onChange)) {
+        onChange(info);
+      }
 
-        if (status === "done") {
-          if (typeof onSuccess === "function") {
-            onSuccess(info);
-          }
-          return;
-        }
+      const { file } = info;
+      const { status } = file;
 
-        if (status === "error") {
-          if (typeof onError === "function") {
-            onError(info);
-          }
-          return;
+      if (status === "done") {
+        if (isFunction(onSuccess)) {
+          onSuccess(info);
         }
-      },
-      customRequest: ({
+        return;
+      }
+
+      if (status === "error") {
+        if (isFunction(onError)) {
+          onError(info);
+        }
+        return;
+      }
+    },
+    customRequest: (options) => {
+      if (isFunction(customRequest)) {
+        return customRequest(options);
+      }
+
+      const {
         method = "post",
         action,
         data,
         headers,
         withCredentials,
         file,
-        filename,
+        filename = name,
         onProgress,
         onSuccess,
         onError,
-      }: any) => {
-        const controller = new AbortController();
+      } = options;
+      const lowerCaseMethod = method.toLowerCase() as Lowercase<
+        CustomRequestParams[0]["method"]
+      >;
 
-        const formData = new FormData();
-        if (data) {
-          Object.keys(data).forEach((key) => {
-            formData.append(key, data[key]);
-          });
-        }
-        formData.append(filename, file);
+      const controller = new AbortController();
 
-        (axiosInstance as any)
-          [method](action, formData, {
-            headers,
-            withCredentials,
-            signal: controller.signal,
-            onUploadProgress: ({ total, loaded }: any) => {
-              onProgress(
-                { percent: Math.round((loaded / total) * 100).toFixed(2) },
-                file,
-              );
+      const formData = new FormData();
+      formData.append(filename, file);
+      if (data) {
+        Object.keys(data).forEach((key) => {
+          const val = data[key];
+          formData.append(key, val as any);
+        });
+      }
+
+      axiosInstance[lowerCaseMethod](action, formData, {
+        headers,
+        withCredentials,
+        signal: controller.signal,
+        onUploadProgress: (progressEvent) => {
+          if (isFunction(onUploadProgress)) {
+            onUploadProgress(progressEvent);
+          }
+
+          const { total, loaded } = progressEvent;
+          let percent = 0;
+          if (total && loaded) {
+            percent = Math.round((loaded / total) * 10000) / 100;
+          }
+
+          onProgress?.(
+            {
+              percent,
+              ...progressEvent,
             },
-            ...(axiosConfig || {}),
-          })
-          .then((body: any) => {
-            onSuccess(body, file);
-          })
-          .catch((error: any) => {
-            logger.error(error);
-            onError(error, error?.response?.data, file);
-          });
+            file,
+          );
+        },
+        ...axiosRest,
+      })
+        .then((body: any) => {
+          onSuccess?.(body, file);
+        })
+        .catch((error: any) => {
+          logger.error(error);
+          onError?.(error, error?.response?.data);
+        });
 
-        return {
-          abort() {
-            controller.abort();
-          },
-        };
-      },
-      ...rest,
-    };
+      return {
+        abort() {
+          controller.abort();
+        },
+      };
+    },
+    ...rest,
   };
-
-  render() {
-    const { className, children } = this.props;
-    const uploadProps = this.getUploadProps();
-
-    return (
-      <Upload className={cls(stl.uploader, className)} {...uploadProps}>
-        {children}
-      </Upload>
-    );
-  }
-}
+};
 
 /**
- * 拖拽异步上传
+ * 上传
  */
-class Dragger extends Uploader {
-  render() {
-    const { className, children } = this.props;
-    const uploadProps = this.getUploadProps();
+const UploaderBase = (props: UploaderProps) => {
+  const { className, children, ...rest } = props;
+  const uploadProps = getUploadProps(rest);
 
-    return (
-      <Upload.Dragger className={cls(stl.dragger, className)} {...uploadProps}>
-        {children}
-      </Upload.Dragger>
-    );
-  }
-}
+  return (
+    <Upload className={cls(stl.uploader, className)} {...uploadProps}>
+      {children}
+    </Upload>
+  );
+};
+
+/**
+ * 拖拽上传
+ */
+const Dragger = (props: DraggerProps) => {
+  const { className, children, ...rest } = props;
+  const uploadProps = getUploadProps(rest);
+
+  return (
+    <Upload.Dragger className={cls(stl.dragger, className)} {...uploadProps}>
+      {children}
+    </Upload.Dragger>
+  );
+};
+
+export const Uploader = UploaderBase as typeof UploaderBase & {
+  Dragger: typeof Dragger;
+};
 
 Uploader.Dragger = Dragger;
 
