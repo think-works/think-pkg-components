@@ -8,6 +8,7 @@ import FilterFormDemo from "./FilterFormDemo";
 import FilterTableDemo from "./FilterTableDemo";
 import FlexTabsDemo from "./FlexTabsDemo";
 import Home from "./Home";
+import LoadingDemo from "./LoadingDemo";
 import PageLayoutDemo from "./PageLayoutDemo";
 import RouterTableDemo from "./RouterTableDemo";
 import SortableContainerDemo from "./SortableContainerDemo";
@@ -71,6 +72,10 @@ export const routes: RouteObject[] = [
   {
     path: "/bypass-props",
     element: <BypassPropsDemo />,
+  },
+  {
+    path: "/loading",
+    element: <LoadingDemo />,
   },
 ];
 

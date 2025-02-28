@@ -8,10 +8,10 @@ export type LoadingProps = SpinProps & {
 };
 
 /**
- * 充满容器且不嵌套的加载中
+ * 充满(非 position: static; 定位)容器且不嵌套的加载中
  */
 export const Loading = (props: LoadingProps) => {
-  const { className, delay = 200, spinning, ...rest } = props;
+  const { className, delay = 200, spinning = true, tip, ...rest } = props;
 
   const [loading, setLoading] = useState(spinning);
 
@@ -31,7 +31,10 @@ export const Loading = (props: LoadingProps) => {
   }, [delay, spinning]);
 
   return loading ? (
-    <Spin className={cls(stl.loading, className)} {...rest} />
+    <div className={cls(stl.loading, className)}>
+      <Spin className={stl.spin} {...rest} />
+      {tip ? <div className={stl.tip}>{tip}</div> : null}
+    </div>
   ) : null;
 };
 
