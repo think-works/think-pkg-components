@@ -2,8 +2,11 @@ import type { TableColumnType } from "antd";
 import { useMemo, useState } from "react";
 import { EditableTable } from "@/components";
 
+const { EditableHeader } = EditableTable;
+
 const EditableTableDemo = () => {
   const [readOnly] = useState<boolean>(false);
+  const [indexTitle, setIndexTitle] = useState("序号");
   const [data, setDataSource] = useState<any[]>([
     {
       description: "查询条件：记录名称、状态、执行人、执行时间",
@@ -35,7 +38,16 @@ const EditableTableDemo = () => {
   const columns: TableColumnType<any>[] = useMemo(() => {
     const list: TableColumnType<any>[] = [
       {
-        title: "序号",
+        title: (
+          <EditableHeader
+            value={indexTitle}
+            deletable={{ popconfirm: "确定删除序号列吗？" }}
+            onChange={(e) => setIndexTitle(e.target.value)}
+            onDelete={() => {
+              alert("删除序号列");
+            }}
+          />
+        ),
         align: "center",
         width: 100,
         dataIndex: "index",
@@ -86,7 +98,8 @@ const EditableTableDemo = () => {
     ];
 
     return list;
-  }, [readOnly]);
+  }, [indexTitle, readOnly]);
+
   const dataSource = useMemo(() => {
     if (data?.length) {
       return data.map((item, index) => {
@@ -98,6 +111,7 @@ const EditableTableDemo = () => {
     }
     return [];
   }, [data]);
+
   return (
     <EditableTable
       // readOnly={readOnly}
@@ -110,4 +124,5 @@ const EditableTableDemo = () => {
     />
   );
 };
+
 export default EditableTableDemo;

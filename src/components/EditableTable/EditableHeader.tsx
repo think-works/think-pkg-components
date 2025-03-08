@@ -1,11 +1,24 @@
-import { Input, InputProps, Popconfirm, Space, Tooltip } from "antd";
+import {
+  Input,
+  InputProps,
+  Popconfirm,
+  PopconfirmProps,
+  Space,
+  Tooltip,
+} from "antd";
 import { ChangeEvent, useLayoutEffect, useState } from "react";
 import { DeleteOutlined } from "@ant-design/icons";
+import { isType } from "@/utils/tools";
 
 export type EditableHeaderProps = InputProps & {
   value?: string;
   /** 可删除 */
-  deletable?: boolean;
+  deletable?:
+    | boolean
+    | {
+        /** 确认弹框 */
+        popconfirm?: string | PopconfirmProps;
+      };
   /** 删除事件 */
   onDelete?: () => void;
 };
@@ -86,13 +99,33 @@ const EditableHeader = (props: EditableHeaderProps) => {
   }
 
   if (deletable) {
+    let popconfirmProps: PopconfirmProps = {
+      title: "确认删除该列？",
+      onConfirm: handleConfirm,
+    };
+
+    if (isType<Record<string, any>>(deletable, "Object")) {
+      const { popconfirm } = deletable;
+
+      if (isType<string>(popconfirm, "String")) {
+        popconfirmProps.title = popconfirm;
+      }
+
+      if (isType<Record<string, any>>(popconfirm, "Object")) {
+        popconfirmProps = {
+          ...popconfirmProps,
+          ...(popconfirm || {}),
+        };
+      }
+    }
+
     return (
       <Tooltip
         placement={"topLeft"}
         title={
           <Space>
             <span>{val}</span>
-            <Popconfirm title="确认删除该列？" onConfirm={handleConfirm}>
+            <Popconfirm {...popconfirmProps}>
               <DeleteOutlined />
             </Popconfirm>
           </Space>
