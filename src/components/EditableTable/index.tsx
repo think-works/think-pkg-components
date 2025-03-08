@@ -92,6 +92,7 @@ export type EditableTableProps = Omit<
   actionColumn?: false | Column;
   /** 操作列渲染 */
   actionRender?: ActionRender;
+  /** 最后一个操作列 */
   lastActionRender?: React.ReactNode;
   /** 可以拖拽，非 readOnly，编辑状态有效 */
   canDrag?: boolean;
