@@ -152,7 +152,10 @@ export const useThrottle = <T extends (...args: any[]) => any>(
 export const useInterval = <T extends (...args: any[]) => any>(
   func: T,
   delay: number,
-  options?: { leading?: boolean },
+  options?: {
+    /** 立即调用 */
+    leading?: boolean;
+  },
 ) => {
   const { leading = false } = options || {};
   const ref = useRef<T>(func);
@@ -184,7 +187,10 @@ export const useInterval = <T extends (...args: any[]) => any>(
 export const useTimeout = <T extends (...args: any[]) => any>(
   func: T,
   delay: number,
-  options?: { leading?: boolean },
+  options?: {
+    /** 立即调用 */
+    leading?: boolean;
+  },
 ) => {
   const { leading = false } = options || {};
   const ref = useRef<T>(func);
