@@ -4,12 +4,14 @@ import { useForceUpdate } from "@/hooks";
 import * as events from "@/utils/events";
 import { isType } from "@/utils/tools";
 import { truthy } from "@/utils/types";
-import { LayoutWrapperExtendRouteMeta } from "./type";
+import {
+  LayoutWrapperCrumbReturn,
+  LayoutWrapperCustomMenuPosition,
+  LayoutWrapperExtendRouteMeta,
+} from "./type";
 import {
   getCustomMenus,
   invokeTransformCrumb,
-  LayoutWrapperCrumbReturn,
-  LayoutWrapperCustomMenuPosition,
   refreshCustomMenuEventKey,
   refreshRouteCrumbEventKey,
 } from "./utils";
@@ -19,9 +21,7 @@ const isArray = (val: any) => isType<any[]>(val, "Array");
 
 // #region 自定义菜单
 
-/**
- * 获取匹配的菜单 key
- */
+/** 获取匹配的菜单 key */
 export const useMatchMenuKeys = () => {
   const matches = useMatches();
 
@@ -61,9 +61,7 @@ export const useMatchMenuKeys = () => {
   return jsonKeys;
 };
 
-/**
- * 获取自定义菜单
- */
+/** 获取自定义菜单 */
 export const useCustomMenus = (position?: LayoutWrapperCustomMenuPosition) => {
   const [forceKey, forceUpdate] = useForceUpdate();
   const [menus, setMenus] = useState<ReturnType<typeof getCustomMenus>>();
@@ -88,9 +86,7 @@ export const useCustomMenus = (position?: LayoutWrapperCustomMenuPosition) => {
 
 // #region 命名路由面包屑
 
-/**
- * 获取匹配的面包屑
- */
+/** 获取匹配的面包屑 */
 export const useMatchCrumbs = () => {
   const matches = useMatches();
 
@@ -135,9 +131,7 @@ export const useMatchCrumbs = () => {
 
 // #region 可见性开关
 
-/**
- * 最后一个有效的可见性开关
- */
+/** 最后一个有效的可见性开关 */
 const useLastVisibility = (key: string) => {
   const matches = useMatches();
   const last = useMemo(() => {
@@ -153,17 +147,13 @@ const useLastVisibility = (key: string) => {
   return last;
 };
 
-/**
- * 侧边栏可见性
- */
+/** 侧边栏可见性 */
 export const useSiderVisibility = () => {
   const last = useLastVisibility("sider");
   return last ?? false;
 };
 
-/**
- * 面包屑栏可见性
- */
+/** 面包屑栏可见性 */
 export const useBreadcrumbVisibility = () => {
   const last = useLastVisibility("breadcrumb");
   return last ?? false;

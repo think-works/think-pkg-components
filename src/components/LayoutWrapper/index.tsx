@@ -1,16 +1,44 @@
 import { Layout } from "antd";
-import cls from "classnames";
-import Crumb from "./Crumb";
-import Footer from "./Footer";
-import Header from "./Header";
+import cls, { Argument } from "classnames";
+import Crumb, { CrumbProps } from "./Crumb";
+import Footer, { FooterProps } from "./Footer";
+import Header, { HeaderProps } from "./Header";
 import { useBreadcrumbVisibility, useSiderVisibility } from "./hooks";
 import stl from "./index.module.less";
-import Sider, { getSiderCfg } from "./Sider";
-import { LayoutSiderItemMode, LayoutWrapperProps } from "./type";
+import Sider, { getSiderCfg, SiderProps } from "./Sider";
+import { LayoutWrapperSiderMode } from "./type";
 
 export * from "./type";
 export * as layoutWrapperUtils from "./utils";
 export * as layoutWrapperHooks from "./hooks";
+
+export type LayoutWrapperProps = {
+  className?: Argument;
+  children?: React.ReactNode;
+  /**
+   * 最小页面宽度
+   * 默认值 1200
+   */
+  minPageWidth?: number;
+  /**
+   * 页面顶部
+   * 快捷属性，等同于 headerProps.children
+   */
+  header?: React.ReactNode;
+  /**
+   * 页面底部
+   * 快捷属性，等同于 footerProps.children
+   */
+  footer?: React.ReactNode;
+  /** 页头属性 */
+  headerProps?: HeaderProps;
+  /** 页脚属性 */
+  footerProps?: FooterProps;
+  /**  侧边栏属性 */
+  siderProps?: SiderProps;
+  /** 面包屑属性 */
+  crumbProps?: CrumbProps;
+};
 
 /**
  * 页面布局组件
@@ -31,8 +59,10 @@ export const LayoutWrapper = (props: LayoutWrapperProps) => {
     headerProps || {};
   const { children: footerChildren = footer, ...footerRestProps } =
     footerProps || {};
-  const { mode: siderMode = LayoutSiderItemMode.VERTICAL, ...siderRestProps } =
-    siderProps || {};
+  const {
+    mode: siderMode = LayoutWrapperSiderMode.VERTICAL,
+    ...siderRestProps
+  } = siderProps || {};
 
   const { currentWidth = 0 } = getSiderCfg(siderMode);
 

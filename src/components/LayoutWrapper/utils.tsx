@@ -1,32 +1,23 @@
-import { MenuProps } from "antd";
-import { ReactNode } from "react";
-import { To } from "react-router-dom";
 import * as events from "@/utils/events";
+import {
+  LayoutWrapperCrumbParams,
+  LayoutWrapperCustomMenuItem,
+  LayoutWrapperCustomMenuMode,
+  LayoutWrapperCustomMenuPosition,
+  LayoutWrapperTransformCrumb,
+} from "./type";
 
-// #region 注册自定义菜单
+// #region 自定义菜单
 
-export type LayoutWrapperCustomMenuPosition = "top" | "left";
-type LayoutWrapperCustomMenuMode = "append" | "replace";
+const customTopMenuSet = new Set<LayoutWrapperCustomMenuItem>();
+const customLeftMenuSet = new Set<LayoutWrapperCustomMenuItem>();
 
-export type LayoutWrapperMenuItem = NonNullable<MenuProps["items"]>[number] & {
-  /** 菜单顺序 */
-  sort?: number;
-  /**
-   * 激活图标 (选中时切换)
-   */
-  activeIcon?: ReactNode;
-};
-
+/** 自定义菜单事件 key */
 export const refreshCustomMenuEventKey = "refreshCustomMenu";
 
-const customTopMenuSet = new Set<LayoutWrapperMenuItem>();
-const customLeftMenuSet = new Set<LayoutWrapperMenuItem>();
-
-/**
- * 注册自定义菜单
- */
+/** 注册自定义菜单 */
 export const registerCustomMenus = (
-  items: LayoutWrapperMenuItem[],
+  items: LayoutWrapperCustomMenuItem[],
   options?: {
     position?: LayoutWrapperCustomMenuPosition;
     mode?: LayoutWrapperCustomMenuMode;
@@ -34,7 +25,7 @@ export const registerCustomMenus = (
 ) => {
   const { position = "left", mode = "append" } = options || {};
   // 检测位置
-  let activeSet: Set<LayoutWrapperMenuItem> | undefined = undefined;
+  let activeSet: Set<LayoutWrapperCustomMenuItem> | undefined = undefined;
   if (position === "top") {
     activeSet = customTopMenuSet;
   } else if (position === "left") {
@@ -42,7 +33,7 @@ export const registerCustomMenus = (
   }
 
   // 检测模式
-  let clonedSet: Set<LayoutWrapperMenuItem> | undefined = undefined;
+  let clonedSet: Set<LayoutWrapperCustomMenuItem> | undefined = undefined;
   if (mode === "append") {
     items.forEach((item) => {
       // 将本次项目追加至集合尾部
@@ -91,15 +82,13 @@ export const registerCustomMenus = (
   };
 };
 
-/**
- * 获取自定义菜单
- */
+/** 获取自定义菜单 */
 export const getCustomMenus = (options?: {
   position?: LayoutWrapperCustomMenuPosition;
 }) => {
   const { position = "left" } = options || {};
 
-  let activeSet: Set<LayoutWrapperMenuItem> | undefined = undefined;
+  let activeSet: Set<LayoutWrapperCustomMenuItem> | undefined = undefined;
   if (position === "top") {
     activeSet = customTopMenuSet;
   } else if (position === "left") {
@@ -109,46 +98,19 @@ export const getCustomMenus = (options?: {
   // 菜单排序
   const list = activeSet ? Array.from(activeSet) : [];
   list.sort(({ sort: aSort = 0 }, { sort: bSort = 0 }) => aSort - bSort);
-  return list as LayoutWrapperMenuItem[];
+  return list as LayoutWrapperCustomMenuItem[];
 };
 
 // #endregion
 
-// #region 注册命名路由面包屑
-
-export type LayoutWrapperCrumbParams = {
-  /**
-   * 面包屑标题
-   */
-  title?: string;
-  /**
-   * 面包屑路径
-   */
-  pathname?: string;
-};
-
-export type LayoutWrapperCrumbReturn = LayoutWrapperCrumbParams & {
-  /**
-   * 面包屑目标位置
-   */
-  to?: To;
-  /**
-   * 面包屑元素
-   */
-  element?: ReactNode;
-};
-
-export type LayoutWrapperTransformCrumb = (
-  params: LayoutWrapperCrumbParams,
-) => false | LayoutWrapperCrumbReturn;
-
-export const refreshRouteCrumbEventKey = "refreshRouteCrumb";
+// #region 命名路由面包屑
 
 const routeCrumbMap = new Map<string, LayoutWrapperTransformCrumb>();
 
-/**
- * 注册命名路由面包屑转换函数
- */
+/** 命名路由面包屑事件 key */
+export const refreshRouteCrumbEventKey = "refreshRouteCrumb";
+
+/** 注册命名路由面包屑转换函数 */
 export const registerRouteCrumb = (
   routeName: string,
   transformer: LayoutWrapperTransformCrumb,
@@ -162,9 +124,7 @@ export const registerRouteCrumb = (
   };
 };
 
-/**
- * 调用命名路由面包屑转换函数
- */
+/** 调用命名路由面包屑转换函数 */
 export const invokeTransformCrumb = (
   routeName: string,
   params: LayoutWrapperCrumbParams,

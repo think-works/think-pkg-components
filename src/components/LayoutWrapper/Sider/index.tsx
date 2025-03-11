@@ -1,7 +1,7 @@
 import { Layout } from "antd";
 import cls, { Argument } from "classnames";
 import React, { useMemo } from "react";
-import { LayoutSiderItemMode } from "../type";
+import { LayoutWrapperSiderMode } from "../type";
 import stl from "./index.module.less";
 import LeftMenu from "./LeftMenu";
 
@@ -10,7 +10,7 @@ const VERTICAL_WIDTH = 80;
 
 export type SiderCfg = {
   /** 菜单模式 */
-  mode?: LayoutSiderItemMode;
+  mode?: LayoutWrapperSiderMode;
   /** 收起状态 */
   collapsed?: boolean;
   /** 展开宽度 */
@@ -21,8 +21,8 @@ export type SiderCfg = {
   currentWidth?: number;
 };
 
-export const getSiderCfg = (mode?: LayoutSiderItemMode): SiderCfg => {
-  if (mode === LayoutSiderItemMode.HORIZONTAL) {
+export const getSiderCfg = (mode?: LayoutWrapperSiderMode): SiderCfg => {
+  if (mode === LayoutWrapperSiderMode.HORIZONTAL) {
     return {
       mode,
       collapsed: false,
@@ -46,7 +46,7 @@ export type SiderProps = {
   /**
    * 侧边栏菜单模式
    */
-  mode?: LayoutSiderItemMode;
+  mode?: LayoutWrapperSiderMode;
   /**
    * 顶部扩展
    */
@@ -97,7 +97,7 @@ const Sider = (props: SiderProps) => {
     <Layout.Sider
       className={cls(
         stl.sider,
-        mode === LayoutSiderItemMode.HORIZONTAL && stl.horizontalSider,
+        mode === LayoutWrapperSiderMode.HORIZONTAL && stl.horizontalSider,
         className,
       )}
       theme="light"

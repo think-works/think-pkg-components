@@ -7,28 +7,20 @@ import { styleConfig, themeToken } from "@/common/theme";
 import { useForceUpdate } from "@/hooks";
 import * as types from "@/utils/types";
 import { useCustomMenus, useMatchMenuKeys } from "../hooks";
-import { LayoutSiderItemMode } from "../type";
-import { LayoutWrapperMenuItem } from "../utils";
+import { LayoutWrapperCustomMenuItem, LayoutWrapperSiderMode } from "../type";
 import stl from "./index.module.less";
 
 export type LeftMenuProps = {
   className?: Argument;
-  /**
-   * 侧边栏菜单模式
-   */
-  mode?: LayoutSiderItemMode;
-  /**
-   * 侧边栏收缩
-   */
+  /** 侧边栏菜单模式 */
+  mode?: LayoutWrapperSiderMode;
+  /** 侧边栏收缩 */
   collapsed?: boolean;
 };
-/**
- * 处理第一层菜单的 icon，激活时切换 icon
- * @param props
- * @returns
- */
+
+/** 处理第一层菜单的 icon，激活时切换 icon */
 const onDealMenuActiveIcon = (
-  menuList: LayoutWrapperMenuItem[],
+  menuList: LayoutWrapperCustomMenuItem[],
   selectedKeys: React.Key[],
 ) => {
   return menuList.map((menu) => {
@@ -45,11 +37,7 @@ const onDealMenuActiveIcon = (
   });
 };
 
-/**
- * 处理垂直菜单样式
- * @param menu
- * @returns
- */
+/** 处理垂直菜单样式 */
 const onDealVerticalMenu = (menuList: MenuItemType[]) => {
   const loop = (menus: (MenuItemType | SubMenuType)[], deep = 1) => {
     return menus.map(
@@ -116,7 +104,7 @@ const LeftMenu = (props: LeftMenuProps) => {
   const customMenus = useCustomMenus();
 
   const menuTheme = useMemo(() => {
-    if (mode === LayoutSiderItemMode.HORIZONTAL) {
+    if (mode === LayoutWrapperSiderMode.HORIZONTAL) {
       return {
         itemMarginBlock: 8,
         itemMarginInline: styleConfig.bizLayoutGap,
@@ -158,7 +146,7 @@ const LeftMenu = (props: LeftMenuProps) => {
     /**
      * 竖直模式下，菜单项样式调整
      */
-    if (mode === LayoutSiderItemMode.VERTICAL) {
+    if (mode === LayoutWrapperSiderMode.VERTICAL) {
       list = onDealVerticalMenu(list) as MenuItemType[];
     }
     setMenus(list);
@@ -178,7 +166,7 @@ const LeftMenu = (props: LeftMenuProps) => {
         key={forceKey}
         className={cls(
           stl.leftMenu,
-          mode === LayoutSiderItemMode.VERTICAL
+          mode === LayoutWrapperSiderMode.VERTICAL
             ? stl.verticalMenu
             : stl.horizontalMenu,
           className,

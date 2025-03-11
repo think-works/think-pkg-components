@@ -6,8 +6,8 @@ import {
   EditableTable,
   LayoutDetail,
   LayoutPanel,
-  LayoutSiderItemMode,
   LayoutWrapper,
+  LayoutWrapperSiderMode,
   layoutWrapperUtils,
 } from "@/components";
 import { StatisticsCard } from "@/components/StatisticsCard";
@@ -113,7 +113,7 @@ const DragContainerDemo = () => {
     <LayoutWrapper
       header={<div>header</div>}
       siderProps={{
-        mode: LayoutSiderItemMode.VERTICAL,
+        mode: LayoutWrapperSiderMode.VERTICAL,
       }}
     >
       <LayoutPanel styles={{ body: { paddingLeft: 0 } }}>
