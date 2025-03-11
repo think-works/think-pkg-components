@@ -12,22 +12,24 @@ export default [
   eslint.configs.recommended,
   react.configs.flat.recommended,
   react.configs.flat["jsx-runtime"],
+  hooks.configs["recommended-latest"],
   ...ts.configs.recommended,
   prettier,
   {
     languageOptions: {
-      parser: ts.parser,
       globals: { ...globals.browser },
     },
-    plugins: {
-      react,
-      "react-hooks": hooks,
-      "@typescript-eslint": ts.plugin,
+    settings: {
+      // https://github.com/jsx-eslint/eslint-plugin-react/blob/master/README.md#configuring-shared-settings
+      react: {
+        version: "detect",
+      },
     },
+    plugins: {},
     rules: {
-      ...hooks.configs.recommended.rules,
       "no-debugger": ["warn"],
       "no-console": ["warn", { allow: ["warn", "error"] }],
+      "no-empty": ["off"],
       "react-hooks/exhaustive-deps": ["error"],
       "@typescript-eslint/ban-ts-comment": ["off"],
       "@typescript-eslint/no-explicit-any": ["off"],
