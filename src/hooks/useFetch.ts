@@ -8,6 +8,7 @@ import { ApiResponse } from "@/utils/types";
  * 注意:
  * 请保持对复杂对象的稳定引用，否则可能会出现重复请求。
  * 如: request / options.autoFetch / options.transformResult
+ * 当 options.autoFetch 值为数组时，会展开数组并将每个数组项都加入依赖数组。
  */
 export const useFetch = <
   ReqFun extends (...rest: any[]) => Promise<ApiResponse>,
