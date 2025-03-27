@@ -7,14 +7,14 @@ import checker from "vite-plugin-checker";
 import mockDevServer from "vite-plugin-mock-dev-server";
 import svgr from "@svgr/rollup";
 import react from "@vitejs/plugin-react";
-import { name, peerDependencies, version } from "./package.json";
+import { dependencies, name, peerDependencies, version } from "./package.json";
 import proxy from "./vite.proxy.js";
 
 const libraryName = name.slice(name.indexOf("/") + 1);
 const srcPath = fileURLToPath(new URL("src", import.meta.url));
-const external = Object.keys(peerDependencies || {}).concat([
-  "react/jsx-runtime",
-]);
+const external = Object.keys(dependencies || {})
+  .concat(Object.keys(peerDependencies || {}))
+  .concat(["react/jsx-runtime"]);
 
 export default defineConfig(({ mode }) => {
   const date = new Date().toISOString();
@@ -30,7 +30,6 @@ export default defineConfig(({ mode }) => {
 
   const env = loadEnv(mode, process.cwd(), "");
 
-  const proxyTarget = env.PROXY_TARGET;
   const mockEnable = env.MOCK_ENABLE === "true";
   const buildSourcemap = env.BUILD_SOURCEMAP === "true";
   const buildIgnoreMinify = env.BUILD_IGNORE_MINIFY === "true";
@@ -48,8 +47,8 @@ export default defineConfig(({ mode }) => {
     server: {
       host: "0.0.0.0",
       proxy: proxy({
+        env,
         apiBase,
-        proxyTarget,
       }),
     },
     build: {

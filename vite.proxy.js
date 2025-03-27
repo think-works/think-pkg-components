@@ -40,20 +40,17 @@ const getProxyRules = (proxyPaths, options) => {
 };
 
 /**
- * 默认的代理路径
- */
-const fullServiceTarget = "https://dev.xincetest.com:10443";
-
-/**
  * 获取代理配置
  * @param {Object} config
+ * @param {Object} config.env
  * @param {string} config.apiBase
- * @param {string} config.proxyTarget
  * @param {string} config.customPrefix
  * @returns {Object.<string, ProxyOptions>}
  */
 export default (config) => {
-  const { apiBase = "/", proxyTarget = "", customPrefix = "" } = config || {};
+  const { env, apiBase = "/", customPrefix = "" } = config || {};
+  const defaultProxyTarget = env.DEFAULT_PROXY_TARGET;
+  const productProxyTarget = env.PRODUCT_PROXY_TARGET;
 
   return {
     ...getProxyRules(
@@ -62,10 +59,10 @@ export default (config) => {
         `${customPrefix}/meta`,
         `${customPrefix}/quality/api`,
       ],
-      getCommonOptions({ target: fullServiceTarget }),
+      getCommonOptions({ target: defaultProxyTarget }),
     ),
     [`${apiBase}api`]: getCommonOptions({
-      target: proxyTarget || fullServiceTarget,
+      target: productProxyTarget || defaultProxyTarget,
     }),
   };
 };
