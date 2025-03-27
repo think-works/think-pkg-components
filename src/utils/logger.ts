@@ -1,12 +1,14 @@
 /* eslint-disable no-console */
-import { appName } from "@/utils/config";
+import { appName, isProd } from "@/utils/config";
 
 /**
  * 创建日志记录器
  */
 export const createLogger = (scope: string) => {
   const debug = (...rest: any[]) => {
-    console.debug(`[${scope}]`, ...rest);
+    if (!isProd) {
+      console.debug(`[${scope}]`, ...rest);
+    }
   };
 
   const info = (...rest: any[]) => {
