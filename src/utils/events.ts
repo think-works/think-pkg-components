@@ -5,7 +5,7 @@ export class Events {
   /** 事件集合 */
   private events: Record<string, EventHandler[]> = {};
 
-  /*
+  /**
    * 注册事件
    * 向名为 name 的处理器数组中追加处理器 handler
    */
@@ -19,7 +19,7 @@ export class Events {
     this.events[name] = list;
   };
 
-  /*
+  /**
    * 注册一次性事件
    * 向名为 name 的处理器数组中追加处理器 handler
    */
@@ -34,7 +34,7 @@ export class Events {
     this.on(name, _handler);
   };
 
-  /*
+  /**
    * 反注册事件
    * 从名为 name 的处理器数组中移除处理器 handler
    * 忽略 handler 将移出该数组中所有处理器
@@ -51,7 +51,7 @@ export class Events {
     this.events[name] = list;
   };
 
-  /*
+  /**
    * 触发事件
    * 触发名为 name 的处理器数组中的所有处理器。
    */
@@ -65,7 +65,7 @@ export class Events {
     });
   };
 
-  /*
+  /**
    * 检查注册事件数量
    * 从名为 name 的处理器数组中检查处理器 handler
    * 忽略 handler 将检查该数组中所有处理器
@@ -80,7 +80,7 @@ export class Events {
     }
   };
 
-  /*
+  /**
    * 检查注册事件存在
    * 从名为 name 的处理器数组中检查处理器 handler
    * 忽略 handler 将检查该数组中所有处理器
