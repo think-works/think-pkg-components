@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useMatches } from "react-router-dom";
 import { useForceUpdate } from "@/hooks";
-import * as events from "@/utils/events";
+import { globalHub } from "@/utils/events";
 import { isType } from "@/utils/tools";
 import { truthy } from "@/utils/types";
 import {
@@ -67,10 +67,10 @@ export const useCustomMenus = (position?: LayoutWrapperCustomMenuPosition) => {
   const [menus, setMenus] = useState<ReturnType<typeof getCustomMenus>>();
 
   useEffect(() => {
-    events.on(refreshCustomMenuEventKey, forceUpdate);
+    globalHub.on(refreshCustomMenuEventKey, forceUpdate);
 
     return () => {
-      events.off(refreshCustomMenuEventKey, forceUpdate);
+      globalHub.off(refreshCustomMenuEventKey, forceUpdate);
     };
   }, [forceUpdate]);
 
@@ -94,10 +94,10 @@ export const useMatchCrumbs = () => {
   const [crumbs, setCrumbs] = useState<LayoutWrapperCrumbReturn[]>();
 
   useEffect(() => {
-    events.on(refreshRouteCrumbEventKey, forceUpdate);
+    globalHub.on(refreshRouteCrumbEventKey, forceUpdate);
 
     return () => {
-      events.off(refreshRouteCrumbEventKey, forceUpdate);
+      globalHub.off(refreshRouteCrumbEventKey, forceUpdate);
     };
   }, [forceUpdate]);
 

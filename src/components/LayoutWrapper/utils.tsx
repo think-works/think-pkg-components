@@ -1,4 +1,4 @@
-import * as events from "@/utils/events";
+import { globalHub } from "@/utils/events";
 import {
   LayoutWrapperCrumbParams,
   LayoutWrapperCustomMenuItem,
@@ -50,7 +50,7 @@ export const registerCustomMenus = (
     });
   }
 
-  events.emit(refreshCustomMenuEventKey);
+  globalHub.emit(refreshCustomMenuEventKey);
 
   return () => {
     if (mode === "append") {
@@ -78,7 +78,7 @@ export const registerCustomMenus = (
       });
     }
 
-    events.emit(refreshCustomMenuEventKey);
+    globalHub.emit(refreshCustomMenuEventKey);
   };
 };
 
@@ -116,11 +116,11 @@ export const registerRouteCrumb = (
   transformer: LayoutWrapperTransformCrumb,
 ) => {
   routeCrumbMap.set(routeName, transformer);
-  events.emit(refreshRouteCrumbEventKey);
+  globalHub.emit(refreshRouteCrumbEventKey);
 
   return () => {
     routeCrumbMap.delete(routeName);
-    events.emit(refreshRouteCrumbEventKey);
+    globalHub.emit(refreshRouteCrumbEventKey);
   };
 };
 
