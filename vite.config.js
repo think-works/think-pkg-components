@@ -41,7 +41,7 @@ export default defineConfig(({ mode }) => {
     clearScreen: false,
     resolve: {
       alias: {
-        "@/": path.join(srcPath, "/"),
+        "@": path.join(srcPath),
       },
     },
     server: {
