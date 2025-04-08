@@ -1,4 +1,8 @@
 /**
+ * TODO: 将本文件名称修改为 cryptos 以便于原生 crypto 作区分
+ */
+
+/**
  * UUID v4
  * http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/2117523
  * https://crypto.stackexchange.com/questions/81619/is-it-possible-to-create-a-128-bit-uuid-from-a-weak-entropy-source
