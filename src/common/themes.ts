@@ -5,9 +5,10 @@
  */
 import { ConfigProviderProps, ThemeConfig } from "antd";
 
-/**
- * 样式配置
- */
+/** 主题颜色方案 */
+export type ColorScheme = "light" | "dark";
+
+/** 样式配置 */
 export const styleConfig = {
   /** antd 变量前缀 */
   antPrefixVar: "ant",
@@ -30,9 +31,7 @@ export const styleConfig = {
   bizLayoutBorderColor: "#ebeef5",
 };
 
-/**
- * 主题变量
- */
+/** 主题变量 */
 export const themeToken = {
   // #region 状态色
 
@@ -146,9 +145,7 @@ export const themeToken = {
   colorDefault?: string;
 };
 
-/**
- * 主题配置
- */
+/** 主题配置  */
 export const themeConfig = {
   token: themeToken,
   cssVar: {
@@ -156,11 +153,60 @@ export const themeConfig = {
   },
 } satisfies ThemeConfig;
 
-/**
- * 默认 ConfigProvider 配置
- */
+/** 默认 ConfigProvider 配置  */
 export const defaultConfigProviderProps = {
   prefixCls: styleConfig.antPrefixClass,
   iconPrefixCls: styleConfig.antPrefixIcon,
   theme: themeConfig,
 } satisfies ConfigProviderProps;
+
+// #region 主题切换
+
+/** 主题属性名称 */
+export const attributeName = "data-theme";
+
+/** 查询主题属性 */
+export const queryThemeAttribute = () => {
+  const htmlElem = document.documentElement;
+  const attrValue = htmlElem.getAttribute(attributeName);
+  return attrValue;
+};
+
+/** 更新主题属性 */
+export const updateThemeAttribute = (attrValue?: ColorScheme) => {
+  const htmlElem = document.documentElement;
+  if (attrValue) {
+    htmlElem.setAttribute(attributeName, attrValue);
+  } else {
+    htmlElem.removeAttribute(attributeName);
+  }
+};
+
+/** 监听浏览器主题变化，并返回取消监听函数。 */
+export const listenBrowserTheme = (
+  callback: (value: ColorScheme) => void,
+  options?: {
+    /** 立即触发一次 */
+    immediate?: boolean;
+  },
+) => {
+  const { immediate = true } = options || {};
+
+  const media = window.matchMedia("(prefers-color-scheme: dark)");
+  if (immediate) {
+    const value = media.matches ? "dark" : "light";
+    callback(value);
+  }
+
+  const handleChange = (event: MediaQueryListEvent) => {
+    const value = event.matches ? "dark" : "light";
+    callback(value);
+  };
+  media.addEventListener("change", handleChange);
+
+  return () => {
+    media.removeEventListener("change", handleChange);
+  };
+};
+
+// #endregion
