@@ -10,7 +10,7 @@ import React, {
 } from "react";
 import { MoreOutlined } from "@ant-design/icons";
 import { BaseTreeIndexItem, BaseTreeNode } from "@/components/BaseTree";
-import { uuid4 } from "@/utils/crypto";
+import { uuid4 } from "@/utils/cryptos";
 import DropdownActions, { DropdownActionItem } from "../DropdownActions";
 import { TreeFolderIcon } from "./icon/FolderIcon";
 import { TreeFolderOpenIcon } from "./icon/FolderOpenIcon";

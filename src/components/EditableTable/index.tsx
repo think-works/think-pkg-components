@@ -12,7 +12,7 @@ import {
   useState,
 } from "react";
 import { DeleteOutlined } from "@ant-design/icons";
-import { uuid4 } from "@/utils/crypto";
+import { uuid4 } from "@/utils/cryptos";
 import { isType } from "@/utils/tools";
 import SortableTable from "../SortableTable";
 import DecoupleAutoComplete from "./DecoupleAutoComplete";

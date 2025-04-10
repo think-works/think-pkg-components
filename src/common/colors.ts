@@ -1,4 +1,4 @@
-import { stringHash } from "@/utils/crypto";
+import { stringHash } from "@/utils/cryptos";
 
 export type ColorType = {
   bgColor: string;

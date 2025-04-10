@@ -1,5 +1,10 @@
+import * as cryptos from "./cryptos";
+
+/** @deprecated 请使用 `cryptos` */
+export const crypto = cryptos;
+
 export * as agent from "./agent";
-export * as crypto from "./crypto";
+export * as cryptos from "./cryptos";
 export * as download from "./download";
 export * as enums from "./enums";
 export * as events from "./events";
