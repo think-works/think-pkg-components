@@ -1,5 +1,5 @@
 import cls, { Argument } from "classnames";
-import { themeToken } from "@/common/theme";
+import { themeToken } from "@/common/themes";
 import { LayoutTitle, LayoutTitleSize } from "../LayoutTitle";
 import stl from "./index.module.less";
 

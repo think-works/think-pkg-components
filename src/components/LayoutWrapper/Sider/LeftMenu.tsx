@@ -3,7 +3,7 @@ import { MenuItemType, SubMenuType } from "antd/es/menu/interface";
 import cls, { Argument } from "classnames";
 import classNames from "classnames";
 import { useEffect, useMemo, useState } from "react";
-import { styleConfig, themeToken } from "@/common/theme";
+import { styleConfig, themeToken } from "@/common/themes";
 import { useForceUpdate } from "@/hooks";
 import * as types from "@/utils/types";
 import { useCustomMenus, useMatchMenuKeys } from "../hooks";

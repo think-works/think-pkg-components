@@ -9,7 +9,7 @@ import {
   RightOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import { themeToken } from "@/common/theme";
+import { themeToken } from "@/common/themes";
 import stl from "./index.module.less";
 import { findLastIndex, findNextIndex } from "./utils";
 
