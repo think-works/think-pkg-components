@@ -26,7 +26,9 @@
 /** 业务布局圆角 */
 @bizLayoutRadius: 8px;
 /** 业务布局边框颜色 */
-@bizLayoutBorderColor: #ebeef5;
+@bizLayoutBorderColor: #ebeef5; // #f0f0f0
+/** 业务布局边框颜色 */
+@bizLayoutBorderColorDark: #303030;
 
 // #endregion
 
@@ -38,25 +40,35 @@
 @colorPrimary: var(
   ~"--@{antPrefixVar}-color-primary",
   #2176ff
-); // 默认值: #1677ff
+); // 默认值: #1677ff | #1668dc
 /** 链接色  */
-@colorLink: var(~"--@{antPrefixVar}-color-link", #2176ff); // 默认值: #1677ff
+@colorLink: var(
+  ~"--@{antPrefixVar}-color-link",
+  #2176ff
+); // 默认值: #1677ff | #1668dc
 /** 信息色 */
-@colorInfo: var(~"--@{antPrefixVar}-color-info", #24a7ff); // 默认值: #1677ff
+@colorInfo: var(
+  ~"--@{antPrefixVar}-color-info",
+  #24a7ff
+); // 默认值: #1677ff | #1668dc
 /** 成功色 */
 @colorSuccess: var(
   ~"--@{antPrefixVar}-color-success",
   #36b257
-); // 默认值: #52c41a
+); // 默认值: #52c41a | #49aa19
 /** 警告色 */
 @colorWarning: var(
   ~"--@{antPrefixVar}-color-warning",
   #fbc504
-); // 默认值: #faad14
+); // 默认值: #faad14 | #d89614
 /** 失败色 */
-@colorError: var(~"--@{antPrefixVar}-color-error", #db4539); // 默认值: #ff4d4f
+@colorError: var(
+  ~"--@{antPrefixVar}-color-error",
+  #db4539
+); // 默认值: #ff4d4f | #dc4446
 /** 默认色(该 token 实际并不存在) */
 @colorDefault: rgba(0, 0, 0, 0.25);
+@colorDefaultDark: rgba(255, 255, 255, 0.25);
 
 // #endregion
 
@@ -66,22 +78,22 @@
 @colorText: var(
   ~"--@{antPrefixVar}-color-text",
   #323340
-); // 默认值: rgba(0, 0, 0, 0.88)
+); // 默认值: rgba(0, 0, 0, 0.88) | rgba(255, 255, 255, 0.85)
 /** 第二级文本色 */
 @colorTextSecondary: var(
   ~"--@{antPrefixVar}-color-text-secondary",
   #565866
-); // 默认值: rgba(0, 0, 0, 0.65)
+); // 默认值: rgba(0, 0, 0, 0.65) | rgba(255, 255, 255, 0.65)
 /** 第三级文本色 */
 @colorTextTertiary: var(
   ~"--@{antPrefixVar}-color-text-tertiary",
   #7d7f8c
-); // 默认值: rgba(0, 0, 0, 0.45)
+); // 默认值: rgba(0, 0, 0, 0.45) | rgba(255, 255, 255, 0.45)
 /** 第四级文本色 */
 @colorTextQuaternary: var(
   ~"--@{antPrefixVar}-color-text-quaternary",
   #a8aab3
-); // 默认值: rgba(0, 0, 0, 0.25)
+); // 默认值: rgba(0, 0, 0, 0.25) | rgba(255, 255, 255, 0.25)
 
 // #endregion
 
@@ -140,7 +152,7 @@
 @colorBgLayout: var(
   ~"--@{antPrefixVar}-color-bg-layout",
   #eff2f7
-); // 默认值: #f5f5f5
+); // 默认值: #f5f5f5 | #000000
 /** 组件容器背景色 */
 @colorBgContainer: var(~"--@{antPrefixVar}-color-bg-container", #ffffff);
 /** 浮层容器背景色 */
@@ -198,10 +210,12 @@
 
 /** table 样式覆盖 */
 .antTableOverride() {
-  .@{antPrefixClass}-table {
-    .@{antPrefixClass}-table-thead {
-      .@{antPrefixClass}-table-cell {
-        background-color: #f5f7fa;
+  :not([data-theme="dark"]) {
+    .@{antPrefixClass}-table {
+      .@{antPrefixClass}-table-thead {
+        .@{antPrefixClass}-table-cell {
+          background-color: #f5f7fa;
+        }
       }
     }
   }
@@ -268,18 +282,20 @@
 // #region 自定义滚动条
 
 /** 滚动条滑块颜色 */
-@scrollbarThumb: #c1c1c1;
+@scrollbarThumb: #c7c7c7;
+/** 滚动条滑块颜色 */
+@scrollbarThumbDark: #6b6b6b;
 /** 滚动条轨道颜色 */
 @scrollbarTrack: transparent;
 
 /** 现代的滚动条 */
-.scrollbarModern(@thumb: @scrollbarThumb, @track: @scrollbarTrack) {
+.scrollbarModern(@thumb, @track) {
   scrollbar-width: thin;
   scrollbar-color: @thumb @track;
 }
 
 /** 遗留的滚动条 */
-.scrollbarLegacy(@thumb: @scrollbarThumb, @track: @scrollbarTrack) {
+.scrollbarLegacy(@thumb, @track) {
   &::-webkit-scrollbar {
     background-color: @track;
   }
@@ -292,35 +308,51 @@
 }
 
 /** 匹配 * 的滚动条 */
-.scrollbarStarSelector(@thumb: @scrollbarThumb, @track: @scrollbarTrack) {
+.scrollbarStarSelector() {
   @supports (scrollbar-width: thin) {
     * {
-      .scrollbarModern(@thumb, @track);
+      .scrollbarModern(@scrollbarThumb, @scrollbarTrack);
+    }
+
+    [data-theme="dark"] * {
+      .scrollbarModern(@scrollbarThumbDark, @scrollbarTrack);
     }
   }
   @supports not (scrollbar-width: thin) {
     * {
-      .scrollbarLegacy(@thumb, @track);
+      .scrollbarLegacy(@scrollbarThumb, @scrollbarTrack);
+    }
+
+    [data-theme="dark"] * {
+      .scrollbarLegacy(@scrollbarThumbDark, @scrollbarTrack);
     }
   }
 }
 
 /** 匹配 *:hover 的滚动条 */
-.scrollbarStarSelectorHover (@thumb: @scrollbarThumb, @track: @scrollbarTrack) {
+.scrollbarStarSelectorHover () {
   @supports (scrollbar-width: thin) {
     * {
       .scrollbarModern(transparent, transparent);
       &:hover {
-        .scrollbarModern(@thumb, @track);
+        .scrollbarModern(@scrollbarThumb, @scrollbarTrack);
       }
+    }
+
+    [data-theme="dark"] *:hover {
+      .scrollbarModern(@scrollbarThumbDark, @scrollbarTrack);
     }
   }
   @supports not (scrollbar-width: thin) {
     * {
       .scrollbarLegacy(transparent, transparent);
       &:hover {
-        .scrollbarLegacy(@thumb, @track);
+        .scrollbarLegacy(@scrollbarThumb, @scrollbarTrack);
       }
+    }
+
+    [data-theme="dark"] *:hover {
+      .scrollbarLegacy(@scrollbarThumbDark, @scrollbarTrack);
     }
   }
 }
