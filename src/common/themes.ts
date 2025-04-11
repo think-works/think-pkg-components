@@ -213,30 +213,49 @@ export const detectThemeScheme = (options?: {
   attributeName?: string;
   /** 存储 key */
   storageKey?: string;
+  /** 检查 meta 元素 */
+  metaElement?: boolean;
   /** 同步更新存储值和属性值 */
   syncTheme?: boolean;
 }) => {
-  const { attributeName, storageKey, syncTheme } = options || {};
-
-  const attrValue = queryThemeAttribute(attributeName);
-  const storageValue = queryThemeStorage(storageKey);
+  const { attributeName, storageKey, metaElement, syncTheme } = options || {};
 
   // 优先使用存储值
+  const storageValue = queryThemeStorage(storageKey);
   if (storageValue) {
     // 更新属性值
-    if (syncTheme && storageValue !== attrValue) {
+    if (syncTheme) {
       updateThemeAttribute(storageValue, attributeName);
     }
     return storageValue;
   }
 
   // 其次使用属性值
+  const attrValue = queryThemeAttribute(attributeName);
   if (attrValue) {
     // 更新存储值
-    if (syncTheme && attrValue !== storageValue) {
+    if (syncTheme) {
       updateThemeStorage(attrValue, storageKey);
     }
     return attrValue;
+  }
+
+  // 最后使用元信息
+  if (metaElement) {
+    const metaTheme = document.querySelector("meta[name='color-scheme']");
+    const metaValue = metaTheme
+      ?.getAttribute("content")
+      ?.split(" ")
+      ?.filter(Boolean)?.[0] as ColorScheme;
+
+    if (metaValue) {
+      // 更新属性值和存储值
+      if (syncTheme) {
+        updateThemeAttribute(metaValue, attributeName);
+        updateThemeStorage(metaValue, storageKey);
+      }
+      return metaValue;
+    }
   }
 };
 

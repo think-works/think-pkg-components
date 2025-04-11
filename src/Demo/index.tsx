@@ -10,7 +10,10 @@ import "./index.less";
 
 dayjs.locale("zh-CN");
 
-const dftScheme = themes.detectThemeScheme({ syncTheme: true });
+const dftScheme = themes.detectThemeScheme({
+  metaElement: true,
+  syncTheme: true,
+});
 const dftConfig = themes.getConfigProviderProps(dftScheme);
 
 const Demo = () => {
