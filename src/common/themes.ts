@@ -187,6 +187,59 @@ export const updateThemeAttribute = (
   }
 };
 
+/** 存储 key */
+export const storageKey = "theme";
+
+/** 查询主题存储 */
+export const queryThemeStorage = (key = storageKey) => {
+  const storageValue = queryStorage(key);
+  if (storageValue) {
+    return storageValue as ColorScheme;
+  }
+};
+
+/** 更新主题存储 */
+export const updateThemeStorage = (value?: ColorScheme, key = storageKey) => {
+  if (value) {
+    updateStorage(key, value);
+  } else {
+    deleteStorage(key);
+  }
+};
+
+/** 侦测主题方案 */
+export const detectThemeScheme = (options?: {
+  /** 属性名称 */
+  attributeName?: string;
+  /** 存储 key */
+  storageKey?: string;
+  /** 同步更新存储值和属性值 */
+  syncTheme?: boolean;
+}) => {
+  const { attributeName, storageKey, syncTheme } = options || {};
+
+  const attrValue = queryThemeAttribute(attributeName);
+  const storageValue = queryThemeStorage(storageKey);
+
+  // 优先使用存储值
+  if (storageValue) {
+    // 更新属性值
+    if (syncTheme && storageValue !== attrValue) {
+      updateThemeAttribute(storageValue, attributeName);
+    }
+    return storageValue;
+  }
+
+  // 其次使用属性值
+  if (attrValue) {
+    // 更新存储值
+    if (syncTheme && attrValue !== storageValue) {
+      updateThemeStorage(attrValue, storageKey);
+    }
+    return attrValue;
+  }
+};
+
 /** 监听浏览器主题变化，并返回取消监听函数。 */
 export const listenBrowserTheme = (
   callback: (value: ColorScheme) => void,
@@ -195,7 +248,7 @@ export const listenBrowserTheme = (
     immediate?: boolean;
   },
 ) => {
-  const { immediate = true } = options || {};
+  const { immediate } = options || {};
 
   const media = window.matchMedia("(prefers-color-scheme: dark)");
   if (immediate) {
@@ -217,25 +270,5 @@ export const listenBrowserTheme = (
 // #endregion
 
 // #region 主题存储
-
-/** 存储 key */
-export const storageKey = "theme";
-
-/** 查询主题存储 */
-export const queryThemeStorage = (key = storageKey) => {
-  const storageValue = queryStorage(key);
-  if (storageValue) {
-    return storageValue as ColorScheme;
-  }
-};
-
-/** 更新主题存储 */
-export const updateThemeStorage = (value?: ColorScheme, key = storageKey) => {
-  if (value) {
-    updateStorage(key, value);
-  } else {
-    deleteStorage(key);
-  }
-};
 
 // #endregion

@@ -50,7 +50,6 @@
       "react": "$react"
     }
   },
-  "dependencies": {},
   "peerDependencies": {
     "@ant-design/icons": "5.x-6.x",
     "antd": "5.x",
@@ -94,6 +93,7 @@
     "less": "^4.3.0",
     "lint-staged": "^15.5.0",
     "lodash-es": "^4.17.21",
+    "normalize.css": "^8.0.1",
     "postcss-preset-env": "^10.1.5",
     "prettier": "^3.5.3",
     "react": "^19.1.0",

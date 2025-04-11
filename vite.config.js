@@ -7,13 +7,13 @@ import checker from "vite-plugin-checker";
 import mockDevServer from "vite-plugin-mock-dev-server";
 import svgr from "@svgr/rollup";
 import react from "@vitejs/plugin-react";
-import { dependencies, name, peerDependencies, version } from "./package.json";
+import pkg from "./package.json";
 import proxy from "./vite.proxy.js";
 
-const libraryName = name.slice(name.indexOf("/") + 1);
+const libraryName = pkg.name.slice(pkg.name.indexOf("/") + 1);
 const srcPath = fileURLToPath(new URL("src", import.meta.url));
-const external = Object.keys(dependencies || {})
-  .concat(Object.keys(peerDependencies || {}))
+const external = Object.keys(pkg.dependencies || {})
+  .concat(Object.keys(pkg.peerDependencies || {}))
   .concat(["react/jsx-runtime"]);
 
 export default defineConfig(({ mode }) => {
@@ -23,8 +23,8 @@ export default defineConfig(({ mode }) => {
     .toString()
     .trim();
 
-  process.env.VITE_APP_NAME = name;
-  process.env.VITE_APP_VERSION = version;
+  process.env.VITE_APP_NAME = pkg.name;
+  process.env.VITE_APP_VERSION = pkg.version;
   process.env.VITE_BUILD_DATE = date;
   process.env.VITE_BUILD_COMMIT = commit;
 
@@ -65,7 +65,7 @@ export default defineConfig(({ mode }) => {
         external,
         output: {
           sourcemapExcludeSources: true,
-          banner: `/*!\n * APP_NAME: ${name}\n * APP_VERSION: ${version}\n * BUILD_DATE: ${date}\n * BUILD_COMMIT: ${commit}\n */\n`,
+          banner: `/*!\n * APP_NAME: ${pkg.name}\n * APP_VERSION: ${pkg.version}\n * BUILD_DATE: ${date}\n * BUILD_COMMIT: ${commit}\n */\n`,
         },
       },
     },
