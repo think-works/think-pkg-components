@@ -2,7 +2,10 @@ import { ConfigProviderProps, theme, ThemeConfig } from "antd";
 import { deleteStorage, queryStorage, updateStorage } from "@/utils/tools";
 
 /** 颜色方案 */
-export type ColorScheme = "light" | "dark";
+export const colorSchemes = ["light", "dark"] as const;
+
+/** 颜色方案 */
+export type ColorScheme = (typeof colorSchemes)[number];
 
 // #region 颜色方案配置
 
@@ -169,7 +172,7 @@ export const queryThemeAttribute = (attrName = attributeName) => {
   const htmlElem = document.documentElement;
   const attrValue = htmlElem.getAttribute(attrName);
 
-  if (attrValue) {
+  if (colorSchemes.includes(attrValue as any)) {
     return attrValue as ColorScheme;
   }
 };
@@ -193,7 +196,7 @@ export const storageKey = "theme";
 /** 查询主题存储 */
 export const queryThemeStorage = (key = storageKey) => {
   const storageValue = queryStorage(key);
-  if (storageValue) {
+  if (colorSchemes.includes(storageValue as any)) {
     return storageValue as ColorScheme;
   }
 };
@@ -246,7 +249,9 @@ export const detectThemeScheme = (options?: {
     const metaValue = metaTheme
       ?.getAttribute("content")
       ?.split(" ")
-      ?.filter(Boolean)?.[0] as ColorScheme;
+      ?.filter((item) =>
+        colorSchemes.includes(item as any),
+      )?.[0] as ColorScheme;
 
     if (metaValue) {
       // 更新属性值和存储值
