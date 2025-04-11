@@ -162,7 +162,7 @@ export const defaultConfigProviderProps = configProviderProps;
 
 // #endregion
 
-// #region 主题切换
+// #region 主题属性存储
 
 /** 属性名称 */
 export const attributeName = "data-theme";
@@ -209,6 +209,10 @@ export const updateThemeStorage = (value?: ColorScheme, key = storageKey) => {
     deleteStorage(key);
   }
 };
+
+// #endregion
+
+// #region 主题侦测切换
 
 /** 侦测主题方案 */
 export const detectThemeScheme = (options?: {
@@ -290,9 +294,5 @@ export const listenBrowserTheme = (
     media.removeEventListener("change", handleChange);
   };
 };
-
-// #endregion
-
-// #region 主题存储
 
 // #endregion
