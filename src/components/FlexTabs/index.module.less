@@ -49,8 +49,6 @@
       flex: auto;
 
       > .segmented {
-        background-color: #f5f7fa;
-
         > :global(.@{antPrefixClass}-segmented-group) {
           > :global(.@{antPrefixClass}-segmented-item) {
             border: 1px solid transparent;
@@ -61,7 +59,7 @@
 
             &:global(.@{antPrefixClass}-segmented-item-selected) {
               color: @colorLink;
-              border-color: #e6e9f0;
+              border-color: @colorBorderSecondary;
             }
           }
         }

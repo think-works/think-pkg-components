@@ -18,7 +18,6 @@ import {
   useState,
 } from "react";
 import { FilterOutlined } from "@ant-design/icons";
-import { types } from "@/components";
 import { useDebounce } from "@/hooks";
 import {
   isType,
@@ -26,6 +25,7 @@ import {
   jsonTryStringify,
   normalizeObject,
 } from "@/utils/tools";
+import { truthy } from "@/utils/types";
 import RouteTable from "../RouteTable";
 import stl from "./index.module.less";
 import StandardFilter, { StandardFilterProps } from "./StandardFilter";
@@ -176,7 +176,7 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
             return (item?.children?.props as any)?.name;
           }
         })
-        .filter(types.truthy),
+        .filter(truthy),
     [moreItems],
   );
 

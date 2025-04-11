@@ -1,6 +1,7 @@
 import { Button, Radio, TabsProps } from "antd";
 import { useState } from "react";
 import { FlexTabs, LayoutTabs, LayoutTabsProps } from "@/components";
+import stl from "./index.module.less";
 
 const FlexTabsDemo = () => {
   const [position, setPosition] = useState<TabsProps["tabPosition"]>("top");
@@ -46,7 +47,7 @@ const FlexTabsDemo = () => {
   };
 
   return (
-    <div style={{ backgroundColor: "#ddd" }}>
+    <div className={stl.flexTabs}>
       <Radio.Group
         value={position}
         onChange={(e) => setPosition(e.target.value)}

@@ -8,7 +8,7 @@
   border-right: unset !important;
   background-color: transparent !important;
   &.horizontalSider {
-    background-color: #fff !important;
+    background-color: @colorBgContainer !important;
   }
   :global(.@{antPrefixClass}-layout-sider-children) {
     flex: auto;
@@ -27,11 +27,9 @@
     overflow: auto;
     overflow: overlay;
     background-color: transparent;
-    .scrollbarModern(transparent, transparent);
     scrollbar-width: none;
 
     &:hover {
-      .scrollbarModern();
       scrollbar-width: none;
     }
   }
@@ -70,7 +68,7 @@
   :global(.@{antPrefixClass}-menu-submenu-selected) {
     & > :global(.@{antPrefixClass}-menu-submenu-title) {
       color: @colorPrimary;
-      background-color: #fff;
+      background-color: @colorBgElevated;
     }
   }
   .verticalItem {
@@ -94,6 +92,22 @@
       font-size: 12px;
       text-align: center;
       line-height: 20px !important;
+    }
+  }
+}
+
+[data-theme="dark"] {
+  .verticalPopup {
+    &:global(.@{antPrefixClass}-menu-submenu-popup) {
+      :global(.@{antPrefixClass}-menu-item-selected) {
+        background-color: @menuItemHoverBg;
+      }
+
+      :global(.@{antPrefixClass}-menu-submenu-selected) {
+        :global(.@{antPrefixClass}-menu-submenu-title) {
+          background-color: @menuItemHoverBg !important;
+        }
+      }
     }
   }
 }

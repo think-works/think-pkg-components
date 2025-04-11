@@ -3,6 +3,7 @@ import { Button, Form, Input, Select, Space, Tooltip } from "antd";
 import { useCallback, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { BaseDatePicker, BaseDateRangePicker, FilterForm } from "@/components";
+import stl from "./index.module.less";
 
 const { MinimizeFilter, FilterItem } = FilterForm;
 
@@ -137,9 +138,7 @@ const FilterFormDemo = () => {
   };
 
   return (
-    <div
-      style={{ height: "100%", backgroundColor: "#fff", overflow: "hidden" }}
-    >
+    <div className={stl.filterForm}>
       <h3>标准表单项</h3>
       <Space wrap>
         {[...getItems(FilterItem), getRangePickerTime(FilterItem)]}

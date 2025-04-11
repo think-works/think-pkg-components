@@ -3,19 +3,19 @@
 // 定制筛选项边框样式
 .outlinedItem() {
   // 筛选项边框和背景
-  border-width: var(--ant-line-width, 1px);
-  border-style: var(--ant-line-type, solid);
-  border-color: var(--ant-color-border, #d9d9d9);
-  border-radius: var(--ant-border-radius, 6px);
-  background-color: var(--ant-color-bg-container, #fff);
+  border-width: @lineWidth;
+  border-style: @lineType;
+  border-color: @colorBorder;
+  border-radius: @borderRadius;
+  background-color: @colorBgContainer;
 
   // 标签边框和背景
   :global(.@{antPrefixClass}-form-item-label) {
-    border-right-width: var(--ant-line-width, 1px);
-    border-right-style: var(--ant-line-type, solid);
-    border-right-color: var(--ant-color-border, #d9d9d9);
-    padding-left: var(--ant-padding-sm, 12px);
-    background-color: var(--ant-color-fill-tertiary, rgba(0, 0, 0, 0.04));
+    border-right-width: @lineWidth;
+    border-right-style: @lineType;
+    border-right-color: @colorBorder;
+    padding-left: @paddingSm;
+    background-color: @colorFillTertiary;
 
     // 隐藏标签后面的冒号
     > label {

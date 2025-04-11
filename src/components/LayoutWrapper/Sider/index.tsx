@@ -1,6 +1,7 @@
 import { Layout } from "antd";
 import cls, { Argument } from "classnames";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { listenBrowserTheme } from "@/common/themes";
 import { LayoutWrapperSiderMode } from "../type";
 import stl from "./index.module.less";
 import LeftMenu from "./LeftMenu";
@@ -75,6 +76,13 @@ const Sider = (props: SiderProps) => {
     renderMenuBottom,
   } = props;
 
+  const [siderTheme, setSiderTheme] = useState("light");
+  useEffect(() => {
+    return listenBrowserTheme((value) => {
+      setSiderTheme(value === "dark" ? "dark" : "light");
+    });
+  }, []);
+
   const siderCfg = useMemo(() => getSiderCfg(mode), [mode]);
 
   const topCom = useMemo(() => {
@@ -100,7 +108,7 @@ const Sider = (props: SiderProps) => {
         mode === LayoutWrapperSiderMode.HORIZONTAL && stl.horizontalSider,
         className,
       )}
-      theme="light"
+      theme={siderTheme as any}
       collapsed={siderCfg.collapsed}
       width={siderCfg.siderWidth}
       collapsedWidth={siderCfg.collapsedWidth}

@@ -1,9 +1,9 @@
-import { ConfigProvider, Menu } from "antd";
+import { ConfigProvider, Menu, theme } from "antd";
 import { MenuItemType, SubMenuType } from "antd/es/menu/interface";
 import cls, { Argument } from "classnames";
 import classNames from "classnames";
 import { useEffect, useMemo, useState } from "react";
-import { styleConfig, themeToken } from "@/common/themes";
+import { styleConfig } from "@/common/themes";
 import { useForceUpdate } from "@/hooks";
 import * as types from "@/utils/types";
 import { useCustomMenus, useMatchMenuKeys } from "../hooks";
@@ -100,6 +100,7 @@ const LeftMenu = (props: LeftMenuProps) => {
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
   const [menus, setMenus] = useState<(MenuItemType | SubMenuType)[]>([]);
 
+  const { token } = theme.useToken();
   const matchMenuKeys = useMatchMenuKeys();
   const customMenus = useCustomMenus();
 
@@ -115,14 +116,14 @@ const LeftMenu = (props: LeftMenuProps) => {
     }
 
     return {
-      itemSelectedColor: themeToken.colorPrimary,
-      itemSelectedBg: "#FFF",
+      itemSelectedColor: token.colorPrimary,
+      itemSelectedBg: token.colorBgElevated,
       itemHeight: 56,
       itemMarginBlock: styleConfig.bizLayoutGap,
       itemBorderRadius: 4,
       itemMarginInline: styleConfig.bizLayoutGap,
     };
-  }, [mode]);
+  }, [mode, token.colorBgElevated, token.colorPrimary]);
 
   // 从路由推导菜单 key
   useEffect(() => {

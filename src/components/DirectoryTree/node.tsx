@@ -9,8 +9,8 @@ import React, {
   useState,
 } from "react";
 import { MoreOutlined } from "@ant-design/icons";
-import { BaseTreeIndexItem, BaseTreeNode } from "@/components/BaseTree";
 import { uuid4 } from "@/utils/cryptos";
+import { BaseTreeIndexItem, BaseTreeNode } from "../BaseTree";
 import DropdownActions, { DropdownActionItem } from "../DropdownActions";
 import { TreeFolderIcon } from "./icon/FolderIcon";
 import { TreeFolderOpenIcon } from "./icon/FolderOpenIcon";

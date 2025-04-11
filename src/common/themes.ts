@@ -1,9 +1,5 @@
-/**
- * 注意：
- * 本文件中的 样式配置 和 主题变量 部分，
- * 需与 @/styles/basic.less 保持一致。
- */
-import { ConfigProviderProps, ThemeConfig } from "antd";
+import { ConfigProviderProps, theme, ThemeConfig } from "antd";
+import { deleteStorage, queryStorage, updateStorage } from "@/utils/tools";
 
 /** 颜色方案 */
 export type ColorScheme = "light" | "dark";
@@ -11,8 +7,12 @@ export type ColorScheme = "light" | "dark";
 // #region 颜色方案配置
 
 /** 获取样式配置 */
-export const getStyleConfig = (scheme?: ColorScheme) => {
-  return {
+export const getStyleConfig = (_scheme?: ColorScheme) => {
+  /**
+   * 注意：
+   * 需与 @/styles/basic.less 中的 样式配置 保持一致。
+   */
+  const cfg = {
     /** antd 变量前缀 */
     antPrefixVar: "ant",
     /** antd 类名前缀 */
@@ -30,9 +30,9 @@ export const getStyleConfig = (scheme?: ColorScheme) => {
     bizLayoutGap: 12,
     /** 业务布局圆角 */
     bizLayoutRadius: 8,
-    /** 业务布局边框颜色 */
-    bizLayoutBorderColor: scheme === "dark" ? "#303030" : "#ebeef5",
   };
+
+  return cfg;
 };
 
 /** 获取主题变量 */
@@ -40,6 +40,8 @@ export const getThemeToken = (scheme?: ColorScheme) => {
   const token = {
     // #region 状态色
 
+    /** 伪造的默认色(该 token 实际并不存在) */
+    colorDefault: "rgba(128, 128, 128, 0.5)",
     /** 主题色 */
     colorPrimary: "#2176ff", // 默认值: #1677ff | #1668dc
     /** 链接色  */
@@ -52,44 +54,29 @@ export const getThemeToken = (scheme?: ColorScheme) => {
     colorWarning: "#fbc504", // 默认值: #faad14 | #d89614
     /** 失败色 */
     colorError: "#db4539", // 默认值: #ff4d4f | #dc4446
-    /** 默认色(该 token 实际并不存在) */
-    colorDefault:
-      scheme === "dark" ? "rgba(255, 255, 255, 0.25)" : "rgba(0, 0, 0, 0.25)",
 
     // #endregion
 
     // #region 文本色
 
     /** 第一级文本色 */
-    colorText: scheme === "dark" ? undefined : "#323340", // 默认值: rgba(0, 0, 0, 0.88) | rgba(255, 255, 255, 0.85)
+    colorText: scheme === "dark" ? "rgba(255, 255, 255, 0.85)" : "#323340", // 默认值: rgba(0, 0, 0, 0.88) | rgba(255, 255, 255, 0.85)
     /** 第二级文本色 */
-    colorTextSecondary: scheme === "dark" ? undefined : "#565866", // 默认值: rgba(0, 0, 0, 0.65) | rgba(255, 255, 255, 0.65)
+    colorTextSecondary:
+      scheme === "dark" ? "rgba(255, 255, 255, 0.65)" : "#565866", // 默认值: rgba(0, 0, 0, 0.65) | rgba(255, 255, 255, 0.65)
     /** 第三级文本色 */
-    colorTextTertiary: scheme === "dark" ? undefined : "#7d7f8c", // 默认值: rgba(0, 0, 0, 0.45) | rgba(255, 255, 255, 0.45)
+    colorTextTertiary:
+      scheme === "dark" ? "rgba(255, 255, 255, 0.45)" : "#7d7f8c", // 默认值: rgba(0, 0, 0, 0.45) | rgba(255, 255, 255, 0.45)
     /** 第四级文本色 */
-    colorTextQuaternary: scheme === "dark" ? undefined : "#a8Aab3", // 默认值: rgba(0, 0, 0, 0.25) | rgba(255, 255, 255, 0.25)
+    colorTextQuaternary:
+      scheme === "dark" ? "rgba(255, 255, 255, 0.25)" : "#a8Aab3", // 默认值: rgba(0, 0, 0, 0.25) | rgba(255, 255, 255, 0.25)
 
     // #endregion
 
-    // #region 填充色
+    // #region 背景色
 
-    /** 第一级填充色 */
-    colorFill: "rgba(0, 0, 0, 0.15)",
-    /** 第二级填充色 */
-    colorFillSecondary: "rgba(0, 0, 0, 0.06)",
-    /** 第三级填充色 */
-    colorFillTertiary: "rgba(0, 0, 0, 0.04)",
-    /** 第四级填充色 */
-    colorFillQuaternary: "rgba(0, 0, 0, 0.02)",
-
-    // #endregion
-
-    // #region 边框色
-
-    /** 第一级边框色 */
-    colorBorder: "#d9d9d9",
-    /** 第二级边框色 */
-    colorBorderSecondary: "#f0f0f0",
+    /** 页面布局背景色 */
+    colorBgLayout: scheme === "dark" ? "#000000" : "#eff2F7", // 默认值: #f5f5f5 | #000000
 
     // #endregion
 
@@ -97,78 +84,39 @@ export const getThemeToken = (scheme?: ColorScheme) => {
 
     /** 基础组件的圆角大小 */
     borderRadius: 4, // 默认值: 6
-    /** LG号圆角，用于组件中的一些大圆角 */
-    borderRadiusLG: 8,
-    /** SM号圆角，用于组件小尺寸下的圆角 */
-    borderRadiusSM: 4,
-    /** XS号圆角，用于组件中的一些小圆角 */
-    borderRadiusXS: 2,
-    /** 外部圆角 */
-    borderRadiusOuter: 4,
-
-    // #endregion
-
-    // #region 背景色
-
-    /** 页面布局背景色 */
-    colorBgLayout: scheme === "dark" ? undefined : "#eff2F7", // 默认值: #f5f5f5 | #000000
-    /** 组件容器背景色 */
-    colorBgContainer: "#ffffff",
-    /** 浮层容器背景色 */
-    colorBgElevated: "#ffffff",
-    /** 浮层蒙层背景色 */
-    colorBgMask: "rgba(0, 0, 0, 0.45)",
-
-    // #endregion
-
-    // #region 主题色的激活色和悬浮色
-
-    /** 主题色的背景色(激活色) */
-    colorPrimaryBg: "#e6f4ff",
-    /** 主题色的背景悬浮色 */
-    colorPrimaryBgHover: "#bae0ff",
-    /** 主题色的边框色(激活色) */
-    colorPrimaryBorder: "#91caff",
-    /** 主题色的边框悬浮色 */
-    colorPrimaryBorderHover: "#69b1ff",
-
-    // #endregion
-
-    // #region 阴影样式
-
-    /** 第一级阴影样式 */
-    boxShadow:
-      "0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05)",
-    /** 第二级阴影样式 */
-    boxShadowSecondary:
-      "0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05)",
-    /** 第三级阴影样式 */
-    boxShadowTertiary:
-      "0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02)",
 
     // #endregion
   } satisfies ThemeConfig["token"] & {
     colorDefault?: string;
   };
 
-  const validToken = Object.keys(token).reduce((acc, key) => {
-    const value = (token as any)[key];
-    if (value) {
-      acc[key] = value;
-    }
-    return acc;
-  }, {} as any);
+  return token;
+};
 
-  return validToken as typeof token;
+/** 获取组件变量  */
+export const getComponentsToken = (scheme?: ColorScheme) => {
+  const components = {
+    Table: {
+      /** 表头背景 */
+      headerBg: scheme === "dark" ? "#1d1d1d" : "#f5f7fa", // 默认值: #fafafa | #1d1d1d
+    },
+  } satisfies ThemeConfig["components"];
+
+  return components;
 };
 
 /** 获取主题配置  */
 export const getThemeConfig = (scheme?: ColorScheme) => {
   const cfg = getStyleConfig(scheme);
   const token = getThemeToken(scheme);
+  const components = getComponentsToken(scheme);
+  const algorithm =
+    scheme === "dark" ? theme.darkAlgorithm : theme.defaultAlgorithm;
 
   return {
     token,
+    components,
+    algorithm,
     cssVar: {
       prefix: cfg.antPrefixVar,
     },
@@ -197,11 +145,17 @@ export const styleConfig = getStyleConfig();
 /** 主题变量 */
 export const themeToken = getThemeToken();
 
+/** 组件变量 */
+export const componentsToken = getComponentsToken();
+
 /** 主题配置  */
 export const themeConfig = getThemeConfig();
 
-/** 默认 ConfigProvider 配置  */
-export const defaultConfigProviderProps = getConfigProviderProps();
+/** ConfigProvider 配置  */
+export const configProviderProps = getConfigProviderProps();
+
+/** 默认 ConfigProvider 配置 @deprecated 请使用 `configProviderProps`  */
+export const defaultConfigProviderProps = configProviderProps;
 
 // #endregion
 
@@ -211,19 +165,25 @@ export const defaultConfigProviderProps = getConfigProviderProps();
 export const attributeName = "data-theme";
 
 /** 查询主题属性 */
-export const queryThemeAttribute = () => {
+export const queryThemeAttribute = (attrName = attributeName) => {
   const htmlElem = document.documentElement;
-  const attrValue = htmlElem.getAttribute(attributeName);
-  return attrValue;
+  const attrValue = htmlElem.getAttribute(attrName);
+
+  if (attrValue) {
+    return attrValue as ColorScheme;
+  }
 };
 
 /** 更新主题属性 */
-export const updateThemeAttribute = (attrValue?: ColorScheme) => {
+export const updateThemeAttribute = (
+  attrValue?: ColorScheme,
+  attrName = attributeName,
+) => {
   const htmlElem = document.documentElement;
   if (attrValue) {
-    htmlElem.setAttribute(attributeName, attrValue);
+    htmlElem.setAttribute(attrName, attrValue);
   } else {
-    htmlElem.removeAttribute(attributeName);
+    htmlElem.removeAttribute(attrName);
   }
 };
 
@@ -252,6 +212,30 @@ export const listenBrowserTheme = (
   return () => {
     media.removeEventListener("change", handleChange);
   };
+};
+
+// #endregion
+
+// #region 主题存储
+
+/** 存储 key */
+export const storageKey = "theme";
+
+/** 查询主题存储 */
+export const queryThemeStorage = (key = storageKey) => {
+  const storageValue = queryStorage(key);
+  if (storageValue) {
+    return storageValue as ColorScheme;
+  }
+};
+
+/** 更新主题存储 */
+export const updateThemeStorage = (value?: ColorScheme, key = storageKey) => {
+  if (value) {
+    updateStorage(key, value);
+  } else {
+    deleteStorage(key);
+  }
 };
 
 // #endregion

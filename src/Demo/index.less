@@ -1,20 +1,10 @@
 @import "@/styles/utils.less";
 
-html,
-body {
-  margin: 0px;
-  padding: 0px;
-  overscroll-behavior: none;
-  color: @colorText;
-  background-color: @colorBgLayout;
-}
-
-html,
-body,
-#app,
-.ant-app {
-  height: 100%;
-}
-
+.basicGlobalOverride();
 .antComponentsOverride();
 .scrollbarStarSelectorHover();
+
+#app {
+  height: 100vh;
+  overflow: auto;
+}

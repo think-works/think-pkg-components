@@ -47,12 +47,11 @@
       bottom: 0;
       z-index: 2;
       margin: 0;
-      padding: var(--ant-margin, 16px)
-        var(--ant-table-cell-padding-inline-md, 8px);
-      border-top-width: var(--ant-line-width, 1px);
-      border-top-style: var(--ant-line-type, solid);
-      border-top-color: var(--ant-table-border-color, #f0f0f0);
-      background-color: var(--ant-color-bg-container, #fff);
+      padding: @margin @tableCellPaddingInlineMd;
+      border-top-width: @lineWidth;
+      border-top-style: @lineType;
+      border-top-color: @tableBorderColor;
+      background-color: @colorBgContainer;
     }
   }
 

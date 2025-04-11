@@ -1,10 +1,9 @@
+// #region 样式配置
+
 /**
  * 注意：
- * 本文件中的 样式配置 和 主题变量 部分，
- * 需与 @/common/theme.ts 保持一致。
+ * 需与 @/common/theme.ts 中的 样式配置 保持一致。
  */
-
-// #region 样式配置
 
 /** antd 变量前缀 */
 @antPrefixVar: ant;
@@ -25,228 +24,10 @@
 @bizLayoutGap: 12px;
 /** 业务布局圆角 */
 @bizLayoutRadius: 8px;
-/** 业务布局边框颜色 */
-@bizLayoutBorderColor: #ebeef5; // #f0f0f0
-/** 业务布局边框颜色 */
-@bizLayoutBorderColorDark: #303030;
 
 // #endregion
 
-// #region 主题变量
-
-// #region 主题变量-状态色
-
-/** 主题色 */
-@colorPrimary: var(
-  ~"--@{antPrefixVar}-color-primary",
-  #2176ff
-); // 默认值: #1677ff | #1668dc
-/** 链接色  */
-@colorLink: var(
-  ~"--@{antPrefixVar}-color-link",
-  #2176ff
-); // 默认值: #1677ff | #1668dc
-/** 信息色 */
-@colorInfo: var(
-  ~"--@{antPrefixVar}-color-info",
-  #24a7ff
-); // 默认值: #1677ff | #1668dc
-/** 成功色 */
-@colorSuccess: var(
-  ~"--@{antPrefixVar}-color-success",
-  #36b257
-); // 默认值: #52c41a | #49aa19
-/** 警告色 */
-@colorWarning: var(
-  ~"--@{antPrefixVar}-color-warning",
-  #fbc504
-); // 默认值: #faad14 | #d89614
-/** 失败色 */
-@colorError: var(
-  ~"--@{antPrefixVar}-color-error",
-  #db4539
-); // 默认值: #ff4d4f | #dc4446
-/** 默认色(该 token 实际并不存在) */
-@colorDefault: rgba(0, 0, 0, 0.25);
-@colorDefaultDark: rgba(255, 255, 255, 0.25);
-
-// #endregion
-
-// #region 主题变量-文本色
-
-/** 第一级文本色 */
-@colorText: var(
-  ~"--@{antPrefixVar}-color-text",
-  #323340
-); // 默认值: rgba(0, 0, 0, 0.88) | rgba(255, 255, 255, 0.85)
-/** 第二级文本色 */
-@colorTextSecondary: var(
-  ~"--@{antPrefixVar}-color-text-secondary",
-  #565866
-); // 默认值: rgba(0, 0, 0, 0.65) | rgba(255, 255, 255, 0.65)
-/** 第三级文本色 */
-@colorTextTertiary: var(
-  ~"--@{antPrefixVar}-color-text-tertiary",
-  #7d7f8c
-); // 默认值: rgba(0, 0, 0, 0.45) | rgba(255, 255, 255, 0.45)
-/** 第四级文本色 */
-@colorTextQuaternary: var(
-  ~"--@{antPrefixVar}-color-text-quaternary",
-  #a8aab3
-); // 默认值: rgba(0, 0, 0, 0.25) | rgba(255, 255, 255, 0.25)
-
-// #endregion
-
-// #region 主题变量-填充色
-
-/** 第一级填充色 */
-@colorFill: var(~"--@{antPrefixVar}-color-fill", rgba(0, 0, 0, 0.15));
-/** 第二级填充色 */
-@colorFillSecondary: var(
-  ~"--@{antPrefixVar}-color-fill-secondary",
-  rgba(0, 0, 0, 0.06)
-);
-/** 第三级填充色 */
-@colorFillTertiary: var(
-  ~"--@{antPrefixVar}-color-fill-tertiary",
-  rgba(0, 0, 0, 0.04)
-);
-/** 第四级填充色 */
-@colorFillQuaternary: var(
-  ~"--@{antPrefixVar}-color-fill-quaternary",
-  rgba(0, 0, 0, 0.02)
-);
-
-// #endregion
-
-// #region 主题变量-边框色
-
-/** 第一级边框色 */
-@colorBorder: var(~"--@{antPrefixVar}-color-border", #d9d9d9);
-/** 第二级边框色 */
-@colorBorderSecondary: var(
-  ~"--@{antPrefixVar}-color-border-secondary",
-  #f0f0f0
-);
-
-// #endregion
-
-// #region 主题变量-边框圆角
-
-/** 基础组件的圆角大小 */
-@borderRadius: var(~"--@{antPrefixVar}-border-radius", 4px); // 默认值: 6px
-/** LG号圆角，用于组件中的一些大圆角 */
-@borderRadiusLG: var(~"--@{antPrefixVar}-border-radius-lg", 8px);
-/** SM号圆角，用于组件小尺寸下的圆角 */
-@borderRadiusSM: var(~"--@{antPrefixVar}-border-radius-sm", 4px);
-/** XS号圆角，用于组件中的一些小圆角 */
-@borderRadiusXS: var(~"--@{antPrefixVar}-border-radius-xs", 2px);
-/** 外部圆角 */
-@borderRadiusOuter: var(~"--@{antPrefixVar}-border-radius-outer", 4px);
-
-// #endregion
-
-// #region 主题变量-背景色
-
-/** 页面布局背景色 */
-@colorBgLayout: var(
-  ~"--@{antPrefixVar}-color-bg-layout",
-  #eff2f7
-); // 默认值: #f5f5f5 | #000000
-/** 组件容器背景色 */
-@colorBgContainer: var(~"--@{antPrefixVar}-color-bg-container", #ffffff);
-/** 浮层容器背景色 */
-@colorBgElevated: var(~"--@{antPrefixVar}-color-bg-elevated", #ffffff);
-/** 浮层蒙层背景色 */
-@colorBgMask: var(~"--@{antPrefixVar}-color-bg-mask", rgba(0, 0, 0, 0.45));
-
-// #endregion
-
-// #region 主题变量-主题色的激活色和悬浮色
-
-/** 主题色的背景色(激活色) */
-@colorPrimaryBg: var(~"--@{antPrefixVar}-color-primary-bg", #e6f4ff);
-/** 主题色的背景悬浮色 */
-@colorPrimaryBgHover: var(~"--@{antPrefixVar}-color-primary-bg-hover", #bae0ff);
-/** 主题色的边框色(激活色) */
-@colorPrimaryBorder: var(~"--@{antPrefixVar}-color-primary-border", #91caff);
-/** 主题色的边框悬浮色 */
-@colorPrimaryBorderHover: var(
-  ~"--@{antPrefixVar}-color-primary-bg-border-hover",
-  #69b1ff
-);
-
-// #endregion
-
-// #region 主题变量-阴影样式
-
-/** 第一级阴影样式 */
-@boxShadow: var(
-  ~"--@{antPrefixVar}-color-shadow",
-  0 6px 16px 0 rgba(0, 0, 0, 0.08),
-  0 3px 6px -4px rgba(0, 0, 0, 0.12),
-  0 9px 28px 8px rgba(0, 0, 0, 0.05)
-);
-/** 第二级阴影样式 */
-@boxShadowSecondary: var(
-  ~"--@{antPrefixVar}-color-shadow-secondary",
-  0 6px 16px 0 rgba(0, 0, 0, 0.08),
-  0 3px 6px -4px rgba(0, 0, 0, 0.12),
-  0 9px 28px 8px rgba(0, 0, 0, 0.05)
-);
-/** 第三级阴影样式 */
-@boxShadowTertiary: var(
-  ~"--@{antPrefixVar}-color-shadow-tertiary",
-  0 1px 2px 0 rgba(0, 0, 0, 0.03),
-  0 1px 6px -1px rgba(0, 0, 0, 0.02),
-  0 2px 4px 0 rgba(0, 0, 0, 0.02)
-);
-
-// #endregion
-
-// #endregion
-
-// #region 组件覆盖
-
-/** table 样式覆盖 */
-.antTableOverride() {
-  :not([data-theme="dark"]) {
-    .@{antPrefixClass}-table {
-      .@{antPrefixClass}-table-thead {
-        .@{antPrefixClass}-table-cell {
-          background-color: #f5f7fa;
-        }
-      }
-    }
-  }
-}
-
-/** tabs 样式覆盖 */
-.antTabsOverride() {
-  .@{antPrefixClass}-tabs {
-    .@{antPrefixClass}-tabs-nav-list {
-      .@{antPrefixClass}-tabs-tab {
-        padding-left: 16px;
-        padding-right: 16px;
-
-        + .@{antPrefixClass}-tabs-tab {
-          margin-top: 0;
-          margin-left: 0;
-        }
-      }
-    }
-  }
-}
-
-/** 组件级别的样式覆盖 */
-.antComponentsOverride() {
-  .antTableOverride();
-  .antTabsOverride();
-}
-
-// #endregion
-
-// #region 混入函数
+// #region 辅助函数
 
 /** 清除浮动 */
 .clear() {
@@ -279,23 +60,106 @@
 
 // #endregion
 
+// #region 基础全局样式
+
+/**
+ * 注意：
+ * antd 样式变量仅在 .ant-app 内部生效。
+ * 需与 @/common/theme.ts 中 colorBgLayout 保持一致。
+ */
+
+/** 基础背景色 */
+@basicBgColor: #eff2f7;
+/** 基础背景色(深色主题) */
+@basicBgColorDark: #000000;
+
+/** 基础主题覆盖 */
+.basicThemeOverride() {
+  [data-theme="light"] {
+    color-scheme: light;
+  }
+
+  [data-theme="dark"] {
+    color-scheme: dark;
+  }
+}
+
+/** 基础元素覆盖 */
+.basicElementOverride() {
+  html,
+  body {
+    margin: 0px;
+    padding: 0px;
+    overscroll-behavior: none;
+    background-color: @basicBgColor;
+  }
+
+  [data-theme="dark"] {
+    background-color: @basicBgColorDark;
+
+    html,
+    body {
+      background-color: @basicBgColorDark;
+    }
+  }
+}
+
+/** 基础全局覆盖 */
+.basicGlobalOverride() {
+  .basicThemeOverride();
+  .basicElementOverride();
+}
+
+// #endregion
+
+// #region antd 组件覆盖
+
+/** tabs 样式覆盖 */
+.antTabsOverride() {
+  .@{antPrefixClass}-tabs {
+    .@{antPrefixClass}-tabs-nav-list {
+      .@{antPrefixClass}-tabs-tab {
+        padding-left: 16px;
+        padding-right: 16px;
+
+        + .@{antPrefixClass}-tabs-tab {
+          margin-top: 0;
+          margin-left: 0;
+        }
+      }
+    }
+  }
+}
+
+/** 组件级别的样式覆盖 */
+.antComponentsOverride() {
+  /**
+   * 注意：
+   * 优先使用 @/common/theme.ts 中 getComponentsToken 组件变量。
+   * 只有当 antd 未提供相关的变量或使用不便时，才在此处使用样式覆盖。
+   */
+  .antTabsOverride();
+}
+
+// #endregion
+
 // #region 自定义滚动条
 
 /** 滚动条滑块颜色 */
 @scrollbarThumb: #c7c7c7;
-/** 滚动条滑块颜色 */
+/** 滚动条滑块颜色(深色主题) */
 @scrollbarThumbDark: #6b6b6b;
 /** 滚动条轨道颜色 */
 @scrollbarTrack: transparent;
 
 /** 现代的滚动条 */
-.scrollbarModern(@thumb, @track) {
+.scrollbarModern(@thumb: @scrollbarThumb, @track: @scrollbarTrack) {
   scrollbar-width: thin;
   scrollbar-color: @thumb @track;
 }
 
 /** 遗留的滚动条 */
-.scrollbarLegacy(@thumb, @track) {
+.scrollbarLegacy(@thumb: @scrollbarThumb, @track: @scrollbarTrack) {
   &::-webkit-scrollbar {
     background-color: @track;
   }
@@ -307,54 +171,297 @@
   }
 }
 
-/** 匹配 * 的滚动条 */
-.scrollbarStarSelector() {
+/** 兼容的滚动条 */
+.scrollbarCompatible(@thumb: @scrollbarThumb, @track: @scrollbarTrack) {
   @supports (scrollbar-width: thin) {
-    * {
-      .scrollbarModern(@scrollbarThumb, @scrollbarTrack);
-    }
+    .scrollbarModern(@thumb, @track);
+  }
+  @supports not (scrollbar-width: thin) {
+    .scrollbarLegacy(@thumb, @track);
+  }
+}
 
-    [data-theme="dark"] * {
-      .scrollbarModern(@scrollbarThumbDark, @scrollbarTrack);
+/** 兼容的 :hover 滚动条 */
+.scrollbarCompatibleHover(@thumb: @scrollbarThumb, @track: @scrollbarTrack) {
+  @supports (scrollbar-width: thin) {
+    .scrollbarModern(transparent, transparent);
+    &:hover {
+      .scrollbarModern(@thumb, @track);
     }
   }
   @supports not (scrollbar-width: thin) {
-    * {
-      .scrollbarLegacy(@scrollbarThumb, @scrollbarTrack);
+    .scrollbarLegacy(transparent, transparent);
+    &:hover {
+      .scrollbarLegacy(@thumb, @track);
     }
+  }
+}
 
-    [data-theme="dark"] * {
-      .scrollbarLegacy(@scrollbarThumbDark, @scrollbarTrack);
+/** 匹配 * 的滚动条 */
+.scrollbarStarSelector() {
+  * {
+    .scrollbarCompatible(@scrollbarThumb, @scrollbarTrack);
+  }
+
+  [data-theme="dark"] {
+    * {
+      .scrollbarCompatible(@scrollbarThumbDark, @scrollbarTrack);
     }
   }
 }
 
 /** 匹配 *:hover 的滚动条 */
 .scrollbarStarSelectorHover () {
-  @supports (scrollbar-width: thin) {
-    * {
-      .scrollbarModern(transparent, transparent);
-      &:hover {
-        .scrollbarModern(@scrollbarThumb, @scrollbarTrack);
-      }
-    }
-
-    [data-theme="dark"] *:hover {
-      .scrollbarModern(@scrollbarThumbDark, @scrollbarTrack);
-    }
+  * {
+    .scrollbarCompatibleHover(@scrollbarThumb, @scrollbarTrack);
   }
-  @supports not (scrollbar-width: thin) {
-    * {
-      .scrollbarLegacy(transparent, transparent);
-      &:hover {
-        .scrollbarLegacy(@scrollbarThumb, @scrollbarTrack);
-      }
-    }
 
-    [data-theme="dark"] *:hover {
-      .scrollbarLegacy(@scrollbarThumbDark, @scrollbarTrack);
+  [data-theme="dark"] {
+    * {
+      .scrollbarCompatibleHover(@scrollbarThumbDark, @scrollbarTrack);
     }
   }
 }
+
+// #endregion
+
+// #region antd 变量映射
+
+/**
+ * 注意：
+ * 源自 .ant-app 中的样式变量，移除色板变量及其衍生变量。
+ * 在 js 中可通过 `const { token } = theme.useToken()` 获取。
+ * 在 less 中请通过 `@colorPrimary` 获取，不建议使用 `var(--ant-color-primary)` 获取。
+ * 
+ * 可参考：
+ * https://ant-design.antgroup.com/docs/react/customize-theme-cn#seedtoken
+ * https://github.com/ant-design/ant-design/blob/master/.dumi/theme/builtins/TokenTable/index.tsx#L103
+ * node_modules/antd/es/version/token-meta.json
+ * node_modules/antd/es/version/token.json
+ */
+
+/** 伪造的默认色(该 token 实际并不存在) */
+@colorDefault: "rgba(128, 128, 128, 0.5)";
+
+@colorPrimary: var(~"--@{antPrefixVar}-color-primary");
+@colorSuccess: var(~"--@{antPrefixVar}-color-success");
+@colorWarning: var(~"--@{antPrefixVar}-color-warning");
+@colorError: var(~"--@{antPrefixVar}-color-error");
+@colorInfo: var(~"--@{antPrefixVar}-color-info");
+@colorLink: var(~"--@{antPrefixVar}-color-link");
+@colorTextBase: var(~"--@{antPrefixVar}-color-text-base");
+@colorBgBase: var(~"--@{antPrefixVar}-color-bg-base");
+@fontFamily: var(~"--@{antPrefixVar}-font-family");
+@fontFamilyCode: var(~"--@{antPrefixVar}-font-family-code");
+@fontSize: var(~"--@{antPrefixVar}-font-size");
+@lineWidth: var(~"--@{antPrefixVar}-line-width");
+@lineType: var(~"--@{antPrefixVar}-line-type");
+@motionEaseOutCirc: var(~"--@{antPrefixVar}-motion-ease-out-circ");
+@motionEaseInOutCirc: var(~"--@{antPrefixVar}-motion-ease-in-out-circ");
+@motionEaseOut: var(~"--@{antPrefixVar}-motion-ease-out");
+@motionEaseInOut: var(~"--@{antPrefixVar}-motion-ease-in-out");
+@motionEaseOutBack: var(~"--@{antPrefixVar}-motion-ease-out-back");
+@motionEaseInBack: var(~"--@{antPrefixVar}-motion-ease-in-back");
+@motionEaseInQuint: var(~"--@{antPrefixVar}-motion-ease-in-quint");
+@motionEaseOutQuint: var(~"--@{antPrefixVar}-motion-ease-out-quint");
+@borderRadius: var(~"--@{antPrefixVar}-border-radius");
+@sizePopupArrow: var(~"--@{antPrefixVar}-size-popup-arrow");
+@controlHeight: var(~"--@{antPrefixVar}-control-height");
+@zIndexBase: var(~"--@{antPrefixVar}-z-index-base");
+@zIndexPopupBase: var(~"--@{antPrefixVar}-z-index-popup-base");
+@opacityImage: var(~"--@{antPrefixVar}-opacity-image");
+@colorText: var(~"--@{antPrefixVar}-color-text");
+@colorTextSecondary: var(~"--@{antPrefixVar}-color-text-secondary");
+@colorTextTertiary: var(~"--@{antPrefixVar}-color-text-tertiary");
+@colorTextQuaternary: var(~"--@{antPrefixVar}-color-text-quaternary");
+@colorFill: var(~"--@{antPrefixVar}-color-fill");
+@colorFillSecondary: var(~"--@{antPrefixVar}-color-fill-secondary");
+@colorFillTertiary: var(~"--@{antPrefixVar}-color-fill-tertiary");
+@colorFillQuaternary: var(~"--@{antPrefixVar}-color-fill-quaternary");
+@colorBgSolid: var(~"--@{antPrefixVar}-color-bg-solid");
+@colorBgSolidHover: var(~"--@{antPrefixVar}-color-bg-solid-hover");
+@colorBgSolidActive: var(~"--@{antPrefixVar}-color-bg-solid-active");
+@colorBgLayout: var(~"--@{antPrefixVar}-color-bg-layout");
+@colorBgContainer: var(~"--@{antPrefixVar}-color-bg-container");
+@colorBgElevated: var(~"--@{antPrefixVar}-color-bg-elevated");
+@colorBgSpotlight: var(~"--@{antPrefixVar}-color-bg-spotlight");
+@colorBgBlur: var(~"--@{antPrefixVar}-color-bg-blur");
+@colorBorder: var(~"--@{antPrefixVar}-color-border");
+@colorBorderSecondary: var(~"--@{antPrefixVar}-color-border-secondary");
+@colorPrimaryBg: var(~"--@{antPrefixVar}-color-primary-bg");
+@colorPrimaryBgHover: var(~"--@{antPrefixVar}-color-primary-bg-hover");
+@colorPrimaryBorder: var(~"--@{antPrefixVar}-color-primary-border");
+@colorPrimaryBorderHover: var(~"--@{antPrefixVar}-color-primary-border-hover");
+@colorPrimaryHover: var(~"--@{antPrefixVar}-color-primary-hover");
+@colorPrimaryActive: var(~"--@{antPrefixVar}-color-primary-active");
+@colorPrimaryTextHover: var(~"--@{antPrefixVar}-color-primary-text-hover");
+@colorPrimaryText: var(~"--@{antPrefixVar}-color-primary-text");
+@colorPrimaryTextActive: var(~"--@{antPrefixVar}-color-primary-text-active");
+@colorSuccessBg: var(~"--@{antPrefixVar}-color-success-bg");
+@colorSuccessBgHover: var(~"--@{antPrefixVar}-color-success-bg-hover");
+@colorSuccessBorder: var(~"--@{antPrefixVar}-color-success-border");
+@colorSuccessBorderHover: var(~"--@{antPrefixVar}-color-success-border-hover");
+@colorSuccessHover: var(~"--@{antPrefixVar}-color-success-hover");
+@colorSuccessActive: var(~"--@{antPrefixVar}-color-success-active");
+@colorSuccessTextHover: var(~"--@{antPrefixVar}-color-success-text-hover");
+@colorSuccessText: var(~"--@{antPrefixVar}-color-success-text");
+@colorSuccessTextActive: var(~"--@{antPrefixVar}-color-success-text-active");
+@colorErrorBg: var(~"--@{antPrefixVar}-color-error-bg");
+@colorErrorBgHover: var(~"--@{antPrefixVar}-color-error-bg-hover");
+@colorErrorBgFilledHover: var(~"--@{antPrefixVar}-color-error-bg-filled-hover");
+@colorErrorBgActive: var(~"--@{antPrefixVar}-color-error-bg-active");
+@colorErrorBorder: var(~"--@{antPrefixVar}-color-error-border");
+@colorErrorBorderHover: var(~"--@{antPrefixVar}-color-error-border-hover");
+@colorErrorHover: var(~"--@{antPrefixVar}-color-error-hover");
+@colorErrorActive: var(~"--@{antPrefixVar}-color-error-active");
+@colorErrorTextHover: var(~"--@{antPrefixVar}-color-error-text-hover");
+@colorErrorText: var(~"--@{antPrefixVar}-color-error-text");
+@colorErrorTextActive: var(~"--@{antPrefixVar}-color-error-text-active");
+@colorWarningBg: var(~"--@{antPrefixVar}-color-warning-bg");
+@colorWarningBgHover: var(~"--@{antPrefixVar}-color-warning-bg-hover");
+@colorWarningBorder: var(~"--@{antPrefixVar}-color-warning-border");
+@colorWarningBorderHover: var(~"--@{antPrefixVar}-color-warning-border-hover");
+@colorWarningHover: var(~"--@{antPrefixVar}-color-warning-hover");
+@colorWarningActive: var(~"--@{antPrefixVar}-color-warning-active");
+@colorWarningTextHover: var(~"--@{antPrefixVar}-color-warning-text-hover");
+@colorWarningText: var(~"--@{antPrefixVar}-color-warning-text");
+@colorWarningTextActive: var(~"--@{antPrefixVar}-color-warning-text-active");
+@colorInfoBg: var(~"--@{antPrefixVar}-color-info-bg");
+@colorInfoBgHover: var(~"--@{antPrefixVar}-color-info-bg-hover");
+@colorInfoBorder: var(~"--@{antPrefixVar}-color-info-border");
+@colorInfoBorderHover: var(~"--@{antPrefixVar}-color-info-border-hover");
+@colorInfoHover: var(~"--@{antPrefixVar}-color-info-hover");
+@colorInfoActive: var(~"--@{antPrefixVar}-color-info-active");
+@colorInfoTextHover: var(~"--@{antPrefixVar}-color-info-text-hover");
+@colorInfoText: var(~"--@{antPrefixVar}-color-info-text");
+@colorInfoTextActive: var(~"--@{antPrefixVar}-color-info-text-active");
+@colorLinkHover: var(~"--@{antPrefixVar}-color-link-hover");
+@colorLinkActive: var(~"--@{antPrefixVar}-color-link-active");
+@colorBgMask: var(~"--@{antPrefixVar}-color-bg-mask");
+@colorWhite: var(~"--@{antPrefixVar}-color-white");
+@fontSizeSm: var(~"--@{antPrefixVar}-font-size-sm");
+@fontSizeLg: var(~"--@{antPrefixVar}-font-size-lg");
+@fontSizeXl: var(~"--@{antPrefixVar}-font-size-xl");
+@fontSizeHeading-1: var(~"--@{antPrefixVar}-font-size-heading-1");
+@fontSizeHeading-2: var(~"--@{antPrefixVar}-font-size-heading-2");
+@fontSizeHeading-3: var(~"--@{antPrefixVar}-font-size-heading-3");
+@fontSizeHeading-4: var(~"--@{antPrefixVar}-font-size-heading-4");
+@fontSizeHeading-5: var(~"--@{antPrefixVar}-font-size-heading-5");
+@lineHeight: var(~"--@{antPrefixVar}-line-height");
+@lineHeightLg: var(~"--@{antPrefixVar}-line-height-lg");
+@lineHeightSm: var(~"--@{antPrefixVar}-line-height-sm");
+@fontHeight: var(~"--@{antPrefixVar}-font-height");
+@fontHeightLg: var(~"--@{antPrefixVar}-font-height-lg");
+@fontHeightSm: var(~"--@{antPrefixVar}-font-height-sm");
+@lineHeightHeading-1: var(~"--@{antPrefixVar}-line-height-heading-1");
+@lineHeightHeading-2: var(~"--@{antPrefixVar}-line-height-heading-2");
+@lineHeightHeading-3: var(~"--@{antPrefixVar}-line-height-heading-3");
+@lineHeightHeading-4: var(~"--@{antPrefixVar}-line-height-heading-4");
+@lineHeightHeading-5: var(~"--@{antPrefixVar}-line-height-heading-5");
+@controlHeightSm: var(~"--@{antPrefixVar}-control-height-sm");
+@controlHeightXs: var(~"--@{antPrefixVar}-control-height-xs");
+@controlHeightLg: var(~"--@{antPrefixVar}-control-height-lg");
+@motionDurationFast: var(~"--@{antPrefixVar}-motion-duration-fast");
+@motionDurationMid: var(~"--@{antPrefixVar}-motion-duration-mid");
+@motionDurationSlow: var(~"--@{antPrefixVar}-motion-duration-slow");
+@lineWidthBold: var(~"--@{antPrefixVar}-line-width-bold");
+@borderRadiusXs: var(~"--@{antPrefixVar}-border-radius-xs");
+@borderRadiusSm: var(~"--@{antPrefixVar}-border-radius-sm");
+@borderRadiusLg: var(~"--@{antPrefixVar}-border-radius-lg");
+@borderRadiusOuter: var(~"--@{antPrefixVar}-border-radius-outer");
+@colorFillContent: var(~"--@{antPrefixVar}-color-fill-content");
+@colorFillContentHover: var(~"--@{antPrefixVar}-color-fill-content-hover");
+@colorFillAlter: var(~"--@{antPrefixVar}-color-fill-alter");
+@colorBgContainerDisabled: var(
+  ~"--@{antPrefixVar}-color-bg-container-disabled"
+);
+@colorBorderBg: var(~"--@{antPrefixVar}-color-border-bg");
+@colorSplit: var(~"--@{antPrefixVar}-color-split");
+@colorTextPlaceholder: var(~"--@{antPrefixVar}-color-text-placeholder");
+@colorTextDisabled: var(~"--@{antPrefixVar}-color-text-disabled");
+@colorTextHeading: var(~"--@{antPrefixVar}-color-text-heading");
+@colorTextLabel: var(~"--@{antPrefixVar}-color-text-label");
+@colorTextDescription: var(~"--@{antPrefixVar}-color-text-description");
+@colorTextLightSolid: var(~"--@{antPrefixVar}-color-text-light-solid");
+@colorHighlight: var(~"--@{antPrefixVar}-color-highlight");
+@colorBgTextHover: var(~"--@{antPrefixVar}-color-bg-text-hover");
+@colorBgTextActive: var(~"--@{antPrefixVar}-color-bg-text-active");
+@colorIcon: var(~"--@{antPrefixVar}-color-icon");
+@colorIconHover: var(~"--@{antPrefixVar}-color-icon-hover");
+@colorErrorOutline: var(~"--@{antPrefixVar}-color-error-outline");
+@colorWarningOutline: var(~"--@{antPrefixVar}-color-warning-outline");
+@fontSizeIcon: var(~"--@{antPrefixVar}-font-size-icon");
+@lineWidthFocus: var(~"--@{antPrefixVar}-line-width-focus");
+@controlOutlineWidth: var(~"--@{antPrefixVar}-control-outline-width");
+@controlInteractiveSize: var(~"--@{antPrefixVar}-control-interactive-size");
+@controlItemBgHover: var(~"--@{antPrefixVar}-control-item-bg-hover");
+@controlItemBgActive: var(~"--@{antPrefixVar}-control-item-bg-active");
+@controlItemBgActiveHover: var(
+  ~"--@{antPrefixVar}-control-item-bg-active-hover"
+);
+@controlItemBgActiveDisabled: var(
+  ~"--@{antPrefixVar}-control-item-bg-active-disabled"
+);
+@controlTmpOutline: var(~"--@{antPrefixVar}-control-tmp-outline");
+@controlOutline: var(~"--@{antPrefixVar}-control-outline");
+@fontWeightStrong: var(~"--@{antPrefixVar}-font-weight-strong");
+@opacityLoading: var(~"--@{antPrefixVar}-opacity-loading");
+@linkDecoration: var(~"--@{antPrefixVar}-link-decoration");
+@linkHoverDecoration: var(~"--@{antPrefixVar}-link-hover-decoration");
+@linkFocusDecoration: var(~"--@{antPrefixVar}-link-focus-decoration");
+@controlPaddingHorizontal: var(~"--@{antPrefixVar}-control-padding-horizontal");
+@controlPaddingHorizontalSm: var(
+  ~"--@{antPrefixVar}-control-padding-horizontal-sm"
+);
+@paddingXxs: var(~"--@{antPrefixVar}-padding-xxs");
+@paddingXs: var(~"--@{antPrefixVar}-padding-xs");
+@paddingSm: var(~"--@{antPrefixVar}-padding-sm");
+@padding: var(~"--@{antPrefixVar}-padding");
+@paddingMd: var(~"--@{antPrefixVar}-padding-md");
+@paddingLg: var(~"--@{antPrefixVar}-padding-lg");
+@paddingXl: var(~"--@{antPrefixVar}-padding-xl");
+@paddingContentHorizontalLg: var(
+  ~"--@{antPrefixVar}-padding-content-horizontal-lg"
+);
+@paddingContentVerticalLg: var(
+  ~"--@{antPrefixVar}-padding-content-vertical-lg"
+);
+@paddingContentHorizontal: var(~"--@{antPrefixVar}-padding-content-horizontal");
+@paddingContentVertical: var(~"--@{antPrefixVar}-padding-content-vertical");
+@paddingContentHorizontalSm: var(
+  ~"--@{antPrefixVar}-padding-content-horizontal-sm"
+);
+@paddingContentVerticalSm: var(
+  ~"--@{antPrefixVar}-padding-content-vertical-sm"
+);
+@marginXxs: var(~"--@{antPrefixVar}-margin-xxs");
+@marginXs: var(~"--@{antPrefixVar}-margin-xs");
+@marginSm: var(~"--@{antPrefixVar}-margin-sm");
+@margin: var(~"--@{antPrefixVar}-margin");
+@marginMd: var(~"--@{antPrefixVar}-margin-md");
+@marginLg: var(~"--@{antPrefixVar}-margin-lg");
+@marginXl: var(~"--@{antPrefixVar}-margin-xl");
+@marginXxl: var(~"--@{antPrefixVar}-margin-xxl");
+@boxShadow: var(~"--@{antPrefixVar}-box-shadow");
+@boxShadowSecondary: var(~"--@{antPrefixVar}-box-shadow-secondary");
+@boxShadowTertiary: var(~"--@{antPrefixVar}-box-shadow-tertiary");
+@boxShadowPopoverArrow: var(~"--@{antPrefixVar}-box-shadow-popover-arrow");
+@boxShadowCard: var(~"--@{antPrefixVar}-box-shadow-card");
+@boxShadowDrawerRight: var(~"--@{antPrefixVar}-box-shadow-drawer-right");
+@boxShadowDrawerLeft: var(~"--@{antPrefixVar}-box-shadow-drawer-left");
+@boxShadowDrawerUp: var(~"--@{antPrefixVar}-box-shadow-drawer-up");
+@boxShadowDrawerDown: var(~"--@{antPrefixVar}-box-shadow-drawer-down");
+@boxShadowTabsOverflowLeft: var(
+  ~"--@{antPrefixVar}-box-shadow-tabs-overflow-left"
+);
+@boxShadowTabsOverflowRight: var(
+  ~"--@{antPrefixVar}-box-shadow-tabs-overflow-right"
+);
+@boxShadowTabsOverflowTop: var(
+  ~"--@{antPrefixVar}-box-shadow-tabs-overflow-top"
+);
+@boxShadowTabsOverflowBottom: var(
+  ~"--@{antPrefixVar}-box-shadow-tabs-overflow-bottom"
+);
 
 // #endregion

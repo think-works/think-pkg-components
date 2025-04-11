@@ -11,8 +11,8 @@ import {
   BaseTreeItemContext,
   BaseTreeProps,
   BaseTreeRef,
-} from "@/components/BaseTree";
-import { BaseTreeNode } from "@/components/BaseTree/base/types";
+} from "../BaseTree";
+import { BaseTreeNode } from "../BaseTree/base/types";
 import styles from "./index.module.less";
 import XDirectoryTreeNode from "./node";
 import {
