@@ -114,6 +114,12 @@
 
 // #region antd 组件覆盖
 
+/**
+ * 注意：
+ * 优先使用 @/common/theme.ts 中 getComponentsToken 组件变量。
+ * 只有当 antd 未提供相关的变量或使用不便时，才在此处使用样式覆盖。
+ */
+
 /** tabs 样式覆盖 */
 .antTabsOverride() {
   .@{antPrefixClass}-tabs {
@@ -133,11 +139,6 @@
 
 /** 组件级别的样式覆盖 */
 .antComponentsOverride() {
-  /**
-   * 注意：
-   * 优先使用 @/common/theme.ts 中 getComponentsToken 组件变量。
-   * 只有当 antd 未提供相关的变量或使用不便时，才在此处使用样式覆盖。
-   */
   .antTabsOverride();
 }
 
