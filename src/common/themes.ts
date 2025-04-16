@@ -1,4 +1,5 @@
 import { ConfigProviderProps, theme, ThemeConfig } from "antd";
+import { merge } from "lodash-es";
 import { deleteStorage, queryStorage, updateStorage } from "@/utils/tools";
 
 /** 颜色方案 */
@@ -10,7 +11,7 @@ export type ColorScheme = (typeof colorSchemes)[number];
 // #region 颜色方案配置
 
 /** 获取样式配置 */
-export const getStyleConfig = (_scheme?: ColorScheme) => {
+export const getStyleConfig = () => {
   /**
    * 注意：
    * 需与 @/styles/basic.less 中的 样式配置 保持一致。
@@ -39,7 +40,12 @@ export const getStyleConfig = (_scheme?: ColorScheme) => {
 };
 
 /** 获取主题变量 */
-export const getThemeToken = (scheme?: ColorScheme) => {
+export const getThemeToken = (
+  scheme?: ColorScheme,
+  diff?: ThemeConfig["token"] & {
+    colorDefault?: string;
+  },
+) => {
   const token = {
     // #region 状态色
 
@@ -93,11 +99,14 @@ export const getThemeToken = (scheme?: ColorScheme) => {
     colorDefault?: string;
   };
 
-  return token;
+  return diff ? merge({}, token, diff) : token;
 };
 
 /** 获取组件变量  */
-export const getComponentsToken = (scheme?: ColorScheme) => {
+export const getComponentsToken = (
+  scheme?: ColorScheme,
+  diff?: ThemeConfig["components"],
+) => {
   const components = {
     Table: {
       /** 表头背景 */
@@ -105,18 +114,18 @@ export const getComponentsToken = (scheme?: ColorScheme) => {
     },
   } satisfies ThemeConfig["components"];
 
-  return components;
+  return diff ? merge({}, components, diff) : components;
 };
 
 /** 获取主题配置  */
-export const getThemeConfig = (scheme?: ColorScheme) => {
-  const cfg = getStyleConfig(scheme);
-  const token = getThemeToken(scheme);
-  const components = getComponentsToken(scheme);
+export const getThemeConfig = (scheme?: ColorScheme, diff?: ThemeConfig) => {
+  const cfg = getStyleConfig();
+  const token = getThemeToken(scheme, diff?.token);
+  const components = getComponentsToken(scheme, diff?.components);
   const algorithm =
     scheme === "dark" ? theme.darkAlgorithm : theme.defaultAlgorithm;
 
-  return {
+  const result = {
     token,
     components,
     algorithm,
@@ -124,18 +133,25 @@ export const getThemeConfig = (scheme?: ColorScheme) => {
       prefix: cfg.antPrefixVar,
     },
   } satisfies ThemeConfig;
+
+  return diff ? merge({}, result, diff) : result;
 };
 
 /** 获取 ConfigProvider 配置  */
-export const getConfigProviderProps = (scheme?: ColorScheme) => {
-  const cfg = getStyleConfig(scheme);
-  const theme = getThemeConfig(scheme);
+export const getConfigProviderProps = (
+  scheme?: ColorScheme,
+  diff?: ConfigProviderProps,
+) => {
+  const cfg = getStyleConfig();
+  const theme = getThemeConfig(scheme, diff?.theme);
 
-  return {
+  const result = {
     theme,
     prefixCls: cfg.antPrefixClass,
     iconPrefixCls: cfg.antPrefixIcon,
   } satisfies ConfigProviderProps;
+
+  return diff ? merge({}, result, diff) : result;
 };
 
 // #endregion
