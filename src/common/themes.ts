@@ -228,23 +228,27 @@ export const detectThemeScheme = (options?: {
   const { attributeName, storageKey, metaElement, syncTheme } = options || {};
 
   // 优先使用存储值
-  const storageValue = queryThemeStorage(storageKey);
-  if (storageValue) {
-    // 更新属性值
-    if (syncTheme) {
-      updateThemeAttribute(storageValue, attributeName);
+  if (storageKey) {
+    const storageValue = queryThemeStorage(storageKey);
+    if (storageValue) {
+      // 更新属性值
+      if (syncTheme && attributeName) {
+        updateThemeAttribute(storageValue, attributeName);
+      }
+      return storageValue;
     }
-    return storageValue;
   }
 
   // 其次使用属性值
-  const attrValue = queryThemeAttribute(attributeName);
-  if (attrValue) {
-    // 更新存储值
-    if (syncTheme) {
-      updateThemeStorage(attrValue, storageKey);
+  if (attributeName) {
+    const attrValue = queryThemeAttribute(attributeName);
+    if (attrValue) {
+      // 更新存储值
+      if (syncTheme && storageKey) {
+        updateThemeStorage(attrValue, storageKey);
+      }
+      return attrValue;
     }
-    return attrValue;
   }
 
   // 最后使用元信息
@@ -259,8 +263,10 @@ export const detectThemeScheme = (options?: {
 
     if (metaValue) {
       // 更新属性值和存储值
-      if (syncTheme) {
+      if (syncTheme && attributeName) {
         updateThemeAttribute(metaValue, attributeName);
+      }
+      if (syncTheme && storageKey) {
         updateThemeStorage(metaValue, storageKey);
       }
       return metaValue;
