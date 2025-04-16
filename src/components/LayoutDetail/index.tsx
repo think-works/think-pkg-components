@@ -1,7 +1,5 @@
 import { theme } from "antd";
 import cls, { Argument } from "classnames";
-import { useEffect, useState } from "react";
-import { listenBrowserTheme } from "@/common/themes";
 import { LayoutTitle, LayoutTitleSize } from "../LayoutTitle";
 import stl from "./index.module.less";
 
@@ -84,24 +82,14 @@ export const LayoutDetail = (props: LayoutDetailProps) => {
   } = props || {};
 
   const { token } = theme.useToken();
+  const startColor = entityColor ?? token.colorPrimaryBgHover;
   const endColor = token.colorBgContainer;
-  const [startColor, setStartColor] = useState(entityColor);
 
   const topBar = crumb || action;
   const entityBg =
     topBar && startColor
       ? `linear-gradient(${startColor} 0%, ${endColor} 50%)`
       : undefined;
-
-  useEffect(() => {
-    if (entityColor) {
-      return;
-    }
-
-    return listenBrowserTheme((value) => {
-      setStartColor(value === "dark" ? "#00296a" : "#c3dcff");
-    });
-  }, [entityColor]);
 
   return (
     <div

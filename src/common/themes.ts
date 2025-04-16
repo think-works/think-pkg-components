@@ -241,27 +241,32 @@ export const detectThemeScheme = (options?: {
   /** 同步更新存储值和属性值 */
   syncTheme?: boolean;
 }) => {
-  const { attributeName, storageKey, metaElement, syncTheme } = options || {};
+  const {
+    attributeName: name = attributeName,
+    storageKey: key = storageKey,
+    metaElement,
+    syncTheme,
+  } = options || {};
 
   // 优先使用存储值
-  if (storageKey) {
-    const storageValue = queryThemeStorage(storageKey);
+  if (key) {
+    const storageValue = queryThemeStorage(key);
     if (storageValue) {
       // 更新属性值
-      if (syncTheme && attributeName) {
-        updateThemeAttribute(storageValue, attributeName);
+      if (syncTheme && name) {
+        updateThemeAttribute(storageValue, name);
       }
       return storageValue;
     }
   }
 
   // 其次使用属性值
-  if (attributeName) {
-    const attrValue = queryThemeAttribute(attributeName);
+  if (name) {
+    const attrValue = queryThemeAttribute(name);
     if (attrValue) {
       // 更新存储值
-      if (syncTheme && storageKey) {
-        updateThemeStorage(attrValue, storageKey);
+      if (syncTheme && key) {
+        updateThemeStorage(attrValue, key);
       }
       return attrValue;
     }
@@ -279,11 +284,11 @@ export const detectThemeScheme = (options?: {
 
     if (metaValue) {
       // 更新属性值和存储值
-      if (syncTheme && attributeName) {
-        updateThemeAttribute(metaValue, attributeName);
+      if (syncTheme && name) {
+        updateThemeAttribute(metaValue, name);
       }
-      if (syncTheme && storageKey) {
-        updateThemeStorage(metaValue, storageKey);
+      if (syncTheme && key) {
+        updateThemeStorage(metaValue, key);
       }
       return metaValue;
     }

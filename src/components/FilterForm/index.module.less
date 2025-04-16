@@ -30,7 +30,15 @@
     > * {
       // 隐藏边框
       border: none;
+      border-radius: 0;
       background-color: transparent;
+
+      // 模拟边框效果
+      &:hover,
+      &:focus,
+      &:focus-within {
+        box-shadow: 0 0 0 1px @colorPrimaryHover;
+      }
     }
 
     // 选择器的样式比较特殊

@@ -68,7 +68,7 @@
   :global(.@{antPrefixClass}-menu-submenu-selected) {
     & > :global(.@{antPrefixClass}-menu-submenu-title) {
       color: @colorPrimary;
-      background-color: @colorBgElevated;
+      background-color: @colorBgContainer;
     }
   }
   .verticalItem {
@@ -121,7 +121,7 @@
     }
 
     :global(.@{antPrefixClass}-menu-item-selected) {
-      background-color: #edf7ff;
+      background-color: @colorPrimaryBg;
     }
 
     :global(.@{antPrefixClass}-menu-submenu-title) {
@@ -134,7 +134,7 @@
       height: 32px !important;
       :global(.@{antPrefixClass}-menu-submenu-title) {
         color: @colorPrimary;
-        background-color: #edf7ff !important;
+        background-color: @colorPrimaryBg !important;
       }
     }
   }

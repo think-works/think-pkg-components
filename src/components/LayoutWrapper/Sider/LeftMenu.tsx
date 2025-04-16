@@ -117,13 +117,13 @@ const LeftMenu = (props: LeftMenuProps) => {
 
     return {
       itemSelectedColor: token.colorPrimary,
-      itemSelectedBg: token.colorBgElevated,
+      itemSelectedBg: token.colorBgContainer,
       itemHeight: 56,
       itemMarginBlock: styleConfig.bizLayoutGap,
       itemBorderRadius: 4,
       itemMarginInline: styleConfig.bizLayoutGap,
     };
-  }, [mode, token.colorBgElevated, token.colorPrimary]);
+  }, [mode, token.colorBgContainer, token.colorPrimary]);
 
   // 从路由推导菜单 key
   useEffect(() => {

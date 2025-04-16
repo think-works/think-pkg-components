@@ -28,7 +28,7 @@ const DragContainerDemo = () => {
         key: "page-layout2",
         label: "工作台",
         icon: <OverviewSvg />,
-        activeIcon: <HomeFilled style={{ color: "red" }} />,
+        activeIcon: <HomeFilled style={{ color: "green" }} />,
       },
       {
         key: "page-layout3",

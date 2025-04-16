@@ -1,4 +1,4 @@
-import { App as AntdApp, ConfigProvider } from "antd";
+import { App as AntdApp, ConfigProvider, ConfigProviderProps } from "antd";
 import zhCN from "antd/es/locale/zh_CN";
 import dayjs from "dayjs";
 import { StrictMode, useEffect, useState } from "react";
@@ -14,14 +14,24 @@ const dftScheme = themes.detectThemeScheme({
   metaElement: true,
   syncTheme: true,
 });
-const dftConfig = themes.getConfigProviderProps(dftScheme);
+
+const diff = {
+  theme: {
+    token: {
+      colorPrimary: "#CC3232",
+      colorLink: "#CC3232",
+    },
+  },
+} satisfies ConfigProviderProps;
+
+const dftConfig = themes.getConfigProviderProps(dftScheme, diff);
 
 const Demo = () => {
   const [config, setConfig] = useState(dftConfig);
 
   useEffect(() => {
     return themes.listenBrowserTheme((value) => {
-      const cfg = themes.getConfigProviderProps(value);
+      const cfg = themes.getConfigProviderProps(value, diff);
       setConfig(cfg);
 
       themes.updateThemeAttribute(value);
@@ -31,7 +41,7 @@ const Demo = () => {
 
   return (
     <StrictMode>
-      <ConfigProvider {...config} locale={zhCN}>
+      <ConfigProvider locale={zhCN} {...config}>
         <AntdApp>
           <RouterProvider router={router} />
         </AntdApp>
