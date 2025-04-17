@@ -14,6 +14,7 @@ export * as layoutWrapperHooks from "./hooks";
 
 export type LayoutWrapperProps = {
   className?: Argument;
+  style?: React.CSSProperties;
   children?: React.ReactNode;
   /**
    * 最小页面宽度
@@ -46,6 +47,7 @@ export type LayoutWrapperProps = {
 export const LayoutWrapper = (props: LayoutWrapperProps) => {
   const {
     className,
+    style,
     children,
     minPageWidth = 1200,
     header,
@@ -70,7 +72,13 @@ export const LayoutWrapper = (props: LayoutWrapperProps) => {
   const showBreadcrumb = useBreadcrumbVisibility();
 
   return (
-    <Layout className={cls(stl.layout, className)}>
+    <Layout
+      className={cls(stl.layout, className)}
+      style={{
+        minWidth: minPageWidth,
+        ...(style || {}),
+      }}
+    >
       {headerChildren ? (
         <Header {...headerRestProps}>{headerChildren}</Header>
       ) : null}
