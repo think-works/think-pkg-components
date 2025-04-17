@@ -93,7 +93,6 @@
     "less": "^4.3.0",
     "lint-staged": "^15.5.1",
     "lodash-es": "^4.17.21",
-    "normalize.css": "^8.0.1",
     "postcss-preset-env": "^10.1.5",
     "prettier": "^3.5.3",
     "react": "^19.1.0",
