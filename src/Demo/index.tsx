@@ -18,8 +18,9 @@ const dftScheme = themes.detectThemeScheme({
 const diff = {
   theme: {
     token: {
-      colorPrimary: "#CC3232",
-      colorLink: "#CC3232",
+      // 主题色切换
+      // colorPrimary: "#CC3232",
+      // colorLink: "#CC3232",
     },
   },
 } satisfies ConfigProviderProps;
