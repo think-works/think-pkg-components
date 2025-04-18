@@ -326,13 +326,8 @@ export const detectThemeScheme = (options?: {
 
   // 检查媒体查询
   if (matchMedia) {
-    const mediaDark = window.matchMedia("(prefers-color-scheme: dark)");
-    const mediaLight = window.matchMedia("(prefers-color-scheme: light)");
-    const mediaValue = mediaDark.matches
-      ? "dark"
-      : mediaLight.matches
-        ? "light"
-        : undefined;
+    const mediaTheme = window.matchMedia("(prefers-color-scheme: dark)");
+    const mediaValue = mediaTheme.matches ? "dark" : "light";
 
     if (mediaValue) {
       // 更新属性值和存储值
