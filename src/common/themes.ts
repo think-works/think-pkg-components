@@ -1,6 +1,6 @@
 import { ConfigProviderProps, theme, ThemeConfig } from "antd";
 import { merge } from "lodash-es";
-import { deleteStorage, queryStorage, updateStorage } from "@/utils/tools";
+import { deleteLocal, queryLocal, updateLocal } from "@/utils/storage";
 
 /** 颜色方案 */
 export const colorSchemes = ["light", "dark"] as const;
@@ -211,7 +211,7 @@ export const storageKey = "theme";
 
 /** 查询主题存储 */
 export const queryThemeStorage = (key = storageKey) => {
-  const storageValue = queryStorage(key);
+  const storageValue = queryLocal(key);
   if (colorSchemes.includes(storageValue as any)) {
     return storageValue as ColorScheme;
   }
@@ -220,9 +220,9 @@ export const queryThemeStorage = (key = storageKey) => {
 /** 更新主题存储 */
 export const updateThemeStorage = (value?: ColorScheme, key = storageKey) => {
   if (value) {
-    updateStorage(key, value);
+    updateLocal(key, value);
   } else {
-    deleteStorage(key);
+    deleteLocal(key);
   }
 };
 
