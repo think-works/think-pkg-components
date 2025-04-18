@@ -178,7 +178,7 @@ export const defaultConfigProviderProps = configProviderProps;
 
 // #endregion
 
-// #region 主题属性存储
+// #region 主题查询切换
 
 /** 属性名称 */
 export const attributeName = "data-theme";
@@ -226,9 +226,75 @@ export const updateThemeStorage = (value?: ColorScheme, key = storageKey) => {
   }
 };
 
-// #endregion
+/** 查询元信息 */
+export const queryThemeMeta = () => {
+  const metaElem = document.querySelector("meta[name='color-scheme']");
+  const metaValue = metaElem
+    ?.getAttribute("content")
+    ?.split(" ")
+    ?.filter((item) => colorSchemes.includes(item as any))?.[0];
 
-// #region 主题侦测切换
+  return metaValue as ColorScheme;
+};
+
+/** 查询媒体查询 */
+export const queryThemeMedia = () => {
+  const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  const mediaValue = mediaQuery.matches ? "dark" : "light";
+
+  return mediaValue as ColorScheme;
+};
+
+/** 侦测主题方案 */
+export const detectThemeScheme = (options?: {
+  /** 属性名称 */
+  attributeName?: false | string;
+  /** 存储 key */
+  storageKey?: false | string;
+  /** 检查 meta 元素 */
+  metaElement?: boolean;
+  /** 媒体查询(一定会返回) */
+  matchMedia?: boolean;
+}) => {
+  const {
+    attributeName: name = attributeName,
+    storageKey: key = storageKey,
+    metaElement,
+    matchMedia,
+  } = options || {};
+
+  // 检查存储值
+  if (key) {
+    const storageValue = queryThemeStorage(key);
+    if (storageValue) {
+      return storageValue;
+    }
+  }
+
+  // 检查属性值
+  if (name) {
+    const attrValue = queryThemeAttribute(name);
+    if (attrValue) {
+      return attrValue;
+    }
+  }
+
+  // 检查元信息
+  if (metaElement) {
+    const metaValue = queryThemeMeta();
+    if (metaValue) {
+      return metaValue;
+    }
+  }
+
+  // 检查媒体查询
+  if (matchMedia) {
+    const mediaValue = queryThemeMedia();
+    if (mediaValue) {
+      return mediaValue;
+    }
+  }
+};
 
 /** 监听浏览器主题变化，并返回取消监听函数。 */
 export const listenBrowserTheme = (
@@ -255,91 +321,6 @@ export const listenBrowserTheme = (
   return () => {
     media.removeEventListener("change", handleChange);
   };
-};
-
-/** 侦测主题方案 */
-export const detectThemeScheme = (options?: {
-  /** 属性名称 */
-  attributeName?: string;
-  /** 存储 key */
-  storageKey?: string;
-  /** 检查 meta 元素 */
-  metaElement?: boolean;
-  /** 媒体查询 */
-  matchMedia?: boolean;
-  /** 同步更新存储值和属性值 */
-  syncTheme?: boolean;
-}) => {
-  const {
-    attributeName: name = attributeName,
-    storageKey: key = storageKey,
-    metaElement,
-    matchMedia,
-    syncTheme,
-  } = options || {};
-
-  // 检查存储值
-  if (key) {
-    const storageValue = queryThemeStorage(key);
-    if (storageValue) {
-      // 更新属性值
-      if (syncTheme && name) {
-        updateThemeAttribute(storageValue, name);
-      }
-      return storageValue;
-    }
-  }
-
-  // 检查属性值
-  if (name) {
-    const attrValue = queryThemeAttribute(name);
-    if (attrValue) {
-      // 更新存储值
-      if (syncTheme && key) {
-        updateThemeStorage(attrValue, key);
-      }
-      return attrValue;
-    }
-  }
-
-  // 检查元信息
-  if (metaElement) {
-    const metaTheme = document.querySelector("meta[name='color-scheme']");
-    const metaValue = metaTheme
-      ?.getAttribute("content")
-      ?.split(" ")
-      ?.filter((item) =>
-        colorSchemes.includes(item as any),
-      )?.[0] as ColorScheme;
-
-    if (metaValue) {
-      // 更新属性值和存储值
-      if (syncTheme && name) {
-        updateThemeAttribute(metaValue, name);
-      }
-      if (syncTheme && key) {
-        updateThemeStorage(metaValue, key);
-      }
-      return metaValue;
-    }
-  }
-
-  // 检查媒体查询
-  if (matchMedia) {
-    const mediaTheme = window.matchMedia("(prefers-color-scheme: dark)");
-    const mediaValue = mediaTheme.matches ? "dark" : "light";
-
-    if (mediaValue) {
-      // 更新属性值和存储值
-      if (syncTheme && name) {
-        updateThemeAttribute(mediaValue, name);
-      }
-      if (syncTheme && key) {
-        updateThemeStorage(mediaValue, key);
-      }
-      return mediaValue;
-    }
-  }
 };
 
 // #endregion

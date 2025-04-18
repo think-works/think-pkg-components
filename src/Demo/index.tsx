@@ -12,7 +12,7 @@ dayjs.locale("zh-CN");
 
 const dftScheme = themes.detectThemeScheme({
   metaElement: true,
-  syncTheme: true,
+  matchMedia: true,
 });
 
 const diff = {
