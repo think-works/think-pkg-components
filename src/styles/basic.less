@@ -77,30 +77,25 @@
 .basicThemeOverride() {
   [data-theme="light"] {
     color-scheme: light;
+    background-color: @basicBgColor;
   }
 
   [data-theme="dark"] {
     color-scheme: dark;
+    background-color: @basicBgColorDark;
   }
 }
 
 /** 基础元素覆盖 */
 .basicElementOverride() {
-  html,
+  html {
+    background-color: @basicBgColor;
+  }
+
   body {
     margin: 0px;
     padding: 0px;
     overscroll-behavior: none;
-    background-color: @basicBgColor;
-  }
-
-  [data-theme="dark"] {
-    background-color: @basicBgColorDark;
-
-    html,
-    body {
-      background-color: @basicBgColorDark;
-    }
   }
 }
 

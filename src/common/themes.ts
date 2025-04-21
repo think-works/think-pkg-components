@@ -237,7 +237,7 @@ export const queryThemeMeta = () => {
   return metaValue as ColorScheme;
 };
 
-/** 查询媒体查询 */
+/** 查询媒体查询(一定会返回) */
 export const queryThemeMedia = () => {
   const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
   const mediaValue = mediaQuery.matches ? "dark" : "light";
