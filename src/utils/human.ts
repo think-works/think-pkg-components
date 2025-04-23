@@ -60,9 +60,9 @@ export const separator = (num: number, len = 0, pad = true, split = ",") => {
 
 /**
  * 人类友好的时间间隔
- * @timestamp 时间间隔
- * @units 单位文案(空字符串表示忽略当前单位)
- * @split 单位分隔符
+ * @param timestamp 时间间隔
+ * @param units 单位文案(空字符串表示忽略当前单位)
+ * @param split 单位分隔符
  * @returns
  */
 export const timespan = (
