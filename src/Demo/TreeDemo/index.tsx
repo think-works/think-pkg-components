@@ -169,7 +169,7 @@ const TreeDemo = () => {
         <DirectoryTree
           ref={treeRef}
           showNodeCount
-          // expandAll={expandAll}
+          expandAll={expandAll}
           expandedKeys={expendKeys}
           onExpandedKeys={(keys) => setExpendKeys(keys as string[])}
           data={treeData as any}
