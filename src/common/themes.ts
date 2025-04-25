@@ -39,7 +39,12 @@ export const getStyleConfig = () => {
   return cfg;
 };
 
-/** 获取主题变量 */
+/**
+ * 获取主题变量
+ *
+ * 请优先从当前上下文获取 antd token
+ * `const { token } = theme.useToken();`
+ */
 export const getThemeToken = (
   scheme?: ColorScheme,
   diff?: ThemeConfig["token"] & {
