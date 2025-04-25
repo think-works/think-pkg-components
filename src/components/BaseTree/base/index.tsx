@@ -149,7 +149,7 @@ export interface BaseTreeProps<BaseNode extends BaseTreeNode> {
   onExpandedKeys?: (
     keys: BaseTreeKey[],
     nodes: BaseNode[],
-    node: BaseNode,
+    node: BaseNode | null,
   ) => void;
   canDrag?: (
     source: BaseTreeIndexItem<BaseNode>,
@@ -179,6 +179,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
     expandedKeys,
     checkedKeys,
     searchText,
+    onExpandedKeys,
     searchFilterProps = [["name"]],
   } = props;
   const [data, setData] = useState<BaseNode[]>(props.data);
@@ -211,7 +212,9 @@ const Tree = <BaseNode extends BaseTreeNode>(
   const [nodeList, treeIndex] = useMemo(() => {
     // 内部维护索引
     const tIndex = new Map<BaseTreeKey, BaseTreeIndexItem<BaseNode>>();
-    const expandList = controlExpandedKeysRef.current;
+    const expandList = new Map<BaseTreeKey, boolean | null>(
+      controlExpandedKeysRef.current,
+    );
     const checkedList = new Map<BaseTreeKey, boolean | null>(
       controlCheckedKeysRef.current,
     );
@@ -510,9 +513,20 @@ const Tree = <BaseNode extends BaseTreeNode>(
     controlExpandedKeysRef.current = expandList;
     controlCheckedKeysRef.current = checkedList;
     // setControlDisabledKeys(disabledList);
+
+    return [kNodes, tIndex];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, count, searchText]);
+
+  const nodes = useMemo(() => {
+    const nowNodes = nodeList.filter((item) => item.isShow === true);
+    return nowNodes;
+  }, [nodeList]);
+
+  useEffect(() => {
     // 重建索引时默认展开选中的所有上级
     if (activeKey) {
-      const active = tIndex.get(activeKey);
+      const active = treeIndex.get(activeKey);
       if (active && active.parent) {
         const expandedLoop = (item: BaseTreeIndexItem<BaseNode>): void => {
           if (item && item.expanded !== true) {
@@ -525,14 +539,8 @@ const Tree = <BaseNode extends BaseTreeNode>(
         expandedLoop(active.parent);
       }
     }
-    return [kNodes, tIndex];
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, count, searchText]);
-
-  const nodes = useMemo(() => {
-    const nowNodes = nodeList.filter((item) => item.isShow === true);
-    return nowNodes;
-  }, [nodeList]);
+  }, [activeKey]);
 
   /** 处理 expandedKeys 受控 */
   useEffect(() => {
@@ -578,11 +586,13 @@ const Tree = <BaseNode extends BaseTreeNode>(
           nodes.push(item.node);
         }
       });
+      const controlExpandedKeys = controlExpandedKeysRef.current;
+      controlExpandedKeys.set(node.key, expanded);
+
       setCount((preCount) => preCount + 1);
-      if (props.onExpandedKeys)
-        props.onExpandedKeys(expandList, nodes, node.node);
+      if (onExpandedKeys) onExpandedKeys(expandList, nodes, node.node);
     },
-    [props, treeIndex],
+    [onExpandedKeys, treeIndex],
   );
 
   const onCheck = (
@@ -800,19 +810,24 @@ const Tree = <BaseNode extends BaseTreeNode>(
   /** 处理 expandAll 受控 */
   useEffect(() => {
     if (expandAll !== undefined) {
-      const controlExpandedKeys = controlExpandedKeysRef.current;
-      controlExpandedKeys.forEach((_, key) => {
-        if (typeof expandAll === "number") {
-          const deep = treeIndex.get(key)?.deep;
-          if (deep && deep <= expandAll) {
-            controlExpandedKeys.set(key, true);
-          }
-        } else {
-          controlExpandedKeys.set(key, expandAll);
-        }
-      });
+      let controlExpandedKeys = new Map<BaseTreeKey, boolean | null>();
       if (expandAll === false) {
         scrollTo(0);
+        if (onExpandedKeys) {
+          onExpandedKeys([], [], null);
+        }
+      } else {
+        controlExpandedKeys = controlExpandedKeysRef.current;
+        controlExpandedKeys.forEach((_, key) => {
+          if (typeof expandAll === "number") {
+            const deep = treeIndex.get(key)?.deep;
+            if (deep && deep <= expandAll) {
+              controlExpandedKeys.set(key, true);
+            }
+          } else {
+            controlExpandedKeys.set(key, expandAll);
+          }
+        });
       }
       controlExpandedKeysRef.current = controlExpandedKeys;
       setCount((preCount) => preCount + 1);

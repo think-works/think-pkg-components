@@ -129,10 +129,10 @@ const TreeDemo = () => {
       <Space>
         <Button
           onClick={() => {
-            if (expandAll === 2) {
+            if (!expandAll) {
               setExpandAll(true);
             } else {
-              setExpandAll(!expandAll);
+              setExpandAll(false);
             }
           }}
         >
