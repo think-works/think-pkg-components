@@ -158,19 +158,19 @@ export const getConfigProviderProps = (
 
 // #region light 配置
 
-/** 样式配置 */
+/** light 颜色方案 - 样式配置 */
 export const styleConfig = getStyleConfig();
 
-/** 主题变量 */
+/** light 颜色方案 - 主题变量 */
 export const themeToken = getThemeToken();
 
-/** 组件变量 */
+/** light 颜色方案 - 组件变量 */
 export const componentsToken = getComponentsToken();
 
-/** 主题配置  */
+/** light 颜色方案 - 主题配置  */
 export const themeConfig = getThemeConfig();
 
-/** ConfigProvider 配置  */
+/** light 颜色方案 - ConfigProvider 配置  */
 export const configProviderProps = getConfigProviderProps();
 
 /** 默认 ConfigProvider 配置 @deprecated 请使用 `configProviderProps`  */

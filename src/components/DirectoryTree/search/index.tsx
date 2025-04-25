@@ -1,4 +1,4 @@
-import { Button, Input, Space, Tooltip } from "antd";
+import { Button, Input, Space, theme, Tooltip } from "antd";
 import { InputProps } from "antd/lib";
 import classNames, { Argument } from "classnames";
 import { useState } from "react";
@@ -9,7 +9,6 @@ import {
   RightOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import { themeToken } from "@/common/themes";
 import stl from "./index.module.less";
 import { findLastIndex, findNextIndex } from "./utils";
 
@@ -39,6 +38,8 @@ export const DirectoryTreeSearch = (props: DirectoryTreeSearchProps) => {
     onLast,
   } = props || {};
   const [showFilter, setShowFilter] = useState(true);
+  const { token } = theme.useToken();
+
   return (
     <div className={classNames(stl.search, className)}>
       <Input
@@ -46,7 +47,7 @@ export const DirectoryTreeSearch = (props: DirectoryTreeSearchProps) => {
         suffix={
           value && showFilter ? (
             <FilterFilled
-              style={{ color: themeToken.colorPrimary }}
+              style={{ color: token.colorPrimary }}
               className={stl.filter}
               onClick={() => {
                 setShowFilter(false);
