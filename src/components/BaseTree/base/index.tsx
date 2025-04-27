@@ -10,6 +10,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { useForceUpdate } from "@/hooks";
 import stl from "./index.module.less";
 import TreeNode from "./node";
 import {
@@ -146,11 +147,7 @@ export interface BaseTreeProps<BaseNode extends BaseTreeNode> {
   searchFilterProps?: string[][];
   /** 展开的Keys 受控 */
   expandedKeys?: BaseTreeKey[];
-  onExpandedKeys?: (
-    keys: BaseTreeKey[],
-    nodes: BaseNode[],
-    node: BaseNode | null,
-  ) => void;
+  onExpandedKeys?: (keys: BaseTreeKey[]) => void;
   canDrag?: (
     source: BaseTreeIndexItem<BaseNode>,
     target?: BaseTreeIndexItem<BaseNode>,
@@ -189,8 +186,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
   const [activeKey, setActiveKey] = useState<BaseTreeKey | undefined>(
     props.activeKey,
   );
-  const [count, setCount] = useState(0);
-  const countRef = useRef(0);
+  const [forceKey, forceUpdate] = useForceUpdate();
   const containerRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<() => void>(() => {});
@@ -223,27 +219,17 @@ const Tree = <BaseNode extends BaseTreeNode>(
 
     const kNodes: BaseTreeIndexItem<BaseNode>[] = [];
 
-    if (searchText) {
-      const searchedParentIds = findParentIdsBySearchText<BaseNode>(
-        data,
-        searchText,
-        searchFilterProps,
-      );
-      searchedParentIds?.forEach((key) => {
+    if (expandedKeys) {
+      expandedKeys.forEach((key) => {
         expandList.set(key, true);
       });
     } else {
-      if (expandedKeys) {
-        expandedKeys.forEach((key) => {
-          expandList.set(key, true);
-        });
-      } else {
-        const controlExpandedKeys = controlExpandedKeysRef.current;
-        controlExpandedKeys.forEach((val, key) => {
-          expandList.set(key, val);
-        });
-      }
+      const controlExpandedKeys = controlExpandedKeysRef.current;
+      controlExpandedKeys.forEach((val, key) => {
+        expandList.set(key, val);
+      });
     }
+
     if (checkedKeys) {
       checkedKeys.forEach((key) => {
         checkedList.set(key, true);
@@ -343,9 +329,6 @@ const Tree = <BaseNode extends BaseTreeNode>(
               searchFilterProps,
             );
             if (isSearched) {
-              if (parent?.key) {
-                expandList.set(parent.key, true);
-              }
               searchedList.set(key, true);
             } else {
               searchedList.set(key, false);
@@ -512,87 +495,33 @@ const Tree = <BaseNode extends BaseTreeNode>(
     loop(data);
     controlExpandedKeysRef.current = expandList;
     controlCheckedKeysRef.current = checkedList;
-    // setControlDisabledKeys(disabledList);
-
     return [kNodes, tIndex];
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, count, searchText]);
+  }, [JSON.stringify(data), forceKey]);
 
   const nodes = useMemo(() => {
     const nowNodes = nodeList.filter((item) => item.isShow === true);
     return nowNodes;
   }, [nodeList]);
 
-  useEffect(() => {
-    // 重建索引时默认展开选中的所有上级
-    if (activeKey) {
-      const active = treeIndex.get(activeKey);
-      if (active && active.parent) {
-        const expandedLoop = (item: BaseTreeIndexItem<BaseNode>): void => {
-          if (item && item.expanded !== true) {
-            item.expanded = true;
-            if (item.parent) {
-              expandedLoop(item.parent);
-            }
-          }
-        };
-        expandedLoop(active.parent);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeKey]);
-
-  /** 处理 expandedKeys 受控 */
-  useEffect(() => {
-    if (expandedKeys) {
-      const controlExpandedKeys = controlExpandedKeysRef.current;
-      controlExpandedKeys.forEach((_, key) => {
-        // 这里照顾之前是 null 的情况，boolean 才会渲染 dom
-        if (!expandedKeys.includes(key)) {
-          if (controlExpandedKeys.get(key) === true) {
-            controlExpandedKeys.set(key, false);
-          }
-        } else {
-          controlExpandedKeys.set(key, true);
-        }
-      });
-      controlExpandedKeysRef.current = controlExpandedKeys;
-      setCount((preCount) => preCount + 1);
-    }
-  }, [expandedKeys]);
-
-  /** 处理 checkedKeys 受控 */
-  useEffect(() => {
-    if (checkedKeys) {
-      const controlCheckedKeys = controlCheckedKeysRef.current;
-      controlCheckedKeys.forEach((_, key) => {
-        controlCheckedKeys.set(key, checkedKeys.includes(key));
-      });
-      controlCheckedKeysRef.current = controlCheckedKeys;
-      setCount((preCount) => preCount + 1);
-    }
-  }, [checkedKeys]);
-  useEffect(() => {
-    countRef.current = count;
-  }, [count]);
   const onExpand = useCallback(
     (node: BaseTreeIndexItem<BaseNode>, expanded: boolean): void => {
       node.expanded = expanded;
       const expandList: BaseTreeKey[] = [];
-      const nodes: BaseNode[] = [];
       treeIndex.forEach((item) => {
         if (item.expanded === true) {
           expandList.push(item.key);
-          nodes.push(item.node);
         }
       });
       const controlExpandedKeys = controlExpandedKeysRef.current;
       controlExpandedKeys.set(node.key, expanded);
-
-      setCount((preCount) => preCount + 1);
-      if (onExpandedKeys) onExpandedKeys(expandList, nodes, node.node);
+      if (onExpandedKeys) {
+        onExpandedKeys(expandList);
+      } else {
+        forceUpdate();
+      }
     },
-    [onExpandedKeys, treeIndex],
+    [forceUpdate, onExpandedKeys, treeIndex],
   );
 
   const onCheck = (
@@ -608,7 +537,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
         nodes.push(item.node);
       }
     });
-    setCount((preCount) => preCount + 1);
+    forceUpdate();
     if (props.onCheckedKeys) props.onCheckedKeys(checkList, nodes, node.node);
   };
 
@@ -658,7 +587,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
       controlCheckedKeysRef.current = controlCheckedKeys;
     }
     if (props.onCheckedKeys) props.onCheckedKeys(checkList, nodes, null);
-    setCount((preCount) => preCount + 1);
+    forceUpdate();
   };
 
   /**
@@ -699,8 +628,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
     [nodeList, onExpand, scrollTo],
   );
 
-  /** ---------------- 拖拽相关 处理根节点的 ---------------- */
-
+  //#region 拖拽相关
   const dragHighlightList = useMemo(() => {
     if (!isSymbol(dragTargetKey) && dragTargetKey) {
       const target = treeIndex.get(dragTargetKey);
@@ -796,8 +724,11 @@ const Tree = <BaseNode extends BaseTreeNode>(
     // e.stopPropagation();
     setDragTargetKey(null);
   };
+
+  //#endregion 拖拽相关结束
+
   useImperativeHandle(ref, () => ({
-    focusReload: () => setCount((preCount) => preCount + 1),
+    focusReload: () => forceUpdate(),
     containerRef,
     scrollTo: scrollAndExtendNode,
     scrollToKey: () => {
@@ -807,6 +738,9 @@ const Tree = <BaseNode extends BaseTreeNode>(
     getNodeList: getNodeList,
     checkAll,
   }));
+
+  //#region 处理受控
+
   /** 处理 expandAll 受控 */
   useEffect(() => {
     if (expandAll !== undefined) {
@@ -814,7 +748,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
       if (expandAll === false) {
         scrollTo(0);
         if (onExpandedKeys) {
-          onExpandedKeys([], [], null);
+          onExpandedKeys([]);
         }
       } else {
         controlExpandedKeys = controlExpandedKeysRef.current;
@@ -829,11 +763,90 @@ const Tree = <BaseNode extends BaseTreeNode>(
           }
         });
       }
-      controlExpandedKeysRef.current = controlExpandedKeys;
-      setCount((preCount) => preCount + 1);
+      forceUpdate();
     }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [expandAll, scrollTo]);
+
+  useEffect(() => {
+    // 重建索引时默认展开选中的所有上级
+    if (activeKey) {
+      const active = treeIndex.get(activeKey);
+
+      const controlExpandedKeys = controlExpandedKeysRef.current;
+      const expandedKeys: BaseTreeKey[] = [];
+      controlExpandedKeys.forEach((val, key) => {
+        if (val === true) {
+          expandedKeys.push(key);
+        }
+      });
+
+      if (active && active.parent) {
+        const expandedLoop = (item: BaseTreeIndexItem<BaseNode>): void => {
+          if (item && item.expanded !== true) {
+            expandedKeys.push(item.key);
+            controlExpandedKeys.set(item.key, true);
+            if (item.parent) {
+              expandedLoop(item.parent);
+            }
+          }
+        };
+        expandedLoop(active.parent);
+        expandedKeys.push(active.key);
+        controlExpandedKeys.set(active.key, true);
+      }
+      onExpandedKeys?.(expandedKeys);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeKey, onExpandedKeys]);
+
+  /** 处理 expandedKeys 受控 */
+  useEffect(() => {
+    if (expandedKeys) {
+      const controlExpandedKeys = controlExpandedKeysRef.current;
+      controlExpandedKeys.forEach((_, key) => {
+        // 这里照顾之前是 null 的情况，boolean 才会渲染 dom
+        if (expandedKeys.includes(key)) {
+          controlExpandedKeys.set(key, true);
+        } else {
+          if (controlExpandedKeys.get(key) === true) {
+            controlExpandedKeys.set(key, false);
+          }
+        }
+      });
+      forceUpdate();
+    }
+  }, [expandedKeys, forceUpdate]);
+
+  /** 处理 checkedKeys 受控 */
+  useEffect(() => {
+    if (checkedKeys) {
+      const controlCheckedKeys = controlCheckedKeysRef.current;
+      controlCheckedKeys.forEach((_, key) => {
+        controlCheckedKeys.set(key, checkedKeys.includes(key));
+      });
+      controlCheckedKeysRef.current = controlCheckedKeys;
+      forceUpdate();
+    }
+  }, [checkedKeys, forceUpdate]);
+
+  /** 处理搜索文案匹配 */
+  useEffect(() => {
+    if (searchText) {
+      const searchedParentIds = findParentIdsBySearchText<BaseNode>(
+        data,
+        searchText,
+        searchFilterProps,
+      );
+      searchedParentIds?.forEach((key) => {
+        controlExpandedKeysRef.current.set(key, true);
+      });
+      forceUpdate();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchText, forceUpdate, data, JSON.stringify(searchFilterProps)]);
+
+  //#endregion 受控结束
   return (
     <div
       ref={containerRef}

@@ -2,6 +2,7 @@ import { Button, Space } from "antd";
 import { useRef, useState } from "react";
 import { DeleteFilled, FileAddOutlined } from "@ant-design/icons";
 import {
+  BaseTreeKey,
   BaseTreeMatchesSearch,
   BaseTreeRef,
   DirectoryTreeDropdownItem,
@@ -14,7 +15,7 @@ import styles from "./index.module.less";
 const TreeDemo = () => {
   const [treeData, setTreeData] = useState(defaultData);
   const [expandAll, setExpandAll] = useState<boolean | number>(2);
-  const [expendKeys, setExpendKeys] = useState<string[]>([]);
+  const [expendKeys, setExpendKeys] = useState<BaseTreeKey[]>([]);
   const [search, setSearch] = useState<string>("");
   const treeRef = useRef<BaseTreeRef<any>>(null);
   const currentScrollRef = useRef({ list: [], index: 0 });
@@ -169,9 +170,10 @@ const TreeDemo = () => {
         <DirectoryTree
           ref={treeRef}
           showNodeCount
+          activeKey={112}
           expandAll={expandAll}
           expandedKeys={expendKeys}
-          onExpandedKeys={(keys) => setExpendKeys(keys as string[])}
+          onExpandedKeys={setExpendKeys}
           data={treeData as any}
           actions={getActions()}
           searchFilterProps={[["name"], ["rawData", "data", "primaryKey"]]}
