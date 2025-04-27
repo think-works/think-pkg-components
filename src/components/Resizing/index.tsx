@@ -38,7 +38,7 @@ export const Resizing = forwardRef(function ResizingCom(
   const refObserver = useRef<ResizeObserver | undefined>(undefined);
   const refContainer = useRef<HTMLDivElement>(null);
 
-  useImperativeHandle(ref, () => refContainer.current as HTMLDivElement, []);
+  useImperativeHandle(ref, () => refContainer.current as HTMLDivElement);
 
   const handleContainerResize = useCallback(
     (entries: ResizeObserverEntry[]) => {
