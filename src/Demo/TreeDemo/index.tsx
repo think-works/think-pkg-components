@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { DeleteFilled, FileAddOutlined } from "@ant-design/icons";
 import {
   BaseTreeKey,
+  BaseTreeKRootNode,
   BaseTreeMatchesSearch,
   BaseTreeRef,
   DirectoryTreeDropdownItem,
@@ -170,6 +171,7 @@ const TreeDemo = () => {
         <DirectoryTree
           ref={treeRef}
           showNodeCount
+          canDrag={() => BaseTreeKRootNode}
           activeKey={112}
           expandAll={expandAll}
           expandedKeys={expendKeys}
