@@ -62,7 +62,7 @@ export const StatisticsCard = (props: StatisticsProps) => {
         </div>
         <div className={stl.staticsItemContent}>
           {title}
-          {onJump && <ArrowSvg fill="#FFF" style={{ marginLeft: 4 }} />}
+          {onJump && <ArrowSvg style={{ marginLeft: 4 }} />}
         </div>
       </div>
     </div>
