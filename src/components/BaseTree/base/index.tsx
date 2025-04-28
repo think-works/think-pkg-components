@@ -75,7 +75,6 @@ export const disabledEvery = <BaseNode extends BaseTreeNode>(
     return length;
   }
   const every = nodes.every((node) => {
-    // console.log(node.checked, node.node.name);
     if (
       node.disabled === true &&
       disabledEvery<BaseNode>(node.children, node.disabled) === true
@@ -516,7 +515,6 @@ const Tree = <BaseNode extends BaseTreeNode>(
       const controlExpandedKeys = controlExpandedKeysRef.current;
       controlExpandedKeys.set(node.key, expanded);
       if (onExpandedKeys) {
-        console.log("处理 onExpand 受控");
         onExpandedKeys(expandList);
       } else {
         forceUpdate();
@@ -554,7 +552,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
     containerTarget: containerRef,
     wrapperTarget: wrapperRef,
     itemHeight: 32,
-    overscan: 20,
+    overscan: 5,
   });
 
   scrollRef.current = () => {
@@ -604,13 +602,16 @@ const Tree = <BaseNode extends BaseTreeNode>(
       if (nodeItem && nodeItem.parent && nodeItem.parent.expanded !== true) {
         const parent = nodeItem.parent;
         nodeItem.expanded = true;
-        let parentsNodeItem = null;
+        let parentsNodeItem: BaseTreeIndexItem<BaseNode> | null = null;
+        const controlExpandedKeys = controlExpandedKeysRef.current;
+
         // node 的父节点全展开
         const expandedParentsLoop = (
           item: BaseTreeIndexItem<BaseNode>,
         ): void => {
           if (item && item.expanded !== true) {
             item.expanded = true;
+            controlExpandedKeys.set(item.key, true);
             parentsNodeItem = item;
             if (item.parent) {
               expandedParentsLoop(item.parent);
@@ -619,15 +620,12 @@ const Tree = <BaseNode extends BaseTreeNode>(
         };
         expandedParentsLoop(parent);
         if (parentsNodeItem) {
-          //展开最外层节点
-          console.log("展开最外层节点");
-          onExpand(parentsNodeItem, true);
+          forceUpdate();
         }
       }
-
       scrollTo(index);
     },
-    [nodeList, onExpand, scrollTo],
+    [nodeList, forceUpdate, scrollTo],
   );
 
   //#region 拖拽相关
@@ -750,7 +748,6 @@ const Tree = <BaseNode extends BaseTreeNode>(
       if (expandAll === false) {
         scrollTo(0);
         if (onExpandedKeys) {
-          console.log("处理 expandAll 受控");
           onExpandedKeys([]);
         }
       } else {
@@ -798,7 +795,6 @@ const Tree = <BaseNode extends BaseTreeNode>(
         expandedKeys.push(active.key);
         controlExpandedKeys.set(active.key, true);
       }
-      console.log("处理 activeKey 受控");
       onExpandedKeys?.(expandedKeys);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -904,6 +900,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
             />
           );
         })}
+        <div style={{ height: 32 }}></div>
       </div>
     </div>
   );
