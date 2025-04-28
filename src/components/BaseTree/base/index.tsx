@@ -516,6 +516,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
       const controlExpandedKeys = controlExpandedKeysRef.current;
       controlExpandedKeys.set(node.key, expanded);
       if (onExpandedKeys) {
+        console.log("处理 onExpand 受控");
         onExpandedKeys(expandList);
       } else {
         forceUpdate();
@@ -619,6 +620,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
         expandedParentsLoop(parent);
         if (parentsNodeItem) {
           //展开最外层节点
+          console.log("展开最外层节点");
           onExpand(parentsNodeItem, true);
         }
       }
@@ -748,6 +750,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
       if (expandAll === false) {
         scrollTo(0);
         if (onExpandedKeys) {
+          console.log("处理 expandAll 受控");
           onExpandedKeys([]);
         }
       } else {
@@ -795,6 +798,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
         expandedKeys.push(active.key);
         controlExpandedKeys.set(active.key, true);
       }
+      console.log("处理 activeKey 受控");
       onExpandedKeys?.(expandedKeys);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
