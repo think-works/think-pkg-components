@@ -589,7 +589,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
   };
 
   const getNodeList = () => {
-    const list = nodeList.map((item) => item.node);
+    const list = nodes.map((item) => item.node);
     return list;
   };
 
@@ -618,10 +618,12 @@ const Tree = <BaseNode extends BaseTreeNode>(
    */
   const scrollAndExtendNode = useCallback(
     (index: number) => {
-      const nodeItem = nodeList[index];
+      const nodeItem = nodes[index];
+
       if (!nodeItem) {
         return;
       }
+      console.log("scrollAndExtendNode index:", index, nodeItem);
 
       if (nodeItem && nodeItem.parent && nodeItem.parent.expanded !== true) {
         const parent = nodeItem.parent;
@@ -642,15 +644,17 @@ const Tree = <BaseNode extends BaseTreeNode>(
           }
         };
         expandedParentsLoop(parent);
+        console.log("展开一下 scrollTo parentsNodeItem:", parentsNodeItem);
         if (parentsNodeItem) {
           forceUpdate();
         }
       }
       setTimeout(() => {
+        console.log("scrollTo index:", index);
         scrollTo(index);
-      }, 0);
+      }, 100);
     },
-    [nodeList, forceUpdate, scrollTo],
+    [nodes, forceUpdate, scrollTo],
   );
 
   //#region 拖拽相关

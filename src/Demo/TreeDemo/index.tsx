@@ -115,6 +115,8 @@ const TreeDemo = () => {
       scrollIndex = scrollIndexList[0];
     }
 
+    console.log("scrollIndexList", scrollIndex);
+
     treeRef.current?.scrollTo?.(scrollIndex);
     currentScrollRef.current = {
       index: scrollIndex,
