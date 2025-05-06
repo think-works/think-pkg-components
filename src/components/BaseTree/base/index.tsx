@@ -1,5 +1,6 @@
 import { useVirtualList } from "ahooks";
 import classNames from "classnames";
+import { cloneDeep } from "lodash-es";
 import React, {
   ForwardedRef,
   forwardRef,
@@ -507,12 +508,35 @@ const Tree = <BaseNode extends BaseTreeNode>(
     (node: BaseTreeIndexItem<BaseNode>, expanded: boolean): void => {
       node.expanded = expanded;
       const expandList: BaseTreeKey[] = [];
+      const controlExpandedKeys = controlExpandedKeysRef.current;
+
+      //一个元素收起，他所有的子元素需要全部收起
+      if (expanded === false) {
+        const nodeChildrenExpandList: BaseTreeKey[] = [];
+        //获取当前节点下所有的展开子节点
+        const loop = (item: BaseTreeIndexItem<BaseNode>): void => {
+          if (item) {
+            if (item.children && item.children.length > 0) {
+              const treeIndexItem = treeIndex.get(item.key);
+              if (treeIndexItem && treeIndexItem.expanded === true) {
+                treeIndexItem.expanded = false;
+              }
+              nodeChildrenExpandList.push(item.key);
+              item?.children?.forEach((child) => {
+                loop(child);
+              });
+            }
+          }
+        };
+        loop(node);
+      }
+
       treeIndex.forEach((item) => {
         if (item.expanded === true) {
           expandList.push(item.key);
         }
       });
-      const controlExpandedKeys = controlExpandedKeysRef.current;
+
       controlExpandedKeys.set(node.key, expanded);
       if (onExpandedKeys) {
         onExpandedKeys(expandList);
@@ -552,7 +576,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
     containerTarget: containerRef,
     wrapperTarget: wrapperRef,
     itemHeight: 32,
-    overscan: 5,
+    overscan: 10,
   });
 
   scrollRef.current = () => {
@@ -604,7 +628,6 @@ const Tree = <BaseNode extends BaseTreeNode>(
         nodeItem.expanded = true;
         let parentsNodeItem: BaseTreeIndexItem<BaseNode> | null = null;
         const controlExpandedKeys = controlExpandedKeysRef.current;
-
         // node 的父节点全展开
         const expandedParentsLoop = (
           item: BaseTreeIndexItem<BaseNode>,
@@ -623,7 +646,9 @@ const Tree = <BaseNode extends BaseTreeNode>(
           forceUpdate();
         }
       }
-      scrollTo(index);
+      setTimeout(() => {
+        scrollTo(index);
+      }, 0);
     },
     [nodeList, forceUpdate, scrollTo],
   );
@@ -803,7 +828,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
   /** 处理 expandedKeys 受控 */
   useEffect(() => {
     if (expandedKeys) {
-      const controlExpandedKeys = controlExpandedKeysRef.current;
+      const controlExpandedKeys = cloneDeep(controlExpandedKeysRef.current);
       controlExpandedKeys.forEach((_, key) => {
         // 这里照顾之前是 null 的情况，boolean 才会渲染 dom
         if (expandedKeys.includes(key)) {
@@ -814,6 +839,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
           }
         }
       });
+      controlExpandedKeysRef.current = controlExpandedKeys;
       forceUpdate();
     }
   }, [expandedKeys, forceUpdate]);
