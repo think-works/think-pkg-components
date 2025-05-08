@@ -16,7 +16,7 @@ import styles from "./index.module.less";
 const TreeDemo = () => {
   const [treeData, setTreeData] = useState(defaultData);
   const [expandAll, setExpandAll] = useState<boolean | number>(2);
-  const [expendKeys, setExpendKeys] = useState<BaseTreeKey[]>([]);
+  const [expendKeys, setExpendKeys] = useState<BaseTreeKey[]>([112]);
   const [search, setSearch] = useState<string>("");
   const treeRef = useRef<BaseTreeRef<any>>(null);
   const currentScrollRef = useRef({ list: [], index: 0 });

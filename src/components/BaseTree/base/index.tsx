@@ -516,11 +516,12 @@ const Tree = <BaseNode extends BaseTreeNode>(
         //获取当前节点下所有的展开子节点
         const loop = (item: BaseTreeIndexItem<BaseNode>): void => {
           if (item) {
+            const treeIndexItem = treeIndex.get(item.key);
+            if (treeIndexItem) {
+              treeIndexItem.expanded = false;
+              controlExpandedKeys.set(item.key, false);
+            }
             if (item.children && item.children.length > 0) {
-              const treeIndexItem = treeIndex.get(item.key);
-              if (treeIndexItem && treeIndexItem.expanded === true) {
-                treeIndexItem.expanded = false;
-              }
               nodeChildrenExpandList.push(item.key);
               item?.children?.forEach((child) => {
                 loop(child);
