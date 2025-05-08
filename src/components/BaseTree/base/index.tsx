@@ -623,9 +623,8 @@ const Tree = <BaseNode extends BaseTreeNode>(
       if (!nodeItem) {
         return;
       }
-      console.log("scrollAndExtendNode index:", index, nodeItem);
 
-      if (nodeItem && nodeItem.parent && nodeItem.parent.expanded !== true) {
+      if (nodeItem && nodeItem.parent) {
         const parent = nodeItem.parent;
         nodeItem.expanded = true;
         let parentsNodeItem: BaseTreeIndexItem<BaseNode> | null = null;
@@ -634,25 +633,21 @@ const Tree = <BaseNode extends BaseTreeNode>(
         const expandedParentsLoop = (
           item: BaseTreeIndexItem<BaseNode>,
         ): void => {
-          if (item && item.expanded !== true) {
-            item.expanded = true;
-            controlExpandedKeys.set(item.key, true);
-            parentsNodeItem = item;
-            if (item.parent) {
-              expandedParentsLoop(item.parent);
-            }
+          item.expanded = true;
+          controlExpandedKeys.set(item.key, true);
+          parentsNodeItem = item;
+          if (item.parent) {
+            expandedParentsLoop(item.parent);
           }
         };
         expandedParentsLoop(parent);
-        console.log("展开一下 scrollTo parentsNodeItem:", parentsNodeItem);
         if (parentsNodeItem) {
           forceUpdate();
         }
       }
       setTimeout(() => {
-        console.log("scrollTo index:", index);
         scrollTo(index);
-      }, 100);
+      }, 0);
     },
     [nodes, forceUpdate, scrollTo],
   );
