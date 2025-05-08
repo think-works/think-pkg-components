@@ -539,8 +539,10 @@ const Tree = <BaseNode extends BaseTreeNode>(
       });
 
       controlExpandedKeys.set(node.key, expanded);
+      //去重key
+      const expandedKeys = Array.from(new Set(expandList));
       if (onExpandedKeys) {
-        onExpandedKeys(expandList);
+        onExpandedKeys(expandedKeys);
       } else {
         forceUpdate();
       }
