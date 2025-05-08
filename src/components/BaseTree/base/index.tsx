@@ -516,11 +516,12 @@ const Tree = <BaseNode extends BaseTreeNode>(
         //获取当前节点下所有的展开子节点
         const loop = (item: BaseTreeIndexItem<BaseNode>): void => {
           if (item) {
+            const treeIndexItem = treeIndex.get(item.key);
+            if (treeIndexItem) {
+              treeIndexItem.expanded = false;
+              controlExpandedKeys.set(item.key, false);
+            }
             if (item.children && item.children.length > 0) {
-              const treeIndexItem = treeIndex.get(item.key);
-              if (treeIndexItem && treeIndexItem.expanded === true) {
-                treeIndexItem.expanded = false;
-              }
               nodeChildrenExpandList.push(item.key);
               item?.children?.forEach((child) => {
                 loop(child);
@@ -538,8 +539,10 @@ const Tree = <BaseNode extends BaseTreeNode>(
       });
 
       controlExpandedKeys.set(node.key, expanded);
+      //去重key
+      const expandedKeys = Array.from(new Set(expandList));
       if (onExpandedKeys) {
-        onExpandedKeys(expandList);
+        onExpandedKeys(expandedKeys);
       } else {
         forceUpdate();
       }
@@ -827,20 +830,39 @@ const Tree = <BaseNode extends BaseTreeNode>(
   /** 处理 expandedKeys 受控 */
   useEffect(() => {
     if (expandedKeys) {
+      //处理所有key的父节点也展开
+      let expandedWithParentKeys = [...expandedKeys];
+      expandedKeys.forEach((key) => {
+        const item = treeIndex.get(key);
+        const expandedLoop = (item: BaseTreeIndexItem<BaseNode>): void => {
+          if (item) {
+            expandedWithParentKeys.push(item.key);
+            if (item.parent) {
+              expandedLoop(item.parent);
+            }
+          }
+        };
+        if (item?.parent) {
+          expandedLoop(item?.parent);
+        }
+      });
+
+      //去重 expandedWithParentKeys
+      expandedWithParentKeys = Array.from(new Set(expandedWithParentKeys));
+
       const controlExpandedKeys = cloneDeep(controlExpandedKeysRef.current);
       controlExpandedKeys.forEach((_, key) => {
         // 这里照顾之前是 null 的情况，boolean 才会渲染 dom
-        if (expandedKeys.includes(key)) {
+        if (expandedWithParentKeys.includes(key)) {
           controlExpandedKeys.set(key, true);
-        } else {
-          if (controlExpandedKeys.get(key) === true) {
-            controlExpandedKeys.set(key, false);
-          }
+        } else if (controlExpandedKeys.get(key) === true) {
+          controlExpandedKeys.set(key, false);
         }
       });
       controlExpandedKeysRef.current = controlExpandedKeys;
       forceUpdate();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [expandedKeys, forceUpdate]);
 
   /** 处理 checkedKeys 受控 */
