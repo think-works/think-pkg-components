@@ -497,7 +497,7 @@ const Tree = <BaseNode extends BaseTreeNode>(
     controlCheckedKeysRef.current = checkedList;
     return [kNodes, tIndex];
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(data), forceKey]);
+  }, [data, forceKey]);
 
   const nodes = useMemo(() => {
     const nowNodes = nodeList.filter((item) => item.isShow === true);
