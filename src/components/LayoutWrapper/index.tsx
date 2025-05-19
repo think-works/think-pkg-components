@@ -39,6 +39,11 @@ export type LayoutWrapperProps = {
   siderProps?: SiderProps;
   /** 面包屑属性 */
   crumbProps?: CrumbProps;
+  /** 内容属性 */
+  containerProps?: {
+    className?: Argument;
+    style?: React.CSSProperties;
+  };
 };
 
 /**
@@ -56,6 +61,7 @@ export const LayoutWrapper = (props: LayoutWrapperProps) => {
     footerProps,
     siderProps,
     crumbProps,
+    containerProps,
   } = props;
   const { children: headerChildren = header, ...headerRestProps } =
     headerProps || {};
@@ -96,7 +102,12 @@ export const LayoutWrapper = (props: LayoutWrapperProps) => {
           }}
         >
           {showBreadcrumb ? <Crumb {...crumbProps} /> : null}
-          <div className={stl.container}>{children}</div>
+          <div
+            {...containerProps}
+            className={cls(stl.container, containerProps?.className)}
+          >
+            {children}
+          </div>
         </Layout.Content>
       </Layout>
       {footerChildren ? (
