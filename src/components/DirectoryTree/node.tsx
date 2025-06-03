@@ -121,7 +121,11 @@ function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
    *  创建占位节点，等待编辑
    */
   const createNode = useCallback(
-    (type: NODE_TYPE, name: string): void => {
+    (
+      type: NODE_TYPE,
+      name: string,
+      createRawData?: Record<string, any>,
+    ): void => {
       setHoldOption(false);
       if (!data.node.children) {
         data.node.children = [];
@@ -132,6 +136,7 @@ function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
         id: uuid4(),
         parentId: data.node.id,
         temp: true,
+        rawData: createRawData as T,
       };
       // TODO 先默认插入第一个 插入指定位置还要考虑滚动条区域 我草 没时间搞
       data.node.children.unshift(node);
@@ -182,12 +187,14 @@ function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
             createNodeType,
             //@ts-expect-error actionType === "create" 存在
             createDefaultName,
+            //@ts-expect-error actionType === "create" 存在
+            createRawData,
             onClick,
             ...others
           } = menuItem;
           const handelItem = () => {
             if (actionType === "create") {
-              createNode(createNodeType, createDefaultName);
+              createNode(createNodeType, createDefaultName, createRawData);
             } else if (actionType === "rename") {
               onEdit(true);
             } else if (actionType === "copy") {

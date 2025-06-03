@@ -79,6 +79,10 @@ export type DirectoryTreeCreateAction<
    */
   createNodeType: NODE_TYPE;
   /**
+   * 新建节点的额外属性
+   */
+  createRawData?: Record<string, any>;
+  /**
    * 新建节点的默认填充名称
    */
   createDefaultName: string;
