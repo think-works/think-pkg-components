@@ -8,6 +8,7 @@ import stl from "./index.module.less";
 
 export type CrumbProps = {
   className?: Argument;
+  style?: React.CSSProperties;
   /*
    * 面包屑模式
    * title 标题模式
@@ -18,7 +19,7 @@ export type CrumbProps = {
 };
 
 const Crumb = (props: CrumbProps) => {
-  const { className, crumbMode, crumbExtend } = props;
+  const { className, style, crumbMode, crumbExtend } = props;
   const matchCrumbs = useMatchCrumbs();
 
   const crumbItems = useMemo(
@@ -73,7 +74,7 @@ const Crumb = (props: CrumbProps) => {
   }, [crumbItems, crumbMode]);
 
   return (
-    <div className={cls(stl.crumb, className)}>
+    <div className={cls(stl.crumb, className)} style={style}>
       <div className={stl.main}>{crumbCom}</div>
       <div className={stl.extend}>{crumbExtend}</div>
     </div>

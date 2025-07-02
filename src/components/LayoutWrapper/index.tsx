@@ -78,13 +78,7 @@ export const LayoutWrapper = (props: LayoutWrapperProps) => {
   const showBreadcrumb = useBreadcrumbVisibility();
 
   return (
-    <Layout
-      className={cls(stl.layout, className)}
-      style={{
-        minWidth: minPageWidth,
-        ...(style || {}),
-      }}
-    >
+    <Layout className={cls(stl.layout, className)} style={style}>
       {headerChildren ? (
         <Header {...headerRestProps}>{headerChildren}</Header>
       ) : null}

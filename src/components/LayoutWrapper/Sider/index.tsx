@@ -44,6 +44,7 @@ export const getSiderCfg = (mode?: LayoutWrapperSiderMode): SiderCfg => {
 
 export type SiderProps = {
   className?: Argument;
+  style?: React.CSSProperties;
   /**
    * 侧边栏菜单模式
    */
@@ -69,6 +70,7 @@ export type SiderProps = {
 const Sider = (props: SiderProps) => {
   const {
     className,
+    style,
     mode,
     topExtend,
     bottomExtend,
@@ -108,6 +110,7 @@ const Sider = (props: SiderProps) => {
         mode === LayoutWrapperSiderMode.HORIZONTAL && stl.horizontalSider,
         className,
       )}
+      style={style}
       theme={siderTheme as any}
       collapsed={siderCfg.collapsed}
       width={siderCfg.siderWidth}
