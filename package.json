@@ -24,7 +24,7 @@
   "scripts": {
     "serve": "vite",
     "build": "tsc && vite build && npm run build:types && npm run build:assets",
-    "build:types": "tsc --outDir dist --noEmit false --composite false --tsBuildInfoFile null --declaration --emitDeclarationOnly && tsc-alias --outDir dist",
+    "build:types": "tsc --outDir dist --noEmit false --declaration --emitDeclarationOnly && tsc-alias --outDir dist",
     "build:assets": "rm -rf dist/main.d.ts dist/Demo && cp src/styles/basic.less dist/basic-utils.less",
     "build:watch": "chokidar \"src/**/*\" -c \"npm run build\"",
     "prepare": "husky",
