@@ -22,6 +22,15 @@ export const SelectWithAddonBefore = forwardRef(
     const { addonBefore, width, style, renderLink, ...rest } = props;
     const value = props.value || null;
 
+    const popupRender: SelectProps["popupRender"] = renderLink
+      ? (menu) => (
+          <>
+            {menu}
+            <div className={styles.link}>{renderLink()}</div>
+          </>
+        )
+      : undefined;
+
     return (
       <div className={styles.item} style={{ width, ...style }}>
         {addonBefore && (
@@ -34,16 +43,8 @@ export const SelectWithAddonBefore = forwardRef(
           onChange={(e, option) => props?.onChange?.(e, option)}
           options={props.options}
           rootClassName={addonBefore ? styles["item-form-select"] : undefined}
-          dropdownRender={
-            renderLink
-              ? (menu) => (
-                  <>
-                    {menu}
-                    <div className={styles.link}>{renderLink()}</div>
-                  </>
-                )
-              : undefined
-          }
+          popupRender={popupRender}
+          dropdownRender={popupRender}
           {...rest}
         >
           {props.children}

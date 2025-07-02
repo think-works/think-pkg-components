@@ -332,6 +332,7 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
         style={styles?.popover}
         trigger="click"
         fresh={true}
+        destroyOnHidden={false}
         destroyTooltipOnHide={false}
         open={openPopover}
         onOpenChange={setOpenPopover}

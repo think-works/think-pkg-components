@@ -230,7 +230,6 @@ const TreeNode = <BaseNode extends BaseTreeNode>(
     return (
       <Dropdown
         trigger={["contextMenu"]}
-        // dropdownRender={()=>contextMenu}
         onOpenChange={(open) => {
           setContextMenuOpen(open);
         }}

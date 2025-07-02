@@ -84,7 +84,7 @@ export const BaseSelect = forwardRef(function BaseSelectCom(
       option.disabled ?? disabledOptions?.some((x) => x === option.value),
   }));
 
-  let dropdownRender = undefined;
+  let popupRender = undefined;
   if (allExtend) {
     const selectedCount = Array.isArray(value) ? value.length : 0;
     const handleAll = () => {
@@ -95,7 +95,7 @@ export const BaseSelect = forwardRef(function BaseSelectCom(
       }
     };
 
-    dropdownRender = (origin: any) => (
+    popupRender = (origin: any) => (
       <>
         {origin}
         <Divider className={stl.dropdownRenderDivider} />
@@ -116,7 +116,8 @@ export const BaseSelect = forwardRef(function BaseSelectCom(
       value={value}
       onChange={onChange}
       options={_options as any}
-      dropdownRender={dropdownRender}
+      popupRender={popupRender}
+      dropdownRender={popupRender}
       {...rest}
     />
   );
