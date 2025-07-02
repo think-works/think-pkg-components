@@ -1,6 +1,5 @@
 export default {
   importOrder: [
-    "global(.ts)?$", // "global.ts"
     "^[^@/.]+", // "name"
     "^@[^/]+/", // "@scope/name"
     "^@/", // "@/path"
