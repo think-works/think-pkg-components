@@ -39,6 +39,11 @@
       &:focus-within {
         box-shadow: 0 0 0 1px @colorPrimaryHover;
       }
+
+      // 操作栏不需要高亮
+      &.actionSpace {
+        box-shadow: none;
+      }
     }
 
     // 选择器的样式比较特殊
