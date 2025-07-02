@@ -7,7 +7,7 @@ import eslint from "@eslint/js";
 
 export default [
   {
-    ignores: ["**/.github/**", "**/dist/**", "**/build/**", "**/iconfont/**"],
+    ignores: ["**/.github/**", "**/dist/**" ],
   },
   eslint.configs.recommended,
   react.configs.flat.recommended,
