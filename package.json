@@ -45,11 +45,6 @@
     "type": "git",
     "url": "https://github.com/think-works/think-pkg-components.git"
   },
-  "overrides": {
-    "ahooks": {
-      "react": "$react"
-    }
-  },
   "peerDependencies": {
     "@ant-design/icons": "5.x-6.x",
     "antd": "5.x",
