@@ -29,6 +29,20 @@ export const uuid4 = () => {
 };
 
 /**
+ * 简单的 Base64 编码
+ */
+export const base64Encode = (str: string) => {
+  return btoa(encodeURIComponent(str));
+};
+
+/**
+ * 简单的 Base64 解码
+ */
+export const base64Decode = (str: string) => {
+  return decodeURIComponent(atob(str));
+};
+
+/**
  * 字符串 hash
  * https://github.com/darkskyapp/string-hash
  */
