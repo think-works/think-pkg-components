@@ -3,29 +3,30 @@
 .sider {
   display: flex;
   flex-direction: column;
-  height: 100%; // 基于窗口高度计算(等同于 100vh)，超出屏幕部分不可见
-  box-shadow: unset !important;
-  border-right: unset !important;
   background-color: transparent !important;
+
   &.horizontalSider {
     background-color: @colorBgContainer !important;
   }
+
+  .top {
+    flex: none;
+  }
+
+  .bottom {
+    flex: none;
+  }
+
   :global(.@{antPrefixClass}-layout-sider-children) {
     flex: auto;
     display: flex;
     flex-direction: column;
   }
 
-  .top {
-  }
-
-  .bottom {
-  }
-
   .menu {
     flex: auto;
-    overflow: auto;
-    overflow: overlay;
+    overflow-y: auto;
+    overflow-y: overlay;
     background-color: transparent;
     scrollbar-width: none;
 

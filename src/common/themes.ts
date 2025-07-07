@@ -26,8 +26,6 @@ export const getStyleConfig = () => {
 
     /** 业务布局 z-index */
     bizLayoutZIndex: 100,
-    /** 业务布局顶部栏高度 */
-    bizLayoutHeader: 48,
     /** 业务布局标题栏高度 */
     bizLayoutTitle: 40,
     /** 业务布局边距 */

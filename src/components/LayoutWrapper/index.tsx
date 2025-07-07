@@ -80,32 +80,50 @@ export const LayoutWrapper = (props: LayoutWrapperProps) => {
   return (
     <Layout className={cls(stl.layout, className)} style={style}>
       {headerChildren ? (
-        <Header {...headerRestProps}>{headerChildren}</Header>
-      ) : null}
-      <Layout
-        className={stl.main}
-        style={showSider ? { marginLeft: currentWidth } : undefined}
-      >
-        {showSider ? (
-          <Sider className={stl.sider} mode={siderMode} {...siderRestProps} />
-        ) : null}
-        <Layout.Content
-          className={stl.content}
-          style={{
-            minWidth: minPageWidth - currentWidth,
-          }}
+        <Header
+          {...headerRestProps}
+          className={cls(stl.header, headerRestProps.className)}
         >
-          {showBreadcrumb ? <Crumb {...crumbProps} /> : null}
+          {headerChildren}
+        </Header>
+      ) : null}
+      <Layout className={stl.body}>
+        {showSider ? (
+          <Sider
+            mode={siderMode}
+            {...siderRestProps}
+            className={cls(stl.sider, siderRestProps.className)}
+          />
+        ) : null}
+        <Layout.Content className={stl.content}>
           <div
-            {...containerProps}
-            className={cls(stl.container, containerProps?.className)}
+            className={stl.main}
+            style={{
+              minWidth: minPageWidth - currentWidth,
+            }}
           >
-            {children}
+            {showBreadcrumb ? (
+              <Crumb
+                {...crumbProps}
+                className={cls(stl.crumb, crumbProps?.className)}
+              />
+            ) : null}
+            <div
+              {...containerProps}
+              className={cls(stl.container, containerProps?.className)}
+            >
+              {children}
+            </div>
           </div>
         </Layout.Content>
       </Layout>
       {footerChildren ? (
-        <Footer {...footerRestProps}>{footerChildren}</Footer>
+        <Footer
+          {...footerRestProps}
+          className={cls(stl.footer, footerRestProps.className)}
+        >
+          {footerChildren}
+        </Footer>
       ) : null}
     </Layout>
   );

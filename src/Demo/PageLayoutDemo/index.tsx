@@ -112,6 +112,7 @@ const DragContainerDemo = () => {
   return (
     <LayoutWrapper
       header={<div>header</div>}
+      footer={<div>footer</div>}
       siderProps={{
         mode: LayoutWrapperSiderMode.VERTICAL,
       }}
