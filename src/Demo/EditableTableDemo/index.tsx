@@ -10,7 +10,7 @@ const EditableTableDemo = () => {
   const [data, setDataSource] = useState<any[]>([
     {
       description: "查询条件：记录名称、状态、执行人、执行时间",
-      expectedResult: "得到对应的查询结果",
+      expectedResult: { text: "得到对应的查询结果" },
     },
     {
       description: "点击表格中的记录名称列1",

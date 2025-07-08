@@ -304,7 +304,7 @@ export const EditableTable = (props: EditableTableProps) => {
             if (typeof disabled === "string") {
               return <span className={stl.col}>{disabled}</span>;
             }
-            return <span className={stl.col}>{text}</span>;
+            return <span className={stl.col}>{`${text}`}</span>;
           }
           // 兜底
           if (!render) {
