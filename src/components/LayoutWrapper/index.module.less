@@ -27,14 +27,21 @@
 
   .content {
     flex: auto;
+    display: flex;
+    flex-direction: column;
+
     overflow-x: auto;
     overflow-x: overlay;
+    overflow-y: hidden;
 
     .main {
-      height: 100%;
+      flex: auto;
       display: flex;
       flex-direction: column;
-      background: transparent;
+
+      overflow-x: hidden;
+      overflow-y: auto;
+      overflow-y: overlay;
 
       .crumb {
         flex: none;
@@ -42,6 +49,8 @@
 
       .container {
         flex: auto;
+        display: flex;
+        flex-direction: column;
       }
     }
   }
