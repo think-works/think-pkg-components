@@ -7,8 +7,8 @@ import { ApiResponse } from "@/utils/types";
  *
  * 注意:
  * 请保持对复杂对象的稳定引用，否则可能会出现重复请求。
- * 如: request / options.autoFetch / options.transformResult
- * 当 options.autoFetch 值为数组时，会展开数组并将每个数组项都加入依赖数组。
+ * 如: request / options.autoFetch / options.transformResult / options.fetchError
+ * 当 options.autoFetch 值为数组时，会展开数组并将每个数组项都加入依赖数组(浅层对比)。
  */
 export const useFetch = <
   ReqFun extends (...rest: any[]) => Promise<ApiResponse>,
@@ -25,7 +25,7 @@ export const useFetch = <
     /**
      * 初始化时自动触发一次请求
      * true 配置: 使用空参数触发
-     * [] 配置: 触发时的函数入参
+     * [] 配置: 触发时的函数入参，会展开数组并将每个数组项都加入依赖数组(浅层对比)。
      */
     autoFetch?: boolean | FetchArgs;
     /**
@@ -37,13 +37,17 @@ export const useFetch = <
      * 默认提取响应数据中的 data 属性
      */
     transformResult?: (res: any) => any;
+    /**
+     * 错误处理函数
+     */
+    fetchError?: (error: any) => void;
   },
 ) => {
   type ResRet = ReturnType<ReqFun> extends Promise<infer ApiRes> ? ApiRes : any;
   type ResObj = ResRet extends ApiResponse<infer ApiObj> ? ApiObj : any;
   type ResExt = ResRet extends ApiResponse<any, infer ApiExt> ? ApiExt : any;
 
-  const { autoFetch, refreshKey, transformResult } = options || {};
+  const { autoFetch, refreshKey, transformResult, fetchError } = options || {};
 
   const needFetch = !!autoFetch;
   const fetchParams =
@@ -77,11 +81,18 @@ export const useFetch = <
         }
 
         return res;
+      } catch (error) {
+        if (fetchError) {
+          fetchError(error);
+          return;
+        }
+
+        throw error;
       } finally {
         setLoading(false);
       }
     },
-    [request, isMounted, transformFunc],
+    [isMounted, request, transformFunc, fetchError],
   );
 
   useEffect(() => {
