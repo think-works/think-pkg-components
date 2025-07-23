@@ -98,7 +98,6 @@ function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
   const [value, setValue] = useState(data.node.name);
   const [edit, setEdit] = useState(data.node.temp);
   const [loading, setLoading] = useState(false);
-  const [holdOption, setHoldOption] = useState<boolean>(false);
   const ref = useRef<InputRef>(null);
   useEffect(() => {
     setTimeout(() => {
@@ -108,15 +107,6 @@ function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
     }, 0);
   }, [edit]);
 
-  const isActive = useMemo(() => {
-    if (edit) {
-      return false;
-    }
-    if (holdOption === true) {
-      return true;
-    }
-    return props.hover;
-  }, [edit, holdOption, props.hover]);
   /**
    *  创建占位节点，等待编辑
    */
@@ -126,7 +116,6 @@ function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
       name: string,
       createRawData?: Record<string, any>,
     ): void => {
-      setHoldOption(false);
       if (!data.node.children) {
         data.node.children = [];
       }
@@ -259,13 +248,12 @@ function XDirectoryNode<T extends BaseTreeNode, NODE_TYPE>(
         <div
           onClick={(e) => e.stopPropagation()}
           className={style["item-right-menu"]}
-          style={{ display: isActive ? "block" : "none" }}
         >
           {!!dropdownMenuItems.length && (
             <DropdownActions
               actionAlign={"left"}
               actions={dropdownMenuItems}
-              onOpenChange={(e) => setHoldOption(e)}
+              transitionName=""
             >
               <MoreOutlined />
             </DropdownActions>
