@@ -8,6 +8,7 @@ export * as cryptos from "./cryptos";
 export * as download from "./download";
 export * as enums from "./enums";
 export * as events from "./events";
+export * as format from "./format";
 export * as human from "./human";
 export * as logger from "./logger";
 export * as storage from "./storage";

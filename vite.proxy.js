@@ -43,26 +43,36 @@ const getProxyRules = (proxyPaths, options) => {
  * 获取代理配置
  * @param {Object} config
  * @param {Object} config.env
- * @param {string} config.apiBase
- * @param {string} config.customPrefix
  * @returns {Object.<string, ProxyOptions>}
  */
 export default (config) => {
-  const { env, apiBase = "/", customPrefix = "" } = config || {};
-  const defaultProxyTarget = env.DEFAULT_PROXY_TARGET;
-  const productProxyTarget = env.PRODUCT_PROXY_TARGET;
+  const { env } = config || {};
+
+  const platformProxyTarget = env.PLATFORM_PROXY_TARGET;
+  const productProxyTarget = env.PRODUCT_PROXY_TARGET || platformProxyTarget;
+
+  let platformBase = env.VITE_PLATFORM_BASE || "/";
+  platformBase = platformBase.endsWith("/") ? platformBase : `${platformBase}/`;
+
+  let apiBase = env.VITE_API_BASE || "/";
+  apiBase = apiBase.endsWith("/") ? apiBase : `${apiBase}/`;
+
+  if (!productProxyTarget) {
+    return {};
+  }
 
   return {
     ...getProxyRules(
       [
-        `${customPrefix}/login`,
-        `${customPrefix}/meta`,
-        `${customPrefix}/quality/api`,
+        `${platformBase}login`,
+        `${platformBase}meta`,
+        `${platformBase}self-monitor`,
+        `${platformBase}quality/api`,
       ],
-      getCommonOptions({ target: defaultProxyTarget }),
+      getCommonOptions({ target: platformProxyTarget }),
     ),
     [`${apiBase}api`]: getCommonOptions({
-      target: productProxyTarget || defaultProxyTarget,
+      target: productProxyTarget,
     }),
   };
 };

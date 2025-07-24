@@ -1,3 +1,3 @@
 export default {
-  "src/**/*": "prettier -l -w",
+  "src/**/*.!(svg)": "prettier -l -w",
 };

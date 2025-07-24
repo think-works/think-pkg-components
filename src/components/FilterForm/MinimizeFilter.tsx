@@ -278,7 +278,7 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
 
       if (filterChangeDebounce >= 0) {
         // 触发 最小化表单-触发筛选项变更-防抖
-        handleFilterChangeDebounce(moreFilterValues, "submit");
+        handleFilterChangeDebounce(moreFilterValues || {}, "submit");
       }
     },
     [

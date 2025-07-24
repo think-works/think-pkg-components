@@ -34,9 +34,6 @@ export default defineConfig(({ mode }) => {
   const buildSourcemap = env.BUILD_SOURCEMAP === "true";
   const buildIgnoreMinify = env.BUILD_IGNORE_MINIFY === "true";
 
-  let apiBase = env.VITE_API_BASE || "/";
-  apiBase = apiBase.endsWith("/") ? apiBase : `${apiBase}/`;
-
   return {
     clearScreen: false,
     resolve: {
@@ -46,10 +43,7 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       host: "0.0.0.0",
-      proxy: proxy({
-        env,
-        apiBase,
-      }),
+      proxy: proxy({ env }),
     },
     build: {
       minify: !buildIgnoreMinify,
