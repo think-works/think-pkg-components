@@ -66,7 +66,6 @@ export default (config) => {
       [
         `${platformBase}login`,
         `${platformBase}meta`,
-        `${platformBase}self-monitor`,
         `${platformBase}quality/api`,
       ],
       getCommonOptions({ target: platformProxyTarget }),
