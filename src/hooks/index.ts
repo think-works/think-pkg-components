@@ -101,7 +101,7 @@ export const useDebounce = <T extends (...args: any[]) => any>(
 
   const dFunc = useMemo(
     () =>
-      debounce(ref.current, wait, {
+      debounce((...rest) => ref.current(...rest), wait, {
         leading,
         trailing,
         maxWait,
@@ -144,7 +144,7 @@ export const useThrottle = <T extends (...args: any[]) => any>(
 
   const tFunc = useMemo(
     () =>
-      throttle(ref.current, wait, {
+      throttle((...rest) => ref.current(...rest), wait, {
         leading,
         trailing,
       }),
