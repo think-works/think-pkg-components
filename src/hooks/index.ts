@@ -70,7 +70,7 @@ export const useEventCallback = <T extends (...args: any[]) => any>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [func, ...(deps || [])]); // 动态依赖数组
 
-  return useCallback(((...rest) => ref.current(...rest)) as T, [ref]);
+  return useCallback<T>(((...rest) => ref.current(...rest)) as T, [ref]);
 };
 
 /**
@@ -101,7 +101,7 @@ export const useDebounce = <T extends (...args: any[]) => any>(
 
   const dFunc = useMemo(
     () =>
-      debounce((...rest) => ref.current(...rest), wait, {
+      debounce<T>(((...rest) => ref.current(...rest)) as T, wait, {
         leading,
         trailing,
         maxWait,
@@ -144,7 +144,7 @@ export const useThrottle = <T extends (...args: any[]) => any>(
 
   const tFunc = useMemo(
     () =>
-      throttle((...rest) => ref.current(...rest), wait, {
+      throttle<T>(((...rest) => ref.current(...rest)) as T, wait, {
         leading,
         trailing,
       }),
