@@ -79,7 +79,10 @@ export const FlexTabs = (props: FlexTabsProps) => {
         style={styles?.tabBar}
       >
         <div className={stl.extraLeft}>{extraLeft}</div>
-        <div className={stl.content}>
+        <div
+          className={stl.content}
+          style={{ textAlign: props.centered ? "center" : undefined }}
+        >
           <Segmented
             className={cls(stl.segmented, classNames?.segmented)}
             style={styles?.segmented}
