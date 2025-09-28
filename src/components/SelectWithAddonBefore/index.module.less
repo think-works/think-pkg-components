@@ -24,7 +24,29 @@
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
       }
+
+      &-after {
+        :global(.@{antPrefixClass}-select-selector) {
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+      }
     }
+  }
+  &-text-after {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    background: @colorFillQuaternary;
+    border: 1px solid @colorBorder;
+    border-left: none;
+    font-size: 14px;
+    padding: 0 10px;
+    line-height: 1;
   }
 }
 .link {

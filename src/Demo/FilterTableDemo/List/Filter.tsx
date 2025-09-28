@@ -24,7 +24,11 @@ const Filter = (props: FilterProps) => {
           <Input />
         </Form.Item>,
         <Form.Item key="id" name="id" label="名称">
-          <SelectWithAddonBefore width={200} addonBefore="前置文本" />
+          <SelectWithAddonBefore
+            width={200}
+            addonBefore="前置文本"
+            addonAfter="后置文本"
+          />
         </Form.Item>,
       ]}
     />

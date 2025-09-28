@@ -1,10 +1,13 @@
 import { RefSelectProps, Select, SelectProps } from "antd";
+import classNames from "classnames";
 import { ForwardedRef, forwardRef } from "react";
 import styles from "./index.module.less";
 
 export type SelectWithAddonBeforeProps = SelectProps & {
   /** 前置文本 */
   addonBefore?: React.ReactNode;
+  /** 后置文本 */
+  addonAfter?: React.ReactNode;
   /** 选择器宽度 */
   width?: number;
   /** 自定义下拉框 里面的菜单下方的链接 */
@@ -19,7 +22,8 @@ export const SelectWithAddonBefore = forwardRef(
     props: SelectWithAddonBeforeProps,
     ref: ForwardedRef<RefSelectProps>,
   ) {
-    const { addonBefore, width, style, renderLink, ...rest } = props;
+    const { addonBefore, addonAfter, width, style, renderLink, ...rest } =
+      props;
     const value = props.value || null;
 
     const popupRender: SelectProps["popupRender"] = renderLink
@@ -42,13 +46,19 @@ export const SelectWithAddonBefore = forwardRef(
           className={styles["item-form"]}
           onChange={(e, option) => props?.onChange?.(e, option)}
           options={props.options}
-          rootClassName={addonBefore ? styles["item-form-select"] : undefined}
+          rootClassName={classNames({
+            [styles["item-form-select-root"]]: addonBefore,
+            [styles["item-form-select-after"]]: addonAfter,
+          })}
           popupRender={popupRender}
           dropdownRender={popupRender}
           {...rest}
         >
           {props.children}
         </Select>
+        {addonAfter && (
+          <div className={styles["item-text-after"]}>{addonAfter}</div>
+        )}
       </div>
     );
   },
