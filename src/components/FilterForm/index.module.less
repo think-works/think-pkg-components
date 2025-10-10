@@ -63,6 +63,11 @@
   margin-right: 0;
   margin-bottom: 0;
 
+  // 不允许标签和输入组件换行
+  :global(.@{antPrefixClass}-form-item-row) {
+    flex-wrap: nowrap;
+  }
+
   // 输入组件边框和背景
   :global(.@{antPrefixClass}-form-item-control-input-content) {
     > * {
