@@ -30,7 +30,7 @@ export const LayoutActions = (props: LayoutActionsProps) => {
     style,
     classNames,
     styles,
-    titleSize = "middle",
+    titleSize,
     divider,
     title,
     extend,

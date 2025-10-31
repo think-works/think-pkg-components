@@ -45,7 +45,7 @@ export const LayoutCard = (props: LayoutCardProps) => {
     style,
     classNames,
     styles,
-    titleSize = "middle",
+    titleSize,
     divider = true,
     bordered = true,
     rimless,

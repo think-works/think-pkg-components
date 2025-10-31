@@ -8,25 +8,35 @@ import {
   ReactNode,
   useCallback,
   useEffect,
+  useImperativeHandle,
+  useMemo,
   useRef,
   useState,
 } from "react";
 import { CaretDownOutlined } from "@ant-design/icons";
 import { styleConfig } from "@/common/themes";
 import { useDebounce } from "@/hooks";
+import { truthy } from "@/utils/types";
 import Resizing from "../Resizing";
 import { IconFolderClose, IconFolderOpen } from "./icons";
 import stl from "./index.module.less";
-import { getFieldValues } from "./utils";
+import { getFieldValues, getFlatNodes } from "./utils";
 
 const scrollDebounce = 200;
 const scrollBoundary = 20;
 const scrollBaseline = 20;
 const scrollRate = 1.1;
 
+type TreeRef = GetRef<typeof Tree>;
+
 export type ResizeNodeRender = GetProp<TreeProps, "titleRender">;
 
-export type ResizeTreeRef = GetRef<typeof Tree>;
+export type ResizeTreeRef = {
+  /** 滚动树 */
+  scrollTo?: TreeRef["scrollTo"];
+  /** 全部展开 */
+  expandAll?: (expanded?: boolean) => void;
+};
 
 export type ResizeTreeProps = TreeProps & {
   className?: string;
@@ -41,6 +51,8 @@ export type ResizeTreeProps = TreeProps & {
   dragAutoScroll?: boolean;
   /** 默认虚拟滚动容器高度 */
   defaultHeight?: number;
+  /** 点击节点标题触发展开 */
+  expandByTitle?: boolean;
   /** 叶子节点图标(true: 使用目录图标) */
   leafIcon?: true | ReactNode | GetProp<TreeProps, "icon">;
   /** 节点图标渲染 */
@@ -70,6 +82,7 @@ export const ResizeTree = forwardRef(function BaseTreeCom(
 
     dragAutoScroll = true,
     defaultHeight = 100,
+    expandByTitle,
     leafIcon,
     nodeIconRender,
     nodeTitleRender,
@@ -79,14 +92,77 @@ export const ResizeTree = forwardRef(function BaseTreeCom(
 
     treeData,
     fieldNames,
-    icon,
-    titleRender,
+    defaultExpandedKeys,
+    expandedKeys,
+    onExpand,
     onDragStart,
     onDragOver,
+    icon,
+    titleRender,
     ...rest
   } = props;
 
-  const [height, setHeight] = useState(defaultHeight);
+  // #region 导出 Ref
+
+  const refTree = useRef<TreeRef>(null);
+
+  useImperativeHandle(ref, () => ({
+    scrollTo: (...args) => refTree.current?.scrollTo(...args),
+
+    expandAll: handleExpandAll,
+  }));
+
+  // #endregion
+
+  // #region 同步外部属性
+
+  const [innerExpandedKeys, setInnerExpandedKeys] = useState(
+    expandedKeys || defaultExpandedKeys,
+  );
+
+  useEffect(() => {
+    setInnerExpandedKeys(expandedKeys);
+  }, [expandedKeys]);
+
+  // #endregion
+
+  // #region 展开收起
+
+  /** 平面化节点 */
+  const flatNodes = useMemo(
+    () => (treeData ? getFlatNodes(treeData, fieldNames) : []),
+    [fieldNames, treeData],
+  );
+
+  /** 展开节点 */
+  const handleExpand = useCallback<GetProp<TreeProps, "onExpand">>(
+    (expandedKeys, ...rest) => {
+      setInnerExpandedKeys(expandedKeys);
+
+      onExpand?.(expandedKeys, ...rest);
+    },
+    [onExpand],
+  );
+
+  /** 展开全部 */
+  const handleExpandAll = useCallback(
+    (expanded?: boolean) => {
+      const nextKeys = !expanded
+        ? []
+        : flatNodes
+            .map((node) => {
+              const { normalKey } = getFieldValues(node, fieldNames);
+              return normalKey;
+            })
+            .filter(truthy);
+
+      setInnerExpandedKeys(nextKeys);
+      onExpand?.(nextKeys, { expanded } as any);
+    },
+    [fieldNames, flatNodes, onExpand],
+  );
+
+  // #endregion
 
   // #region 自动滚动
 
@@ -95,6 +171,8 @@ export const ResizeTree = forwardRef(function BaseTreeCom(
    * https://github.com/ant-design/ant-design/issues/54284
    * https://github.com/ant-design/ant-design/issues/31057#issuecomment-1206278137
    */
+
+  const [height, setHeight] = useState(defaultHeight);
 
   const refResizing = useRef<HTMLDivElement>(null);
   const refTreeListHolder = useRef<HTMLDivElement>(null);
@@ -235,6 +313,20 @@ export const ResizeTree = forwardRef(function BaseTreeCom(
 
   // #region 渲染节点
 
+  /** 切换展开状态 */
+  const switchExpandState = useCallback(
+    (node: TreeDataNode) => {
+      const prevKeys = innerExpandedKeys || [];
+      const filterKeys = prevKeys?.filter((key) => key !== node.key);
+      const expanded = prevKeys.length === filterKeys.length;
+      const nextKeys = expanded ? [...prevKeys, node.key] : filterKeys;
+
+      setInnerExpandedKeys(nextKeys);
+      onExpand?.(nextKeys, { expanded } as any);
+    },
+    [innerExpandedKeys, onExpand],
+  );
+
   /** 渲染节点 */
   const handleTitleRender = useCallback<ResizeNodeRender>(
     (nodeData, ...rest) => {
@@ -300,7 +392,18 @@ export const ResizeTree = forwardRef(function BaseTreeCom(
 
       // 有效节点
       if (nodeComArr.length) {
-        child = <div className={stl.nodeContainer}>{nodeComArr}</div>;
+        child = (
+          <div
+            className={stl.nodeContainer}
+            onClick={() => {
+              if (expandByTitle) {
+                switchExpandState(nodeData);
+              }
+            }}
+          >
+            {nodeComArr}
+          </div>
+        );
       }
 
       // 节点包装
@@ -311,12 +414,14 @@ export const ResizeTree = forwardRef(function BaseTreeCom(
       return child;
     },
     [
+      expandByTitle,
       fieldNames,
       nodeActionRender,
       nodeCountRender,
       nodeIconRender,
       nodeTitleRender,
       nodeWrapperRender,
+      switchExpandState,
       titleRender,
     ],
   );
@@ -332,7 +437,7 @@ export const ResizeTree = forwardRef(function BaseTreeCom(
     >
       {treeData?.length ? (
         <Tree
-          ref={ref}
+          ref={refTree}
           className={cls(stl.tree, classNames?.tree)}
           style={styles?.tree}
           virtual
@@ -341,11 +446,14 @@ export const ResizeTree = forwardRef(function BaseTreeCom(
           height={height}
           treeData={treeData}
           fieldNames={fieldNames}
+          defaultExpandedKeys={defaultExpandedKeys}
+          expandedKeys={innerExpandedKeys}
+          onExpand={handleExpand}
+          onDragStart={handleDragStart}
+          onDragOver={handleDragOver}
           icon={handleIcon}
           titleRender={handleTitleRender}
           switcherIcon={<CaretDownOutlined className={stl.switcherIcon} />}
-          onDragStart={handleDragStart}
-          onDragOver={handleDragOver}
           {...rest}
         />
       ) : (

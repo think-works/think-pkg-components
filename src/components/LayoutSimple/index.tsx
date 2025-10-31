@@ -43,7 +43,7 @@ export const LayoutSimple = (props: LayoutSimpleProps) => {
     style,
     classNames,
     styles,
-    titleSize = "middle",
+    titleSize,
     divider = true,
     rimless,
     cling,

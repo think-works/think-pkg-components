@@ -1,4 +1,3 @@
-import { GetProp } from "antd";
 import cls, { Argument } from "classnames";
 import {
   CSSProperties,
@@ -12,18 +11,13 @@ import {
   useRef,
   useState,
 } from "react";
-import { truthy } from "@/utils/types";
 import BaseAction, { BaseActionProps } from "../BaseAction";
 import LayoutTitle, { LayoutTitleSize } from "../LayoutTitle";
 import FilterTree, { FilterTreeProps, FilterTreeRef } from "./FilterTree";
 import { IconActionAdd, IconAllFold, IconAllUnfold } from "./icons";
 import stl from "./index.module.less";
-import { getFieldValues, getFlatNodes } from "./utils";
 
-export type LayoutTreeRef = FilterTreeRef & {
-  /** 全部展开 */
-  expandAll?: (expand?: boolean) => void;
-};
+export type LayoutTreeRef = FilterTreeRef & {};
 
 export type LayoutTreeProps = FilterTreeProps & {
   className?: string;
@@ -40,12 +34,12 @@ export type LayoutTreeProps = FilterTreeProps & {
   titleSize?: LayoutTitleSize;
   /** 分割线 */
   divider?: boolean;
-  /** 可展开 */
-  expandable?: boolean;
   /** 标题 */
   title?: ReactNode;
   /** 扩展 */
   extend?: ReactNode;
+  /** 可展开 */
+  expandable?: boolean;
 };
 
 export const LayoutTree = forwardRef(function BaseTreeCom(
@@ -58,19 +52,14 @@ export const LayoutTree = forwardRef(function BaseTreeCom(
     classNames,
     styles,
 
-    titleSize = "middle",
+    titleSize,
     divider = true,
+    title,
+    extend,
     expandable = true,
     filterable = true,
     editable,
-    title,
-    extend,
 
-    treeData,
-    fieldNames,
-    defaultExpandedKeys,
-    expandedKeys,
-    onExpand,
     ...rest
   } = props;
 
@@ -94,26 +83,15 @@ export const LayoutTree = forwardRef(function BaseTreeCom(
    */
   useImperativeHandle(ref, () => ({
     scrollTo: (...args) => refTree.current?.scrollTo?.(...args),
+    expandAll: (...args) => refTree.current?.expandAll?.(...args),
+
     addNode: (...args) => refTree.current?.addNode?.(...args),
     editNode: (...args) => refTree.current?.editNode?.(...args),
     deleteNode: (...args) => refTree.current?.deleteNode?.(...args),
-    prevMatched: refTree.current?.prevMatched,
+
+    prevMatched: (...args) => refTree.current?.prevMatched?.(...args),
     nextMatched: (...args) => refTree.current?.nextMatched?.(...args),
-
-    expandAll: handleExpandAll,
   }));
-
-  // #endregion
-
-  // #region 同步外部属性
-
-  const [innerExpandedKeys, setInnerExpandedKeys] = useState(
-    expandedKeys || defaultExpandedKeys,
-  );
-
-  useEffect(() => {
-    setInnerExpandedKeys(expandedKeys);
-  }, [expandedKeys]);
 
   // #endregion
 
@@ -121,46 +99,11 @@ export const LayoutTree = forwardRef(function BaseTreeCom(
 
   const [foldState, setFoldState] = useState<"fold" | "unfold">();
 
-  /** 平面化节点 */
-  const flatNodes = useMemo(
-    () => (treeData ? getFlatNodes(treeData, fieldNames) : []),
-    [fieldNames, treeData],
-  );
-
-  /** 展开节点 */
-  const handleExpand = useCallback<GetProp<FilterTreeProps, "onExpand">>(
-    (expandedKeys, ...rest) => {
-      setInnerExpandedKeys(expandedKeys);
-
-      onExpand?.(expandedKeys, ...rest);
-    },
-    [onExpand],
-  );
-
   /** 展开全部 */
-  const handleExpandAll = useCallback(
-    (expand?: boolean) => {
-      if (expand) {
-        // 全部展开
-        const allKeys = flatNodes
-          .map((node) => {
-            const { normalKey } = getFieldValues(node, fieldNames);
-            return normalKey;
-          })
-          .filter(truthy);
-
-        setFoldState("unfold");
-        setInnerExpandedKeys(allKeys);
-        onExpand?.(allKeys, { expanded: true } as any);
-      } else {
-        // 全部折叠
-        setFoldState("fold");
-        setInnerExpandedKeys([]);
-        onExpand?.([], { expanded: false } as any);
-      }
-    },
-    [fieldNames, flatNodes, onExpand],
-  );
+  const handleExpandAll = useCallback((expand?: boolean) => {
+    refTree.current?.expandAll?.(expand);
+    setFoldState(expand ? "unfold" : "fold");
+  }, []);
 
   /** 展开收起组件 */
   const foldCom = useMemo(() => {
@@ -250,11 +193,6 @@ export const LayoutTree = forwardRef(function BaseTreeCom(
         divider={divider}
         filterable={filterable}
         editable={editable}
-        treeData={treeData}
-        fieldNames={fieldNames}
-        defaultExpandedKeys={defaultExpandedKeys}
-        expandedKeys={innerExpandedKeys}
-        onExpand={handleExpand}
         {...rest}
       />
     </div>

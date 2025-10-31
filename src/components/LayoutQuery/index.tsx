@@ -51,7 +51,7 @@ export const LayoutQuery = (props: LayoutQueryProps) => {
     style,
     classNames,
     styles,
-    titleSize = "middle",
+    titleSize,
     bordered = true,
     rimless,
     overflow,

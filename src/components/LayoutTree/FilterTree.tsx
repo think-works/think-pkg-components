@@ -107,17 +107,15 @@ export const FilterTree = forwardRef(function FilterTreeCom(
 
   const refTree = useRef<EditableTreeRef>(null);
 
-  /**
-   * 直接多层 ref 透传函数，祖父组件调用孙组件函数时，会访问到旧版闭包数据。
-   * 至少需要在直接父级组件中用函数包装一次，祖父组件才会访问到新版闭包数据。
-   */
   useImperativeHandle(ref, () => ({
     scrollTo: (...args) => refTree.current?.scrollTo?.(...args),
+    expandAll: (...args) => refTree.current?.expandAll?.(...args),
+
     addNode: (...args) => refTree.current?.addNode?.(...args),
     editNode: (...args) => refTree.current?.editNode?.(...args),
     deleteNode: (...args) => refTree.current?.deleteNode?.(...args),
 
-    prevMatched: (...args) => handlePrevMatched?.(...args),
+    prevMatched: handlePrevMatched,
     nextMatched: handleNextMatched,
   }));
 

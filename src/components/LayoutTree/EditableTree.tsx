@@ -41,9 +41,7 @@ export type EditableAllowAction<T = boolean | BaseActionProps> =
       node?: TreeDataNode,
     ) => T);
 
-export type EditableTreeRef = {
-  /** 滚动树 */
-  scrollTo?: ResizeTreeRef["scrollTo"];
+export type EditableTreeRef = ResizeTreeRef & {
   /** 新建节点 */
   addNode?: EditableCommand;
   /** 编辑节点 */
@@ -134,12 +132,9 @@ export const EditableTree = forwardRef(function EditableTreeCom(
 
   const refTree = useRef<ResizeTreeRef>(null);
 
-  /**
-   * 直接多层 ref 透传函数，祖父组件调用孙组件函数时，会访问到旧版闭包数据。
-   * 至少需要在直接父级组件中用函数包装一次，祖父组件才会访问到新版闭包数据。
-   */
   useImperativeHandle(ref, () => ({
-    scrollTo: (...args) => refTree.current?.scrollTo(...args),
+    scrollTo: (...args) => refTree.current?.scrollTo?.(...args),
+    expandAll: (...args) => refTree.current?.expandAll?.(...args),
 
     addNode: handleAddNode,
     editNode: handleEditNode,
@@ -520,7 +515,9 @@ export const EditableTree = forwardRef(function EditableTreeCom(
           children: "新建",
           icon: <IconActionAdd />,
           onClick: () => {
-            handleAddNode(nodeData.key);
+            handleAddNode(nodeData.key, {
+              diffNode: { title: "新建" },
+            });
 
             // 展开当前项
             setInnerExpandedKeys((keys) => [...(keys || []), nodeData.key]);
