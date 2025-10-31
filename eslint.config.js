@@ -1,18 +1,18 @@
 import prettier from "eslint-config-prettier";
 import react from "eslint-plugin-react";
 import hooks from "eslint-plugin-react-hooks";
+import { defineConfig } from "eslint/config";
 import globals from "globals";
 import ts from "typescript-eslint";
 import eslint from "@eslint/js";
 
-export default [
+export default defineConfig([
   {
-    ignores: ["**/.github/**", "**/dist/**" ],
+    ignores: ["**/.github/**", "**/dist/**"],
   },
   eslint.configs.recommended,
   react.configs.flat.recommended,
   react.configs.flat["jsx-runtime"],
-  hooks.configs["recommended-latest"],
   ...ts.configs.recommended,
   prettier,
   {
@@ -25,11 +25,14 @@ export default [
         version: "detect",
       },
     },
-    plugins: {},
+    plugins: {
+      "react-hooks": hooks,
+    },
     rules: {
       "no-debugger": ["warn"],
       "no-console": ["warn", { allow: ["warn", "error"] }],
       "no-empty": ["off"],
+      "react-hooks/rules-of-hooks": ["error"],
       "react-hooks/exhaustive-deps": ["error"],
       "@typescript-eslint/ban-ts-comment": ["off"],
       "@typescript-eslint/no-explicit-any": ["off"],
@@ -53,4 +56,4 @@ export default [
       ],
     },
   },
-];
+]);

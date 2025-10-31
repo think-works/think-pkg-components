@@ -8,6 +8,7 @@ import FilterFormDemo from "./FilterFormDemo";
 import FilterTableDemo from "./FilterTableDemo";
 import FlexTabsDemo from "./FlexTabsDemo";
 import Home from "./Home";
+import LayoutTreeDemo from "./LayoutTreeDemo";
 import LoadingDemo from "./LoadingDemo";
 import PageLayoutDemo from "./PageLayoutDemo";
 import RouterTableDemo from "./RouterTableDemo";
@@ -76,6 +77,10 @@ export const routes: RouteObject[] = [
   {
     path: "/loading",
     element: <LoadingDemo />,
+  },
+  {
+    path: "/layout-tree",
+    element: <LayoutTreeDemo />,
   },
 ];
 

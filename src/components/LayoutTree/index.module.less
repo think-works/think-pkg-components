@@ -1,0 +1,189 @@
+@import "@/styles/utils.less";
+
+.resizeTree {
+  height: 100%;
+
+  .empty {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .tree {
+    width: 100%;
+    background-color: transparent;
+
+    .switcherIcon {
+      font-size: 14px;
+      vertical-align: middle;
+    }
+
+    .folderIcon {
+      font-size: 18px;
+    }
+
+    .nodeContainer {
+      flex: auto;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding-left: 2px;
+      padding-right: 8px;
+
+      .nodeTitle {
+        flex: auto;
+        min-width: 0;
+        .ellipsis();
+      }
+
+      .nodeIcon,
+      .nodeCount,
+      .nodeAction {
+        flex: none;
+        display: flex;
+        align-items: center;
+      }
+
+      .nodeIcon {
+        font-size: 18px;
+      }
+
+      .nodeCount {
+        font-size: 12px;
+        color: @colorLink;
+      }
+
+      .nodeAction {
+        font-size: 18px;
+        color: @colorTextTertiary;
+      }
+    }
+
+    :global(.@{antPrefixClass}-tree-treenode) {
+      :global(.@{antPrefixClass}-tree-switcher) {
+        margin: 0;
+      }
+
+      :global(.@{antPrefixClass}-tree-node-content-wrapper) {
+        flex: auto;
+        min-width: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+
+        :global(.@{antPrefixClass}-tree-iconEle) {
+          display: flex;
+          align-items: center;
+
+          &:empty {
+            display: none;
+          }
+        }
+
+        :global(.@{antPrefixClass}-tree-title) {
+          flex: auto;
+          min-width: 0;
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
+  }
+}
+
+.editableTree {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .resizeTree {
+    flex: auto;
+  }
+}
+
+.filterTree {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .filter {
+    flex: none;
+    display: flex;
+    align-items: center;
+
+    &.divider {
+      border-top: 1px solid @colorBorderSecondary;
+      border-bottom: 1px solid @colorBorderSecondary;
+    }
+
+    .input {
+      flex: auto;
+    }
+
+    .counter {
+      flex: none;
+      margin-right: 8px;
+
+      .count {
+        font-size: 12px;
+        line-height: 24px;
+        user-select: none;
+      }
+    }
+
+    .filterIcon {
+      font-size: 14px;
+      cursor: pointer;
+
+      &:hover {
+        color: @colorPrimaryHover;
+      }
+
+      &.disabled {
+        cursor: not-allowed;
+        color: @colorTextDisabled;
+      }
+    }
+  }
+
+  .editableTree {
+    flex: auto;
+
+    .matchedContainer {
+      flex: auto;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      background-color: @colorWarningBg;
+
+      &.active {
+        box-shadow: inset 0 0 0 2px @colorWarningBorder;
+      }
+    }
+  }
+}
+
+.layoutTree {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: @bizLayoutRadius;
+  background-color: @colorBgContainer;
+
+  .allFoldIcon {
+    font-size: 16px;
+  }
+
+  .head {
+    flex: none;
+    padding: 0 @bizLayoutGap;
+    padding-right: 8px;
+    min-height: @bizLayoutTitle;
+    line-height: @bizLayoutTitle;
+  }
+
+  .body {
+    flex: auto;
+  }
+}
