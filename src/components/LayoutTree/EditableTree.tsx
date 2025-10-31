@@ -14,6 +14,9 @@ import {
   useState,
 } from "react";
 import { uuid4 } from "@/utils/cryptos";
+import { BaseActionProps } from "../BaseAction";
+import DropdownActions from "../DropdownActions";
+import { IconActionAdd, IconActionDelete, IconActionEdit } from "./icons";
 import stl from "./index.module.less";
 import ResizeTree, {
   ResizeNodeRender,
@@ -27,21 +30,21 @@ export type EditableCommand = (
   targetKey?: Key,
   options?: {
     /** 修改目标节点 */
-    diffTargetNode?: Record<string, any>;
+    diffNode?: Record<string, any>;
   },
-) => Promise<boolean> | boolean | undefined;
+) => void;
 
-export type EditableAllowAction =
-  | boolean
+export type EditableAllowAction<T = boolean | BaseActionProps> =
+  | T
   | ((
-      /** 修改前的目标节点 */
-      targetNode?: TreeDataNode,
-    ) => Promise<boolean> | boolean | undefined);
+      /** 操作节点 */
+      node?: TreeDataNode,
+    ) => T);
 
 export type EditableTreeRef = {
   /** 滚动树 */
   scrollTo?: ResizeTreeRef["scrollTo"];
-  /** 新增节点 */
+  /** 新建节点 */
   addNode?: EditableCommand;
   /** 编辑节点 */
   editNode?: EditableCommand;
@@ -64,14 +67,14 @@ export type EditableTreeProps = ResizeTreeProps & {
     | {
         /** 深度克隆(默认为 true) */
         cloneData?: boolean;
-        /** 新增 */
+        /** 新建 */
         add?: EditableAllowAction;
         /** 编辑 */
         edit?: EditableAllowAction;
         /** 删除 */
         delete?: EditableAllowAction;
         /** 移动 */
-        move?: EditableAllowAction;
+        move?: EditableAllowAction<boolean>;
       };
   /** 树数据变化 */
   onTreeDataChange?: (
@@ -80,8 +83,8 @@ export type EditableTreeProps = ResizeTreeProps & {
     options: {
       /** 操作类型 */
       action: "add" | "edit" | "delete" | "move";
-      /** 修改后的目标节点 */
-      targetNode?: TreeDataNode;
+      /** 操作节点 */
+      node: TreeDataNode;
     },
   ) => void;
 };
@@ -98,9 +101,13 @@ export const EditableTree = forwardRef(function EditableTreeCom(
     editable,
     onTreeDataChange,
     nodeTitleRender,
+    nodeActionRender,
 
     treeData: outerTreeData,
     fieldNames,
+    defaultExpandedKeys,
+    expandedKeys,
+    onExpand,
     onDrop,
     ...rest
   } = props;
@@ -114,6 +121,14 @@ export const EditableTree = forwardRef(function EditableTreeCom(
   } = editable === true
     ? { cloneData: true, add: true, edit: true, delete: true, move: true }
     : editable || {};
+
+  const refTimeout = useRef<any>(undefined);
+  useEffect(() => {
+    const timer = refTimeout.current;
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
 
   // #region 导出 Ref
 
@@ -135,6 +150,10 @@ export const EditableTree = forwardRef(function EditableTreeCom(
 
   // #region 同步外部属性
 
+  const [innerExpandedKeys, setInnerExpandedKeys] = useState(
+    expandedKeys || defaultExpandedKeys,
+  );
+
   const [innerTreeData, setInnerTreeData] = useState<
     TreeDataNode[] | undefined
   >(outerTreeData);
@@ -142,6 +161,10 @@ export const EditableTree = forwardRef(function EditableTreeCom(
   useEffect(() => {
     setInnerTreeData(outerTreeData);
   }, [outerTreeData]);
+
+  useEffect(() => {
+    setInnerExpandedKeys(expandedKeys);
+  }, [expandedKeys]);
 
   // #endregion
 
@@ -165,14 +188,10 @@ export const EditableTree = forwardRef(function EditableTreeCom(
     [cloneData, innerTreeData],
   );
 
-  /** 向指定节点(未找到则为根节点)下新增节点 */
+  /** 向指定节点(未找到则为根节点)下新建节点 */
   const handleAddNode = useCallback<EditableCommand>(
-    async (targetKey, options) => {
-      const { diffTargetNode } = options || {};
-
-      if (!allowAdd) {
-        return false;
-      }
+    (targetKey, options) => {
+      const { diffNode } = options || {};
 
       const { fieldNameKey, fieldNameTitle, fieldNameChildren } =
         getFieldValues({}, fieldNames);
@@ -188,15 +207,6 @@ export const EditableTree = forwardRef(function EditableTreeCom(
         findTreeNodes(targetTreeData, targetKey || newTargetKey, fieldNames) ||
         {};
 
-      // 是否可操作
-      const allowAction =
-        typeof allowAdd === "function" ? await allowAdd(targetNode) : allowAdd;
-
-      // 不允许操作
-      if (!allowAction) {
-        return false;
-      }
-
       // 新节点
       const newTargetNode: TreeDataNode = {
         key: newTargetKey,
@@ -206,7 +216,7 @@ export const EditableTree = forwardRef(function EditableTreeCom(
       };
 
       // 编辑节点
-      merge(newTargetNode, diffTargetNode);
+      merge(newTargetNode, diffNode);
 
       if (!targetNode) {
         // 添加到根节点下
@@ -231,23 +241,17 @@ export const EditableTree = forwardRef(function EditableTreeCom(
 
       // 更新内部数据
       setInnerTreeData(_targetTreeData);
-
-      return true;
     },
-    [allowAdd, cloneTreeData, fieldNames],
+    [cloneTreeData, fieldNames],
   );
 
   /** 编辑指定节点 */
   const handleEditNode = useCallback<EditableCommand>(
-    async (targetKey, options) => {
-      const { diffTargetNode } = options || {};
-
-      if (!allowEdit) {
-        return false;
-      }
+    (targetKey, options) => {
+      const { diffNode } = options || {};
 
       if (!targetKey) {
-        return false;
+        return;
       }
 
       // 目标树数据
@@ -257,24 +261,13 @@ export const EditableTree = forwardRef(function EditableTreeCom(
       const { node: targetNode } =
         findTreeNodes(targetTreeData, targetKey, fieldNames) || {};
 
-      // 是否可操作
-      const allowAction =
-        typeof allowEdit === "function"
-          ? await allowEdit(targetNode)
-          : allowEdit;
-
-      // 不允许操作
-      if (!allowAction) {
-        return false;
-      }
-
       // 未找到目标
       if (!targetNode) {
-        return false;
+        return;
       }
 
       // 编辑节点
-      merge(targetNode, diffTargetNode);
+      merge(targetNode, diffNode);
 
       // 进入编辑状态
       setEditingState({
@@ -283,10 +276,8 @@ export const EditableTree = forwardRef(function EditableTreeCom(
         targetKey,
         targetNode,
       });
-
-      return true;
     },
-    [allowEdit, cloneTreeData, fieldNames],
+    [cloneTreeData, fieldNames],
   );
 
   /** 输入框失焦 */
@@ -321,7 +312,7 @@ export const EditableTree = forwardRef(function EditableTreeCom(
       setInnerTreeData(_targetTreeData);
 
       // 触发外部变更
-      onTreeDataChange?.(_targetTreeData, { action, targetNode });
+      onTreeDataChange?.(_targetTreeData, { action, node: targetNode });
 
       // 退出编辑
       setEditingState(undefined);
@@ -331,13 +322,9 @@ export const EditableTree = forwardRef(function EditableTreeCom(
 
   /** 删除指定节点 */
   const handleDeleteNode = useCallback<EditableCommand>(
-    async (targetKey) => {
-      if (!allowDelete) {
-        return false;
-      }
-
+    (targetKey) => {
       if (!targetKey) {
-        return false;
+        return;
       }
 
       // 目标树数据
@@ -350,20 +337,9 @@ export const EditableTree = forwardRef(function EditableTreeCom(
         siblings: targetSibling,
       } = findTreeNodes(targetTreeData, targetKey, fieldNames) || {};
 
-      // 是否可操作
-      const allowAction =
-        typeof allowDelete === "function"
-          ? await allowDelete(targetNode)
-          : allowDelete;
-
-      // 不允许操作
-      if (!allowAction) {
-        return false;
-      }
-
       // 未找到目标
       if (!targetNode) {
-        return false;
+        return;
       }
 
       // 删除节点
@@ -378,28 +354,18 @@ export const EditableTree = forwardRef(function EditableTreeCom(
       setInnerTreeData(_targetTreeData);
 
       // 触发外部变更
-      onTreeDataChange?.(_targetTreeData, { action: "delete", targetNode });
-
-      return true;
+      onTreeDataChange?.(_targetTreeData, {
+        action: "delete",
+        node: targetNode,
+      });
     },
-    [allowDelete, cloneTreeData, fieldNames, onTreeDataChange],
+    [cloneTreeData, fieldNames, onTreeDataChange],
   );
 
   /** 移动指定节点 */
   const handleDrop = useCallback<GetProp<ResizeTreeProps, "onDrop">>(
     async (info, ...rest) => {
       onDrop?.(info, ...rest);
-
-      // 是否可操作
-      const allowAction =
-        typeof allowMove === "function"
-          ? await allowMove(info.dragNode)
-          : allowMove;
-
-      // 不允许操作
-      if (!allowAction) {
-        return false;
-      }
 
       // 目标树数据
       const targetTreeData = cloneTreeData();
@@ -477,15 +443,25 @@ export const EditableTree = forwardRef(function EditableTreeCom(
       // 触发外部变更
       onTreeDataChange?.(_targetTreeData, {
         action: "move",
-        targetNode: dropNode,
+        node: dragNode,
       });
     },
-    [allowMove, cloneTreeData, fieldNames, onDrop, onTreeDataChange],
+    [cloneTreeData, fieldNames, onDrop, onTreeDataChange],
   );
 
   // #endregion
 
   // #region 渲染节点
+
+  /** 展开节点 */
+  const handleExpand = useCallback<GetProp<ResizeTreeProps, "onExpand">>(
+    (expandedKeys, ...rest) => {
+      setInnerExpandedKeys(expandedKeys);
+
+      onExpand?.(expandedKeys, ...rest);
+    },
+    [onExpand],
+  );
 
   /** 节点标题渲染 */
   const handleNodeTitleRender = useCallback<ResizeNodeRender>(
@@ -523,6 +499,98 @@ export const EditableTree = forwardRef(function EditableTreeCom(
     [editingKey, fieldNames, handleInputBlur, nodeTitleRender],
   );
 
+  /** 节点操作渲染 */
+  const handleNodeActionRender = useCallback<ResizeNodeRender>(
+    (nodeData, ...rest) => {
+      if (nodeActionRender) {
+        return nodeActionRender(nodeData, ...rest);
+      }
+
+      const actions: (BaseActionProps & { key?: Key })[] = [];
+
+      // 新增
+      const allowAddAction =
+        typeof allowAdd === "function" ? allowAdd(nodeData) : allowAdd;
+      if (allowAddAction) {
+        const actionProps =
+          typeof allowAddAction === "object" ? allowAddAction : {};
+
+        actions.push({
+          key: "add",
+          children: "新建",
+          icon: <IconActionAdd />,
+          onClick: () => {
+            handleAddNode(nodeData.key);
+
+            // 展开当前项
+            setInnerExpandedKeys((keys) => [...(keys || []), nodeData.key]);
+
+            // 滚动到当前项
+            clearTimeout(refTimeout.current);
+            refTimeout.current = setTimeout(() => {
+              refTree.current?.scrollTo?.({ key: nodeData.key });
+            }, 100);
+          },
+          ...actionProps,
+        });
+      }
+
+      // 编辑
+      const allowEditAction =
+        typeof allowEdit === "function" ? allowEdit(nodeData) : allowEdit;
+      if (allowEditAction) {
+        const actionProps =
+          typeof allowEditAction === "object" ? allowEditAction : {};
+
+        actions.push({
+          key: "edit",
+          children: "编辑",
+          icon: <IconActionEdit />,
+          onClick: () => {
+            handleEditNode(nodeData.key);
+          },
+          ...actionProps,
+        });
+      }
+
+      // 删除
+      const allowDeleteAction =
+        typeof allowDelete === "function" ? allowDelete(nodeData) : allowDelete;
+      if (allowDeleteAction) {
+        const actionProps =
+          typeof allowDeleteAction === "object" ? allowDeleteAction : {};
+
+        actions.push({
+          key: "delete",
+          danger: true,
+          children: "删除",
+          icon: <IconActionDelete />,
+          popconfirm: {
+            stopPropagation: true,
+            title: "确定删除？",
+            onConfirm: () => {
+              handleDeleteNode(nodeData.key);
+            },
+          },
+          ...actionProps,
+        });
+      }
+
+      if (actions.length) {
+        return <DropdownActions actions={actions} />;
+      }
+    },
+    [
+      allowAdd,
+      allowDelete,
+      allowEdit,
+      handleAddNode,
+      handleDeleteNode,
+      handleEditNode,
+      nodeActionRender,
+    ],
+  );
+
   // #endregion
 
   return (
@@ -531,11 +599,15 @@ export const EditableTree = forwardRef(function EditableTreeCom(
         ref={refTree}
         className={cls(stl.resizeTree, classNames?.resize)}
         style={styles?.resize}
-        draggable={!!allowMove}
+        draggable={allowMove}
         treeData={innerTreeData}
         fieldNames={fieldNames}
+        defaultExpandedKeys={defaultExpandedKeys}
+        expandedKeys={innerExpandedKeys}
+        onExpand={handleExpand}
         onDrop={handleDrop}
         nodeTitleRender={handleNodeTitleRender}
+        nodeActionRender={handleNodeActionRender}
         {...rest}
       />
     </div>

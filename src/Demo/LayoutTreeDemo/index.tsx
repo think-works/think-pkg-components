@@ -1,7 +1,7 @@
-import { Button, Select, Space, Switch, TreeDataNode } from "antd";
+import { Select, Space, Switch, TreeDataNode } from "antd";
 import { Key, useMemo, useRef, useState } from "react";
 import { FileFilled, FileOutlined, StarOutlined } from "@ant-design/icons";
-import { DropdownActions, LayoutTree, LayoutTreeRef } from "@/components";
+import { LayoutTree, LayoutTreeRef } from "@/components";
 
 const dig = (path = "0", level = 3) => {
   const list = [];
@@ -28,13 +28,13 @@ const LayoutTreeDemo = () => {
   const refTree = useRef<LayoutTreeRef>(null);
 
   const [treeData, setTreeData] = useState<TreeDataNode[]>(demoData);
-  const [expandedKeys, setExpandedKeys] = useState<Key[]>();
   const [selectedKeys, setSelectedKeys] = useState<Key[]>();
 
+  const [selectable, setSelectable] = useState<boolean>(true);
   const [filterable, setFilterable] = useState<boolean>(true);
+  const [editable, setEditable] = useState<boolean>(true);
   const [showIcon, setShowIcon] = useState<boolean>(true);
   const [leafIcon, setLeafIcon] = useState<string>("true");
-  const [editable, setEditable] = useState<boolean>(false);
 
   const leafIconCom = useMemo(() => {
     if (leafIcon === "true") {
@@ -44,10 +44,10 @@ const LayoutTreeDemo = () => {
       return false;
     }
     if (leafIcon === "ReactNode") {
-      return <FileFilled />;
+      return <FileOutlined />;
     }
     if (leafIcon === "Function") {
-      const func = () => <FileOutlined />;
+      const func = () => <FileFilled />;
       return func;
     }
   }, [leafIcon]);
@@ -57,8 +57,16 @@ const LayoutTreeDemo = () => {
       <div>
         <Space>
           <div>
+            selectable:
+            <Switch checked={selectable} onChange={setSelectable} />
+          </div>
+          <div>
             filterable:
             <Switch checked={filterable} onChange={setFilterable} />
+          </div>
+          <div>
+            editable:
+            <Switch checked={editable} onChange={setEditable} />
           </div>
           <div>
             showIcon:
@@ -89,29 +97,6 @@ const LayoutTreeDemo = () => {
               ]}
             />
           </div>
-          <div>
-            editable:
-            <Switch checked={editable} onChange={setEditable} />
-          </div>
-          <div>
-            <Button
-              disabled={!editable}
-              onClick={() => {
-                refTree.current?.addNode?.(undefined, {
-                  diffTargetNode: {
-                    title: "默认名称1",
-                  },
-                });
-
-                // 滚动到第一项
-                setTimeout(() => {
-                  refTree.current?.scrollTo?.({ index: 0 });
-                }, 100);
-              }}
-            >
-              新建
-            </Button>
-          </div>
         </Space>
       </div>
       <div>selectedKey: {JSON.stringify(selectedKeys)}</div>
@@ -119,63 +104,16 @@ const LayoutTreeDemo = () => {
         style={{ height: 500, width: 400 }}
         ref={refTree}
         title="LayoutTree Demo"
+        selectable={selectable}
         filterable={filterable}
         editable={editable}
         showIcon={showIcon}
         leafIcon={leafIconCom}
         treeData={treeData}
         onTreeDataChange={setTreeData}
-        expandedKeys={expandedKeys}
-        onExpand={setExpandedKeys}
         onSelect={setSelectedKeys}
         nodeIconRender={() => <StarOutlined />}
         nodeCountRender={(node) => node.children?.length}
-        nodeActionRender={(node) =>
-          !editable ? null : (
-            <DropdownActions
-              actions={[
-                {
-                  key: "add",
-                  children: "新建",
-                  onClick: () => {
-                    refTree.current?.addNode?.(node.key, {
-                      diffTargetNode: {
-                        title: "默认名称2",
-                      },
-                    });
-
-                    // 展开当前项
-                    setExpandedKeys((keys) => [...(keys || []), node.key]);
-
-                    // 滚动到当前项
-                    setTimeout(() => {
-                      refTree.current?.scrollTo?.({ key: node.key });
-                    }, 100);
-                  },
-                },
-                {
-                  key: "edit",
-                  children: "编辑",
-                  onClick: () => {
-                    refTree.current?.editNode?.(node.key);
-                  },
-                },
-                {
-                  danger: true,
-                  key: "delete",
-                  children: "删除",
-                  popconfirm: {
-                    stopPropagation: true,
-                    title: "确定删除吗？",
-                    onConfirm: () => {
-                      refTree.current?.deleteNode?.(node.key);
-                    },
-                  },
-                },
-              ]}
-            />
-          )
-        }
       />
     </div>
   );

@@ -1,6 +1,8 @@
 export {
   MoreOutlined as IconActionMore,
-  PlusOutlined as IconActionPlus,
+  PlusOutlined as IconActionAdd,
+  EditOutlined as IconActionEdit,
+  DeleteOutlined as IconActionDelete,
   CaretDownOutlined as IconNodeUnfold,
   CaretRightOutlined as IconNodeFold,
 } from "@ant-design/icons";

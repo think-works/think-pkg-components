@@ -97,8 +97,9 @@ export const FilterTree = forwardRef(function FilterTreeCom(
 
   const refTimeout = useRef<any>(undefined);
   useEffect(() => {
+    const timer = refTimeout.current;
     return () => {
-      clearTimeout(refTimeout.current);
+      clearTimeout(timer);
     };
   }, []);
 
@@ -352,62 +353,85 @@ export const FilterTree = forwardRef(function FilterTreeCom(
 
   // #region 渲染筛选组件
 
-  const countCom = validMatched ? (
-    <Tooltip title={`第 ${currMatched + 1 || "?"} 项 / 共 ${matchedCount} 项`}>
-      <span className={stl.count}>
-        {currMatched + 1 || "?"}/{matchedCount}
-      </span>
-    </Tooltip>
-  ) : (
-    <Tooltip title="无结果">
-      <span className={stl.count}>无结果</span>
-    </Tooltip>
+  const countCom = useMemo(
+    () =>
+      validMatched ? (
+        <Tooltip
+          title={`第 ${currMatched + 1 || "?"} 项 / 共 ${matchedCount} 项`}
+        >
+          <span className={stl.count}>
+            {currMatched + 1 || "?"}/{matchedCount}
+          </span>
+        </Tooltip>
+      ) : (
+        <Tooltip title="无结果">
+          <span className={stl.count}>无结果</span>
+        </Tooltip>
+      ),
+    [currMatched, matchedCount, validMatched],
   );
 
-  const counterCom = !showCounter ? null : (
-    <div className={stl.counter}>
-      <Space size={4}>
-        {countCom}
-        <Tooltip title="上一个">
-          <ArrowUpOutlined
-            className={cls(stl.filterIcon, {
-              [stl.disabled]: !validMatched,
-            })}
-            onClick={handlePrevMatched}
-          />
-        </Tooltip>
-        <Tooltip title="下一个">
-          <ArrowDownOutlined
-            className={cls(stl.filterIcon, {
-              [stl.disabled]: !validMatched,
-            })}
-            onClick={handleNextMatched}
-          />
-        </Tooltip>
-      </Space>
-    </div>
+  const counterCom = useMemo(
+    () =>
+      !showCounter ? null : (
+        <div className={stl.counter}>
+          <Space size={4}>
+            {countCom}
+            <Tooltip title="上一个">
+              <ArrowUpOutlined
+                className={cls(stl.filterIcon, {
+                  [stl.disabled]: !validMatched,
+                })}
+                onClick={handlePrevMatched}
+              />
+            </Tooltip>
+            <Tooltip title="下一个">
+              <ArrowDownOutlined
+                className={cls(stl.filterIcon, {
+                  [stl.disabled]: !validMatched,
+                })}
+                onClick={handleNextMatched}
+              />
+            </Tooltip>
+          </Space>
+        </div>
+      ),
+    [countCom, handleNextMatched, handlePrevMatched, showCounter, validMatched],
   );
 
-  const filterCom = (
-    <div
-      className={cls(stl.filter, classNames?.filter, {
-        [stl.divider]: divider,
-      })}
-      style={styles?.filter}
-    >
-      <Input
-        className={stl.input}
-        allowClear
-        variant="borderless"
-        prefix={<SearchOutlined />}
-        placeholder={filterPlaceholder}
-        value={filterValue}
-        defaultValue={defaultFilterValue}
-        onChange={handleFilterChange}
-        onKeyDown={handleFilterKeyDown}
-      />
-      {counterCom}
-    </div>
+  const filterCom = useMemo(
+    () => (
+      <div
+        className={cls(stl.filter, classNames?.filter, {
+          [stl.divider]: divider,
+        })}
+        style={styles?.filter}
+      >
+        <Input
+          className={stl.input}
+          allowClear
+          variant="borderless"
+          prefix={<SearchOutlined />}
+          placeholder={filterPlaceholder}
+          value={filterValue}
+          defaultValue={defaultFilterValue}
+          onChange={handleFilterChange}
+          onKeyDown={handleFilterKeyDown}
+        />
+        {counterCom}
+      </div>
+    ),
+    [
+      classNames?.filter,
+      counterCom,
+      defaultFilterValue,
+      divider,
+      filterPlaceholder,
+      filterValue,
+      handleFilterChange,
+      handleFilterKeyDown,
+      styles?.filter,
+    ],
   );
 
   // #endregion

@@ -1,4 +1,4 @@
-import { Button, GetProp, Space, Tooltip } from "antd";
+import { GetProp } from "antd";
 import cls, { Argument } from "classnames";
 import {
   CSSProperties,
@@ -13,9 +13,10 @@ import {
   useState,
 } from "react";
 import { truthy } from "@/utils/types";
+import BaseAction, { BaseActionProps } from "../BaseAction";
 import LayoutTitle, { LayoutTitleSize } from "../LayoutTitle";
 import FilterTree, { FilterTreeProps, FilterTreeRef } from "./FilterTree";
-import { IconAllFold, IconAllUnfold } from "./icons";
+import { IconActionAdd, IconAllFold, IconAllUnfold } from "./icons";
 import stl from "./index.module.less";
 import { getFieldValues, getFlatNodes } from "./utils";
 
@@ -61,6 +62,7 @@ export const LayoutTree = forwardRef(function BaseTreeCom(
     divider = true,
     expandable = true,
     filterable = true,
+    editable,
     title,
     extend,
 
@@ -71,6 +73,16 @@ export const LayoutTree = forwardRef(function BaseTreeCom(
     onExpand,
     ...rest
   } = props;
+
+  const { add: allowAdd } = editable === true ? { add: true } : editable || {};
+
+  const refTimeout = useRef<any>(undefined);
+  useEffect(() => {
+    const timer = refTimeout.current;
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
 
   // #region 导出 Ref
 
@@ -105,7 +117,7 @@ export const LayoutTree = forwardRef(function BaseTreeCom(
 
   // #endregion
 
-  // #region 处理展开收起
+  // #region 操作组件
 
   const [foldState, setFoldState] = useState<"fold" | "unfold">();
 
@@ -151,26 +163,65 @@ export const LayoutTree = forwardRef(function BaseTreeCom(
   );
 
   /** 展开收起组件 */
-  const foldCom =
-    foldState === "unfold" ? (
-      <Tooltip title="全部收起">
-        <Button
-          size="small"
-          type="text"
-          icon={<IconAllFold className={stl.allFoldIcon} />}
-          onClick={() => handleExpandAll(false)}
-        />
-      </Tooltip>
+  const foldCom = useMemo(() => {
+    if (!expandable) {
+      return null;
+    }
+
+    return foldState === "unfold" ? (
+      <BaseAction
+        className={stl.toolAction}
+        size="small"
+        type="text"
+        tooltip="全部收起"
+        icon={<IconAllFold className={stl.allFoldIcon} />}
+        onClick={() => handleExpandAll(false)}
+      />
     ) : (
-      <Tooltip title="全部展开">
-        <Button
-          size="small"
-          type="text"
-          icon={<IconAllUnfold className={stl.allFoldIcon} />}
-          onClick={() => handleExpandAll(true)}
-        />
-      </Tooltip>
+      <BaseAction
+        className={stl.toolAction}
+        size="small"
+        type="text"
+        tooltip="全部展开"
+        icon={<IconAllUnfold className={stl.allFoldIcon} />}
+        onClick={() => handleExpandAll(true)}
+      />
     );
+  }, [expandable, foldState, handleExpandAll]);
+
+  /** 新建组件 */
+  const addCom = useMemo(() => {
+    const allowAddAction =
+      typeof allowAdd === "function" ? allowAdd() : allowAdd;
+
+    if (!allowAddAction) {
+      return null;
+    }
+
+    const actionProps =
+      typeof allowAddAction === "object" ? allowAddAction : {};
+
+    const baseActionProps: BaseActionProps = {
+      className: stl.toolAction,
+      size: "small",
+      type: "text",
+      tooltip: "新建",
+      icon: <IconActionAdd className={stl.addIcon} />,
+      onClick: () => {
+        refTree.current?.addNode?.(undefined, {
+          diffNode: { title: "新建" },
+        });
+
+        // 滚动到第一项
+        clearTimeout(refTimeout.current);
+        refTimeout.current = setTimeout(() => {
+          refTree.current?.scrollTo?.({ index: 0 });
+        }, 100);
+      },
+      ...actionProps,
+    };
+    return <BaseAction {...baseActionProps} />;
+  }, [allowAdd]);
 
   // #endregion
 
@@ -184,12 +235,11 @@ export const LayoutTree = forwardRef(function BaseTreeCom(
           divider={divider && !filterable}
           title={title}
           extend={
-            extend || expandable ? (
-              <Space>
-                {expandable ? foldCom : null}
-                {extend}
-              </Space>
-            ) : null
+            <>
+              {foldCom}
+              {addCom}
+              {extend}
+            </>
           }
         />
       ) : null}
@@ -199,6 +249,7 @@ export const LayoutTree = forwardRef(function BaseTreeCom(
         style={styles?.body}
         divider={divider}
         filterable={filterable}
+        editable={editable}
         treeData={treeData}
         fieldNames={fieldNames}
         defaultExpandedKeys={defaultExpandedKeys}
