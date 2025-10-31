@@ -1,4 +1,4 @@
-import { GetProp, Input, InputProps, Space, Tooltip } from "antd";
+import { GetProp, Input, InputProps, Space, Tooltip, TreeDataNode } from "antd";
 import cls, { Argument } from "classnames";
 import {
   CSSProperties,
@@ -46,7 +46,9 @@ export type FilterTreeProps = EditableTreeProps & {
   /** 分割线 */
   divider?: boolean;
   /** 可筛选 */
-  filterable?: boolean;
+  filterable?:
+    | boolean
+    | ((keyword: string, node: TreeDataNode) => boolean | void);
   /** 筛选占位符 */
   filterPlaceholder?: string;
   /** 筛选值 */
@@ -166,13 +168,15 @@ export const FilterTree = forwardRef(function FilterTreeCom(
 
         if (typeof normalTitle === "string") {
           return normalTitle?.toLowerCase()?.includes(keyword?.toLowerCase());
+        } else if (typeof filterable === "function") {
+          return filterable(keyword, node);
         }
       });
       const filterKeys = filterNodes?.map((x) => x.key);
 
       setInnerFilterMatchedKeys(filterKeys);
     },
-    [fieldNames, flatNodes],
+    [fieldNames, filterable, flatNodes],
   );
 
   /** 筛选值变更-原始 */
