@@ -1,10 +1,12 @@
 import { Empty, GetProp, GetRef, Tree, TreeDataNode, TreeProps } from "antd";
+import { EventDataNode } from "antd/es/tree";
 import cls, { Argument } from "classnames";
 import {
   CSSProperties,
   DragEventHandler,
   ForwardedRef,
   forwardRef,
+  Key,
   ReactNode,
   useCallback,
   useEffect,
@@ -20,7 +22,7 @@ import { truthy } from "@/utils/types";
 import Resizing from "../Resizing";
 import { IconFolderClose, IconFolderOpen } from "./icons";
 import stl from "./index.module.less";
-import { getFieldValues, getFlatNodes } from "./utils";
+import { findTreeNodes, getFieldValues, getFlatNodes } from "./utils";
 
 const scrollDebounce = 200;
 const scrollBoundary = 20;
@@ -35,10 +37,12 @@ export type ResizeTreeRef = {
   /** 滚动树 */
   scrollTo?: TreeRef["scrollTo"];
   /** 全部展开 */
-  expandAll?: (expanded?: boolean) => void;
+  expandAll?: (expanded: boolean) => void;
+  /** 确保可见 */
+  ensureVisible?: (key: Key) => void;
 };
 
-export type ResizeTreeProps = TreeProps & {
+export type ResizeTreeProps = Omit<TreeProps, "onExpand"> & {
   className?: string;
   style?: CSSProperties;
   classNames?: {
@@ -47,14 +51,23 @@ export type ResizeTreeProps = TreeProps & {
   styles?: {
     tree?: CSSProperties;
   };
-  /** 拖拽时自动滚动 */
-  dragAutoScroll?: boolean;
+  /** 拖拽时滚动 */
+  dragScroll?: boolean;
   /** 默认虚拟滚动容器高度 */
   defaultHeight?: number;
   /** 点击节点标题触发展开 */
   expandByTitle?: boolean;
   /** 叶子节点图标(true: 使用目录图标) */
   leafIcon?: true | ReactNode | GetProp<TreeProps, "icon">;
+  /** 展开/收起节点时触发 */
+  onExpand?: (
+    expandedKeys: Key[],
+    info?: {
+      expanded: boolean;
+      node?: EventDataNode<TreeDataNode>;
+      nativeEvent?: MouseEvent;
+    },
+  ) => void;
   /** 节点图标渲染 */
   nodeIconRender?: ResizeNodeRender;
   /** 节点标题渲染 */
@@ -80,7 +93,7 @@ export const ResizeTree = forwardRef(function BaseTreeCom(
     classNames,
     styles,
 
-    dragAutoScroll = true,
+    dragScroll = true,
     defaultHeight = 100,
     expandByTitle,
     leafIcon,
@@ -110,6 +123,7 @@ export const ResizeTree = forwardRef(function BaseTreeCom(
     scrollTo: (...args) => refTree.current?.scrollTo(...args),
 
     expandAll: handleExpandAll,
+    ensureVisible: handleEnsureVisible,
   }));
 
   // #endregion
@@ -128,6 +142,14 @@ export const ResizeTree = forwardRef(function BaseTreeCom(
 
   // #region 展开收起
 
+  const refTimeout = useRef<any>(undefined);
+  useEffect(() => {
+    const timer = refTimeout.current;
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
+
   /** 平面化节点 */
   const flatNodes = useMemo(
     () => (treeData ? getFlatNodes(treeData, fieldNames) : []),
@@ -138,15 +160,15 @@ export const ResizeTree = forwardRef(function BaseTreeCom(
   const handleExpand = useCallback<GetProp<TreeProps, "onExpand">>(
     (expandedKeys, ...rest) => {
       setInnerExpandedKeys(expandedKeys);
-
       onExpand?.(expandedKeys, ...rest);
     },
     [onExpand],
   );
 
-  /** 展开全部 */
+  /** 全部展开 */
   const handleExpandAll = useCallback(
-    (expanded?: boolean) => {
+    (expanded: boolean) => {
+      // 全部节点
       const nextKeys = !expanded
         ? []
         : flatNodes
@@ -156,15 +178,44 @@ export const ResizeTree = forwardRef(function BaseTreeCom(
             })
             .filter(truthy);
 
+      // 展开节点
       setInnerExpandedKeys(nextKeys);
-      onExpand?.(nextKeys, { expanded } as any);
+      onExpand?.(nextKeys, { expanded });
     },
     [fieldNames, flatNodes, onExpand],
   );
 
+  /** 确保可见 */
+  const handleEnsureVisible = useCallback(
+    (key: Key) => {
+      // 匹配节点
+      const { matches } =
+        (treeData && findTreeNodes(treeData, key, fieldNames)) || {};
+      const matchKeys = matches?.map((x) => x.key) || [];
+
+      // 去重节点
+      const prevKeys = innerExpandedKeys || [];
+      const nextKeys = Array.from(new Set([...prevKeys, ...matchKeys]));
+
+      // 展开节点
+      setInnerExpandedKeys(nextKeys);
+      onExpand?.(nextKeys, { expanded: true });
+
+      // 滚动节点(延迟等待节点展开)
+      clearTimeout(refTimeout.current);
+      refTimeout.current = setTimeout(() => {
+        refTree.current?.scrollTo?.({
+          key,
+          align: "auto",
+        });
+      }, 50);
+    },
+    [fieldNames, innerExpandedKeys, onExpand, treeData],
+  );
+
   // #endregion
 
-  // #region 自动滚动
+  // #region 拖拽滚动
 
   /**
    * Tree 组件似乎自带拖拽滚动功能，但有些问题，暂时自行实现。
@@ -195,7 +246,7 @@ export const ResizeTree = forwardRef(function BaseTreeCom(
     };
   }, [treeData]);
 
-  const handleAutoScroll = useCallback<DragEventHandler<HTMLDivElement>>(
+  const handleDragScroll = useCallback<DragEventHandler<HTMLDivElement>>(
     (e) => {
       const holder = refTreeListHolder.current;
       const node = e.target as HTMLDivElement;
@@ -242,8 +293,8 @@ export const ResizeTree = forwardRef(function BaseTreeCom(
     [],
   );
 
-  const handleAutoScrollDebounce = useDebounce(
-    handleAutoScroll,
+  const handleDragScrollDebounce = useDebounce(
+    handleDragScroll,
     scrollDebounce,
   );
 
@@ -261,13 +312,13 @@ export const ResizeTree = forwardRef(function BaseTreeCom(
     (info, ...rest) => {
       const { event } = info;
 
-      if (dragAutoScroll) {
-        handleAutoScrollDebounce(event);
+      if (dragScroll) {
+        handleDragScrollDebounce(event);
       }
 
       onDragOver?.(info, ...rest);
     },
-    [dragAutoScroll, handleAutoScrollDebounce, onDragOver],
+    [dragScroll, handleDragScrollDebounce, onDragOver],
   );
 
   // #endregion
@@ -316,13 +367,15 @@ export const ResizeTree = forwardRef(function BaseTreeCom(
   /** 切换展开状态 */
   const switchExpandState = useCallback(
     (node: TreeDataNode) => {
+      // 切换状态
       const prevKeys = innerExpandedKeys || [];
       const filterKeys = prevKeys?.filter((key) => key !== node.key);
       const expanded = prevKeys.length === filterKeys.length;
       const nextKeys = expanded ? [...prevKeys, node.key] : filterKeys;
 
+      // 展开节点
       setInnerExpandedKeys(nextKeys);
-      onExpand?.(nextKeys, { expanded } as any);
+      onExpand?.(nextKeys, { expanded });
     },
     [innerExpandedKeys, onExpand],
   );

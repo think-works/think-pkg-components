@@ -87,10 +87,6 @@ export const FilterTree = forwardRef(function FilterTreeCom(
 
     treeData,
     fieldNames,
-    autoExpandParent,
-    defaultExpandedKeys,
-    expandedKeys,
-    onExpand,
     nodeWrapperRender,
     ...rest
   } = props;
@@ -109,7 +105,9 @@ export const FilterTree = forwardRef(function FilterTreeCom(
 
   useImperativeHandle(ref, () => ({
     scrollTo: (...args) => refTree.current?.scrollTo?.(...args),
+
     expandAll: (...args) => refTree.current?.expandAll?.(...args),
+    ensureVisible: (...args) => refTree.current?.ensureVisible?.(...args),
 
     addNode: (...args) => refTree.current?.addNode?.(...args),
     editNode: (...args) => refTree.current?.editNode?.(...args),
@@ -118,24 +116,6 @@ export const FilterTree = forwardRef(function FilterTreeCom(
     prevMatched: handlePrevMatched,
     nextMatched: handleNextMatched,
   }));
-
-  // #endregion
-
-  // #region 同步外部属性
-
-  const [innerAutoExpandParent, setInnerAutoExpandParent] =
-    useState(autoExpandParent);
-  const [innerExpandedKeys, setInnerExpandedKeys] = useState(
-    expandedKeys || defaultExpandedKeys,
-  );
-
-  useEffect(() => {
-    setInnerAutoExpandParent(autoExpandParent);
-  }, [autoExpandParent]);
-
-  useEffect(() => {
-    setInnerExpandedKeys(expandedKeys);
-  }, [expandedKeys]);
 
   // #endregion
 
@@ -224,18 +204,6 @@ export const FilterTree = forwardRef(function FilterTreeCom(
   const matchedCount = filterMatchedKeys?.length ?? 0;
   const validMatched = matchedCount > 0;
 
-  /** 展开节点 */
-  const handleExpand = useCallback<GetProp<EditableTreeProps, "onExpand">>(
-    (expandedKeys, ...rest) => {
-      // 恢复自动展开状态
-      setInnerAutoExpandParent(autoExpandParent ?? false);
-      setInnerExpandedKeys(expandedKeys);
-
-      onExpand?.(expandedKeys, ...rest);
-    },
-    [autoExpandParent, onExpand],
-  );
-
   /** 滚动至匹配项 */
   const scrollToFilterMatched = useCallback(
     (matched: number) => {
@@ -244,18 +212,8 @@ export const FilterTree = forwardRef(function FilterTreeCom(
         return;
       }
 
-      // 展开指定节点的父节点
-      setInnerAutoExpandParent(true);
-      setInnerExpandedKeys([matchedKey]);
-
-      // 滚动至指定节点(延迟等待节点收起)
-      clearTimeout(refTimeout.current);
-      refTimeout.current = setTimeout(() => {
-        refTree.current?.scrollTo?.({
-          key: matchedKey,
-          align: "auto",
-        });
-      }, 20);
+      // 滚动节点
+      refTree.current?.ensureVisible?.(matchedKey);
     },
     [filterMatchedKeys],
   );
@@ -443,10 +401,6 @@ export const FilterTree = forwardRef(function FilterTreeCom(
         style={styles?.editable}
         treeData={treeData}
         fieldNames={fieldNames}
-        autoExpandParent={innerAutoExpandParent}
-        defaultExpandedKeys={defaultExpandedKeys}
-        expandedKeys={innerExpandedKeys}
-        onExpand={handleExpand}
         nodeWrapperRender={handleNodeWrapperRender}
         {...rest}
       />

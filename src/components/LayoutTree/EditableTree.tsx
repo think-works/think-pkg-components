@@ -29,6 +29,8 @@ export type EditableCommand = (
   /** 目标节点 key */
   targetKey?: Key,
   options?: {
+    /** 确保节点可见 */
+    ensureVisible?: boolean;
     /** 修改目标节点 */
     diffNode?: Record<string, any>;
   },
@@ -103,9 +105,6 @@ export const EditableTree = forwardRef(function EditableTreeCom(
 
     treeData: outerTreeData,
     fieldNames,
-    defaultExpandedKeys,
-    expandedKeys,
-    onExpand,
     onDrop,
     ...rest
   } = props;
@@ -120,21 +119,15 @@ export const EditableTree = forwardRef(function EditableTreeCom(
     ? { cloneData: true, add: true, edit: true, delete: true, move: true }
     : editable || {};
 
-  const refTimeout = useRef<any>(undefined);
-  useEffect(() => {
-    const timer = refTimeout.current;
-    return () => {
-      clearTimeout(timer);
-    };
-  }, []);
-
   // #region 导出 Ref
 
   const refTree = useRef<ResizeTreeRef>(null);
 
   useImperativeHandle(ref, () => ({
     scrollTo: (...args) => refTree.current?.scrollTo?.(...args),
+
     expandAll: (...args) => refTree.current?.expandAll?.(...args),
+    ensureVisible: (...args) => refTree.current?.ensureVisible?.(...args),
 
     addNode: handleAddNode,
     editNode: handleEditNode,
@@ -145,10 +138,6 @@ export const EditableTree = forwardRef(function EditableTreeCom(
 
   // #region 同步外部属性
 
-  const [innerExpandedKeys, setInnerExpandedKeys] = useState(
-    expandedKeys || defaultExpandedKeys,
-  );
-
   const [innerTreeData, setInnerTreeData] = useState<
     TreeDataNode[] | undefined
   >(outerTreeData);
@@ -157,13 +146,17 @@ export const EditableTree = forwardRef(function EditableTreeCom(
     setInnerTreeData(outerTreeData);
   }, [outerTreeData]);
 
-  useEffect(() => {
-    setInnerExpandedKeys(expandedKeys);
-  }, [expandedKeys]);
-
   // #endregion
 
   // #region 操作节点
+
+  const refTimeout = useRef<any>(undefined);
+  useEffect(() => {
+    const timer = refTimeout.current;
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
 
   const [editingState, setEditingState] = useState<{
     /** 操作类型 */
@@ -186,7 +179,7 @@ export const EditableTree = forwardRef(function EditableTreeCom(
   /** 向指定节点(未找到则为根节点)下新建节点 */
   const handleAddNode = useCallback<EditableCommand>(
     (targetKey, options) => {
-      const { diffNode } = options || {};
+      const { ensureVisible, diffNode } = options || {};
 
       const { fieldNameKey, fieldNameTitle, fieldNameChildren } =
         getFieldValues({}, fieldNames);
@@ -236,6 +229,15 @@ export const EditableTree = forwardRef(function EditableTreeCom(
 
       // 更新内部数据
       setInnerTreeData(_targetTreeData);
+
+      // 确保节点可见
+      if (ensureVisible) {
+        // 滚动节点(延迟等待数据更新)
+        clearTimeout(refTimeout.current);
+        refTimeout.current = setTimeout(() => {
+          refTree.current?.ensureVisible?.(newTargetKey);
+        }, 50);
+      }
     },
     [cloneTreeData, fieldNames],
   );
@@ -243,7 +245,7 @@ export const EditableTree = forwardRef(function EditableTreeCom(
   /** 编辑指定节点 */
   const handleEditNode = useCallback<EditableCommand>(
     (targetKey, options) => {
-      const { diffNode } = options || {};
+      const { ensureVisible, diffNode } = options || {};
 
       if (!targetKey) {
         return;
@@ -271,6 +273,15 @@ export const EditableTree = forwardRef(function EditableTreeCom(
         targetKey,
         targetNode,
       });
+
+      // 确保节点可见
+      if (ensureVisible) {
+        // 滚动节点(延迟等待数据更新)
+        clearTimeout(refTimeout.current);
+        refTimeout.current = setTimeout(() => {
+          refTree.current?.ensureVisible?.(targetKey);
+        }, 50);
+      }
     },
     [cloneTreeData, fieldNames],
   );
@@ -448,16 +459,6 @@ export const EditableTree = forwardRef(function EditableTreeCom(
 
   // #region 渲染节点
 
-  /** 展开节点 */
-  const handleExpand = useCallback<GetProp<ResizeTreeProps, "onExpand">>(
-    (expandedKeys, ...rest) => {
-      setInnerExpandedKeys(expandedKeys);
-
-      onExpand?.(expandedKeys, ...rest);
-    },
-    [onExpand],
-  );
-
   /** 节点标题渲染 */
   const handleNodeTitleRender = useCallback<ResizeNodeRender>(
     (nodeData, ...rest) => {
@@ -516,17 +517,9 @@ export const EditableTree = forwardRef(function EditableTreeCom(
           icon: <IconActionAdd />,
           onClick: () => {
             handleAddNode(nodeData.key, {
+              ensureVisible: true,
               diffNode: { title: "新建" },
             });
-
-            // 展开当前项
-            setInnerExpandedKeys((keys) => [...(keys || []), nodeData.key]);
-
-            // 滚动到当前项
-            clearTimeout(refTimeout.current);
-            refTimeout.current = setTimeout(() => {
-              refTree.current?.scrollTo?.({ key: nodeData.key });
-            }, 100);
           },
           ...actionProps,
         });
@@ -544,7 +537,9 @@ export const EditableTree = forwardRef(function EditableTreeCom(
           children: "编辑",
           icon: <IconActionEdit />,
           onClick: () => {
-            handleEditNode(nodeData.key);
+            handleEditNode(nodeData.key, {
+              ensureVisible: true,
+            });
           },
           ...actionProps,
         });
@@ -599,9 +594,6 @@ export const EditableTree = forwardRef(function EditableTreeCom(
         draggable={allowMove}
         treeData={innerTreeData}
         fieldNames={fieldNames}
-        defaultExpandedKeys={defaultExpandedKeys}
-        expandedKeys={innerExpandedKeys}
-        onExpand={handleExpand}
         onDrop={handleDrop}
         nodeTitleRender={handleNodeTitleRender}
         nodeActionRender={handleNodeActionRender}

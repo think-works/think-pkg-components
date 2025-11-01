@@ -5,7 +5,6 @@ import {
   forwardRef,
   ReactNode,
   useCallback,
-  useEffect,
   useImperativeHandle,
   useMemo,
   useRef,
@@ -65,14 +64,6 @@ export const LayoutTree = forwardRef(function BaseTreeCom(
 
   const { add: allowAdd } = editable === true ? { add: true } : editable || {};
 
-  const refTimeout = useRef<any>(undefined);
-  useEffect(() => {
-    const timer = refTimeout.current;
-    return () => {
-      clearTimeout(timer);
-    };
-  }, []);
-
   // #region 导出 Ref
 
   const refTree = useRef<FilterTreeRef>(null);
@@ -83,7 +74,9 @@ export const LayoutTree = forwardRef(function BaseTreeCom(
    */
   useImperativeHandle(ref, () => ({
     scrollTo: (...args) => refTree.current?.scrollTo?.(...args),
+
     expandAll: (...args) => refTree.current?.expandAll?.(...args),
+    ensureVisible: (...args) => refTree.current?.ensureVisible?.(...args),
 
     addNode: (...args) => refTree.current?.addNode?.(...args),
     editNode: (...args) => refTree.current?.editNode?.(...args),
@@ -100,9 +93,9 @@ export const LayoutTree = forwardRef(function BaseTreeCom(
   const [foldState, setFoldState] = useState<"fold" | "unfold">();
 
   /** 展开全部 */
-  const handleExpandAll = useCallback((expand?: boolean) => {
-    refTree.current?.expandAll?.(expand);
-    setFoldState(expand ? "unfold" : "fold");
+  const handleExpandAll = useCallback((expanded: boolean) => {
+    refTree.current?.expandAll?.(expanded);
+    setFoldState(expanded ? "unfold" : "fold");
   }, []);
 
   /** 展开收起组件 */
@@ -152,14 +145,9 @@ export const LayoutTree = forwardRef(function BaseTreeCom(
       icon: <IconActionAdd className={stl.addIcon} />,
       onClick: () => {
         refTree.current?.addNode?.(undefined, {
+          ensureVisible: true,
           diffNode: { title: "新建" },
         });
-
-        // 滚动到第一项
-        clearTimeout(refTimeout.current);
-        refTimeout.current = setTimeout(() => {
-          refTree.current?.scrollTo?.({ index: 0 });
-        }, 100);
       },
       ...actionProps,
     };
