@@ -62,7 +62,7 @@ export type ResizeTreeProps = Omit<TreeProps, "onExpand"> & {
   /** 展开/收起节点时触发 */
   onExpand?: (
     expandedKeys: Key[],
-    info?: {
+    info: {
       expanded: boolean;
       node?: EventDataNode<TreeDataNode>;
       nativeEvent?: MouseEvent;
@@ -385,7 +385,6 @@ export const ResizeTree = forwardRef(function BaseTreeCom(
     (nodeData, ...rest) => {
       const { normalTitle } = getFieldValues(nodeData, fieldNames);
 
-      // 优先使用外部属性
       let child =
         typeof normalTitle === "function"
           ? normalTitle(nodeData, ...rest)

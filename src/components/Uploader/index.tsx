@@ -140,9 +140,9 @@ const getUploadProps = (props: UploaderProps): UploadProps => {
         return;
       }
     },
-    customRequest: (options) => {
+    customRequest: (options, ...rest) => {
       if (isFunction(customRequest)) {
-        return customRequest(options);
+        return customRequest(options, ...rest);
       }
 
       const {

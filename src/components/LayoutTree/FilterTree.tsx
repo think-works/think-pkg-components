@@ -46,9 +46,7 @@ export type FilterTreeProps = EditableTreeProps & {
   /** 分割线 */
   divider?: boolean;
   /** 可筛选 */
-  filterable?:
-    | boolean
-    | ((keyword: string, node: TreeDataNode) => boolean | void);
+  filterable?: boolean | ((keyword: string, node: TreeDataNode) => boolean);
   /** 筛选占位符 */
   filterPlaceholder?: string;
   /** 筛选值 */
@@ -87,6 +85,7 @@ export const FilterTree = forwardRef(function FilterTreeCom(
 
     treeData,
     fieldNames,
+    nodeTitleRender,
     nodeWrapperRender,
     ...rest
   } = props;
@@ -141,21 +140,28 @@ export const FilterTree = forwardRef(function FilterTreeCom(
         return;
       }
 
-      // 筛选节点标题(仅支持特定数据结构)
       const filterNodes = flatNodes.filter((node) => {
-        const { normalTitle } = getFieldValues(node, fieldNames);
-
-        if (typeof normalTitle === "string") {
-          return normalTitle?.toLowerCase()?.includes(keyword?.toLowerCase());
-        } else if (typeof filterable === "function") {
+        // 外部函数筛选
+        if (typeof filterable === "function") {
           return filterable(keyword, node);
+        }
+
+        // 筛选节点标题(仅支持特定数据结构)
+        const { normalTitle } = getFieldValues(node, fieldNames);
+        let child =
+          typeof normalTitle === "function" ? normalTitle(node) : normalTitle;
+        if (nodeTitleRender) {
+          child = nodeTitleRender(node);
+        }
+        if (typeof child === "string") {
+          return child?.toLowerCase()?.includes(keyword?.toLowerCase());
         }
       });
       const filterKeys = filterNodes?.map((x) => x.key);
 
       setInnerFilterMatchedKeys(filterKeys);
     },
-    [fieldNames, filterable, flatNodes],
+    [fieldNames, filterable, flatNodes, nodeTitleRender],
   );
 
   /** 筛选值变更-原始 */
@@ -401,6 +407,7 @@ export const FilterTree = forwardRef(function FilterTreeCom(
         style={styles?.editable}
         treeData={treeData}
         fieldNames={fieldNames}
+        nodeTitleRender={nodeTitleRender}
         nodeWrapperRender={handleNodeWrapperRender}
         {...rest}
       />

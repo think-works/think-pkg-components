@@ -7,6 +7,7 @@ import {
   ForwardedRef,
   forwardRef,
   Key,
+  ReactNode,
   useCallback,
   useEffect,
   useImperativeHandle,
@@ -65,8 +66,6 @@ export type EditableTreeProps = ResizeTreeProps & {
   editable?:
     | boolean
     | {
-        /** 深度克隆(默认为 true) */
-        cloneData?: boolean;
         /** 新建 */
         add?: EditableAllowAction;
         /** 编辑 */
@@ -75,6 +74,10 @@ export type EditableTreeProps = ResizeTreeProps & {
         delete?: EditableAllowAction;
         /** 移动 */
         move?: EditableAllowAction<boolean>;
+        /** 深度克隆树数据 */
+        cloneData?: boolean;
+        /** 字符串化的标题 */
+        stringifyTitle?: (node: TreeDataNode) => string;
       };
   /** 树数据变化 */
   onTreeDataChange?: (
@@ -110,14 +113,13 @@ export const EditableTree = forwardRef(function EditableTreeCom(
   } = props;
 
   const {
+    add: allowAdd = !!editable,
+    edit: allowEdit = !!editable,
+    delete: allowDelete = !!editable,
+    move: allowMove = !!editable,
     cloneData = true,
-    add: allowAdd,
-    edit: allowEdit,
-    delete: allowDelete,
-    move: allowMove,
-  } = editable === true
-    ? { cloneData: true, add: true, edit: true, delete: true, move: true }
-    : editable || {};
+    stringifyTitle,
+  } = typeof editable === "object" ? editable : {};
 
   // #region 导出 Ref
 
@@ -464,14 +466,19 @@ export const EditableTree = forwardRef(function EditableTreeCom(
     (nodeData, ...rest) => {
       const { normalKey, normalTitle } = getFieldValues(nodeData, fieldNames);
 
-      // 优先使用外部属性
-      let child =
-        typeof normalTitle === "function"
-          ? normalTitle(nodeData, ...rest)
-          : normalTitle;
-
-      if (nodeTitleRender) {
-        child = nodeTitleRender(nodeData, ...rest);
+      let child: ReactNode;
+      if (typeof stringifyTitle === "function") {
+        // 外部函数转换
+        child = stringifyTitle(nodeData);
+      } else {
+        // 转换节点标题(仅支持特定数据结构)
+        child =
+          typeof normalTitle === "function"
+            ? normalTitle(nodeData, ...rest)
+            : normalTitle;
+        if (nodeTitleRender) {
+          child = nodeTitleRender(nodeData, ...rest);
+        }
       }
 
       // 仅支持编辑纯文本节点
@@ -492,7 +499,7 @@ export const EditableTree = forwardRef(function EditableTreeCom(
 
       return child;
     },
-    [editingKey, fieldNames, handleInputBlur, nodeTitleRender],
+    [editingKey, fieldNames, handleInputBlur, nodeTitleRender, stringifyTitle],
   );
 
   /** 节点操作渲染 */

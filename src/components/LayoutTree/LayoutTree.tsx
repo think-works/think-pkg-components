@@ -62,7 +62,8 @@ export const LayoutTree = forwardRef(function BaseTreeCom(
     ...rest
   } = props;
 
-  const { add: allowAdd } = editable === true ? { add: true } : editable || {};
+  const { add: allowAdd = !!editable } =
+    typeof editable === "object" ? editable : {};
 
   // #region 导出 Ref
 
