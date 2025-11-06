@@ -1,4 +1,4 @@
-import { GetProp, Input, TreeDataNode } from "antd";
+import { GetProp, Input, TreeDataNode, TreeProps } from "antd";
 import cls, { Argument } from "classnames";
 import { cloneDeep, merge } from "lodash-es";
 import {
@@ -11,6 +11,7 @@ import {
   useCallback,
   useEffect,
   useImperativeHandle,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -73,7 +74,7 @@ export type EditableTreeProps = ResizeTreeProps & {
         /** 删除 */
         delete?: EditableAllowAction;
         /** 移动 */
-        move?: EditableAllowAction<boolean>;
+        move?: EditableAllowAction<boolean> | { icon?: boolean | ReactNode };
         /** 深度克隆树数据 */
         cloneData?: boolean;
         /** 字符串化的标题 */
@@ -81,8 +82,8 @@ export type EditableTreeProps = ResizeTreeProps & {
       };
   /** 树数据变化 */
   onTreeDataChange?: (
-    /** 目标树数据 */
-    targetTreeData: TreeDataNode[],
+    /** 树数据 */
+    treeData: TreeDataNode[],
     options: {
       /** 操作类型 */
       action: "add" | "edit" | "delete" | "move";
@@ -108,6 +109,7 @@ export const EditableTree = forwardRef(function EditableTreeCom(
 
     treeData: outerTreeData,
     fieldNames,
+    draggable,
     onDrop,
     ...rest
   } = props;
@@ -171,6 +173,41 @@ export const EditableTree = forwardRef(function EditableTreeCom(
     targetNode: TreeDataNode;
   }>();
   const editingKey = editingState?.targetKey;
+
+  /** 内部拖拽属性 */
+  const innerDraggable = useMemo<GetProp<TreeProps, "draggable">>(() => {
+    // 优先使用外部属性
+    if (typeof draggable !== "undefined") {
+      return draggable;
+    }
+
+    // 禁止移动
+    if (!allowMove) {
+      return false;
+    }
+
+    // 允许移动
+    const nodeDraggable = (node: TreeDataNode) => {
+      // 禁用编辑中的节点拖拽，避免框选文本时冲突。
+      const { normalKey } = getFieldValues(node, fieldNames);
+      if (normalKey === editingKey) {
+        return false;
+      }
+
+      // 进一步检查
+      if (typeof allowMove === "function") {
+        const allowAction = allowMove(node);
+        return allowAction;
+      }
+
+      return true;
+    };
+
+    return {
+      ...(typeof allowMove === "object" ? allowMove : {}),
+      nodeDraggable,
+    };
+  }, [allowMove, draggable, editingKey, fieldNames]);
 
   /** 克隆树数据 */
   const cloneTreeData = useCallback(
@@ -598,7 +635,7 @@ export const EditableTree = forwardRef(function EditableTreeCom(
         ref={refTree}
         className={cls(stl.resizeTree, classNames?.resize)}
         style={styles?.resize}
-        draggable={allowMove}
+        draggable={innerDraggable}
         treeData={innerTreeData}
         fieldNames={fieldNames}
         onDrop={handleDrop}

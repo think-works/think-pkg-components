@@ -29,13 +29,16 @@ const LayoutTreeDemo = () => {
 
   const [treeData, setTreeData] = useState<TreeDataNode[]>(demoData);
   const [selectedKeys, setSelectedKeys] = useState<Key[]>();
+  const [checkedKeys, setCheckedKeys] = useState<Key[]>();
   const [expandedKeys, setExpandedKeys] = useState<Key[]>();
 
   const [selectable, setSelectable] = useState<boolean>(true);
+  const [checkable, setCheckable] = useState<boolean>(true);
   const [filterable, setFilterable] = useState<boolean>(true);
-  const [editable, setEditable] = useState<boolean>(true);
   const [showIcon, setShowIcon] = useState<boolean>(true);
   const [leafIcon, setLeafIcon] = useState<string>("true");
+  const [editable, setEditable] = useState<boolean>(true);
+  const [expandable, setExpandable] = useState<boolean>(true);
   const [expandByTitle, setExpandByTitle] = useState(true);
 
   const leafIconCom = useMemo(() => {
@@ -63,12 +66,12 @@ const LayoutTreeDemo = () => {
             <Switch checked={selectable} onChange={setSelectable} />
           </div>
           <div>
-            filterable:
-            <Switch checked={filterable} onChange={setFilterable} />
+            checkable:
+            <Switch checked={checkable} onChange={setCheckable} />
           </div>
           <div>
-            editable:
-            <Switch checked={editable} onChange={setEditable} />
+            filterable:
+            <Switch checked={filterable} onChange={setFilterable} />
           </div>
           <div>
             showIcon:
@@ -100,12 +103,25 @@ const LayoutTreeDemo = () => {
             />
           </div>
           <div>
+            editable:
+            <Switch checked={editable} onChange={setEditable} />
+          </div>
+          <div>
+            expandable:
+            <Switch checked={expandable} onChange={setExpandable} />
+          </div>
+          <div>
             expandByTitle:
             <Switch checked={expandByTitle} onChange={setExpandByTitle} />
           </div>
         </Space>
       </div>
-      <div>selectedKey: {JSON.stringify(selectedKeys)}</div>
+      <div style={{ maxHeight: 22, overflow: "auto" }}>
+        selectedKey: {JSON.stringify(selectedKeys)}
+      </div>
+      <div style={{ maxHeight: 22, overflow: "auto" }}>
+        checkedKeys: {JSON.stringify(checkedKeys)}
+      </div>
       <div style={{ maxHeight: 22, overflow: "auto" }}>
         expandedKeys: {JSON.stringify(expandedKeys)}
       </div>
@@ -114,14 +130,17 @@ const LayoutTreeDemo = () => {
         ref={refTree}
         title="LayoutTree Demo"
         selectable={selectable}
+        checkable={checkable}
         filterable={filterable}
-        editable={editable}
         showIcon={showIcon}
         leafIcon={leafIconCom}
+        editable={editable}
+        expandable={expandable}
         expandByTitle={expandByTitle}
         treeData={treeData}
         onTreeDataChange={setTreeData}
         onSelect={setSelectedKeys}
+        onCheck={(keys) => setCheckedKeys(keys as Key[])}
         onExpand={setExpandedKeys}
         nodeIconRender={() => <StarOutlined />}
         nodeCountRender={(node) => node.children?.length}
