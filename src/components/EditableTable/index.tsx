@@ -439,7 +439,7 @@ export const EditableTable = (props: EditableTableProps) => {
       columns={colList}
       className={cls(stl.table, className)}
       size={size}
-      rowKey={normalRowKey}
+      rowKey={rowKey}
       dataSource={itemList}
       locale={{ emptyText: "无内容" }}
       {...rest}
