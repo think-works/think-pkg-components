@@ -55,6 +55,8 @@ export type ResizeTreeProps = Omit<TreeProps, "onExpand"> & {
   dragScroll?: boolean;
   /** 默认虚拟滚动容器高度 */
   defaultHeight?: number;
+  /** 空数据占位 */
+  emptyPlaceholder?: ReactNode;
   /** 点击节点标题触发展开 */
   expandByTitle?: boolean;
   /** 叶子节点图标(true: 使用目录图标) */
@@ -62,8 +64,8 @@ export type ResizeTreeProps = Omit<TreeProps, "onExpand"> & {
   /** 展开/收起节点时触发 */
   onExpand?: (
     expandedKeys: Key[],
-    info: {
-      expanded: boolean;
+    info?: {
+      expanded?: boolean;
       node?: EventDataNode<TreeDataNode>;
       nativeEvent?: MouseEvent;
     },
@@ -95,6 +97,7 @@ export const ResizeTree = forwardRef(function BaseTreeCom(
 
     dragScroll = true,
     defaultHeight = 100,
+    emptyPlaceholder,
     expandByTitle,
     leafIcon,
     nodeIconRender,
@@ -509,7 +512,9 @@ export const ResizeTree = forwardRef(function BaseTreeCom(
           {...rest}
         />
       ) : (
-        <Empty className={stl.empty} image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        emptyPlaceholder || (
+          <Empty className={stl.empty} image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        )
       )}
     </Resizing>
   );

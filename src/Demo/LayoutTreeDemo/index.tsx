@@ -10,7 +10,7 @@ const dig = (path = "0", level = 3) => {
     const treeNode: TreeDataNode = {
       title: key,
       key,
-      xxx: "ooo",
+      other: "value",
     } as TreeDataNode;
 
     if (level > 0) {
