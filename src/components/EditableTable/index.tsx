@@ -135,10 +135,10 @@ export const EditableTable = (props: EditableTableProps) => {
   const [innerRowKey, setInnerRowKey] = useState(rowKey || "innerRowKey");
   // 指定 key
   // Warning: [antd: Table] `index` parameter of `rowKey` function is deprecated. There is no guarantee that it will work as expected.
-  const normalRowKey = useCallback(
-    (row: DataRow, idx?: number) => idx ?? itemList.findIndex((x) => x === row),
-    [itemList],
-  );
+  // const normalRowKey = useCallback(
+  //   (row: DataRow, idx?: number) => idx ?? itemList.findIndex((x) => x === row),
+  //   [itemList],
+  // );
   // 排除内部使用的 rowKey，校验这行是否有有效值
   const verifyRow = useCallback(
     (row: DataRow) =>
