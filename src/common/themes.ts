@@ -183,11 +183,11 @@ export const defaultConfigProviderProps = configProviderProps;
 
 // #region 主题查询切换
 
-/** 属性名称 */
-export const attributeName = "data-theme";
+/** 主题属性名称 */
+export const themeAttributeName = "data-theme";
 
 /** 查询主题属性 */
-export const queryThemeAttribute = (attrName = attributeName) => {
+export const queryThemeAttribute = (attrName = themeAttributeName) => {
   const htmlElem = document.documentElement;
   const attrValue = htmlElem.getAttribute(attrName);
 
@@ -199,7 +199,7 @@ export const queryThemeAttribute = (attrName = attributeName) => {
 /** 更新主题属性 */
 export const updateThemeAttribute = (
   attrValue?: ColorScheme,
-  attrName = attributeName,
+  attrName = themeAttributeName,
 ) => {
   const htmlElem = document.documentElement;
   if (attrValue) {
@@ -209,11 +209,11 @@ export const updateThemeAttribute = (
   }
 };
 
-/** 存储 key */
-export const storageKey = "theme";
+/** 主题存储 key */
+export const themeStorageKey = "theme";
 
 /** 查询主题存储 */
-export const queryThemeStorage = (key = storageKey) => {
+export const queryThemeStorage = (key = themeStorageKey) => {
   const storageValue = queryLocal(key);
   if (colorSchemes.includes(storageValue as any)) {
     return storageValue as ColorScheme;
@@ -221,7 +221,10 @@ export const queryThemeStorage = (key = storageKey) => {
 };
 
 /** 更新主题存储 */
-export const updateThemeStorage = (value?: ColorScheme, key = storageKey) => {
+export const updateThemeStorage = (
+  value?: ColorScheme,
+  key = themeStorageKey,
+) => {
   if (value) {
     updateLocal(key, value);
   } else {
@@ -250,18 +253,18 @@ export const queryThemeMedia = () => {
 
 /** 侦测主题方案 */
 export const detectThemeScheme = (options?: {
-  /** 属性名称 */
-  attributeName?: false | string;
-  /** 存储 key */
-  storageKey?: false | string;
+  /** 主题属性名称 */
+  themeAttributeName?: false | string;
+  /** 主题存储 key */
+  themeStorageKey?: false | string;
   /** 检查 meta 元素 */
   metaElement?: boolean;
   /** 媒体查询(一定会返回) */
   matchMedia?: boolean;
 }) => {
   const {
-    attributeName: name = attributeName,
-    storageKey: key = storageKey,
+    themeAttributeName: name = themeAttributeName,
+    themeStorageKey: key = themeStorageKey,
     metaElement,
     matchMedia,
   } = options || {};
