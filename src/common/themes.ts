@@ -240,7 +240,7 @@ export const queryThemeMeta = () => {
     ?.split(" ")
     ?.filter((item) => colorSchemes.includes(item as any))?.[0];
 
-  return metaValue as ColorScheme;
+  return metaValue as ColorScheme | undefined;
 };
 
 /** 查询媒体查询(一定会返回) */
