@@ -80,16 +80,16 @@ export const queryBrowserLanguage = () => {
 
 /** 侦测语言标记 */
 export const detectLangTag = (options?: {
-  /** 语言属性名称 */
-  langAttributeName?: false | string;
   /** 语言存储 key */
   langStorageKey?: false | string;
+  /** 语言属性名称 */
+  langAttributeName?: false | string;
   /** 检查浏览器 */
   browser?: boolean;
 }) => {
   const {
-    langAttributeName: name = langAttributeName,
     langStorageKey: key = langStorageKey,
+    langAttributeName: name = langAttributeName,
     browser,
   } = options || {};
 

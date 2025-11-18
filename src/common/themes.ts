@@ -253,18 +253,18 @@ export const queryThemeMedia = () => {
 
 /** 侦测主题方案 */
 export const detectThemeScheme = (options?: {
-  /** 主题属性名称 */
-  themeAttributeName?: false | string;
   /** 主题存储 key */
   themeStorageKey?: false | string;
+  /** 主题属性名称 */
+  themeAttributeName?: false | string;
   /** 检查 meta 元素 */
   metaElement?: boolean;
   /** 媒体查询(一定会返回) */
   matchMedia?: boolean;
 }) => {
   const {
-    themeAttributeName: name = themeAttributeName,
     themeStorageKey: key = themeStorageKey,
+    themeAttributeName: name = themeAttributeName,
     metaElement,
     matchMedia,
   } = options || {};
