@@ -39,7 +39,9 @@ export const langAttributeName = "lang";
 export const queryLangAttribute = (attrName = langAttributeName) => {
   const htmlElem = document.documentElement;
   const attrValue = htmlElem.getAttribute(attrName);
-  return attrValue;
+  if (attrValue) {
+    return attrValue;
+  }
 };
 
 /** 更新语言属性 */
@@ -61,7 +63,9 @@ export const langStorageKey = "lang";
 /** 查询语言存储 */
 export const queryLangStorage = (key = langStorageKey) => {
   const storageValue = queryLocal(key);
-  return storageValue;
+  if (storageValue) {
+    return storageValue as string;
+  }
 };
 
 /** 更新语言存储 */
@@ -73,7 +77,7 @@ export const updateLangStorage = (value?: string, key = langStorageKey) => {
   }
 };
 
-/** 查询浏览器语言 */
+/** 查询浏览器语言(一定会返回) */
 export const queryBrowserLanguage = () => {
   return navigator.language;
 };
@@ -115,6 +119,32 @@ export const detectLangTag = (options?: {
       return browserValue;
     }
   }
+};
+
+/** 监听浏览器语言变化，并返回取消监听函数。 */
+export const listenBrowserTheme = (
+  callback: (value: string) => void,
+  options?: {
+    /** 立即触发一次 */
+    immediate?: boolean;
+  },
+) => {
+  const { immediate } = options || {};
+
+  if (immediate) {
+    const value = navigator.language;
+    callback(value);
+  }
+
+  const handleChange = () => {
+    const value = navigator.language;
+    callback(value);
+  };
+  window.addEventListener("languagechange", handleChange);
+
+  return () => {
+    window.removeEventListener("languagechange", handleChange);
+  };
 };
 
 // #endregion
