@@ -122,7 +122,7 @@ export const detectLangTag = (options?: {
 };
 
 /** 监听浏览器语言变化，并返回取消监听函数。 */
-export const listenBrowserTheme = (
+export const listenBrowserLang = (
   callback: (value: string) => void,
   options?: {
     /** 立即触发一次 */
