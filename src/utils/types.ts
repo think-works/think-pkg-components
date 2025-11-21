@@ -121,3 +121,14 @@ export type RequiredPick<T, K extends keyof T = keyof T> = RequiredPickWith<
  * @deprecated 请使用 RequiredPickWith
  */
 export type RequiredKey<T, K extends keyof T> = RequiredPickWith<T, K>;
+
+/** 对象路径(用点号连接的键) */
+export type ObjectPaths<T> = T extends object
+  ? {
+      [K in keyof T]: K extends string
+        ? T[K] extends object
+          ? `${K}.${ObjectPaths<T[K]>}`
+          : `${K}`
+        : never;
+    }[keyof T]
+  : never;

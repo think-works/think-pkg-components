@@ -2,18 +2,8 @@ import { useConfigContext } from ".";
 import { useLocale as useAntdLocale } from "antd/es/locale";
 import { useCallback, useMemo } from "react";
 import { findLocaleText, replaceTextVars } from "@/common/lang";
+import { ObjectPaths } from "@/utils/types";
 import { getLocale, Locale } from "./locale";
-
-/** 对象路径(用点号连接的键) */
-type ObjectPaths<T> = T extends object
-  ? {
-      [K in keyof T]: K extends string
-        ? T[K] extends object
-          ? `${K}.${ObjectPaths<T[K]>}`
-          : `${K}`
-        : never;
-    }[keyof T]
-  : never;
 
 /**
  * 使用组件库的本地化资源
