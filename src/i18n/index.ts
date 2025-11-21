@@ -3,7 +3,7 @@
  * 除默认语言外，其他语言都应指定类型，以免缺失翻译内容。
  *
  * ```
- * import { Locale } from ".";
+ * import { Locale } from "..";
  * const locale: Locale = {
  *   lang: "en-US",
  * };
@@ -12,8 +12,8 @@
 import { merge } from "lodash-es";
 import { lookupLangTag } from "@/common/lang";
 import { LiteralUnion } from "@/utils/types";
-import enUS from "./en-US";
-import zhCN from "./zh-CN";
+import enUS from "./locale/en-US";
+import zhCN from "./locale/zh-CN";
 
 /** 支持的语言 */
 export type Language = LiteralUnion<keyof typeof locales>;

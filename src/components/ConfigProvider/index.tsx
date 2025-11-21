@@ -1,6 +1,6 @@
 import { useLocale as useAntdLocale } from "antd/es/locale";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { getLocale, Language, Locale } from "./locale";
+import { getLocale, Language, Locale } from "@/i18n";
 
 export * from "./hooks";
 

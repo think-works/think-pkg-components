@@ -2,8 +2,8 @@ import { useConfigContext } from ".";
 import { useLocale as useAntdLocale } from "antd/es/locale";
 import { useCallback, useMemo } from "react";
 import { findLocaleText, replaceTextVars } from "@/common/lang";
+import { getLocale, Locale } from "@/i18n";
 import { ObjectPaths } from "@/utils/types";
-import { getLocale, Locale } from "./locale";
 
 /**
  * 使用组件库的本地化资源
