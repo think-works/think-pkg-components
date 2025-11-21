@@ -1,3 +1,21 @@
+// #region 类型函数
+
+/**
+ * 真值转换
+ */
+export const truthy = <T>(
+  value: T,
+): value is Exclude<T, false | "" | 0 | null | undefined> => Boolean(value);
+
+/**
+ * 元组类型
+ */
+export const tuple = <T extends [any, ...any[]]>(value: T) => value;
+
+// #endregion
+
+// #region 请求响应
+
 /**
  * api 接口响应
  */
@@ -29,51 +47,12 @@ export type PagingResponse<T = any> = {
   list?: T[];
 };
 
-/**
- * 可变类型移除 readonly
- */
-export type Mutable<T> = {
-  -readonly [P in keyof T]: T[P] extends ReadonlyArray<infer U>
-    ? Mutable<U>[]
-    : Mutable<T[P]>;
-};
+// #endregion
 
 /**
  * 提取静态数组项类型
  */
-export type Array2Union<T extends readonly unknown[]> = T[number];
-
-/**
- * 必选指定 key 且其他 key 可选
- */
-export type RequiredPick<T, K extends keyof T> = {
-  [P in K]-?: T[P];
-} & {
-  [PP in Exclude<keyof T, K>]?: T[PP];
-};
-
-/**
- * 可选指定 key 且其他 key 必选
- */
-export type PartialPick<T, K extends keyof T> = {
-  [P in K]?: T[P];
-} & {
-  [PP in Exclude<keyof T, K>]-?: T[PP];
-};
-
-/**
- * 必选 key 且 value 可为 undefined
- */
-export type RequiredKey<T, R = Required<T>> = {
-  [P in keyof R]: R[P] | undefined;
-};
-
-/**
- * useState 的 set 函数类型
- */
-export type SetState<S = undefined> = React.Dispatch<
-  React.SetStateAction<S | undefined>
->;
+export type Array2Union<T extends readonly any[]> = T[number];
 
 /**
  * 保留字面量
@@ -87,13 +66,58 @@ export type LiteralUnion<T extends string | number> =
   | (string & Record<never, never>);
 
 /**
- * 真值转换
+ * useState 的 set 函数类型
  */
-export const truthy = <T>(
-  value: T,
-): value is Exclude<T, false | "" | 0 | null | undefined> => Boolean(value);
+export type SetState<S = undefined> = React.Dispatch<
+  React.SetStateAction<S | undefined>
+>;
 
 /**
- * 元组类型
+ * 可变类型(递归)
  */
-export const tuple = <T extends [any, ...any[]]>(value: T) => value;
+export type Mutable<T> = T extends (...args: any[]) => any
+  ? T
+  : T extends readonly [infer First, ...infer Rest]
+    ? [Mutable<First>, ...Mutable<Rest>]
+    : T extends readonly (infer U)[]
+      ? Mutable<U>[]
+      : T extends object
+        ? { -readonly [P in keyof T]: Mutable<T[P]> }
+        : T;
+
+/**
+ * 可选类型(递归)
+ */
+export type PartialDeep<T> = T extends (...args: any[]) => any
+  ? T
+  : T extends [infer First, ...infer Rest]
+    ? [PartialDeep<First>, ...PartialDeep<Rest>]
+    : T extends (infer U)[]
+      ? PartialDeep<U>[]
+      : T extends object
+        ? { [P in keyof T]?: PartialDeep<T[P]> }
+        : T;
+
+/**
+ * 必选指定 key (value 可为 undefined)而可选其他 key
+ */
+export type RequiredPickWith<T, K extends keyof T = keyof T, V = undefined> = {
+  [P in keyof Required<Pick<T, K>>]: T[P] | V;
+} & {
+  [P in keyof Partial<Omit<T, K>>]: T[P];
+};
+
+/**
+ * 必选指定 key 而可选其他 key
+ */
+export type RequiredPick<T, K extends keyof T = keyof T> = RequiredPickWith<
+  T,
+  K,
+  never
+>;
+
+/**
+ * 必选指定 key (value 可为 undefined)而可选其他 key
+ * @deprecated 请使用 RequiredPickWith
+ */
+export type RequiredKey<T, K extends keyof T> = RequiredPickWith<T, K>;

@@ -4,6 +4,7 @@ import type { Reference } from "rc-table";
 import { ForwardedRef, forwardRef, useMemo } from "react";
 import { separator } from "@/utils/human";
 import { isBlank, isType, msecToString } from "@/utils/tools";
+import { useComponentsLocale } from "../ConfigProvider";
 import stl from "./index.module.less";
 
 const isString = (val: any) => isType<string>(val, "String");
@@ -67,6 +68,8 @@ export const BaseTable = forwardRef(function BaseTableCom(
     stickyPagination,
     ...rest
   } = props || {};
+
+  const { locale, replaceTextVars } = useComponentsLocale();
 
   const cols = useMemo(
     () =>
@@ -208,7 +211,11 @@ export const BaseTable = forwardRef(function BaseTableCom(
                 showTotal: (total) => (
                   <div className={stl.total}>
                     <div className={stl.extend}>{extend}</div>
-                    <div className={stl.count}>共 {total} 条</div>
+                    <div className={stl.count}>
+                      {replaceTextVars(locale.BaseTable.totalCount, {
+                        count: total,
+                      })}
+                    </div>
                   </div>
                 ),
                 ...(pagination || {}),

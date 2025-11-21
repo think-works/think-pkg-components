@@ -14,6 +14,7 @@ import {
 import { DeleteOutlined } from "@ant-design/icons";
 import { uuid4 } from "@/utils/cryptos";
 import { isType } from "@/utils/tools";
+import { useComponentsLocale } from "../ConfigProvider";
 import SortableTable from "../SortableTable";
 import DecoupleAutoComplete from "./DecoupleAutoComplete";
 import DecoupleInput from "./DecoupleInput";
@@ -130,6 +131,9 @@ export const EditableTable = (props: EditableTableProps) => {
     size = "small",
     ...rest
   } = props;
+
+  const { locale } = useComponentsLocale();
+
   const [itemList, setItemList] = useState<DataRow[]>([]);
   const itemCount = itemList.length;
   const [innerRowKey, setInnerRowKey] = useState(rowKey || "innerRowKey");
@@ -390,7 +394,7 @@ export const EditableTable = (props: EditableTableProps) => {
         className: cls(stl.action, colCls),
         dataIndex: "__action",
         render: colRender,
-        title: "操作",
+        title: locale.common.actionText,
         align: "center",
         width: 50,
         ...colRest,
@@ -398,14 +402,15 @@ export const EditableTable = (props: EditableTableProps) => {
     }
     return list;
   }, [
-    size,
     columns,
     readOnly,
     actionColumn,
     handleChange,
+    locale.common.actionText,
     itemCount,
     actionRender,
     lastActionRender,
+    size,
     handleDelete,
   ]);
 
@@ -425,7 +430,7 @@ export const EditableTable = (props: EditableTableProps) => {
         rowKey={innerRowKey}
         dataSource={itemList}
         onDataSourceChange={handleSort}
-        locale={{ emptyText: "无内容" }}
+        locale={{ emptyText: locale.common.emptyContent }}
         {...rest}
       />
     );
@@ -441,7 +446,7 @@ export const EditableTable = (props: EditableTableProps) => {
       size={size}
       rowKey={rowKey || normalRowKey}
       dataSource={itemList}
-      locale={{ emptyText: "无内容" }}
+      locale={{ emptyText: locale.common.emptyContent }}
       {...rest}
     />
   );

@@ -11,6 +11,7 @@ import {
   useState,
 } from "react";
 import BaseAction, { BaseActionProps } from "../BaseAction";
+import { useComponentsLocale } from "../ConfigProvider";
 import LayoutTitle, { LayoutTitleSize } from "../LayoutTitle";
 import FilterTree, { FilterTreeProps, FilterTreeRef } from "./FilterTree";
 import { IconActionAdd, IconAllFold, IconAllUnfold } from "./icons";
@@ -65,6 +66,8 @@ export const LayoutTree = forwardRef(function BaseTreeCom(
   const { add: allowAdd = !!editable } =
     typeof editable === "object" ? editable : {};
 
+  const { locale } = useComponentsLocale();
+
   // #region 导出 Ref
 
   const refTree = useRef<FilterTreeRef>(null);
@@ -110,7 +113,7 @@ export const LayoutTree = forwardRef(function BaseTreeCom(
         className={stl.toolAction}
         size="small"
         type="text"
-        tooltip="全部收起"
+        tooltip={locale.common.collapseAll}
         icon={<IconAllFold className={stl.allFoldIcon} />}
         onClick={() => handleExpandAll(false)}
       />
@@ -119,12 +122,18 @@ export const LayoutTree = forwardRef(function BaseTreeCom(
         className={stl.toolAction}
         size="small"
         type="text"
-        tooltip="全部展开"
+        tooltip={locale.common.expandAll}
         icon={<IconAllUnfold className={stl.allFoldIcon} />}
         onClick={() => handleExpandAll(true)}
       />
     );
-  }, [expandable, foldState, handleExpandAll]);
+  }, [
+    expandable,
+    foldState,
+    handleExpandAll,
+    locale.common.collapseAll,
+    locale.common.expandAll,
+  ]);
 
   /** 新建组件 */
   const addCom = useMemo(() => {
@@ -142,18 +151,18 @@ export const LayoutTree = forwardRef(function BaseTreeCom(
       className: stl.toolAction,
       size: "small",
       type: "text",
-      tooltip: "新建",
+      tooltip: locale.common.createText,
       icon: <IconActionAdd className={stl.addIcon} />,
       onClick: () => {
         refTree.current?.addNode?.(undefined, {
           ensureVisible: true,
-          diffNode: { title: "新建" },
+          diffNode: { title: locale.LayoutTree.newItem },
         });
       },
       ...actionProps,
     };
     return <BaseAction {...baseActionProps} />;
-  }, [allowAdd]);
+  }, [allowAdd, locale.LayoutTree.newItem, locale.common.createText]);
 
   // #endregion
 

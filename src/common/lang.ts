@@ -1,34 +1,53 @@
+import { lookup } from "bcp-47-match";
 import { deleteLocal, queryLocal, updateLocal } from "@/utils/storage";
 
-/** 修正语言标记 */
-export const normalizeLangTag = (supportList: string[], locale: string) => {
-  const list = supportList.find((item) => {
-    const lowerItem = item.toLowerCase();
-    const lowerLocale = locale.toLowerCase();
+// #region 本地化资源
 
-    // 完全匹配
-    if (lowerItem === lowerLocale) {
-      return true;
-    }
-
-    // 部分匹配
-    const itemArr = lowerItem.split("-");
-    const localeArr = lowerLocale.split("-");
-
-    if (itemArr[0] === localeArr[0]) {
-      // 第一位相同
-      if (itemArr.length === 1 || localeArr.length === 1) {
-        // 没有第二位
-        return true;
-      } else if (itemArr[1] === localeArr[1]) {
-        // 第二位相同
-        return true;
-      }
-    }
-  });
-
-  return list;
+/** 查找语言标记 */
+export const lookupLangTag = (languages: string[], language: string) => {
+  /**
+   * https://developer.mozilla.org/en-US/docs/Glossary/BCP_47_language_tag
+   * https://www.w3.org/International/articles/language-tags/
+   * https://www.w3.org/International/questions/qa-choosing-language-tags
+   */
+  return lookup(languages, language);
 };
+
+/** 查找本地化资源文本 */
+export const findLocaleText = (
+  /** 本地化资源 */
+  locale: Record<string, any>,
+  /** 本地化资源路径(以 `.` 分割) */
+  paths: string,
+  /** 替换文本中的变量(以 `${var}` 占位) */
+  vars?: Record<string, any>,
+) => {
+  // 分割路径
+  const text = paths
+    .split(".")
+    .reduce((o, k) => o?.[k], locale)
+    ?.toString() as string | undefined;
+
+  // 替换变量
+  if (text && vars) {
+    return replaceTextVars(text, vars);
+  }
+
+  return text;
+};
+
+/** 替换文本变量 */
+export const replaceTextVars = (
+  /** 文本 */
+  text: string,
+  /** 变量(以 `${var}` 占位) */
+  vars: Record<string, any>,
+) => {
+  // 替换占位
+  return text.replace(/\$\{(\w+)\}/g, (_, k) => vars[k] ?? "");
+};
+
+// #endregion
 
 // #region 语言查询切换
 
@@ -78,7 +97,7 @@ export const updateLangStorage = (value?: string, key = langStorageKey) => {
 };
 
 /** 查询浏览器语言(一定会返回) */
-export const queryBrowserLanguage = () => {
+export const queryBrowserLang = () => {
   return navigator.language;
 };
 
@@ -114,7 +133,7 @@ export const detectLangTag = (options?: {
   }
 
   if (browser) {
-    const browserValue = queryBrowserLanguage();
+    const browserValue = queryBrowserLang();
     if (browserValue) {
       return browserValue;
     }

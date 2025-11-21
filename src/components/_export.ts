@@ -1,3 +1,5 @@
+export * from "./ConfigProvider";
+
 export * from "./BaseAction";
 export * from "./BaseAvatar";
 export * from "./BaseDatePicker";

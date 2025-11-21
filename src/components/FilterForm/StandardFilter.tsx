@@ -20,6 +20,7 @@ import React, {
 } from "react";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
 import { normalizeObject } from "@/utils/tools";
+import { useComponentsLocale } from "../ConfigProvider";
 import RouteTable from "../RouteTable";
 import stl from "./index.module.less";
 
@@ -114,6 +115,8 @@ export const StandardFilter = (props: StandardFilterProps) => {
     onReset,
     ...rest
   } = props;
+
+  const { locale } = useComponentsLocale();
 
   // 显示展开/收起按钮
   const showUnfold = (items?.length || 0) > visibleCount;
@@ -227,12 +230,12 @@ export const StandardFilter = (props: StandardFilterProps) => {
                 <Space size={4}>
                   {unfold ? (
                     <>
-                      <span>收起</span>
+                      <span>{locale.common.collapseText}</span>
                       <UpOutlined />
                     </>
                   ) : (
                     <>
-                      <span>展开</span>
+                      <span>{locale.common.expandText}</span>
                       <DownOutlined />
                     </>
                   )}
@@ -246,7 +249,7 @@ export const StandardFilter = (props: StandardFilterProps) => {
                 onClick={handleReset}
                 {...resetProps}
               >
-                {resetText || "重置"}
+                {resetText || locale.common.resetText}
               </Button>
             )}
             {submitText === false ? null : (
@@ -256,7 +259,7 @@ export const StandardFilter = (props: StandardFilterProps) => {
                 onClick={handleSubmit}
                 {...submitProps}
               >
-                {submitText || "查询"}
+                {submitText || locale.common.queryText}
               </Button>
             )}
             {extend}
@@ -269,6 +272,10 @@ export const StandardFilter = (props: StandardFilterProps) => {
       extend,
       handleReset,
       handleSubmit,
+      locale.common.collapseText,
+      locale.common.expandText,
+      locale.common.queryText,
+      locale.common.resetText,
       resetProps,
       resetText,
       showUnfold,

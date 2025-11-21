@@ -1,5 +1,6 @@
 import cls, { Argument } from "classnames";
 import { HTMLAttributes, useCallback, useEffect, useRef } from "react";
+import { useComponentsLocale } from "../ConfigProvider";
 import stl from "./index.module.less";
 import { querySize, updateSize } from "./utils";
 
@@ -76,6 +77,8 @@ const DragHandler = (props: DragHandlerProps) => {
   } = props;
   const { width: minWidth, height: minHeight } = minSize || {};
   const { width: maxWidth, height: maxHeight } = maxSize || {};
+
+  const { locale } = useComponentsLocale();
 
   // 查询持久化值
   const query = useCallback(() => {
@@ -292,9 +295,9 @@ const DragHandler = (props: DragHandlerProps) => {
       )}
       title={
         resize === "row"
-          ? "上下拖拽调整高度，双击快捷调整"
+          ? locale.DragContainer.verticalDragTip
           : resize === "col"
-            ? "左右拖拽调整宽度，双击快捷调整"
+            ? locale.DragContainer.horizontalDragTip
             : ""
       }
       onMouseDown={handleMouseDown}

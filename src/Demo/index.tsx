@@ -1,14 +1,30 @@
-import { App as AntdApp, ConfigProvider, ConfigProviderProps } from "antd";
+import {
+  App as AntdApp,
+  ConfigProvider as AntdConfigProvider,
+  ConfigProviderProps as AntdConfigProviderProps,
+} from "antd";
+import enUS from "antd/es/locale/en_US";
 import zhCN from "antd/es/locale/zh_CN";
 import dayjs from "dayjs";
 import { StrictMode, useEffect, useState } from "react";
 import { RouterProvider } from "react-router-dom";
-import { themes } from "@/components";
+import { lang, themes } from "@/components";
 import { router } from "./router";
+import "dayjs/locale/en";
 import "dayjs/locale/zh-cn";
 import "./index.less";
 
-dayjs.locale("zh-CN");
+const zhLang = "zh-CN";
+const enLang = "en-US";
+
+// const dftI18n: string = enLang;
+const dftI18n = lang.detectLangTag({ browser: true });
+
+const antdLocale = dftI18n === zhLang ? zhCN : enUS;
+const dayjsLocale = dftI18n === zhLang ? zhLang : enLang;
+// const componentsLocale = dftI18n === zhLang ? zhLang : enLang;
+
+dayjs.locale(dayjsLocale);
 
 const dftScheme = themes.detectThemeScheme({
   metaElement: true,
@@ -23,7 +39,7 @@ const diff = {
       // colorLink: "#CC3232",
     },
   },
-} satisfies ConfigProviderProps;
+} satisfies AntdConfigProviderProps;
 
 const dftConfig = themes.getConfigProviderProps(dftScheme, diff);
 
@@ -42,11 +58,14 @@ const Demo = () => {
 
   return (
     <StrictMode>
-      <ConfigProvider locale={zhCN} {...config}>
+      <AntdConfigProvider locale={antdLocale} {...config}>
         <AntdApp>
+          {/* 未配置 ConfigProvider 时尝试使用 AntdConfigProvider 中的配置 */}
+          {/* <ConfigProvider lang={componentsLocale}> */}
           <RouterProvider router={router} />
+          {/* </ConfigProvider> */}
         </AntdApp>
-      </ConfigProvider>
+      </AntdConfigProvider>
     </StrictMode>
   );
 };

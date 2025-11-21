@@ -17,6 +17,7 @@ import {
 } from "react";
 import { uuid4 } from "@/utils/cryptos";
 import { BaseActionProps } from "../BaseAction";
+import { useComponentsLocale } from "../ConfigProvider";
 import DropdownActions from "../DropdownActions";
 import { IconActionAdd, IconActionDelete, IconActionEdit } from "./icons";
 import stl from "./index.module.less";
@@ -122,6 +123,8 @@ export const EditableTree = forwardRef(function EditableTreeCom(
     cloneData = true,
     stringifyTitle,
   } = typeof editable === "object" ? editable : {};
+
+  const { locale } = useComponentsLocale();
 
   // #region 导出 Ref
 
@@ -557,12 +560,12 @@ export const EditableTree = forwardRef(function EditableTreeCom(
 
         actions.push({
           key: "add",
-          children: "新建",
+          children: locale.common.createText,
           icon: <IconActionAdd />,
           onClick: () => {
             handleAddNode(nodeData.key, {
               ensureVisible: true,
-              diffNode: { title: "新建" },
+              diffNode: { title: locale.LayoutTree.newItem },
             });
           },
           ...actionProps,
@@ -578,7 +581,7 @@ export const EditableTree = forwardRef(function EditableTreeCom(
 
         actions.push({
           key: "edit",
-          children: "编辑",
+          children: locale.common.editText,
           icon: <IconActionEdit />,
           onClick: () => {
             handleEditNode(nodeData.key, {
@@ -599,11 +602,11 @@ export const EditableTree = forwardRef(function EditableTreeCom(
         actions.push({
           key: "delete",
           danger: true,
-          children: "删除",
+          children: locale.common.deleteText,
           icon: <IconActionDelete />,
           popconfirm: {
             stopPropagation: true,
-            title: "确定删除？",
+            title: locale.common.confirmDelete,
             onConfirm: () => {
               handleDeleteNode(nodeData.key);
             },
@@ -623,6 +626,11 @@ export const EditableTree = forwardRef(function EditableTreeCom(
       handleAddNode,
       handleDeleteNode,
       handleEditNode,
+      locale.LayoutTree.newItem,
+      locale.common.confirmDelete,
+      locale.common.createText,
+      locale.common.deleteText,
+      locale.common.editText,
       nodeActionRender,
     ],
   );
