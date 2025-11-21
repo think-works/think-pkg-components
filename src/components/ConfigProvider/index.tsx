@@ -34,17 +34,21 @@ export type ConfigProviderProps = {
 export const ConfigProvider = (props: ConfigProviderProps) => {
   // 默认为 Antd 中使用的语言
   const [_, antdLang] = useAntdLocale("global");
-  const { children, lang = antdLang, locale } = props;
+  const { children, lang, locale } = props;
 
   const [context, setContext] = useState<ConfigContextType>({});
-  const innerLocale = useMemo(() => locale || getLocale(lang), [lang, locale]);
+  const innerLang = useMemo(() => lang || antdLang, [antdLang, lang]);
+  const innerLocale = useMemo(
+    () => locale || getLocale(innerLang),
+    [innerLang, locale],
+  );
 
   useEffect(() => {
     setContext({
-      lang,
+      lang: innerLang,
       locale: innerLocale,
     });
-  }, [lang, innerLocale]);
+  }, [innerLang, innerLocale]);
 
   return (
     <ConfigContext.Provider value={context}>{children}</ConfigContext.Provider>
