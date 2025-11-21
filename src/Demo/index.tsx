@@ -1,12 +1,8 @@
-import {
-  App as AntdApp,
-  ConfigProvider as AntdConfigProvider,
-  ConfigProviderProps as AntdConfigProviderProps,
-} from "antd";
+import { App as AntdApp, ConfigProvider as AntdConfigProvider } from "antd";
 import enUS from "antd/es/locale/en_US";
 import zhCN from "antd/es/locale/zh_CN";
 import dayjs from "dayjs";
-import { StrictMode, useEffect, useState } from "react";
+import { StrictMode, useEffect, useMemo, useState } from "react";
 import { RouterProvider } from "react-router-dom";
 import { lang, themes } from "@/components";
 import { router } from "./router";
@@ -14,56 +10,100 @@ import "dayjs/locale/en";
 import "dayjs/locale/zh-cn";
 import "./index.less";
 
-const zhLang = "zh-CN";
-const enLang = "en-US";
+// 平台主题色
+const platformColor = "#CC3232";
 
-// const dftI18n: string = enLang;
+// 检查默认国际化语言
 const dftI18n = lang.detectLangTag({ browser: true });
 
-const antdLocale = dftI18n === zhLang ? zhCN : enUS;
-const dayjsLocale = dftI18n === zhLang ? zhLang : enLang;
-// const componentsLocale = dftI18n === zhLang ? zhLang : enLang;
-
-dayjs.locale(dayjsLocale);
-
+// 检查默认主题方案
 const dftScheme = themes.detectThemeScheme({
   metaElement: true,
   matchMedia: true,
 });
 
-const diff = {
-  theme: {
-    token: {
-      // 主题色切换
-      // colorPrimary: "#CC3232",
-      // colorLink: "#CC3232",
-    },
-  },
-} satisfies AntdConfigProviderProps;
-
-const dftConfig = themes.getConfigProviderProps(dftScheme, diff);
-
 const Demo = () => {
-  const [config, setConfig] = useState(dftConfig);
+  // #region 国际化配置
 
+  const [i18n, setI18n] = useState<string | undefined>(dftI18n);
+
+  // 国际化配置
+  const localeConfig = useMemo(() => {
+    if (i18n) {
+      const isEnglish = lang.lookupLangTag(["en"], i18n);
+      if (isEnglish) {
+        // 使用英文
+        dayjs.locale("en");
+        return {
+          locale: enUS,
+        };
+      }
+    }
+
+    // 默认使用中文
+    dayjs.locale("zh-CN");
+    return {
+      locale: zhCN,
+    };
+  }, [i18n]);
+
+  // 监听浏览器语言切换
   useEffect(() => {
-    return themes.listenBrowserTheme((value) => {
-      const cfg = themes.getConfigProviderProps(value, diff);
-      setConfig(cfg);
-
-      themes.updateThemeAttribute(value);
-      themes.updateThemeStorage(value);
-    });
+    return lang.listenBrowserLang(
+      (value) => {
+        setI18n?.(value);
+      },
+      { immediate: true },
+    );
   }, []);
+
+  // #endregion
+
+  // #region 主题配置
+
+  const [theme, setTheme] = useState<"light" | "dark" | undefined>(dftScheme);
+
+  // 主题配置
+  const themeConfig = useMemo(
+    () =>
+      themes.getConfigProviderProps(
+        theme,
+        platformColor
+          ? {
+              theme: {
+                token: {
+                  colorPrimary: platformColor,
+                  colorLink: platformColor,
+                },
+              },
+            }
+          : undefined,
+      ),
+    [theme],
+  );
+
+  // 主题变更时更新属性
+  useEffect(() => {
+    themes.updateThemeAttribute(theme);
+  }, [theme]);
+
+  // 监听浏览器主题切换
+  useEffect(() => {
+    return themes.listenBrowserTheme(
+      (value) => {
+        setTheme(value);
+      },
+      { immediate: true },
+    );
+  }, []);
+
+  // #endregion
 
   return (
     <StrictMode>
-      <AntdConfigProvider locale={antdLocale} {...config}>
+      <AntdConfigProvider {...localeConfig} {...themeConfig}>
         <AntdApp>
-          {/* 未配置 ConfigProvider 时尝试使用 AntdConfigProvider 中的配置 */}
-          {/* <ConfigProvider lang={componentsLocale}> */}
           <RouterProvider router={router} />
-          {/* </ConfigProvider> */}
         </AntdApp>
       </AntdConfigProvider>
     </StrictMode>
