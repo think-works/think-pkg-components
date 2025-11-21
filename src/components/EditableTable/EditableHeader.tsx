@@ -8,8 +8,8 @@ import {
 } from "antd";
 import { ChangeEvent, useLayoutEffect, useState } from "react";
 import { DeleteOutlined } from "@ant-design/icons";
+import { useComponentsLocale } from "@/i18n/hooks";
 import { isType } from "@/utils/tools";
-import { useComponentsLocale } from "../ConfigProvider";
 
 export type EditableHeaderProps = InputProps & {
   value?: string;

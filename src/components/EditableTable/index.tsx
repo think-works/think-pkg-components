@@ -12,9 +12,9 @@ import {
   useState,
 } from "react";
 import { DeleteOutlined } from "@ant-design/icons";
+import { useComponentsLocale } from "@/i18n/hooks";
 import { uuid4 } from "@/utils/cryptos";
 import { isType } from "@/utils/tools";
-import { useComponentsLocale } from "../ConfigProvider";
 import SortableTable from "../SortableTable";
 import DecoupleAutoComplete from "./DecoupleAutoComplete";
 import DecoupleInput from "./DecoupleInput";

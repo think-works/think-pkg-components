@@ -1,8 +1,8 @@
 import { Button, Divider, RefSelectProps, Select, SelectProps } from "antd";
 import cls, { Argument } from "classnames";
 import { ForwardedRef, forwardRef } from "react";
+import { useComponentsLocale } from "@/i18n/hooks";
 import { isType } from "@/utils/tools";
-import { useComponentsLocale } from "../ConfigProvider";
 import stl from "./index.module.less";
 
 const isArray = (val: any) => isType<any[]>(val, "Array");

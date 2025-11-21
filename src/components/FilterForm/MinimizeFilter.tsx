@@ -19,6 +19,7 @@ import {
 } from "react";
 import { FilterOutlined } from "@ant-design/icons";
 import { useDebounce } from "@/hooks";
+import { useComponentsLocale } from "@/i18n/hooks";
 import {
   isType,
   jsonTryParse,
@@ -26,7 +27,6 @@ import {
   normalizeObject,
 } from "@/utils/tools";
 import { truthy } from "@/utils/types";
-import { useComponentsLocale } from "../ConfigProvider";
 import RouteTable from "../RouteTable";
 import stl from "./index.module.less";
 import StandardFilter, { StandardFilterProps } from "./StandardFilter";

@@ -18,7 +18,7 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 import { useDebounce } from "@/hooks";
-import { useComponentsLocale } from "../ConfigProvider";
+import { useComponentsLocale } from "@/i18n/hooks";
 import EditableTree, {
   EditableTreeProps,
   EditableTreeRef,

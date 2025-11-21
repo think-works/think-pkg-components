@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { useComponentsLocale } from "../ConfigProvider";
+import { useComponentsLocale } from "@/i18n/hooks";
 
 export type CountdownButtonProps = ButtonProps & {
   /** 倒计时(秒) */

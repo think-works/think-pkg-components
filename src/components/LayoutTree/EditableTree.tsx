@@ -15,9 +15,9 @@ import {
   useRef,
   useState,
 } from "react";
+import { useComponentsLocale } from "@/i18n/hooks";
 import { uuid4 } from "@/utils/cryptos";
 import { BaseActionProps } from "../BaseAction";
-import { useComponentsLocale } from "../ConfigProvider";
 import DropdownActions from "../DropdownActions";
 import { IconActionAdd, IconActionDelete, IconActionEdit } from "./icons";
 import stl from "./index.module.less";

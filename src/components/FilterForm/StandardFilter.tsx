@@ -19,8 +19,8 @@ import React, {
   useState,
 } from "react";
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
+import { useComponentsLocale } from "@/i18n/hooks";
 import { normalizeObject } from "@/utils/tools";
-import { useComponentsLocale } from "../ConfigProvider";
 import RouteTable from "../RouteTable";
 import stl from "./index.module.less";
 

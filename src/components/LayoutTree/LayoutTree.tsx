@@ -10,8 +10,8 @@ import {
   useRef,
   useState,
 } from "react";
+import { useComponentsLocale } from "@/i18n/hooks";
 import BaseAction, { BaseActionProps } from "../BaseAction";
-import { useComponentsLocale } from "../ConfigProvider";
 import LayoutTitle, { LayoutTitleSize } from "../LayoutTitle";
 import FilterTree, { FilterTreeProps, FilterTreeRef } from "./FilterTree";
 import { IconActionAdd, IconAllFold, IconAllUnfold } from "./icons";

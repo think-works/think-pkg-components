@@ -1,6 +1,6 @@
 import cls, { Argument } from "classnames";
 import { HTMLAttributes, useCallback, useEffect, useRef } from "react";
-import { useComponentsLocale } from "../ConfigProvider";
+import { useComponentsLocale } from "@/i18n/hooks";
 import stl from "./index.module.less";
 import { querySize, updateSize } from "./utils";
 

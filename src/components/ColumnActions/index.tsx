@@ -1,8 +1,8 @@
 import { Space } from "antd";
 import { ReactNode } from "react";
 import { DownOutlined } from "@ant-design/icons";
+import { useComponentsLocale } from "@/i18n/hooks";
 import { truthy } from "@/utils/types";
-import { useComponentsLocale } from "../ConfigProvider";
 import DropdownActions, { DropdownActionsProps } from "../DropdownActions";
 
 export type ColumnActionsProps = {

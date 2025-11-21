@@ -2,9 +2,9 @@ import { Table, TableProps, Tooltip } from "antd";
 import cls, { Argument } from "classnames";
 import type { Reference } from "rc-table";
 import { ForwardedRef, forwardRef, useMemo } from "react";
+import { useComponentsLocale } from "@/i18n/hooks";
 import { separator } from "@/utils/human";
 import { isBlank, isType, msecToString } from "@/utils/tools";
-import { useComponentsLocale } from "../ConfigProvider";
 import stl from "./index.module.less";
 
 const isString = (val: any) => isType<string>(val, "String");
