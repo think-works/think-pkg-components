@@ -1,3 +1,3 @@
 export * from "./index";
-export * from "./useFetch";
-export * from "./useDynamicImport";
+export * from "./fetch";
+export * from "./import";

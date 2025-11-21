@@ -2,8 +2,6 @@ import { useLocale as useAntdLocale } from "antd/es/locale";
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { getLocale, Language, Locale } from "@/i18n";
 
-export * from "./hooks";
-
 export type ConfigContextType = {
   /** 预期使用的语言 */
   lang?: Language;

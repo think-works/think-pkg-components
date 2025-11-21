@@ -1,7 +1,7 @@
-import { useConfigContext } from ".";
 import { useLocale as useAntdLocale } from "antd/es/locale";
 import { useCallback, useMemo } from "react";
 import { findLocaleText, replaceTextVars } from "@/common/lang";
+import { useConfigContext } from "@/components/ConfigProvider";
 import { getLocale, Locale } from "@/i18n";
 import { ObjectPaths } from "@/utils/types";
 
