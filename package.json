@@ -47,7 +47,7 @@
   },
   "peerDependencies": {
     "@ant-design/icons": "5.x-6.x",
-    "antd": "5.x",
+    "antd": "5.x-6.x",
     "axios": "1.x",
     "classnames": "2.x",
     "dayjs": "1.x",
