@@ -121,7 +121,8 @@ export const queryLangCookie = (name = langCookieName) => {
 /** 更新语言 Cookie */
 export const updateLangCookie = (value?: LangTagAuto, key = langCookieName) => {
   if (value) {
-    const oneYear = new Date().setFullYear(new Date().getFullYear() + 1);
+    const oneYear = new Date();
+    oneYear.setFullYear(oneYear.getFullYear() + 1);
     Cookies.set(key, value, {
       expires: oneYear,
     });

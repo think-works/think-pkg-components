@@ -1,14 +1,15 @@
 import { App as AntdApp, ConfigProvider as AntdConfigProvider } from "antd";
-import enUS from "antd/es/locale/en_US";
-import zhCN from "antd/es/locale/zh_CN";
 import dayjs from "dayjs";
 import { StrictMode, useEffect, useMemo, useState } from "react";
 import { RouterProvider } from "react-router-dom";
 import { lang, themes } from "@/components";
 import { router } from "./router";
-import "dayjs/locale/en";
-import "dayjs/locale/zh-cn";
 import "./index.less";
+import zhCN from "antd/es/locale/zh_CN";
+import "dayjs/locale/zh-cn";
+
+// import enUS from "antd/es/locale/en_US";
+// import "dayjs/locale/en";
 
 // 平台主题色
 const platformColor = "#CC3232";
@@ -29,24 +30,30 @@ const Demo = () => {
     dftI18n !== "auto" ? dftI18n : undefined,
   );
 
+  const [antdLocale, setAntdLocale] = useState(zhCN);
+
   // 国际化配置
-  const localeConfig = useMemo(() => {
-    if (i18n) {
-      const isEnglish = lang.lookupLangTag(["en"], i18n);
-      if (isEnglish) {
-        // 使用英文
-        dayjs.locale("en");
-        return {
-          locale: enUS,
-        };
-      }
+  useEffect(() => {
+    if (!i18n) {
+      return;
     }
 
-    // 默认使用中文
-    dayjs.locale("zh-CN");
-    return {
-      locale: zhCN,
-    };
+    /**
+     * antd / dayjs 默认英文而产品默认中文。
+     * 本质上打包后已经内置了中文和英文语言包。
+     * 此处的动态加载用于演示加载任意的语言包。
+     */
+    if (lang.lookupLangTag(["en"], i18n)) {
+      // setAntdLocale(enUS);
+      // dayjs.locale("en");
+
+      import("antd/es/locale/en_US").then((module) => {
+        setAntdLocale(module.default);
+      });
+      import("dayjs/locale/en").then(() => {
+        dayjs.locale("en");
+      });
+    }
   }, [i18n]);
 
   // 监听浏览器语言切换
@@ -105,7 +112,7 @@ const Demo = () => {
 
   return (
     <StrictMode>
-      <AntdConfigProvider {...localeConfig} {...themeConfig}>
+      <AntdConfigProvider locale={antdLocale} {...themeConfig}>
         <AntdApp>
           <RouterProvider router={router} />
         </AntdApp>
@@ -115,3 +122,5 @@ const Demo = () => {
 };
 
 export default Demo;
+
+lang.updateLangCookie("auto");
