@@ -11,7 +11,8 @@ import "dayjs/locale/zh-cn";
 // import enUS from "antd/es/locale/en_US";
 // import "dayjs/locale/en";
 
-dayjs.locale("zh-CN");
+const defaultAntdLocale = zhCN;
+const defaultDayjsLang = "zh-CN";
 
 // 平台主题色
 const platformColor = "#CC3232";
@@ -32,30 +33,31 @@ const Demo = () => {
     dftI18n !== "auto" ? dftI18n : undefined,
   );
 
-  const [antdLocale, setAntdLocale] = useState(zhCN);
+  const [antdLocale, setAntdLocale] = useState(defaultAntdLocale);
 
   // 国际化配置
   useEffect(() => {
-    if (!i18n) {
-      return;
-    }
-
     /**
      * antd / dayjs 默认英文而产品默认中文。
      * 本质上打包后已经内置了中文和英文语言包。
      * 此处的动态加载用于演示加载任意的语言包。
      */
-    if (lang.lookupLangTag(["en"], i18n)) {
-      // setAntdLocale(enUS);
-      // dayjs.locale("en");
+    if (i18n) {
+      if (lang.lookupLangTag(["en"], i18n)) {
+        // setAntdLocale(enUS);
+        // dayjs.locale("en");
 
-      import("antd/es/locale/en_US").then((module) => {
-        setAntdLocale(module.default);
-      });
-      import("dayjs/locale/en").then(() => {
-        dayjs.locale("en");
-      });
+        import("antd/es/locale/en_US").then((module) => {
+          setAntdLocale(module.default);
+        });
+        import("dayjs/locale/en").then(() => {
+          dayjs.locale("en");
+        });
+      }
     }
+
+    setAntdLocale(defaultAntdLocale);
+    dayjs.locale(defaultDayjsLang);
   }, [i18n]);
 
   // 监听浏览器语言切换
