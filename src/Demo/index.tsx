@@ -122,5 +122,3 @@ const Demo = () => {
 };
 
 export default Demo;
-
-lang.updateLangCookie("auto");
