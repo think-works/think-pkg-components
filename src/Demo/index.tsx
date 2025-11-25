@@ -11,6 +11,8 @@ import "dayjs/locale/zh-cn";
 // import enUS from "antd/es/locale/en_US";
 // import "dayjs/locale/en";
 
+dayjs.locale("zh-CN");
+
 // 平台主题色
 const platformColor = "#CC3232";
 
