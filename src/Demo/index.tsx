@@ -26,7 +26,7 @@ const Demo = () => {
   // #region 国际化配置
 
   const [i18n, setI18n] = useState<lang.LangTag | undefined>(
-    dftI18n === "auto" ? undefined : dftI18n,
+    dftI18n !== "auto" ? dftI18n : undefined,
   );
 
   // 国际化配置
@@ -64,7 +64,7 @@ const Demo = () => {
   // #region 主题配置
 
   const [theme, setTheme] = useState<themes.ColorScheme | undefined>(
-    dftScheme === "auto" ? undefined : dftScheme,
+    dftScheme !== "auto" ? dftScheme : undefined,
   );
 
   // 主题配置
