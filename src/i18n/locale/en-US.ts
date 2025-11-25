@@ -1,4 +1,4 @@
-import { Locale } from "..";
+import type { Locale } from "..";
 
 const locale: Locale = {
   /** 语言标识 */

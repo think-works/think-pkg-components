@@ -8,6 +8,9 @@ export const colorSchemes = ["light", "dark"] as const;
 /** 颜色方案 */
 export type ColorScheme = (typeof colorSchemes)[number];
 
+/** 颜色方案(允许 auto) */
+export type ColorSchemeAuto = ColorScheme | "auto";
+
 // #region 颜色方案配置
 
 /** 获取样式配置 */
@@ -214,15 +217,15 @@ export const themeStorageKey = "theme";
 
 /** 查询主题存储 */
 export const queryThemeStorage = (key = themeStorageKey) => {
-  const storageValue = queryLocal(key);
-  if (colorSchemes.includes(storageValue as any)) {
-    return storageValue as ColorScheme;
+  const storageValue = queryLocal<ColorSchemeAuto>(key);
+  if (storageValue === "auto" || colorSchemes.includes(storageValue as any)) {
+    return storageValue;
   }
 };
 
 /** 更新主题存储 */
 export const updateThemeStorage = (
-  value?: ColorScheme,
+  value?: ColorSchemeAuto,
   key = themeStorageKey,
 ) => {
   if (value) {
@@ -261,25 +264,25 @@ export const detectThemeScheme = (options?: {
   metaElement?: boolean;
   /** 媒体查询(一定会返回) */
   matchMedia?: boolean;
-}) => {
+}): ColorSchemeAuto | undefined => {
   const {
-    themeStorageKey: key = themeStorageKey,
-    themeAttributeName: name = themeAttributeName,
+    themeStorageKey: storageKey = themeStorageKey,
+    themeAttributeName: attributeName = themeAttributeName,
     metaElement,
     matchMedia,
   } = options || {};
 
   // 检查存储值
-  if (key) {
-    const storageValue = queryThemeStorage(key);
+  if (storageKey) {
+    const storageValue = queryThemeStorage(storageKey);
     if (storageValue) {
       return storageValue;
     }
   }
 
   // 检查属性值
-  if (name) {
-    const attrValue = queryThemeAttribute(name);
+  if (attributeName) {
+    const attrValue = queryThemeAttribute(attributeName);
     if (attrValue) {
       return attrValue;
     }

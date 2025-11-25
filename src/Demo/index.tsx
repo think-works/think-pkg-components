@@ -25,7 +25,9 @@ const dftScheme = themes.detectThemeScheme({
 const Demo = () => {
   // #region 国际化配置
 
-  const [i18n, setI18n] = useState<string | undefined>(dftI18n);
+  const [i18n, setI18n] = useState<lang.LangTag | undefined>(
+    dftI18n === "auto" ? undefined : dftI18n,
+  );
 
   // 国际化配置
   const localeConfig = useMemo(() => {
@@ -61,7 +63,9 @@ const Demo = () => {
 
   // #region 主题配置
 
-  const [theme, setTheme] = useState<"light" | "dark" | undefined>(dftScheme);
+  const [theme, setTheme] = useState<themes.ColorScheme | undefined>(
+    dftScheme === "auto" ? undefined : dftScheme,
+  );
 
   // 主题配置
   const themeConfig = useMemo(

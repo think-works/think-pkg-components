@@ -1,6 +1,5 @@
-import { Table, TableProps, Tooltip } from "antd";
+import { GetRef, Table, TableColumnType, TableProps, Tooltip } from "antd";
 import cls, { Argument } from "classnames";
-import type { Reference } from "rc-table";
 import { ForwardedRef, forwardRef, useMemo } from "react";
 import { useComponentsLocale } from "@/i18n/hooks";
 import { separator } from "@/utils/human";
@@ -18,9 +17,9 @@ const isBlankString = (text?: string) =>
 
 export const BaseTableDefaultPageSize = 20;
 
-type TableColumn<RecordType = any> = NonNullable<
-  TableProps<RecordType>["columns"]
->[number];
+type TableRef = GetRef<typeof Table>;
+
+type TableColumn<RecordType = any> = TableColumnType<RecordType>;
 
 export type BaseTableColumn<RecordType = any> = TableColumn<RecordType> & {
   /** 渲染无数据占位符 */
@@ -57,7 +56,7 @@ export type BaseTableProps<RecordType = any> = Omit<
  */
 export const BaseTable = forwardRef(function BaseTableCom(
   props: BaseTableProps,
-  ref: ForwardedRef<Reference>,
+  ref: ForwardedRef<TableRef>,
 ) {
   const {
     className,

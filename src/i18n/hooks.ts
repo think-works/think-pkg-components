@@ -1,9 +1,9 @@
 import { useLocale as useAntdLocale } from "antd/es/locale";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { findLocaleText, replaceTextVars } from "@/common/lang";
 import { useConfigContext } from "@/components/ConfigProvider";
-import { getLocale, Locale } from "@/i18n";
 import { ObjectPaths } from "@/utils/types";
+import { defaultLanguage, defaultLocale, getLocale, Locale } from "./index";
 
 /**
  * 使用组件库的本地化资源
@@ -13,14 +13,21 @@ export const useComponentsLocale = () => {
   const [_, antdLang] = useAntdLocale("global");
   const { lang: contextLang, locale: contextLocale } = useConfigContext();
 
-  const innerLang = useMemo(
-    () => contextLang || antdLang,
-    [antdLang, contextLang],
+  const innerLang = contextLang || antdLang || defaultLanguage;
+  const [innerLocale, setInnerLocale] = useState(
+    contextLocale || defaultLocale,
   );
-  const innerLocale = useMemo(
-    () => contextLocale || getLocale(innerLang),
-    [contextLocale, innerLang],
-  );
+
+  useEffect(() => {
+    if (contextLocale) {
+      return;
+    }
+
+    getLocale(innerLang).then((loadedLocale) => {
+      setInnerLocale(loadedLocale);
+    });
+  }, [contextLocale, innerLang]);
+
   const innerFindLocaleText = useCallback(
     (paths: ObjectPaths<Locale>, vars?: Record<string, any>) =>
       findLocaleText(innerLocale, paths, vars),

@@ -1,6 +1,7 @@
-import { Input } from "antd";
-import type { TextAreaProps } from "antd/lib/input";
+import { GetProps, Input } from "antd";
 import { ChangeEvent, useLayoutEffect, useState } from "react";
+
+type TextAreaProps = GetProps<typeof Input.TextArea>;
 
 /**
  * 解耦受控组件关系，间接同步外部变更。

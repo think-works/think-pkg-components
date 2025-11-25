@@ -12,16 +12,28 @@
 import { merge } from "lodash-es";
 import { lookupLangTag } from "@/common/lang";
 import { LiteralUnion } from "@/utils/types";
-import enUS from "./locale/en-US";
 import zhCN from "./locale/zh-CN";
 
 /** 支持的语言 */
-export type Language = LiteralUnion<keyof typeof locales>;
+type InnerLanguage = keyof typeof locales;
+
+/** 支持的语言 */
+export type Language = LiteralUnion<InnerLanguage>;
 
 /** 本地化资源 */
 export type Locale = {
   lang: Language;
 } & Omit<typeof defaultLocale, "lang">;
+
+/** 本地化资源 */
+const locales = {
+  // 中文
+  zh: zhCN,
+  "zh-CN": zhCN,
+  // 英文
+  en: async () => await import("./locale/en-US"),
+  "en-US": async () => await import("./locale/en-US"),
+} as const;
 
 /** 默认语言 */
 export const defaultLanguage = "zh-CN";
@@ -29,29 +41,31 @@ export const defaultLanguage = "zh-CN";
 /** 默认本地化资源 */
 export const defaultLocale = zhCN;
 
-/** 本地化资源 */
-export const locales = {
-  zh: zhCN, // 中文兜底
-  "zh-CN": zhCN,
-  en: enUS, // 英文兜底
-  "en-US": enUS,
-} as const;
-
 /** 支持的语言 */
-export const languages = Object.keys(locales) as (keyof typeof locales)[];
+export const languages = Object.keys(locales) as InnerLanguage[];
 
 /** 获取本地化资源 */
-export const getLocale = (language?: Language): Locale => {
+export const getLocale = async (language?: Language): Promise<Locale> => {
+  // 默认语言
   if (!language || language === defaultLanguage) {
     return defaultLocale;
   }
 
+  // 不支持的语言
   const langTag = lookupLangTag(languages, language);
   if (!langTag) {
     return defaultLocale;
   }
 
-  const langLocale = (locales as Record<string, Locale>)[langTag];
+  // 动态加载语言
+  let langLocale: Locale;
+  const GetLocale = locales[langTag as InnerLanguage];
+  if (typeof GetLocale === "function") {
+    langLocale = (await GetLocale()).default;
+  } else {
+    langLocale = GetLocale;
+  }
 
+  // 避免翻译缺失
   return merge({}, defaultLocale, langLocale);
 };

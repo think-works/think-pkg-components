@@ -1,5 +1,4 @@
-import { ConfigProvider, Menu, theme } from "antd";
-import { MenuItemType, SubMenuType } from "antd/es/menu/interface";
+import { ConfigProvider, GetProp, Menu, MenuProps, theme } from "antd";
 import cls, { Argument } from "classnames";
 import classNames from "classnames";
 import { useEffect, useMemo, useState } from "react";
@@ -9,6 +8,8 @@ import * as types from "@/utils/types";
 import { useCustomMenus, useMatchMenuKeys } from "../hooks";
 import { LayoutWrapperCustomMenuItem, LayoutWrapperSiderMode } from "../type";
 import stl from "./index.module.less";
+
+type ItemType = GetProp<MenuProps, "items">[number];
 
 export type LeftMenuProps = {
   className?: Argument;
@@ -31,47 +32,22 @@ const onDealMenuActiveIcon = (
         ...others,
         key,
         icon: selectedKeys.includes(key) ? activeIcon || icon : icon,
-      } as MenuItemType;
+      } as ItemType;
     }
-    return menu as MenuItemType;
+    return menu as ItemType;
   });
 };
 
 /** 处理垂直菜单样式 */
-const onDealVerticalMenu = (menuList: MenuItemType[]) => {
-  const loop = (menus: (MenuItemType | SubMenuType)[], deep = 1) => {
-    return menus.map(
-      (
-        menu: MenuItemType | SubMenuType,
-      ): MenuItemType | SubMenuType<MenuItemType> => {
-        const { label, icon, ...others } = menu;
-        const { children } = menu as SubMenuType<MenuItemType>;
-        if (children) {
-          return {
-            ...others,
-            children: loop(
-              children as (MenuItemType | SubMenuType)[],
-              deep + 1,
-            ),
-            popupClassName: stl.verticalPopup,
-            label: (
-              <div className={stl.verticalItem}>
-                <div
-                  className={classNames(
-                    stl.verticalIcon,
-                    deep === 1 && "anticon",
-                  )}
-                >
-                  {icon}
-                </div>
-                <div className={stl.verticalLabel}>{label}</div>
-              </div>
-            ),
-          };
-        }
-
+const onDealVerticalMenu = (menuList: ItemType[]) => {
+  const loop = (menus: ItemType[], deep = 1) => {
+    return menus.map((menu: ItemType): ItemType => {
+      const { label, icon, children, ...others } = menu as any;
+      if (children) {
         return {
           ...others,
+          children: loop(children as ItemType[], deep + 1),
+          popupClassName: stl.verticalPopup,
           label: (
             <div className={stl.verticalItem}>
               <div
@@ -85,9 +61,23 @@ const onDealVerticalMenu = (menuList: MenuItemType[]) => {
               <div className={stl.verticalLabel}>{label}</div>
             </div>
           ),
-        };
-      },
-    );
+        } as ItemType;
+      }
+
+      return {
+        ...others,
+        label: (
+          <div className={stl.verticalItem}>
+            <div
+              className={classNames(stl.verticalIcon, deep === 1 && "anticon")}
+            >
+              {icon}
+            </div>
+            <div className={stl.verticalLabel}>{label}</div>
+          </div>
+        ),
+      } as ItemType;
+    });
   };
 
   return loop(menuList);
@@ -98,7 +88,7 @@ const LeftMenu = (props: LeftMenuProps) => {
   const [forceKey, forceUpdate] = useForceUpdate();
   const [openKeys, setOpenKeys] = useState<string[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
-  const [menus, setMenus] = useState<(MenuItemType | SubMenuType)[]>([]);
+  const [menus, setMenus] = useState<ItemType[]>([]);
 
   const { token } = theme.useToken();
   const matchMenuKeys = useMatchMenuKeys();
@@ -143,12 +133,12 @@ const LeftMenu = (props: LeftMenuProps) => {
     let list = customMenus?.length
       ? onDealMenuActiveIcon(customMenus, selectedKeys)
       : [];
-    list = list.filter(types.truthy) as MenuItemType[];
+    list = list.filter(types.truthy);
     /**
      * 竖直模式下，菜单项样式调整
      */
     if (mode === LayoutWrapperSiderMode.VERTICAL) {
-      list = onDealVerticalMenu(list) as MenuItemType[];
+      list = onDealVerticalMenu(list);
     }
     setMenus(list);
 

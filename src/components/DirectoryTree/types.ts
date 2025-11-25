@@ -1,6 +1,8 @@
-import { ItemType } from "antd/es/menu/interface";
+import { GetProp, MenuProps } from "antd";
 import { BaseTreeNode } from "../BaseTree";
 import { DropdownActionItem } from "../DropdownActions";
+
+type ItemType = GetProp<MenuProps, "items">[number];
 
 export interface DirectoryTreeNode<T extends BaseTreeNode, NODE_TYPE>
   extends BaseTreeNode {

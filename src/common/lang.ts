@@ -1,5 +1,13 @@
 import { lookup } from "bcp-47-match";
+import Cookies from "js-cookie";
 import { deleteLocal, queryLocal, updateLocal } from "@/utils/storage";
+import { LiteralUnion } from "@/utils/types";
+
+/** 语言标记 */
+export type LangTag = string;
+
+/** 语言标记(允许 auto) */
+export type LangTagAuto = LiteralUnion<"auto">;
 
 // #region 本地化资源
 
@@ -59,13 +67,13 @@ export const queryLangAttribute = (attrName = langAttributeName) => {
   const htmlElem = document.documentElement;
   const attrValue = htmlElem.getAttribute(attrName);
   if (attrValue) {
-    return attrValue;
+    return attrValue as LangTag;
   }
 };
 
 /** 更新语言属性 */
 export const updateLangAttribute = (
-  attrValue?: string,
+  attrValue?: LangTag,
   attrName = langAttributeName,
 ) => {
   const htmlElem = document.documentElement;
@@ -81,14 +89,17 @@ export const langStorageKey = "lang";
 
 /** 查询语言存储 */
 export const queryLangStorage = (key = langStorageKey) => {
-  const storageValue = queryLocal(key);
+  const storageValue = queryLocal<LangTagAuto>(key);
   if (storageValue) {
-    return storageValue as string;
+    return storageValue;
   }
 };
 
 /** 更新语言存储 */
-export const updateLangStorage = (value?: string, key = langStorageKey) => {
+export const updateLangStorage = (
+  value?: LangTagAuto,
+  key = langStorageKey,
+) => {
   if (value) {
     updateLocal(key, value);
   } else {
@@ -96,37 +107,71 @@ export const updateLangStorage = (value?: string, key = langStorageKey) => {
   }
 };
 
+/** 语言 Cookie 名称 */
+export const langCookieName = "think_lang";
+
+/** 查询语言 Cookie */
+export const queryLangCookie = (name = langCookieName) => {
+  const cookieValue = Cookies.get(name);
+  if (cookieValue) {
+    return cookieValue as LangTagAuto;
+  }
+};
+
+/** 更新语言 Cookie */
+export const updateLangCookie = (value?: LangTagAuto, key = langCookieName) => {
+  if (value) {
+    const oneYear = new Date().setFullYear(new Date().getFullYear() + 1);
+    Cookies.set(key, value, {
+      expires: oneYear,
+    });
+  } else {
+    Cookies.remove(key);
+  }
+};
+
 /** 查询浏览器语言(一定会返回) */
 export const queryBrowserLang = () => {
-  return navigator.language;
+  return navigator.language as LangTag;
 };
 
 /** 侦测语言标记 */
 export const detectLangTag = (options?: {
+  /** 语言 Cookie 名称 */
+  langCookieName?: false | string;
   /** 语言存储 key */
   langStorageKey?: false | string;
   /** 语言属性名称 */
   langAttributeName?: false | string;
   /** 检查浏览器 */
   browser?: boolean;
-}) => {
+}): LangTagAuto | undefined => {
   const {
-    langStorageKey: key = langStorageKey,
-    langAttributeName: name = langAttributeName,
+    langCookieName: cookieName = langCookieName,
+    langStorageKey: storageKey = langStorageKey,
+    langAttributeName: attributeName = langAttributeName,
     browser,
   } = options || {};
 
+  // 检查 Cookie 值
+  if (cookieName) {
+    const cookieValue = queryLangCookie(cookieName);
+    if (cookieValue) {
+      return cookieValue;
+    }
+  }
+
   // 检查存储值
-  if (key) {
-    const storageValue = queryLangStorage(key);
+  if (storageKey) {
+    const storageValue = queryLangStorage(storageKey);
     if (storageValue) {
       return storageValue;
     }
   }
 
   // 检查属性值
-  if (name) {
-    const attrValue = queryLangAttribute(name);
+  if (attributeName) {
+    const attrValue = queryLangAttribute(attributeName);
     if (attrValue) {
       return attrValue;
     }
@@ -142,7 +187,7 @@ export const detectLangTag = (options?: {
 
 /** 监听浏览器语言变化，并返回取消监听函数。 */
 export const listenBrowserLang = (
-  callback: (value: string) => void,
+  callback: (value: LangTag) => void,
   options?: {
     /** 立即触发一次 */
     immediate?: boolean;

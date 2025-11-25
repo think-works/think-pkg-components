@@ -1,5 +1,4 @@
-import { AutoComplete } from "antd";
-import { AutoCompleteProps } from "antd/lib";
+import { AutoComplete, AutoCompleteProps } from "antd";
 import { useLayoutEffect, useState } from "react";
 
 /**

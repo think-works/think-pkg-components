@@ -1,5 +1,11 @@
-import { Button, Space, Table, TableProps, Tooltip } from "antd";
-import type { ColumnType } from "antd/lib/table/interface";
+import {
+  Button,
+  Space,
+  Table,
+  TableColumnType,
+  TableProps,
+  Tooltip,
+} from "antd";
 import cls from "classnames";
 import { cloneDeep, get, set } from "lodash-es";
 import {
@@ -27,7 +33,7 @@ const isFunction = (val: any) =>
 
 type DataRow = Record<string, any>;
 
-type Column = ColumnType<any>;
+type Column = TableColumnType<any>;
 
 type RenderParams = Parameters<Required<Column>["render"]>;
 
