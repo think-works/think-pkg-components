@@ -8,9 +8,12 @@ import { defaultLanguage, defaultLocale, getLocale, Locale } from "./index";
 /**
  * 获取组件库的本地化资源
  */
-export const getComponentsLocale = async (language?: string) => {
+export const getComponentsLocale = async (
+  language?: string,
+  locale?: Locale,
+) => {
   const innerLang = language || defaultLanguage;
-  const innerLocale = await getLocale(innerLang);
+  const innerLocale = locale || (await getLocale(innerLang));
 
   const innerFindLocaleText = (
     paths: ObjectPaths<Locale>,
