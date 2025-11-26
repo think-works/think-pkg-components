@@ -53,6 +53,7 @@ const Demo = () => {
         import("dayjs/locale/en").then(() => {
           dayjs.locale("en");
         });
+        return;
       }
     }
 
