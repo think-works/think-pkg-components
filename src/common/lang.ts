@@ -1,5 +1,6 @@
 import { lookup } from "bcp-47-match";
 import Cookies from "js-cookie";
+import logger from "@/utils/logger";
 import { deleteLocal, queryLocal, updateLocal } from "@/utils/storage";
 import { LiteralUnion } from "@/utils/types";
 
@@ -27,7 +28,7 @@ export const findLocaleText = (
   locale: Record<string, any>,
   /** 本地化资源路径(以 `.` 分割) */
   paths: string,
-  /** 替换文本中的变量(以 `${var}` 占位) */
+  /** 替换文本中的变量(以 `{var}` 占位) */
   vars?: Record<string, any>,
 ) => {
   // 分割路径
@@ -48,11 +49,18 @@ export const findLocaleText = (
 export const formatLocaleText = (
   /** 文本 */
   text: string,
-  /** 变量(以 `${var}` 占位) */
+  /** 变量(以 `{var}` 占位) */
   vars: Record<string, any>,
 ) => {
   // 替换占位
-  return text.replace(/\$\{(\w+)\}/g, (_, k) => vars[k] ?? "");
+  return text.replace(/\{(\w+)\}/g, (match, key) => {
+    if (key in vars) {
+      return vars[key];
+    }
+
+    logger.error(`Missing variable "${key}" in locale text "${text}".`);
+    return match;
+  });
 };
 
 // #endregion

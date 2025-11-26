@@ -138,12 +138,12 @@ const locale: Locale = {
     confirmDelete: "Confirm delete?",
   },
   BaseSelect: {
-    /** 已选择 ${count} 项 */
-    selectedCount: "Selected ${count} items",
+    /** 已选择 {count} 项 */
+    selectedCount: "Selected {count} items",
   },
   BaseTable: {
     /** 共 {count} 项 */
-    totalCount: "Total ${count} items",
+    totalCount: "Total {count} items",
   },
   CountdownButton: {
     /** 发送验证码 */
@@ -168,8 +168,8 @@ const locale: Locale = {
     nextText: "Next",
     /** 新建项 */
     newItem: "New item",
-    /** 第 ${index} 项 / 共 ${count} 项 */
-    itemPosition: "Item ${index} of ${count}",
+    /** 第 {index} 项 / 共 {count} 项 */
+    itemPosition: "Item {index} of {count}",
   },
 };
 

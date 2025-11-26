@@ -136,12 +136,12 @@ const locale = {
     confirmDelete: "确认删除？",
   },
   BaseSelect: {
-    /** 已选择 ${count} 项 */
-    selectedCount: "已选择 ${count} 项",
+    /** 已选择 {count} 项 */
+    selectedCount: "已选择 {count} 项",
   },
   BaseTable: {
     /** 共 {count} 项 */
-    totalCount: "共 ${count} 项",
+    totalCount: "共 {count} 项",
   },
   CountdownButton: {
     /** 发送验证码 */
@@ -164,8 +164,8 @@ const locale = {
     nextText: "下一个",
     /** 新建项 */
     newItem: "新建项",
-    /** 第 ${index} 项 / 共 ${count} 项 */
-    itemPosition: "第 ${index} 项 / 共 ${count} 项",
+    /** 第 {index} 项 / 共 {count} 项 */
+    itemPosition: "第 {index} 项 / 共 {count} 项",
   },
 };
 

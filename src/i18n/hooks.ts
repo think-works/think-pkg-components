@@ -28,7 +28,7 @@ export const getComponentsLocale = async (
     /** 查找本地化资源文本 */
     findLocaleText: innerFindLocaleText,
     /** 格式化本地化资源文本 */
-    formatLocaleText: formatLocaleText,
+    formatLocaleText,
   };
 };
 
