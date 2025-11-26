@@ -68,7 +68,7 @@ export const FilterTree = forwardRef(function FilterTreeCom(
   props: FilterTreeProps,
   ref: ForwardedRef<FilterTreeRef>,
 ) {
-  const { locale, replaceTextVars } = useComponentsLocale();
+  const { locale, formatLocaleText } = useComponentsLocale();
 
   const {
     className,
@@ -322,7 +322,7 @@ export const FilterTree = forwardRef(function FilterTreeCom(
     () =>
       validMatched ? (
         <Tooltip
-          title={replaceTextVars(locale.LayoutTree.itemPosition, {
+          title={formatLocaleText(locale.LayoutTree.itemPosition, {
             index: currMatched + 1 || "?",
             count: matchedCount,
           })}
@@ -341,7 +341,7 @@ export const FilterTree = forwardRef(function FilterTreeCom(
       locale.LayoutTree.itemPosition,
       locale.common.emptyResult,
       matchedCount,
-      replaceTextVars,
+      formatLocaleText,
       validMatched,
     ],
   );

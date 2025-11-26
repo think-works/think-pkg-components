@@ -42,7 +42,7 @@ export const BaseSelect = forwardRef(function BaseSelectCom(
     ...rest
   } = props || {};
 
-  const { locale, replaceTextVars } = useComponentsLocale();
+  const { locale, formatLocaleText } = useComponentsLocale();
 
   let _options = options || [];
 
@@ -104,7 +104,7 @@ export const BaseSelect = forwardRef(function BaseSelectCom(
         <Divider className={stl.dropdownRenderDivider} />
         <div className={stl.dropdownRenderActions}>
           <span>
-            {replaceTextVars(locale.BaseSelect.selectedCount, {
+            {formatLocaleText(locale.BaseSelect.selectedCount, {
               count: selectedCount,
             })}
           </span>

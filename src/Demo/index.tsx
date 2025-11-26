@@ -14,6 +14,8 @@ import "dayjs/locale/zh-cn";
 const defaultAntdLocale = zhCN;
 const defaultDayjsLang = "zh-CN";
 
+dayjs.locale(defaultDayjsLang);
+
 // 平台主题色
 const platformColor = "#CC3232";
 

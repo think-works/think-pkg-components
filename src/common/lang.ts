@@ -38,14 +38,14 @@ export const findLocaleText = (
 
   // 替换变量
   if (text && vars) {
-    return replaceTextVars(text, vars);
+    return formatLocaleText(text, vars);
   }
 
   return text;
 };
 
-/** 替换文本变量 */
-export const replaceTextVars = (
+/** 格式化本地化资源文本 */
+export const formatLocaleText = (
   /** 文本 */
   text: string,
   /** 变量(以 `${var}` 占位) */

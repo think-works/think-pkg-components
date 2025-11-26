@@ -68,7 +68,7 @@ export const BaseTable = forwardRef(function BaseTableCom(
     ...rest
   } = props || {};
 
-  const { locale, replaceTextVars } = useComponentsLocale();
+  const { locale, formatLocaleText } = useComponentsLocale();
 
   const cols = useMemo(
     () =>
@@ -211,7 +211,7 @@ export const BaseTable = forwardRef(function BaseTableCom(
                   <div className={stl.total}>
                     <div className={stl.extend}>{extend}</div>
                     <div className={stl.count}>
-                      {replaceTextVars(locale.BaseTable.totalCount, {
+                      {formatLocaleText(locale.BaseTable.totalCount, {
                         count: total,
                       })}
                     </div>

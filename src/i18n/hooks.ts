@@ -1,6 +1,6 @@
 import { useLocale as useAntdLocale } from "antd/es/locale";
 import { useCallback, useEffect, useState } from "react";
-import { findLocaleText, replaceTextVars } from "@/common/lang";
+import { findLocaleText, formatLocaleText } from "@/common/lang";
 import { useConfigContext } from "@/components/ConfigProvider";
 import { ObjectPaths } from "@/utils/types";
 import { defaultLanguage, defaultLocale, getLocale, Locale } from "./index";
@@ -27,8 +27,8 @@ export const getComponentsLocale = async (
     locale: innerLocale,
     /** 查找本地化资源文本 */
     findLocaleText: innerFindLocaleText,
-    /** 替换文本变量 */
-    replaceTextVars: replaceTextVars,
+    /** 格式化本地化资源文本 */
+    formatLocaleText: formatLocaleText,
   };
 };
 
@@ -68,7 +68,7 @@ export const useComponentsLocale = () => {
     locale: innerLocale,
     /** 查找本地化资源文本 */
     findLocaleText: innerFindLocaleText,
-    /** 替换文本变量 */
-    replaceTextVars,
+    /** 格式化本地化资源文本 */
+    formatLocaleText,
   };
 };
