@@ -35,13 +35,9 @@ export const getComponentsLocale = async (
   ) => findLocaleText(innerLocale, paths, vars);
 
   return {
-    /** 预期使用的语言 */
     lang: innerLang,
-    /** 实际使用的本地化资源 */
     locale: innerLocale,
-    /** 查找本地化资源文本 */
     findLocaleText: innerFindLocaleText,
-    /** 格式化本地化资源文本 */
     formatLocaleText,
   };
 };
@@ -76,13 +72,9 @@ export const useComponentsLocale = (): ComponentsLocale => {
   );
 
   return {
-    /** 预期使用的语言 */
     lang: innerLang,
-    /** 实际使用的本地化资源 */
     locale: innerLocale,
-    /** 查找本地化资源文本 */
     findLocaleText: innerFindLocaleText,
-    /** 格式化本地化资源文本 */
     formatLocaleText,
   };
 };
