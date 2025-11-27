@@ -17,7 +17,7 @@ const defaultDayjsLang = "zh-CN";
 dayjs.locale(defaultDayjsLang);
 
 // 平台主题色
-const platformColor = "#CC3232";
+const platformColor = undefined; // "#CC3232";
 
 // 检查默认国际化语言
 const dftI18n = lang.detectLangTag({ browser: true });
