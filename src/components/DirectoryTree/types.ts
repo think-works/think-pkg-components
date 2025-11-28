@@ -4,8 +4,10 @@ import { DropdownActionItem } from "../DropdownActions";
 
 type ItemType = GetProp<MenuProps, "items">[number];
 
-export interface DirectoryTreeNode<T extends BaseTreeNode, NODE_TYPE>
-  extends BaseTreeNode {
+export interface DirectoryTreeNode<
+  T extends BaseTreeNode,
+  NODE_TYPE,
+> extends BaseTreeNode {
   /**
    * 节点id
    */
