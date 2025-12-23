@@ -1,6 +1,7 @@
 import { Space } from "antd";
 import { ReactNode } from "react";
 import { DownOutlined } from "@ant-design/icons";
+import { useComponentsLocale } from "@/i18n/hooks";
 import { truthy } from "@/utils/types";
 import DropdownActions, { DropdownActionsProps } from "../DropdownActions";
 
@@ -26,6 +27,8 @@ export const ColumnActions = (props: ColumnActionsProps) => {
     dropdownActionAlign,
   } = props || {};
 
+  const { locale } = useComponentsLocale();
+
   const _dropdownActions = dropdownActions?.filter(truthy)?.map((action) => ({
     type: "link" as const,
     ...action,
@@ -46,7 +49,7 @@ export const ColumnActions = (props: ColumnActionsProps) => {
         {dropdownTrigger || (
           <a>
             <Space size={4}>
-              <span>{dropdownText || "操作"}</span>
+              <span>{dropdownText || locale.common.actionText}</span>
               <DownOutlined />
             </Space>
           </a>

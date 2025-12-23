@@ -21,8 +21,10 @@ import {
   DirectoryTreeNode,
 } from "./types";
 
-export interface DirectoryTreeProps<BASE_NODE extends BaseTreeNode, NODE_TYPE>
-  extends BaseTreeProps<DirectoryTreeNode<BASE_NODE, NODE_TYPE>> {
+export interface DirectoryTreeProps<
+  BASE_NODE extends BaseTreeNode,
+  NODE_TYPE,
+> extends BaseTreeProps<DirectoryTreeNode<BASE_NODE, NODE_TYPE>> {
   classNames?: string;
   style?: React.CSSProperties;
   /** actions call */

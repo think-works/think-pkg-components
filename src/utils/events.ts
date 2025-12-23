@@ -25,10 +25,10 @@ export class Events {
    */
   public once = (name: string, handler: EventHandler) => {
     const _handler = (...arg: any) => {
+      this.off(name, _handler);
       if (typeof handler === "function") {
         handler(...arg);
       }
-      this.off(name, _handler);
     };
 
     this.on(name, _handler);

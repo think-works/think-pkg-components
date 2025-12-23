@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { useComponentsLocale } from "@/i18n/hooks";
 
 export type CountdownButtonProps = ButtonProps & {
   /** 倒计时(秒) */
@@ -28,9 +29,11 @@ export const CountdownButton = forwardRef(function CountdownButtonCom(
   props: CountdownButtonProps,
   ref: ForwardedRef<HTMLButtonElement | HTMLAnchorElement>,
 ) {
+  const { locale } = useComponentsLocale();
+
   const {
     countdown = 60,
-    children = "发送验证码",
+    children = locale.CountdownButton.sendCode,
     disabled,
     onClick,
     onCountdown,

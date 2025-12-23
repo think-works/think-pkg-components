@@ -8,6 +8,9 @@ export const colorSchemes = ["light", "dark"] as const;
 /** 颜色方案 */
 export type ColorScheme = (typeof colorSchemes)[number];
 
+/** 颜色方案(允许 auto) */
+export type ColorSchemeAuto = ColorScheme | "auto";
+
 // #region 颜色方案配置
 
 /** 获取样式配置 */
@@ -183,11 +186,11 @@ export const defaultConfigProviderProps = configProviderProps;
 
 // #region 主题查询切换
 
-/** 属性名称 */
-export const attributeName = "data-theme";
+/** 主题属性名称 */
+export const themeAttributeName = "data-theme";
 
 /** 查询主题属性 */
-export const queryThemeAttribute = (attrName = attributeName) => {
+export const queryThemeAttribute = (attrName = themeAttributeName) => {
   const htmlElem = document.documentElement;
   const attrValue = htmlElem.getAttribute(attrName);
 
@@ -199,7 +202,7 @@ export const queryThemeAttribute = (attrName = attributeName) => {
 /** 更新主题属性 */
 export const updateThemeAttribute = (
   attrValue?: ColorScheme,
-  attrName = attributeName,
+  attrName = themeAttributeName,
 ) => {
   const htmlElem = document.documentElement;
   if (attrValue) {
@@ -209,19 +212,22 @@ export const updateThemeAttribute = (
   }
 };
 
-/** 存储 key */
-export const storageKey = "theme";
+/** 主题存储 key */
+export const themeStorageKey = "theme";
 
 /** 查询主题存储 */
-export const queryThemeStorage = (key = storageKey) => {
-  const storageValue = queryLocal(key);
-  if (colorSchemes.includes(storageValue as any)) {
-    return storageValue as ColorScheme;
+export const queryThemeStorage = (key = themeStorageKey) => {
+  const storageValue = queryLocal<ColorSchemeAuto>(key);
+  if (storageValue === "auto" || colorSchemes.includes(storageValue as any)) {
+    return storageValue;
   }
 };
 
 /** 更新主题存储 */
-export const updateThemeStorage = (value?: ColorScheme, key = storageKey) => {
+export const updateThemeStorage = (
+  value?: ColorSchemeAuto,
+  key = themeStorageKey,
+) => {
   if (value) {
     updateLocal(key, value);
   } else {
@@ -237,7 +243,7 @@ export const queryThemeMeta = () => {
     ?.split(" ")
     ?.filter((item) => colorSchemes.includes(item as any))?.[0];
 
-  return metaValue as ColorScheme;
+  return metaValue as ColorScheme | undefined;
 };
 
 /** 查询媒体查询(一定会返回) */
@@ -250,33 +256,33 @@ export const queryThemeMedia = () => {
 
 /** 侦测主题方案 */
 export const detectThemeScheme = (options?: {
-  /** 属性名称 */
-  attributeName?: false | string;
-  /** 存储 key */
-  storageKey?: false | string;
+  /** 主题存储 key */
+  themeStorageKey?: false | string;
+  /** 主题属性名称 */
+  themeAttributeName?: false | string;
   /** 检查 meta 元素 */
   metaElement?: boolean;
   /** 媒体查询(一定会返回) */
   matchMedia?: boolean;
-}) => {
+}): ColorSchemeAuto | undefined => {
   const {
-    attributeName: name = attributeName,
-    storageKey: key = storageKey,
+    themeStorageKey: storageKey = themeStorageKey,
+    themeAttributeName: attributeName = themeAttributeName,
     metaElement,
     matchMedia,
   } = options || {};
 
   // 检查存储值
-  if (key) {
-    const storageValue = queryThemeStorage(key);
+  if (storageKey) {
+    const storageValue = queryThemeStorage(storageKey);
     if (storageValue) {
       return storageValue;
     }
   }
 
   // 检查属性值
-  if (name) {
-    const attrValue = queryThemeAttribute(name);
+  if (attributeName) {
+    const attrValue = queryThemeAttribute(attributeName);
     if (attrValue) {
       return attrValue;
     }

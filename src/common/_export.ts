@@ -4,4 +4,5 @@ import * as themes from "./themes";
 export const theme = themes;
 
 export * as colors from "./colors";
+export * as lang from "./lang";
 export * as themes from "./themes";

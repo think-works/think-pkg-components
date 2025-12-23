@@ -11,6 +11,7 @@ export * as events from "./events";
 export * as format from "./format";
 export * as human from "./human";
 export * as logger from "./logger";
+export * as messages from "./messages";
 export * as storage from "./storage";
 export * as tools from "./tools";
 export * as types from "./types";

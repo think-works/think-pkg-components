@@ -14,7 +14,7 @@ const libraryName = pkg.name.slice(pkg.name.indexOf("/") + 1);
 const srcPath = fileURLToPath(new URL("src", import.meta.url));
 const external = Object.keys(pkg.dependencies || {})
   .concat(Object.keys(pkg.peerDependencies || {}))
-  .concat(["react/jsx-runtime"]);
+  .concat(["react/jsx-runtime", "antd/es/locale"]);
 
 export default defineConfig(({ mode }) => {
   const date = new Date().toISOString();

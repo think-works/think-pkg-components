@@ -19,7 +19,7 @@ const print = (type, msg) => {
 
 export default defineMock([
   {
-    url: "/(.*)",
+    url: "/*splat",
     response: async (req, res, next) => {
       if (!req.url) {
         return next();

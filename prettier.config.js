@@ -1,3 +1,7 @@
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
+
 export default {
   importOrder: [
     "^[^@/.]+", // "name"
@@ -10,5 +14,5 @@ export default {
   importOrderSideEffects: false,
   importOrderSortSpecifiers: true,
   importOrderCaseInsensitive: true,
-  plugins: ["@trivago/prettier-plugin-sort-imports"],
+  plugins: [require.resolve("@trivago/prettier-plugin-sort-imports")],
 };

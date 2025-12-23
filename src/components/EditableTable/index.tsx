@@ -1,5 +1,11 @@
-import { Button, Space, Table, TableProps, Tooltip } from "antd";
-import type { ColumnType } from "antd/lib/table/interface";
+import {
+  Button,
+  Space,
+  Table,
+  TableColumnType,
+  TableProps,
+  Tooltip,
+} from "antd";
 import cls from "classnames";
 import { cloneDeep, get, set } from "lodash-es";
 import {
@@ -12,6 +18,7 @@ import {
   useState,
 } from "react";
 import { DeleteOutlined } from "@ant-design/icons";
+import { useComponentsLocale } from "@/i18n/hooks";
 import { uuid4 } from "@/utils/cryptos";
 import { isType } from "@/utils/tools";
 import SortableTable from "../SortableTable";
@@ -26,7 +33,7 @@ const isFunction = (val: any) =>
 
 type DataRow = Record<string, any>;
 
-type Column = ColumnType<any>;
+type Column = TableColumnType<any>;
 
 type RenderParams = Parameters<Required<Column>["render"]>;
 
@@ -130,6 +137,9 @@ export const EditableTable = (props: EditableTableProps) => {
     size = "small",
     ...rest
   } = props;
+
+  const { locale } = useComponentsLocale();
+
   const [itemList, setItemList] = useState<DataRow[]>([]);
   const itemCount = itemList.length;
   const [innerRowKey, setInnerRowKey] = useState(rowKey || "innerRowKey");
@@ -390,7 +400,7 @@ export const EditableTable = (props: EditableTableProps) => {
         className: cls(stl.action, colCls),
         dataIndex: "__action",
         render: colRender,
-        title: "操作",
+        title: locale.common.actionText,
         align: "center",
         width: 50,
         ...colRest,
@@ -398,14 +408,15 @@ export const EditableTable = (props: EditableTableProps) => {
     }
     return list;
   }, [
-    size,
     columns,
     readOnly,
     actionColumn,
     handleChange,
+    locale.common.actionText,
     itemCount,
     actionRender,
     lastActionRender,
+    size,
     handleDelete,
   ]);
 
@@ -425,7 +436,7 @@ export const EditableTable = (props: EditableTableProps) => {
         rowKey={innerRowKey}
         dataSource={itemList}
         onDataSourceChange={handleSort}
-        locale={{ emptyText: "无内容" }}
+        locale={{ emptyText: locale.common.emptyContent }}
         {...rest}
       />
     );
@@ -441,7 +452,7 @@ export const EditableTable = (props: EditableTableProps) => {
       size={size}
       rowKey={rowKey || normalRowKey}
       dataSource={itemList}
-      locale={{ emptyText: "无内容" }}
+      locale={{ emptyText: locale.common.emptyContent }}
       {...rest}
     />
   );

@@ -1,6 +1,7 @@
 import { Button, Divider, RefSelectProps, Select, SelectProps } from "antd";
 import cls, { Argument } from "classnames";
 import { ForwardedRef, forwardRef } from "react";
+import { useComponentsLocale } from "@/i18n/hooks";
 import { isType } from "@/utils/tools";
 import stl from "./index.module.less";
 
@@ -41,6 +42,8 @@ export const BaseSelect = forwardRef(function BaseSelectCom(
     ...rest
   } = props || {};
 
+  const { locale, formatLocaleText } = useComponentsLocale();
+
   let _options = options || [];
 
   if (allOption) {
@@ -48,7 +51,7 @@ export const BaseSelect = forwardRef(function BaseSelectCom(
       {
         key: "all",
         value: null,
-        label: "全部",
+        label: locale.common.allText,
         ...(isObject(allOption) ? allOption : {}),
       } as any,
     ].concat(_options);
@@ -100,9 +103,13 @@ export const BaseSelect = forwardRef(function BaseSelectCom(
         {origin}
         <Divider className={stl.dropdownRenderDivider} />
         <div className={stl.dropdownRenderActions}>
-          <span>已选择 {selectedCount} 项</span>
+          <span>
+            {formatLocaleText(locale.BaseSelect.selectedCount, {
+              count: selectedCount,
+            })}
+          </span>
           <Button type="primary" size="small" onClick={handleAll}>
-            全选
+            {locale.common.selectAll}
           </Button>
         </div>
       </>

@@ -9,6 +9,7 @@ export * from "./BaseTree";
 export * from "./BypassProps";
 
 export * from "./ColumnActions";
+export * from "./ConfigProvider";
 export * from "./CountdownButton";
 export * from "./DirectoryTree/export";
 export * from "./DragContainer";

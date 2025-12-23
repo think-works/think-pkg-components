@@ -1,5 +1,4 @@
-import { Button, Input, Space, theme, Tooltip } from "antd";
-import { InputProps } from "antd/lib";
+import { Button, Input, InputProps, Space, theme, Tooltip } from "antd";
 import classNames, { Argument } from "classnames";
 import { useState } from "react";
 import {

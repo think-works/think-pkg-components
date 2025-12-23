@@ -1,9 +1,10 @@
-import { Tooltip } from "antd";
+import { GetProps, Tooltip } from "antd";
 import cls, { Argument } from "classnames";
 import React from "react";
 import { QuestionCircleOutlined } from "@ant-design/icons";
-import type { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
 import stl from "./index.module.less";
+
+type AntdIconProps = GetProps<typeof QuestionCircleOutlined>;
 
 export type HelpTipsProps = AntdIconProps & {
   className?: Argument;

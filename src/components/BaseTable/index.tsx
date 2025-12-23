@@ -1,7 +1,7 @@
-import { Table, TableProps, Tooltip } from "antd";
+import { GetRef, Table, TableColumnType, TableProps, Tooltip } from "antd";
 import cls, { Argument } from "classnames";
-import type { Reference } from "rc-table";
 import { ForwardedRef, forwardRef, useMemo } from "react";
+import { useComponentsLocale } from "@/i18n/hooks";
 import { separator } from "@/utils/human";
 import { isBlank, isType, msecToString } from "@/utils/tools";
 import stl from "./index.module.less";
@@ -17,9 +17,9 @@ const isBlankString = (text?: string) =>
 
 export const BaseTableDefaultPageSize = 20;
 
-type TableColumn<RecordType = any> = NonNullable<
-  TableProps<RecordType>["columns"]
->[number];
+type TableRef = GetRef<typeof Table>;
+
+type TableColumn<RecordType = any> = TableColumnType<RecordType>;
 
 export type BaseTableColumn<RecordType = any> = TableColumn<RecordType> & {
   /** 渲染无数据占位符 */
@@ -56,7 +56,7 @@ export type BaseTableProps<RecordType = any> = Omit<
  */
 export const BaseTable = forwardRef(function BaseTableCom(
   props: BaseTableProps,
-  ref: ForwardedRef<Reference>,
+  ref: ForwardedRef<TableRef>,
 ) {
   const {
     className,
@@ -67,6 +67,8 @@ export const BaseTable = forwardRef(function BaseTableCom(
     stickyPagination,
     ...rest
   } = props || {};
+
+  const { locale, formatLocaleText } = useComponentsLocale();
 
   const cols = useMemo(
     () =>
@@ -208,7 +210,11 @@ export const BaseTable = forwardRef(function BaseTableCom(
                 showTotal: (total) => (
                   <div className={stl.total}>
                     <div className={stl.extend}>{extend}</div>
-                    <div className={stl.count}>共 {total} 条</div>
+                    <div className={stl.count}>
+                      {formatLocaleText(locale.BaseTable.totalCount, {
+                        count: total,
+                      })}
+                    </div>
                   </div>
                 ),
                 ...(pagination || {}),

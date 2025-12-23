@@ -1,7 +1,6 @@
-import { AutoComplete, AutoCompleteProps } from "antd";
+import { AutoComplete, AutoCompleteProps, GetRef } from "antd";
 import cls, { Argument } from "classnames";
 import { get } from "lodash-es";
-import type { BaseSelectRef } from "rc-select";
 import {
   ForwardedRef,
   forwardRef,
@@ -11,6 +10,8 @@ import {
 } from "react";
 import { useDebounce, useIsMounted } from "@/hooks";
 import stl from "./index.module.less";
+
+type AutoCompleteRef = GetRef<typeof AutoComplete>;
 
 export type FetchAutoCompleteProps = AutoCompleteProps & {
   className?: Argument;
@@ -34,7 +35,7 @@ export type FetchAutoCompleteProps = AutoCompleteProps & {
  */
 export const FetchAutoComplete = forwardRef(function FetchAutoCompleteCom(
   props: FetchAutoCompleteProps,
-  ref: ForwardedRef<BaseSelectRef>,
+  ref: ForwardedRef<AutoCompleteRef>,
 ) {
   const {
     className,

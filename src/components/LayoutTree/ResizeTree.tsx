@@ -1,5 +1,4 @@
 import { Empty, GetProp, GetRef, Tree, TreeDataNode, TreeProps } from "antd";
-import { EventDataNode } from "antd/es/tree";
 import cls, { Argument } from "classnames";
 import {
   CSSProperties,
@@ -30,6 +29,8 @@ const scrollBaseline = 20;
 const scrollRate = 1.1;
 
 type TreeRef = GetRef<typeof Tree>;
+type TreeOnExpand = GetProp<TreeProps, "onExpand">;
+type TreeOnExpandInfo = Parameters<TreeOnExpand>[1];
 
 export type ResizeNodeRender = GetProp<TreeProps, "titleRender">;
 
@@ -62,14 +63,7 @@ export type ResizeTreeProps = Omit<TreeProps, "onExpand"> & {
   /** 叶子节点图标(true: 使用目录图标) */
   leafIcon?: true | ReactNode | GetProp<TreeProps, "icon">;
   /** 展开/收起节点时触发 */
-  onExpand?: (
-    expandedKeys: Key[],
-    info?: {
-      expanded?: boolean;
-      node?: EventDataNode<TreeDataNode>;
-      nativeEvent?: MouseEvent;
-    },
-  ) => void;
+  onExpand?: (expandedKeys: Key[], info?: Partial<TreeOnExpandInfo>) => void;
   /** 节点图标渲染 */
   nodeIconRender?: ResizeNodeRender;
   /** 节点标题渲染 */

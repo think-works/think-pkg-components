@@ -8,6 +8,7 @@ import {
 } from "antd";
 import { ChangeEvent, useLayoutEffect, useState } from "react";
 import { DeleteOutlined } from "@ant-design/icons";
+import { useComponentsLocale } from "@/i18n/hooks";
 import { isType } from "@/utils/tools";
 
 export type EditableHeaderProps = InputProps & {
@@ -36,6 +37,8 @@ const EditableHeader = (props: EditableHeaderProps) => {
     onDelete,
     ...rest
   } = props;
+
+  const { locale } = useComponentsLocale();
 
   const [val, setVal] = useState(value);
   const [isEdit, setIsEdit] = useState(false);
@@ -100,7 +103,7 @@ const EditableHeader = (props: EditableHeaderProps) => {
 
   if (deletable) {
     let popconfirmProps: PopconfirmProps = {
-      title: "确认删除该列？",
+      title: locale.common.confirmDelete,
       onConfirm: handleConfirm,
     };
 

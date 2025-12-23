@@ -18,6 +18,7 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 import { useDebounce } from "@/hooks";
+import { useComponentsLocale } from "@/i18n/hooks";
 import EditableTree, {
   EditableTreeProps,
   EditableTreeRef,
@@ -67,6 +68,8 @@ export const FilterTree = forwardRef(function FilterTreeCom(
   props: FilterTreeProps,
   ref: ForwardedRef<FilterTreeRef>,
 ) {
+  const { locale, formatLocaleText } = useComponentsLocale();
+
   const {
     className,
     style,
@@ -75,7 +78,7 @@ export const FilterTree = forwardRef(function FilterTreeCom(
     divider = true,
     filterable = true,
 
-    filterPlaceholder = "搜索",
+    filterPlaceholder = locale.common.filterText,
     filterValue,
     defaultFilterValue,
     filterChangeDebounce = 200,
@@ -319,18 +322,28 @@ export const FilterTree = forwardRef(function FilterTreeCom(
     () =>
       validMatched ? (
         <Tooltip
-          title={`第 ${currMatched + 1 || "?"} 项 / 共 ${matchedCount} 项`}
+          title={formatLocaleText(locale.LayoutTree.itemPosition, {
+            index: currMatched + 1 || "?",
+            count: matchedCount,
+          })}
         >
           <span className={stl.count}>
             {currMatched + 1 || "?"}/{matchedCount}
           </span>
         </Tooltip>
       ) : (
-        <Tooltip title="无结果">
-          <span className={stl.count}>无结果</span>
+        <Tooltip title={locale.common.emptyResult}>
+          <span className={stl.count}>{locale.common.emptyResult}</span>
         </Tooltip>
       ),
-    [currMatched, matchedCount, validMatched],
+    [
+      currMatched,
+      locale.LayoutTree.itemPosition,
+      locale.common.emptyResult,
+      matchedCount,
+      formatLocaleText,
+      validMatched,
+    ],
   );
 
   const counterCom = useMemo(
@@ -339,7 +352,7 @@ export const FilterTree = forwardRef(function FilterTreeCom(
         <div className={stl.counter}>
           <Space size={4}>
             {countCom}
-            <Tooltip title="上一个">
+            <Tooltip title={locale.LayoutTree.previousText}>
               <ArrowUpOutlined
                 className={cls(stl.filterIcon, {
                   [stl.disabled]: !validMatched,
@@ -347,7 +360,7 @@ export const FilterTree = forwardRef(function FilterTreeCom(
                 onClick={handlePrevMatched}
               />
             </Tooltip>
-            <Tooltip title="下一个">
+            <Tooltip title={locale.LayoutTree.nextText}>
               <ArrowDownOutlined
                 className={cls(stl.filterIcon, {
                   [stl.disabled]: !validMatched,
@@ -358,7 +371,15 @@ export const FilterTree = forwardRef(function FilterTreeCom(
           </Space>
         </div>
       ),
-    [countCom, handleNextMatched, handlePrevMatched, showCounter, validMatched],
+    [
+      countCom,
+      handleNextMatched,
+      handlePrevMatched,
+      locale.LayoutTree.nextText,
+      locale.LayoutTree.previousText,
+      showCounter,
+      validMatched,
+    ],
   );
 
   const filterCom = useMemo(

@@ -19,6 +19,7 @@ import {
 } from "react";
 import { FilterOutlined } from "@ant-design/icons";
 import { useDebounce } from "@/hooks";
+import { useComponentsLocale } from "@/i18n/hooks";
 import {
   isType,
   jsonTryParse,
@@ -150,6 +151,8 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
     onFilterChange,
     ...rest
   } = props;
+
+  const { locale } = useComponentsLocale();
 
   // 更多表单-属性
   const {
@@ -321,8 +324,7 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
   const moreButtonActive = moreFilterValidCount > 0;
   const moreButtonText =
     moreText ||
-    (items?.length ? "更多" : "") +
-      "筛选" +
+    (items?.length ? locale.FilterForm.moreFilter : locale.common.filterText) +
       (moreButtonActive ? ` (${moreFilterValidCount})` : "");
 
   const moreAction =
@@ -344,7 +346,7 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
             style={styles?.popoverContent}
           >
             <StandardFilter
-              submitText="筛选"
+              submitText={locale.common.filterText}
               itemColSpan={12} // 两列布局
               initialValues={{}} // 会在打开气泡卡片时，手动初始化更多表单
               visibleCount={Number.MAX_SAFE_INTEGER} // 不显示展开收起
