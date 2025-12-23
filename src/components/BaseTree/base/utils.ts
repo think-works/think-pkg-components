@@ -32,6 +32,10 @@ export const BaseTreeMatchesSearch = (
     if (typeof value === "string" && value.includes(searchText)) {
       return true;
     }
+    // 如果值是数字
+    if (typeof value === "number" && value.toString().includes(searchText)) {
+      return true;
+    }
   }
 
   return false; // 如果所有字段都没有匹配，返回 false
