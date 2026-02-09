@@ -39,6 +39,8 @@ export type ResizeTreeRef = {
   scrollTo?: TreeRef["scrollTo"];
   /** 全部展开 */
   expandAll?: (expanded: boolean) => void;
+  /** 展开指定节点 */
+  expandNode?: (key: Key) => void;
   /** 确保可见 */
   ensureVisible?: (key: Key) => void;
 };
@@ -120,6 +122,7 @@ export const ResizeTree = forwardRef(function BaseTreeCom(
     scrollTo: (...args) => refTree.current?.scrollTo(...args),
 
     expandAll: handleExpandAll,
+    expandNode: handleExpandNode,
     ensureVisible: handleEnsureVisible,
   }));
 
@@ -180,6 +183,23 @@ export const ResizeTree = forwardRef(function BaseTreeCom(
       onExpand?.(nextKeys, { expanded });
     },
     [fieldNames, flatNodes, onExpand],
+  );
+
+  /** 展开指定节点 */
+  const handleExpandNode = useCallback(
+    (key: Key) => {
+      // 去重节点
+      const prevKeys = innerExpandedKeys || [];
+      if (prevKeys.includes(key)) {
+        return;
+      }
+      const nextKeys = [...prevKeys, key];
+
+      // 展开节点
+      setInnerExpandedKeys(nextKeys);
+      onExpand?.(nextKeys, { expanded: true });
+    },
+    [innerExpandedKeys, onExpand],
   );
 
   /** 确保可见 */

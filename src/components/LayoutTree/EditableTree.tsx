@@ -265,6 +265,9 @@ export const EditableTree = forwardRef(function EditableTreeCom(
         _targetNode[fieldNameChildren] = _targetNode[fieldNameChildren] || [];
         _targetNode[fieldNameChildren].unshift(newTargetNode);
         parentId = targetNode.key;
+
+        // 展开父节点以显示新创建的子节点
+        refTree.current?.expandNode?.(targetNode.key);
       }
 
       // 进入编辑状态
@@ -577,6 +580,10 @@ export const EditableTree = forwardRef(function EditableTreeCom(
             size="small"
             defaultValue={child}
             onBlur={handleInputBlur}
+            onPressEnter={(e) => {
+              // 按下回车键时触发失焦
+              (e.target as HTMLInputElement).blur();
+            }}
             onClick={(e) => {
               // 避免选中树节点
               e.stopPropagation();
