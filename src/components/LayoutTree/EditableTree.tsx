@@ -90,6 +90,8 @@ export type EditableTreeProps = ResizeTreeProps & {
       action: "add" | "edit" | "delete" | "move";
       /** 操作节点 */
       node: TreeDataNode;
+      /** 父节点 ID，不返回证明是根节点 */
+      parentId?: Key;
     },
   ) => void;
 };
@@ -174,6 +176,8 @@ export const EditableTree = forwardRef(function EditableTreeCom(
     targetKey: Key;
     /** 目标节点 */
     targetNode: TreeDataNode;
+    /** 父节点 ID */
+    parentId?: Key;
   }>();
   const editingKey = editingState?.targetKey;
 
@@ -248,14 +252,19 @@ export const EditableTree = forwardRef(function EditableTreeCom(
       // 编辑节点
       merge(newTargetNode, diffNode);
 
+      // 父节点 ID
+      let parentId: Key | undefined;
+
       if (!targetNode) {
         // 添加到根节点下
         targetTreeData.unshift(newTargetNode);
+        parentId = undefined;
       } else {
         // 添加到目标节点下
         const _targetNode = targetNode as Record<string, any>;
         _targetNode[fieldNameChildren] = _targetNode[fieldNameChildren] || [];
         _targetNode[fieldNameChildren].unshift(newTargetNode);
+        parentId = targetNode.key;
       }
 
       // 进入编辑状态
@@ -264,6 +273,7 @@ export const EditableTree = forwardRef(function EditableTreeCom(
         targetTreeData,
         targetKey: newTargetKey,
         targetNode: newTargetNode,
+        parentId,
       });
 
       // 浅层复制
@@ -297,7 +307,7 @@ export const EditableTree = forwardRef(function EditableTreeCom(
       const targetTreeData = cloneTreeData();
 
       // 查找目标节点
-      const { node: targetNode } =
+      const { node: targetNode, matches } =
         findTreeNodes(targetTreeData, targetKey, fieldNames) || {};
 
       // 未找到目标
@@ -308,12 +318,20 @@ export const EditableTree = forwardRef(function EditableTreeCom(
       // 编辑节点
       merge(targetNode, diffNode);
 
+      // 父节点 ID (matches 数组中倒数第二个是父节点)
+      const parentNode =
+        matches && matches.length > 1 ? matches[matches.length - 2] : undefined;
+      const { normalKey: parentKey } = parentNode
+        ? getFieldValues(parentNode, fieldNames)
+        : { normalKey: undefined };
+
       // 进入编辑状态
       setEditingState({
         action: "edit",
         targetTreeData,
         targetKey,
         targetNode,
+        parentId: parentKey,
       });
 
       // 确保节点可见
@@ -345,7 +363,7 @@ export const EditableTree = forwardRef(function EditableTreeCom(
         return;
       }
 
-      const { action, targetTreeData, targetNode } = editingState;
+      const { action, targetTreeData, targetNode, parentId } = editingState;
 
       // 编辑节点
       merge(targetNode, {
@@ -360,7 +378,11 @@ export const EditableTree = forwardRef(function EditableTreeCom(
       setInnerTreeData(_targetTreeData);
 
       // 触发外部变更
-      onTreeDataChange?.(_targetTreeData, { action, node: targetNode });
+      onTreeDataChange?.(_targetTreeData, {
+        action,
+        node: targetNode,
+        parentId,
+      });
 
       // 退出编辑
       setEditingState(undefined);
@@ -383,12 +405,20 @@ export const EditableTree = forwardRef(function EditableTreeCom(
         node: targetNode,
         index: targetIndex,
         siblings: targetSibling,
+        matches,
       } = findTreeNodes(targetTreeData, targetKey, fieldNames) || {};
 
       // 未找到目标
       if (!targetNode) {
         return;
       }
+
+      // 父节点 ID (matches 数组中倒数第二个是父节点)
+      const parentNode =
+        matches && matches.length > 1 ? matches[matches.length - 2] : undefined;
+      const { normalKey: parentKey } = parentNode
+        ? getFieldValues(parentNode, fieldNames)
+        : { normalKey: undefined };
 
       // 删除节点
       if (targetSibling && targetIndex !== undefined) {
@@ -405,6 +435,7 @@ export const EditableTree = forwardRef(function EditableTreeCom(
       onTreeDataChange?.(_targetTreeData, {
         action: "delete",
         node: targetNode,
+        parentId: parentKey,
       });
     },
     [cloneTreeData, fieldNames, onTreeDataChange],
@@ -464,6 +495,9 @@ export const EditableTree = forwardRef(function EditableTreeCom(
         return;
       }
 
+      // 新的父节点 ID
+      let newParentId: Key | undefined;
+
       if (info.dropToGap) {
         // 与放置节点同级
         if (dropPosition === -1) {
@@ -473,11 +507,24 @@ export const EditableTree = forwardRef(function EditableTreeCom(
           // 在放置节点后面
           dropSibling.splice(dropIndex + 1, 0, dragNode);
         }
+
+        // 获取放置节点的父节点（与放置节点同级，所以父节点相同）
+        const { matches: dropMatches } =
+          findTreeNodes(targetTreeData, dropKey, fieldNames) || {};
+        const parentNode =
+          dropMatches && dropMatches.length > 1
+            ? dropMatches[dropMatches.length - 2]
+            : undefined;
+        const { normalKey: parentKey } = parentNode
+          ? getFieldValues(parentNode, fieldNames)
+          : { normalKey: undefined };
+        newParentId = parentKey;
       } else {
         // 在放置节点子级
         const _dropNode = dropNode as Record<string, any>;
         _dropNode[fieldNameChildren] = _dropNode[fieldNameChildren] || [];
         _dropNode[fieldNameChildren].unshift(dragNode);
+        newParentId = dropNode.key;
       }
 
       // #endregion
@@ -492,6 +539,7 @@ export const EditableTree = forwardRef(function EditableTreeCom(
       onTreeDataChange?.(_targetTreeData, {
         action: "move",
         node: dragNode,
+        parentId: newParentId,
       });
     },
     [cloneTreeData, fieldNames, onDrop, onTreeDataChange],
