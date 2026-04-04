@@ -1,7 +1,6 @@
 import { Button } from "antd";
 import { useMemo, useState } from "react";
-import FilterTable from "@/components/FilterTable";
-import { RouteTableParams, RouteTableProps } from "@/components/RouteTable";
+import { FilterTable, RouteTableProps } from "@/components";
 import { queryPageTestFeature } from "@/Demo/api/controller/feature";
 
 export type ResultProps = {
@@ -15,7 +14,7 @@ const Result = (props: ResultProps) => {
   const projectId = "8f8d58";
   const [list, setList] = useState<any[]>([]);
 
-  const fetchData = async (params: RouteTableParams) => {
+  const fetchData: RouteTableProps["fetchData"] = async (params) => {
     const { filter = {}, ...rest } = params;
     setList([list]);
     if (projectId && workspaceId) {

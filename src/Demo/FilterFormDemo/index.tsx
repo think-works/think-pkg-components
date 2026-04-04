@@ -2,12 +2,19 @@
 import { Button, Form, Input, Select, Space, Tooltip } from "antd";
 import { useCallback, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { BaseDatePicker, BaseDateRangePicker, FilterForm } from "@/components";
+import {
+  BaseDatePicker,
+  BaseDateRangePicker,
+  FilterForm,
+  RouteTable,
+} from "@/components";
 import stl from "./index.module.less";
 
 const { MinimizeFilter, FilterItem } = FilterForm;
 
 const FilterFormDemo = () => {
+  const queryFilter = RouteTable.useSearchFilterValue();
+
   const [_searchParams, setSearchParams] = useSearchParams();
   const [_filter, setFilter] = useState<Record<string, any>>();
 
@@ -153,6 +160,7 @@ const FilterFormDemo = () => {
       <h3>标准筛选表单</h3>
       <FilterForm
         // outlinedItem
+        initialValues={queryFilter}
         onInitValues={handleInitValues}
         onFilterChange={handleFilterChange}
         items={[...getItems(), getRangePickerTime()]}
@@ -162,6 +170,7 @@ const FilterFormDemo = () => {
         <Button onClick={handleQuery}>验证表单初始化</Button>
         <MinimizeFilter
           // filterChangeDebounce={-1}
+          initialValues={queryFilter}
           onInitValues={handleInitValues}
           onFilterChange={handleFilterChange}
           moreFilterItems={[

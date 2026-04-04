@@ -1,11 +1,15 @@
-import { isEmpty, isEqual, isPlainObject, omit } from "lodash-es";
-import React, { JSX, useCallback, useMemo } from "react";
+import { isEqual, isPlainObject, omit, pick } from "lodash-es";
 import {
-  Location,
-  NavigateFunction,
-  useLocation,
-  useNavigate,
-} from "react-router";
+  ForwardedRef,
+  forwardRef,
+  ReactElement,
+  RefAttributes,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { useLocation, useNavigate } from "react-router";
 import {
   isType,
   jsonTryParse,
@@ -14,23 +18,29 @@ import {
   parseQuery,
   stringifyQuery,
 } from "@/utils/tools";
-import { BaseTableDefaultPageSize } from "../BaseTable";
-import FetchTable, {
-  FetchTableData,
-  FetchTablePaging,
-  FetchTableParams,
-  FetchTableProps,
-} from "../FetchTable";
-import { FilterTableParams } from "../FilterTable";
+import { BaseTableDefaultPageSize, BaseTableRef } from "../BaseTable";
+import { FetchTablePaging } from "../FetchTable";
+import FilterTable, { FilterTableProps } from "../FilterTable";
 
 const isNumber = (val: any) => isType<number>(val, "Number");
+
+// #region 路由辅助函数
 
 const QUERY_PAGE_KEY = "pageNo";
 const QUERY_SIZE_KEY = "pageSize";
 const QUERY_FILTER_KEY = "filter";
 
+type ParsedPageSearch = {
+  /** 页索引 */
+  pageNo?: number;
+  /** 页尺寸 */
+  pageSize?: number;
+  /** 筛选数据 */
+  filter?: Record<string, any>;
+};
+
 /**
- * 清理查询参数中的分页查询参数
+ * 清理查询参数中的分页参数
  */
 const clearPageSearch = (search: string) => {
   const query = parseQuery(search);
@@ -44,7 +54,7 @@ const clearPageSearch = (search: string) => {
 };
 
 /**
- * 从查询参数中获取分页查询参数
+ * 从查询参数中获取分页参数
  */
 const parsePageSearch = (search: string) => {
   const query = parseQuery(search);
@@ -59,40 +69,55 @@ const parsePageSearch = (search: string) => {
   const sizeVal = jsonTryParse(sizeStr) ?? undefined;
   const filterVal = jsonTryParse(filterStr) ?? undefined;
 
-  // 检查原始值的格式
-  const pageNo = isNumber(pageVal) ? pageVal : undefined;
-  const pageSize = isNumber(sizeVal) ? sizeVal : undefined;
-  const filter = isPlainObject(filterVal)
-    ? (filterVal as Record<string, any>)
-    : undefined;
+  // 值有效才会保留在结果中
+  const parsed: ParsedPageSearch = {};
 
-  return {
-    pageNo,
-    pageSize,
-    filter,
-  };
+  parsed.pageNo = isNumber(pageVal) ? pageVal : undefined;
+  parsed.pageSize = isNumber(sizeVal) ? sizeVal : undefined;
+  parsed.filter = isPlainObject(filterVal) ? filterVal : undefined;
+
+  return parsed;
 };
 
 /**
- * 从查询参数中获取筛选条件
+ * 更新查询参数中的分页参数
  */
-const updatePageSearch = (search: string, diff: Record<string, any>) => {
+const updatePageSearch = (search: string, diff: ParsedPageSearch) => {
   const query = parseQuery(search);
 
+  // 值有效才会更新查询参数
   const _diff: Record<string, any> = {};
-  Object.keys(diff).forEach((key) => {
-    _diff[key] = jsonTryStringify(diff[key]);
-  });
+  const { pageNo, pageSize, filter } = diff;
 
-  return stringifyQuery(
-    {
-      ...query,
-      ..._diff,
-    },
-    {
-      sortKey: true,
-    },
-  );
+  if ("pageNo" in diff) {
+    _diff[QUERY_PAGE_KEY] = isNumber(pageNo)
+      ? jsonTryStringify(pageNo)
+      : undefined;
+  }
+  if ("pageSize" in diff) {
+    _diff[QUERY_SIZE_KEY] = isNumber(pageSize)
+      ? jsonTryStringify(pageSize)
+      : undefined;
+  }
+  if ("filter" in diff) {
+    _diff[QUERY_FILTER_KEY] = isPlainObject(filter)
+      ? jsonTryStringify(filter)
+      : undefined;
+  }
+
+  const newQuery = { ...query, ..._diff };
+  const pageQuery = pick(newQuery, [
+    QUERY_PAGE_KEY,
+    QUERY_SIZE_KEY,
+    QUERY_FILTER_KEY,
+  ]);
+  const otherQuery = omit(newQuery, [
+    QUERY_PAGE_KEY,
+    QUERY_SIZE_KEY,
+    QUERY_FILTER_KEY,
+  ]);
+
+  return stringifyQuery({ ...pageQuery, ...otherQuery });
 };
 
 /**
@@ -127,194 +152,117 @@ const useSearchFilterValue = () => {
   return filter;
 };
 
-export type RouteTableParams<FilterType = Record<string, any>> =
-  FilterTableParams<FilterType>;
-
-export type RouteTableData<Item = any> = FetchTableData<Item>;
-
-export type RouteTableGetData<
-  FilterType = Record<string, any>,
-  DataItem = any,
-> = (
-  params: RouteTableParams<FilterType>,
-) => void | Promise<void | RouteTableData<DataItem>>;
+// #endregion
 
 export type RouteTableProps<
   RecordType = any,
   FilterType = Record<string, any>,
   DataItem = any,
-> = Omit<
-  FetchTableProps<RecordType>,
-  "pageNo" | "pageSize" | "fetchData" | "onPagingChange"
-> & {
-  /** 路由位置 */
-  location: Location;
-  /** 路由导航 */
-  navigate: NavigateFunction;
-  /** 筛选数据 */
-  filter?: FilterType;
-  /** 获取数据函数 */
-  fetchData?: RouteTableGetData<FilterType, DataItem>;
-};
-
-export type RouteTableState = {
-  /** 页索引 */
-  pageNo: number;
-  /** 页尺寸 */
-  pageSize: number;
-  /** 筛选数据 */
-  filter: Record<string, any> | undefined;
-  /** 重置筛选表格 */
-  filterKey: number;
-  /** 刷新当前分页 */
-  refreshKey: number;
-};
+> = Omit<FilterTableProps<RecordType, FilterType, DataItem>, "onPagingChange">;
 
 /**
  * 路由表格
  */
-class RouteTableComponent extends React.Component<
-  RouteTableProps,
-  RouteTableState
-> {
-  static getDerivedStateFromProps(props: RouteTableProps, state: any) {
-    const { location } = props;
-    const { pageNo, pageSize, filter } = parsePageSearch(location.search);
+const RouteTableCom = forwardRef(function RouteTableCom<
+  RecordType = any,
+  FilterType = Record<string, any>,
+  DataItem = any,
+>(
+  props: RouteTableProps<RecordType, FilterType, DataItem>,
+  ref: ForwardedRef<BaseTableRef>,
+) {
+  const { defaultPage, defaultSize, filter: propsFilter, ...rest } = props;
 
-    let diff = null;
+  const navigate = useNavigate();
+  const { search } = useLocation();
 
-    if (pageNo !== state.pageNo) {
-      diff = Object.assign({}, diff, {
-        pageNo,
-      });
+  const {
+    pageNo: queryPageNo,
+    pageSize: queryPageSize,
+    filter: queryFilter,
+  } = useMemo(() => parsePageSearch(search), [search]);
+
+  const [pageNo, setPageNo] = useState(queryPageNo || defaultPage || 1);
+  const [pageSize, setPageSize] = useState(
+    queryPageSize || defaultSize || BaseTableDefaultPageSize,
+  );
+
+  useEffect(() => {
+    const diff: ParsedPageSearch = {};
+
+    // 同步分页参数到路由
+    if (pageNo !== queryPageNo) {
+      diff.pageNo = pageNo;
+    }
+    if (pageSize !== queryPageSize) {
+      diff.pageSize = pageSize;
     }
 
-    if (pageSize !== state.pageSize) {
-      diff = Object.assign({}, diff, {
-        pageSize,
+    // 同步 props.filter 至 query.filter
+    const normalizePropsFilter =
+      propsFilter &&
+      normalizeObject(propsFilter, {
+        clearUndefined: true,
+        clearRecursion: true,
       });
+    const normalizeQueryFilter =
+      queryFilter &&
+      normalizeObject(queryFilter, {
+        clearUndefined: true,
+        clearRecursion: true,
+      });
+
+    // 深层对比 props.filter 和 query.filter
+    if (!isEqual(normalizePropsFilter, normalizeQueryFilter)) {
+      diff.filter = propsFilter as Record<string, any> | undefined;
     }
 
-    if (!isEqual(filter, state.filter)) {
-      // filter 变更，强制刷新，重置分页
-      diff = Object.assign({}, diff, {
-        pageNo: 1, // 重置分页
-        filter: filter,
-        filterKey: state.filterKey + 1,
-      });
+    // 没有变更时不更新查询参数，避免循环更新
+    if (Object.keys(diff).length === 0) {
+      return;
     }
 
-    return diff;
-  }
+    const newSearch = updatePageSearch(search, diff);
+    navigate({ search: newSearch }, { replace: true });
+  }, [
+    navigate,
+    pageNo,
+    pageSize,
+    propsFilter,
+    queryFilter,
+    queryPageNo,
+    queryPageSize,
+    search,
+  ]);
 
-  constructor(props: RouteTableProps) {
-    super(props);
+  const handlePagingChange = useCallback((nextPaging: FetchTablePaging) => {
+    const { pageNo, pageSize } = nextPaging;
+    setPageNo(pageNo);
+    setPageSize(pageSize);
+  }, []);
 
-    const { location } = props;
-    const { pageNo, pageSize, filter } = parsePageSearch(location.search);
+  return (
+    <FilterTable
+      ref={ref}
+      defaultPage={pageNo}
+      defaultSize={pageSize}
+      filter={propsFilter}
+      onPagingChange={handlePagingChange}
+      {...rest}
+    />
+  );
+});
 
-    this.state = {
-      pageNo: pageNo || 1,
-      pageSize: pageSize || BaseTableDefaultPageSize,
-      filter: filter,
-      filterKey: 0,
-      refreshKey: 0,
-    };
-  }
+type RouteTableComponent = <
+  RecordType = any,
+  FilterType = Record<string, any>,
+  DataItem = any,
+>(
+  props: RouteTableProps<RecordType, FilterType, DataItem> &
+    RefAttributes<BaseTableRef>,
+) => ReactElement | null;
 
-  componentDidUpdate(prevProps: any) {
-    let { filter: currFilter } = this.props;
-    let { filter: prevFilter } = prevProps;
-
-    currFilter = normalizeObject(currFilter as any, {
-      sortKey: true,
-      clearNull: true,
-      clearUndefined: true,
-    });
-    prevFilter = normalizeObject(prevFilter as any, {
-      sortKey: true,
-      clearNull: true,
-      clearUndefined: true,
-    });
-
-    if (!isEqual(currFilter, prevFilter)) {
-      this.setQuery({
-        pageNo: 1, // 重置分页
-        filter: isEmpty(currFilter) ? "" : currFilter,
-      });
-    }
-  }
-  private setQuery = (diff: Record<string, any>) => {
-    const { navigate, location } = this.props;
-    const newSearch = updatePageSearch(location.search, diff);
-
-    navigate(
-      {
-        ...location,
-        search: newSearch,
-      },
-      {
-        replace: true,
-      },
-    );
-  };
-
-  private fetchData = (params: FetchTableParams) => {
-    const { location, fetchData } = this.props;
-    const { filter } = parsePageSearch(location.search);
-
-    return (
-      fetchData &&
-      fetchData({
-        ...params,
-        filter,
-      })
-    );
-  };
-
-  private handlePagingChange = (paging: FetchTablePaging) => {
-    const { pageNo, pageSize } = paging;
-
-    this.setQuery({ pageNo, pageSize });
-  };
-
-  render() {
-    const { ...rest } = omit(this.props, [
-      "location",
-      "navigate",
-      "pageNo",
-      "pageSize",
-      "filter",
-      "fetchData",
-      "onPagingChange",
-      "refreshKey",
-    ]);
-    const { refreshKey: propsRefreshKey } = this.props;
-    const { pageNo, pageSize, filterKey, refreshKey } = this.state;
-
-    return (
-      <FetchTable
-        key={filterKey}
-        refreshKey={`${propsRefreshKey}-${refreshKey}`}
-        pageNo={pageNo}
-        pageSize={pageSize}
-        fetchData={this.fetchData}
-        onPagingChange={this.handlePagingChange}
-        {...rest}
-      />
-    );
-  }
-}
-
-type withRouterResult = (
-  props: Omit<RouteTableProps, "location" | "navigate">,
-) => JSX.Element;
-
-type withRouterFunc = (
-  Component: React.ComponentType<RouteTableProps>,
-) => withRouterResult;
-
-type WrapperComponent = withRouterResult & {
+type RouteTableComponentStatics = RouteTableComponent & {
   clearPageSearch: typeof clearPageSearch;
   parsePageSearch: typeof parsePageSearch;
   updatePageSearch: typeof updatePageSearch;
@@ -323,25 +271,13 @@ type WrapperComponent = withRouterResult & {
   useSearchFilterValue: typeof useSearchFilterValue;
 };
 
-const withRouter: withRouterFunc = (Component) => {
-  const RouterCom = (props: Parameters<withRouterResult>[0]) => {
-    const location = useLocation();
-    const navigate = useNavigate();
-    return <Component location={location} navigate={navigate} {...props} />;
-  };
-  return RouterCom;
-};
-
-/**
- * 路由表格包装
- */
-export const RouteTable = withRouter(RouteTableComponent) as WrapperComponent;
-
-RouteTable.clearPageSearch = clearPageSearch;
-RouteTable.parsePageSearch = parsePageSearch;
-RouteTable.updatePageSearch = updatePageSearch;
-RouteTable.useClearPageSearch = useClearPageSearch;
-RouteTable.useParsePageSearch = useParsePageSearch;
-RouteTable.useSearchFilterValue = useSearchFilterValue;
+export const RouteTable = Object.assign(RouteTableCom, {
+  clearPageSearch,
+  parsePageSearch,
+  updatePageSearch,
+  useClearPageSearch,
+  useParsePageSearch,
+  useSearchFilterValue,
+}) as RouteTableComponentStatics;
 
 export default RouteTable;

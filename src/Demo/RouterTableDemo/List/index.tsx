@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LayoutQuery } from "@/components/LayoutQuery";
+import { LayoutQuery, RouteTable } from "@/components";
 import Filter from "./Filter";
 import Result from "./Result";
 
@@ -8,7 +8,10 @@ import Result from "./Result";
  * @returns
  */
 const SubmissionList = () => {
-  const [filter, setFilter] = useState();
+  const queryFilter = RouteTable.useSearchFilterValue();
+
+  const [filter, setFilter] = useState(queryFilter);
+
   const handleFilterChange = (values: any) => {
     setFilter(values);
   };
@@ -16,7 +19,9 @@ const SubmissionList = () => {
   return (
     <LayoutQuery
       title="提测单列表"
-      filter={<Filter onChange={handleFilterChange} />}
+      filter={
+        <Filter defaultValues={queryFilter} onChange={handleFilterChange} />
+      }
     >
       <Result filter={filter} />
     </LayoutQuery>

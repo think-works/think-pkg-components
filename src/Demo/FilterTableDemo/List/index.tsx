@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LayoutQuery } from "@/components/LayoutQuery";
+import { LayoutQuery } from "@/components";
 import Filter from "./Filter";
 import Result from "./Result";
 

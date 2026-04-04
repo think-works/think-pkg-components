@@ -1,6 +1,5 @@
 import { Form, Input } from "antd";
-import { FilterForm } from "@/components/FilterForm";
-import { SelectWithAddonBefore } from "@/components/SelectWithAddonBefore";
+import { FilterForm, SelectWithAddonBefore } from "@/components";
 
 export type FilterProps = {
   onChange?: (params: Record<string, any>) => void;

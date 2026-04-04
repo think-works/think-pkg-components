@@ -21,7 +21,6 @@ import React, {
 import { DownOutlined, UpOutlined } from "@ant-design/icons";
 import { useComponentsLocale } from "@/i18n/hooks";
 import { normalizeObject } from "@/utils/tools";
-import RouteTable from "../RouteTable";
 import stl from "./index.module.less";
 
 export type FilterFormItemConfig = {
@@ -128,9 +127,8 @@ export const StandardFilter = (props: StandardFilterProps) => {
   const [innerForm] = Form.useForm();
   const form = (outerForm || innerForm) as FormInstance<Record<string, any>>;
 
-  // 用路由参数初始化
-  const initValues = RouteTable.useSearchFilterValue();
-  const refInitValues = useRef(initialValues || initValues);
+  // 默认筛选项值
+  const refInitValues = useRef(initialValues);
   const refOnInitValues = useRef(onInitValues);
 
   // 组件实例化时触发一次初始化
@@ -294,7 +292,6 @@ export const StandardFilter = (props: StandardFilterProps) => {
       style={style}
       layout="inline"
       form={form}
-      initialValues={refInitValues.current}
       labelCol={{ span: itemLabelSpan }}
       {...rest}
     >

@@ -27,7 +27,6 @@ import {
   normalizeObject,
 } from "@/utils/tools";
 import { truthy } from "@/utils/types";
-import RouteTable from "../RouteTable";
 import stl from "./index.module.less";
 import StandardFilter, { StandardFilterProps } from "./StandardFilter";
 
@@ -205,9 +204,8 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
   const [innerForm] = Form.useForm();
   const form = (outerForm || innerForm) as FormInstance<Record<string, any>>;
 
-  // 最小化表单-用路由参数初始化
-  const initValues = RouteTable.useSearchFilterValue();
-  const refInitValues = useRef(initialValues || initValues);
+  // 最小化表单-默认筛选项值
+  const refInitValues = useRef(initialValues);
   const refOnInitValues = useRef(onInitValues);
 
   // 最小化表单-组件实例化时触发一次初始化
@@ -348,7 +346,6 @@ export const MinimizeFilter = (props: MinimizeFilterProps) => {
             <StandardFilter
               submitText={locale.common.filterText}
               itemColSpan={12} // 两列布局
-              initialValues={{}} // 会在打开气泡卡片时，手动初始化更多表单
               visibleCount={Number.MAX_SAFE_INTEGER} // 不显示展开收起
               items={moreItems}
               form={moreFilterForm}

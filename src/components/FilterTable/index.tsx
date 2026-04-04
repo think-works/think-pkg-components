@@ -1,7 +1,16 @@
-import { isEqual, omit } from "lodash-es";
-import React from "react";
+import { isEqual } from "lodash-es";
+import {
+  ForwardedRef,
+  forwardRef,
+  ReactElement,
+  RefAttributes,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { normalizeObject } from "@/utils/tools";
-import { BaseTableDefaultPageSize } from "../BaseTable";
+import { BaseTableDefaultPageSize, BaseTableRef } from "../BaseTable";
 import FetchTable, {
   FetchTableData,
   FetchTablePaging,
@@ -14,8 +23,6 @@ export type FilterTableParams<FilterType = Record<string, any>> =
     filter?: FilterType;
   };
 
-export type FilterTableData<Item = any> = FetchTableData<Item>;
-
 export type FilterTableGetData<
   FilterType = Record<string, any>,
   DataItem = any,
@@ -27,10 +34,7 @@ export type FilterTableProps<
   RecordType = any,
   FilterType = Record<string, any>,
   DataItem = any,
-> = Omit<
-  FetchTableProps<RecordType>,
-  "pageNo" | "pageSize" | "fetchData" | "onPagingChange"
-> & {
+> = Omit<FetchTableProps<RecordType>, "pageNo" | "pageSize" | "fetchData"> & {
   /** 默认页索引 */
   defaultPage?: number;
   /** 默认页尺寸 */
@@ -41,126 +45,113 @@ export type FilterTableProps<
   fetchData?: FilterTableGetData<FilterType, DataItem>;
 };
 
-export type FilterTableState = {
-  /** 页索引 */
-  pageNo: number;
-  /** 页尺寸 */
-  pageSize: number;
-  /** 筛选数据 */
-  filter: Record<string, any> | undefined;
-  /** 重置筛选表格 */
-  filterKey: number;
-  /** 刷新当前分页 */
-  refreshKey: number;
-};
-
 /**
  * 可筛选表格
  */
-export class FilterTable extends React.Component<
-  FilterTableProps,
-  FilterTableState
-> {
-  static getDerivedStateFromProps(
-    props: FilterTableProps,
-    state: FilterTableState,
-  ): FilterTableState | null {
-    let diff: FilterTableState | null = null;
+const FilterTableCom = forwardRef(function FilterTableCom<
+  RecordType = any,
+  FilterType = Record<string, any>,
+  DataItem = any,
+>(
+  props: FilterTableProps<RecordType, FilterType, DataItem>,
+  ref: ForwardedRef<BaseTableRef>,
+) {
+  const {
+    defaultPage,
+    defaultSize,
+    filter: propsFilter,
+    fetchData,
+    onPagingChange,
+    refreshKey: propsRefreshKey,
+    ...rest
+  } = props;
 
-    // 浅层对比 props.filter 和 state.filter
-    if (props.filter !== state.filter) {
-      // 保持同步 props.filter 和 state.filter
-      diff = Object.assign({}, diff, {
-        filter: props.filter,
-      });
+  const [filterKey, setFilterKey] = useState(0);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [pageNo, setPageNo] = useState(defaultPage || 1);
+  const [pageSize, setPageSize] = useState(
+    defaultSize || BaseTableDefaultPageSize,
+  );
 
-      // 清理无效属性，避免干扰深层对比
-      const normalizePropsFilter =
-        props.filter &&
-        normalizeObject(props.filter as any, {
-          clearUndefined: true,
-        });
-      const normalizeStateFilter =
-        state.filter &&
-        normalizeObject(state.filter as any, {
-          clearUndefined: true,
-        });
-
-      // 深层对比 props.filter 和 state.filter
-      if (isEqual(normalizePropsFilter, normalizeStateFilter)) {
-        // filter 没变，刷新当前分页
-        diff = Object.assign({}, diff, {
-          refreshKey: state.refreshKey + 1, // 触发 FetchTable 内刷新
-        });
-      } else {
-        // filter 变更，强制刷新，重置分页
-        diff = Object.assign({}, diff, {
-          pageNo: 1,
-          filterKey: state.filterKey + 1, // 触发 FetchTable 销毁重建
-        });
-      }
+  const prevPropsFilterRef = useRef(propsFilter);
+  useEffect(() => {
+    // 浅层对比 props.filter 和上一次 props.filter
+    if (propsFilter === prevPropsFilterRef.current) {
+      return;
     }
 
-    return diff;
-  }
+    // 清理无效属性，避免干扰深层对比
+    const normalizePropsFilter =
+      propsFilter &&
+      normalizeObject(propsFilter, {
+        clearUndefined: true,
+        clearRecursion: true,
+      });
+    const normalizePrevPropsFilter =
+      prevPropsFilterRef.current &&
+      normalizeObject(prevPropsFilterRef.current, {
+        clearUndefined: true,
+        clearRecursion: true,
+      });
 
-  constructor(props: FilterTableProps) {
-    super(props);
-    const { defaultPage, defaultSize, filter } = props;
+    // 深层对比当前 props.filter 和 上一次 props.filter
+    if (isEqual(normalizePropsFilter, normalizePrevPropsFilter)) {
+      // filter 没变，刷新当前分页 (如：筛选条件不变时多次点击查询以实现刷新效果)
+      setRefreshKey((prev) => prev + 1); // 触发 FetchTable 内刷新
+    } else {
+      // filter 变更，强制刷新，重置分页 (如：筛选条件变更时显隐动态列和清理排序状态)
+      setPageNo(1);
+      setFilterKey((prev) => prev + 1); // 触发 FetchTable 销毁重建
+    }
 
-    this.state = {
-      pageNo: defaultPage || 1,
-      pageSize: defaultSize || BaseTableDefaultPageSize,
-      filter: filter,
-      filterKey: 0,
-      refreshKey: 0,
-    };
-  }
+    prevPropsFilterRef.current = propsFilter;
+  }, [propsFilter]);
 
-  private fetchData = (params: FilterTableParams) => {
-    const { fetchData } = this.props;
-    const { filter } = this.state;
+  useEffect(() => {
+    onPagingChange?.({
+      pageNo,
+      pageSize,
+    });
+  }, [onPagingChange, pageNo, pageSize]);
 
-    return (
-      fetchData &&
-      fetchData({
+  const handleFetchData = useCallback(
+    (params: FilterTableParams<FilterType>) =>
+      fetchData?.({
         ...params,
-        filter,
-      })
-    );
-  };
+        filter: propsFilter,
+      }),
+    [fetchData, propsFilter],
+  );
 
-  private handlePagingChange = (paging: FetchTablePaging) => {
-    const { pageNo, pageSize } = paging;
-    this.setState({ pageNo, pageSize });
-  };
+  const handlePagingChange = useCallback((nextPaging: FetchTablePaging) => {
+    const { pageNo, pageSize } = nextPaging;
+    setPageNo(pageNo);
+    setPageSize(pageSize);
+  }, []);
 
-  render() {
-    const { ...rest } = omit(this.props, [
-      "defaultPage",
-      "defaultSize",
-      "pageNo",
-      "pageSize",
-      "filter",
-      "fetchData",
-      "onPagingChange",
-      "refreshKey",
-    ]);
-    const { refreshKey: propsRefreshKey } = this.props;
-    const { pageNo, pageSize, filterKey, refreshKey } = this.state;
+  return (
+    <FetchTable
+      ref={ref}
+      key={filterKey}
+      refreshKey={`${propsRefreshKey}-${refreshKey}`}
+      pageNo={pageNo}
+      pageSize={pageSize}
+      fetchData={handleFetchData}
+      onPagingChange={handlePagingChange}
+      {...rest}
+    />
+  );
+});
 
-    return (
-      <FetchTable
-        key={filterKey}
-        refreshKey={`${propsRefreshKey}-${refreshKey}`}
-        pageNo={pageNo}
-        pageSize={pageSize}
-        fetchData={this.fetchData}
-        onPagingChange={this.handlePagingChange}
-        {...rest}
-      />
-    );
-  }
-}
+type FilterTableComponent = <
+  RecordType = any,
+  FilterType = Record<string, any>,
+  DataItem = any,
+>(
+  props: FilterTableProps<RecordType, FilterType, DataItem> &
+    RefAttributes<BaseTableRef>,
+) => ReactElement | null;
+
+export const FilterTable = FilterTableCom as FilterTableComponent;
 
 export default FilterTable;

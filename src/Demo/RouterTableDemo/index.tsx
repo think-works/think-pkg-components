@@ -1,4 +1,4 @@
-import LayoutPanel from "@/components/LayoutPanel";
+import { LayoutPanel } from "@/components";
 import SubmissionList from "./List";
 
 const RouterTableDemo = () => {

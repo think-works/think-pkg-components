@@ -1,6 +1,12 @@
 import { GetRef, Table, TableColumnType, TableProps, Tooltip } from "antd";
 import cls, { Argument } from "classnames";
-import { ForwardedRef, forwardRef, useMemo } from "react";
+import {
+  ForwardedRef,
+  forwardRef,
+  ReactElement,
+  RefAttributes,
+  useMemo,
+} from "react";
 import { useComponentsLocale } from "@/i18n/hooks";
 import { separator } from "@/utils/human";
 import { isBlank, isType, msecToString } from "@/utils/tools";
@@ -17,7 +23,7 @@ const isBlankString = (text?: string) =>
 
 export const BaseTableDefaultPageSize = 20;
 
-type TableRef = GetRef<typeof Table>;
+export type BaseTableRef = GetRef<typeof Table>;
 
 type TableColumn<RecordType = any> = TableColumnType<RecordType>;
 
@@ -54,9 +60,9 @@ export type BaseTableProps<RecordType = any> = Omit<
 /**
  * 基础表格
  */
-export const BaseTable = forwardRef(function BaseTableCom(
+const BaseTableCom = forwardRef(function BaseTableCom(
   props: BaseTableProps,
-  ref: ForwardedRef<TableRef>,
+  ref: ForwardedRef<BaseTableRef>,
 ) {
   const {
     className,
@@ -72,7 +78,7 @@ export const BaseTable = forwardRef(function BaseTableCom(
 
   const cols = useMemo(
     () =>
-      (columns || []).map((col: any) => {
+      (columns || []).map((col) => {
         let render = col.render;
         const {
           width,
@@ -226,5 +232,11 @@ export const BaseTable = forwardRef(function BaseTableCom(
     </div>
   );
 });
+
+type BaseTableComponent = <RecordType = any>(
+  props: BaseTableProps<RecordType> & RefAttributes<BaseTableRef>,
+) => ReactElement | null;
+
+export const BaseTable = BaseTableCom as BaseTableComponent;
 
 export default BaseTable;

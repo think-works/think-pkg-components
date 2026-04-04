@@ -1,12 +1,23 @@
-import { omit } from "lodash-es";
-import React from "react";
+import {
+  ForwardedRef,
+  forwardRef,
+  ReactElement,
+  RefAttributes,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import logger from "@/utils/logger";
 import { isType } from "@/utils/tools";
 import BaseTable, {
   BaseTableDefaultPageSize,
   BaseTableProps,
+  BaseTableRef,
 } from "../BaseTable";
 
+const isNumber = (val: any) => isType<number>(val, "Number");
 const isBoolean = (val: any) => isType<boolean>(val, "Boolean");
 
 const API_PAGE_KEY = "pageNo";
@@ -52,206 +63,184 @@ export type FetchTableProps<RecordType = any, DataItem = any> = Omit<
   refreshKey?: number | string;
   /** 延时显示加载中(ms) */
   loadingDelay?: number;
+  /** 首次请求延时(ms) */
+  firstQueryDelay?: boolean | number;
   /** 获取数据函数 */
   fetchData?: FetchTableGetData<DataItem>;
   /** 分页变更 */
-  onPagingChange?: (params: FetchTablePaging) => void;
+  onPagingChange?: (nextPaging: FetchTablePaging) => void;
   /** 分页、排序、筛选变更(返回 true 可忽略后续流程) */
   onChange?: (...rest: Parameters<RawOnChange>) => void | boolean;
-};
-
-export type FetchTableState = {
-  /** 加载中 */
-  loading: boolean;
-  /** 页索引 */
-  current: number;
-  /** 页尺寸 */
-  pageSize: number;
-  /** 总记录数量 */
-  total: number;
-  /** 当前页记录 */
-  dataSource: any[];
 };
 
 /**
  * 可查询表格
  */
-export class FetchTable extends React.Component<
-  FetchTableProps,
-  FetchTableState
-> {
-  mounted = false;
-  queryTimer: any;
-  loadingTimer: any;
+const FetchTableCom = forwardRef(function FetchTableCom<
+  RecordType = any,
+  DataItem = any,
+>(
+  props: FetchTableProps<RecordType, DataItem>,
+  ref: ForwardedRef<BaseTableRef>,
+) {
+  const {
+    pageNo: propsPageNo,
+    pageSize: propsPageSize,
+    refreshKey,
+    loadingDelay = 200,
+    firstQueryDelay,
+    fetchData,
+    onPagingChange,
+    onChange,
+    pagination,
+    ...rest
+  } = props;
 
-  constructor(props: FetchTableProps) {
-    super(props);
-    const { pagination } = props;
-    const { defaultPageSize } = pagination || {};
+  const defaultPageSize =
+    !isBoolean(pagination) && pagination?.defaultPageSize
+      ? pagination.defaultPageSize
+      : BaseTableDefaultPageSize;
 
-    this.state = {
-      loading: false,
-      total: 0,
-      current: 1,
-      pageSize: defaultPageSize || BaseTableDefaultPageSize,
-      dataSource: [],
+  const [loading, setLoading] = useState(false);
+  const [total, setTotal] = useState(0);
+  const [dataSource, setDataSource] = useState<any[]>([]);
+  const [pageNo, setPageNo] = useState(1);
+  const [pageSize, setPageSize] = useState(defaultPageSize);
+
+  const mergedPagination = useMemo(
+    () =>
+      isBoolean(pagination)
+        ? pagination
+        : {
+            ...(pagination || {}),
+            total,
+            current: pageNo,
+            pageSize,
+          },
+    [pageNo, pageSize, pagination, total],
+  );
+
+  const requestIdRef = useRef(0);
+  const firstQueryPendingRef = useRef(true);
+  const firstQueryDelayTimerRef = useRef<any>(undefined);
+  const loadingDelayTimerRef = useRef<any>(undefined);
+
+  const isMountedRef = useRef(false);
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
     };
-  }
+  }, []);
 
-  componentDidMount() {
-    this.mounted = true;
-    /**
-     * 触发时间早于 http 初始化，需要延迟触发
-     * <StrictMode /> 下触发两次符合预期行为
-     * https://react.dev/reference/react/StrictMode#fixing-bugs-found-by-double-rendering-in-development
-     */
-    clearTimeout(this.queryTimer);
-    this.queryTimer = setTimeout(() => {
-      this.queryData();
-    }, 0);
-  }
-
-  componentWillUnmount() {
-    this.mounted = false;
-    clearTimeout(this.queryTimer);
-    clearTimeout(this.loadingTimer);
-  }
-
-  componentDidUpdate(prevProps: FetchTableProps) {
-    const {
-      pageNo: currPage,
-      pageSize: currSize,
-      refreshKey: currRefreshKey,
-    } = this.props;
-    const {
-      pageNo: prevPage,
-      pageSize: prevSize,
-      refreshKey: prevRefreshKey,
-    } = prevProps;
-
-    // 参数变更，查询数据
-    if (
-      currPage !== prevPage ||
-      currSize !== prevSize ||
-      currRefreshKey !== prevRefreshKey
-    ) {
-      this.queryData();
-    }
-  }
-
-  // 更新分页参数
-  private updatePaging = (paging: any) => {
-    const { pageNo, pageSize, onPagingChange } = this.props;
-
-    if (typeof onPagingChange === "function") {
-      onPagingChange({
-        pageNo,
-        pageSize,
-        ...(paging || {}),
-      });
-    }
-  };
-
-  // 查询分页数据
-  private queryData = async () => {
-    const { pageNo, pageSize, loadingDelay = 200, fetchData } = this.props;
-
+  /** 查询数据 */
+  const queryData = useCallback(async () => {
+    const requestId = ++requestIdRef.current;
     const params = {
-      [API_PAGE_KEY]: pageNo || 1,
-      [API_SIZE_KEY]: pageSize || BaseTableDefaultPageSize,
+      [API_PAGE_KEY]: propsPageNo || 1,
+      [API_SIZE_KEY]: propsPageSize || BaseTableDefaultPageSize,
     };
 
     // 加载很快时，不显示
-    clearTimeout(this.loadingTimer);
-    this.loadingTimer = setTimeout(() => {
-      this.setState({
-        loading: true,
-      });
+    clearTimeout(loadingDelayTimerRef.current);
+    loadingDelayTimerRef.current = setTimeout(() => {
+      if (isMountedRef.current) {
+        setLoading(true);
+      }
     }, loadingDelay);
 
     try {
       const fn = fetchData ? fetchData : () => Promise.resolve();
-      const res = (await fn(params)) || {};
-      const pageNo = res[API_PAGE_KEY];
-      const pageSize = res[API_SIZE_KEY];
-      const total = res[API_TOTAL_KEY];
-      const list = res[API_LIST_KEY];
+      const res = ((await fn(params)) || {}) as FetchTableData<DataItem>;
+      const resPageNo = res[API_PAGE_KEY];
+      const resPageSize = res[API_SIZE_KEY];
+      const resTotal = res[API_TOTAL_KEY];
+      const resList = res[API_LIST_KEY];
 
-      if (this.mounted) {
-        this.setState({
-          total: total || 0,
-          current: pageNo || 1,
-          pageSize: pageSize || BaseTableDefaultPageSize,
-          dataSource: list || [],
-        });
+      // 未销毁且最后一次请求，才更新数据
+      if (isMountedRef.current && requestId === requestIdRef.current) {
+        setTotal(resTotal || 0);
+        setDataSource(resList || []);
+        setPageNo(resPageNo || propsPageNo || 1);
+        setPageSize(resPageSize || propsPageSize || BaseTableDefaultPageSize);
       }
     } catch (error) {
       logger.error(error);
     } finally {
-      clearTimeout(this.loadingTimer);
-      if (this.mounted) {
-        this.setState({
-          loading: false,
-        });
+      clearTimeout(loadingDelayTimerRef.current);
+      if (isMountedRef.current && requestId === requestIdRef.current) {
+        setLoading(false);
       }
     }
-  };
+  }, [fetchData, loadingDelay, propsPageNo, propsPageSize]);
 
-  // 分页参数变更
-  private handleChange = (
-    pagination: any,
-    filters: any,
-    sorter: any,
-    extra: any,
-  ) => {
-    const { onChange } = this.props;
+  /** 避免不稳定的函数引用 */
+  const queryDataRef = useRef(queryData);
+  useEffect(() => {
+    queryDataRef.current = queryData;
+  }, [queryData]);
 
-    // 触发外部事件
-    const ignore = onChange && onChange(pagination, filters, sorter, extra);
-    if (ignore) {
-      return;
+  /** 触发查询 */
+  useEffect(() => {
+    /**
+     * <StrictMode /> 下触发两次查询符合预期行为
+     * https://react.dev/reference/react/StrictMode#fixing-bugs-found-by-double-rendering-in-development
+     */
+    const delayQuery = firstQueryDelay === true || isNumber(firstQueryDelay);
+    const delayTime = isNumber(firstQueryDelay) ? firstQueryDelay : 0;
+
+    if (delayQuery && firstQueryPendingRef.current) {
+      /** 在非静态实例化 axios 实例时，需要延迟触发第一次查询 */
+      clearTimeout(firstQueryDelayTimerRef.current);
+      firstQueryDelayTimerRef.current = setTimeout(() => {
+        queryDataRef.current();
+      }, delayTime);
+    } else {
+      /** 实例化后直接触发 */
+      queryDataRef.current();
     }
 
-    // 将分页参数保存至外部
-    const { current, pageSize } = pagination || {};
-    this.updatePaging({
-      pageNo: current,
-      pageSize: pageSize,
-    });
-  };
+    firstQueryPendingRef.current = false;
 
-  render() {
-    const { pagination, ...rest } = omit(this.props, [
-      "pageNo",
-      "pageSize",
-      "refreshKey",
-      "fetchData",
-      "onPagingChange",
-      "onChange",
-      "loading",
-      "dataSource",
-    ]);
-    const { loading, total, current, pageSize, dataSource } = this.state;
+    return () => {
+      clearTimeout(firstQueryDelayTimerRef.current);
+    };
+  }, [firstQueryDelay, propsPageNo, propsPageSize, refreshKey]);
 
-    return (
-      <BaseTable
-        loading={loading}
-        dataSource={dataSource}
-        pagination={
-          isBoolean(pagination)
-            ? pagination
-            : {
-                total,
-                current,
-                pageSize,
-                ...(pagination || {}),
-              }
-        }
-        onChange={this.handleChange}
-        {...rest}
-      />
-    );
-  }
-}
+  const handleChange = useCallback<RawOnChange>(
+    (nextPagination, ...rest) => {
+      // 触发外部事件
+      const ignore = onChange && onChange(nextPagination, ...rest);
+      if (ignore) {
+        return;
+      }
+
+      // 将分页参数保存至外部
+      const { current, pageSize } = nextPagination || {};
+      onPagingChange?.({
+        pageNo: current || 1,
+        pageSize: pageSize || BaseTableDefaultPageSize,
+      });
+    },
+    [onChange, onPagingChange],
+  );
+
+  return (
+    <BaseTable
+      ref={ref}
+      loading={loading}
+      dataSource={dataSource}
+      pagination={mergedPagination}
+      onChange={handleChange}
+      {...rest}
+    />
+  );
+});
+
+type FetchTableComponent = <RecordType = any, DataItem = any>(
+  props: FetchTableProps<RecordType, DataItem> & RefAttributes<BaseTableRef>,
+) => ReactElement | null;
+
+export const FetchTable = FetchTableCom as FetchTableComponent;
 
 export default FetchTable;
